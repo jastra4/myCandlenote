@@ -5,8 +5,8 @@ const morgan = require('morgan');
 
 const app = express();
 
-const DIST_DIR = path.join(__dirname,  "../dist");
-const SRC_DIR = path.join(__dirname,  "../src/");
+const DIST_DIR = path.join(__dirname,  "../client/dist");
+const SRC_DIR = path.join(__dirname,  "../client/src/");
 const port = process.env.PORT || 3000;
 
 app.use(express.static(DIST_DIR));
