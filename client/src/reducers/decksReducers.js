@@ -30,4 +30,4 @@ const decksReducer = (state = {}, action) => {
   }
 };
 
-export default deckReducer;
+export default decksReducer;

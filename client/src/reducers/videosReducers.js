@@ -30,4 +30,4 @@ const videosReducer = (state = {}, action) => {
   }
 }
 
-export default vidoesReducer;
+export default videosReducer;

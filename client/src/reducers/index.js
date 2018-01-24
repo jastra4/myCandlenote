@@ -11,7 +11,7 @@ const reducers = combineReducers({
   decks: decksReducer,
   flashcards: flashcardsReducer,
   notes: notesReducer,
-  user: usersReducers,
+  user: usersReducer,
 });
 
 export default reducers;
