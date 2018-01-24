@@ -5,6 +5,12 @@ const userReducer = (state = { username = '', userId = -1, oathId = '' }, action
         ...state,
         ...action.payload,
       }
+    case 'REMOVE_CURRENT_USER':
+      return {
+        username: '',
+        userId: -1,
+        oathId: '',
+      }
     default:
       return state;
   }
