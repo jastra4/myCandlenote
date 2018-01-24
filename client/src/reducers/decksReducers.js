@@ -1,12 +1,12 @@
 const dotProp = require('dot-prop-immutable');
 
-const defaultDecks = {
+const defaultState = {
   byId: {},
   currentDeck: -1,
   allIds: [],
 };
 
-const decksReducer = (state = defaultDecks, action) => {
+const decksReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_DECK':
       return {

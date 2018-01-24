@@ -1,6 +1,12 @@
 const dotProp = require('dot-prop-immutable');
 
-const messagesReducer = (state = {}, action) => {
+const defaultState = {
+  byId: {},
+  currentMessage: -1,
+  allIds: [],
+};
+
+const messagesReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_MESSAGE':
       return {

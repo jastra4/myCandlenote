@@ -1,6 +1,12 @@
 const dotProp = require('dot-prop-immutable');
 
-const notesReducer = (state = {}, action) => {
+const defaultState = {
+  byId: {},
+  currentNote: -1,
+  allIds: [],
+};
+
+const notesReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_NOTE':
       return {

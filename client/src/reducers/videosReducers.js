@@ -1,6 +1,12 @@
 const dotProp = require('dot-prop-immutable');
 
-const videosReducer = (state = {}, action) => {
+const defaultState = {
+  byId: {},
+  currentVideo: -1,
+  allIds: [],
+};
+
+const videosReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_VIDEO':
       return {

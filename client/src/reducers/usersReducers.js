@@ -1,4 +1,10 @@
-const usersReducer = (state = { username: '', userId: -1, oathId: '' }, action) => {
+const defaultState = {
+  username: '',
+  userId: -1,
+  oathId: '',
+};
+
+const usersReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_CURRENT_USER':
       return {

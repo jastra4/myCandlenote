@@ -1,6 +1,12 @@
 const dotProp = require('dot-prop-immutable');
 
-const flashcardsReducer = (state = {}, action) => {
+const defaultState = {
+  byId: {},
+  currentFlashcard: -1,
+  allIds: [],
+};
+
+const flashcardsReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'ADD_FLASHCARD':
       return {
