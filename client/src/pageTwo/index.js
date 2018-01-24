@@ -8,7 +8,7 @@ export default class PageTwo extends React.Component {
 
   render = () => (
     <div>
-      <h1>Page Two!!</h
+      <h1>Page Two!!</h1>
     </div>
   );
 }
