@@ -9,11 +9,12 @@ const store = createStore(
   reducers,
   applyMiddleware(
     thunk,
-    createLogger()
-  )
+    createLogger(),
+  ),
 );
 
 export default store;
+
 /*
 
   demoState = {
