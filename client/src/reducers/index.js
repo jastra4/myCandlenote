@@ -13,7 +13,7 @@ const reducers = combineReducers({
   notes: notesReducer,
   user: usersReducer,
   messages: messagesReducer,
-  videos: videosReducer
+  videos: videosReducer,
 });
 
 export default reducers;

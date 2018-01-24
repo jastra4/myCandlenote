@@ -8,26 +8,25 @@ const videosReducer = (state = {}, action) => {
         byId: {
           ...state.byId,
           [action.payload.id]: action.payload,
-        }
+        },
       };
-    case 'SET_VIDEOS':
-      const videosById = action.payload.reduce((videos, video) => {
-        videos[video.id] = video;
-        return videos;
-      }, {});
-      return {
-        byId: videosById,
-      };
+    case 'SET_VIDEOS': {
+      const videosById = action.payload.reduce((videos, video) => ({
+        ...videos,
+        [video.id]: video,
+      }), {});
+      return { byId: videosById };
+    }
     case 'SET_CURRENT_VIDEO':
       return {
         ...state,
-        selectedvideo: action.payload.id,
-      }
+        currentvideo: action.payload.id,
+      };
     case 'DELETE_VIDEO':
       return dotProp.delete(state, `byId.${action.payload.id}`);
     default:
       return state;
   }
-}
+};
 
 export default videosReducer;
