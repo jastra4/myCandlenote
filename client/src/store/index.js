@@ -37,7 +37,7 @@ export default store;
           body: 'Lorem Ipsum...',
         }
       },
-      selectedNote: 5,
+      currentNote: 5,
       allIds: [3, 5],
     },
     decks: {
@@ -53,7 +53,7 @@ export default store;
           title: 'Derivatives',
         },
       },
-      selectedDeck: 10,
+      currentDeck: 10,
       allIds: [7, 10],
     },
     flashcards: {
@@ -83,7 +83,7 @@ export default store;
           back: 'Another Math Answer',
         },
       },
-      selectedFlashcard: 17,
+      currentFlashcard: 17,
       allIds[11, 13, 17, 20],
     }
     videos: {
@@ -95,7 +95,7 @@ export default store;
           starred: true,
         }
       },
-      selectedVideo: 10,
+      currentVideo: 10,
       allIds: [10],
     },
     messages: {
@@ -109,7 +109,7 @@ export default store;
           hasBeenRead: false,
         }
       },
-      selectedMessage: 8,
+      currentMessage: 8,
       allIds: [8],
     },
   }
