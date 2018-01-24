@@ -16,7 +16,6 @@ const deckReducer = (state = {}, action) => {
         return decks;
       }, {});
       return {
-        ...state,
         byId: decksById,
       }
     case 'SET_CURRENT_DECK':
