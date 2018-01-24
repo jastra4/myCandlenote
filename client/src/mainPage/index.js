@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default class MainPage extends React.Component {
-
   constructor() {
     super();
+    this.state = {};
   }
 
   render = () => (
@@ -12,4 +12,4 @@ export default class MainPage extends React.Component {
       <p>Hello World :)</p>
     </div>
   );
-};
+}
