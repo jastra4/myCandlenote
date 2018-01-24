@@ -12,6 +12,8 @@ const reducers = combineReducers({
   flashcards: flashcardsReducer,
   notes: notesReducer,
   user: usersReducer,
+  messages: messagesReducer,
+  videos: videosReducer
 });
 
 export default reducers;
