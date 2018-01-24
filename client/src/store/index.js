@@ -8,6 +8,7 @@ import reducers from '../reducers';
   demoState = {
     user: {
       username: 'Jon',
+      userId: 5,
       oathId: 'whatever'
     },
     resources: {
