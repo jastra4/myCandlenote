@@ -87,7 +87,7 @@ import reducers from '../reducers';
       selectedVideo: 10,
       allIds: [10],
     },
-    privateMessages: {
+    messages: {
       byId: {
         8: {
           id: 8,
