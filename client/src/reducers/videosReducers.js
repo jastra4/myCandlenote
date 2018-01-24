@@ -30,4 +30,4 @@ const videosReducer = (state = {}, action) => {
   }
 }
 
-export default messagesReducer;
+export default vidoesReducer;
