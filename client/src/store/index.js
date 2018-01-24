@@ -26,37 +26,39 @@ import reducers from '../reducers';
           body: 'Lorem Ipsum...',
         }
       ],
-      decks: [
-        {
-          id: 7
-          subject: 'Physics',
-          title: 'Kinematics',
-          flashcards: [
-            {
-              front: 'Sciency Question',
-              back: 'Sciency Answer',
-            },
-            {
-              front: 'Another Sciency Question',
-              back: 'Another Sciency Answer',
-            }
-          ],
-        },
-        {
-          id: 10,
-          subject: 'Math',
-          title: 'Derivatives',
-          flashcards: [
-            {
-              front: 'Math Question',
-              back: 'Math Answer',
-            },
-            {
-              front: 'Another Math Question',
-              back: 'Another Math Answer',
-            },
-          ],
-        },
+      flashcards: [
+        decks: 
+          {
+            id: 7
+            subject: 'Physics',
+            title: 'Kinematics',
+            cards: [
+              {
+                front: 'Sciency Question',
+                back: 'Sciency Answer',
+              },
+              {
+                front: 'Another Sciency Question',
+                back: 'Another Sciency Answer',
+              }
+            ],
+          },
+          {
+            id: 10,
+            subject: 'Math',
+            title: 'Derivatives',
+            cards: [
+              {
+                front: 'Math Question',
+                back: 'Math Answer',
+              },
+              {
+                front: 'Another Math Question',
+                back: 'Another Math Answer',
+              },
+            ],
+          },
+        currentDeck: 10,
       ],
       videos: [
         {
@@ -75,6 +77,7 @@ import reducers from '../reducers';
       }
     ],
     selectedNote: 3,
+    selectedDeck: 5,
     selectedFlashcard: 2,
     selectedVideo: 1,
   }
