@@ -9,27 +9,27 @@ import reducers from '../reducers';
     user: {
       username: 'Jon',
       userId: 5,
-      oathId: 'whatever'
+      oathId: 'whatever',
     },
     resources: {
-      notes: [
-        {
-          id: 3,
-          subject: 'English',
-          heading: 'Predicate Nominatives',
-          body: 'Lorem Ipsum...',
-        },
-        {
-          id: 5,
-          subject: 'Comp Sci',
-          heading: 'Higher order functions',
-          body: 'Lorem Ipsum...',
-        }
-      ],
-      flashcards: [
-        decks: 
-          {
-            id: 7
+      notes: {
+        noteList: [
+          3: {
+            subject: 'English',
+            heading: 'Predicate Nominatives',
+            body: 'Lorem Ipsum...',
+          },
+          5: {
+            subject: 'Comp Sci',
+            heading: 'Higher order functions',
+            body: 'Lorem Ipsum...',
+          }
+        ],
+        selectedNote: 5,
+      },
+      decks: {
+        deckList: [
+          7: {
             subject: 'Physics',
             title: 'Kinematics',
             cards: [
@@ -43,8 +43,7 @@ import reducers from '../reducers';
               }
             ],
           },
-          {
-            id: 10,
+          10: {
             subject: 'Math',
             title: 'Derivatives',
             cards: [
@@ -58,28 +57,31 @@ import reducers from '../reducers';
               },
             ],
           },
-        currentDeck: 10,
-      ],
-      videos: [
-        {
-          title: 'Video Title',
-          url: 'https://www.youtube.com/somethingfromyoutube,
-          starred: true,
+        ],
+        selectedDeck: 10,
+      },
+      videos: {
+        videoList: [
+          10: {
+            title: 'Video Title',
+            url: 'https://www.youtube.com/somethingfromyoutube,
+            starred: true,
+          }
+        ],
+        selectedVideo: 10,
+      },
+    },
+    privateMessages: {
+      messages: [
+        8: {
+          sendFrom: 'Some Name',
+          timeSent: 2131244325,
+          messageBody: 'Lorem Ipsum...',
+          hasBeenRead: false,
         }
       ],
+      selectedMessage: 8,
     },
-    privateMessages: [
-      {
-        sendFrom: 'Some Name',
-        timeSent: 2131244325,
-        messageBody: 'Lorem Ipsum...',
-        hasBeenRead: false
-      }
-    ],
-    selectedNote: 3,
-    selectedDeck: 5,
-    selectedFlashcard: 2,
-    selectedVideo: 1,
   }
 
 */
