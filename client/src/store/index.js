@@ -12,20 +12,23 @@ import reducers from '../reducers';
       oathId: 'whatever'
     },
     resources: {
-      notes: {
-        3: {
+      notes: [
+        {
+          id: 3,
           subject: 'English',
           heading: 'Predicate Nominatives',
           body: 'Lorem Ipsum...',
         },
-        5: {
+        {
+          id: 5,
           subject: 'Comp Sci',
           heading: 'Higher order functions',
           body: 'Lorem Ipsum...',
         }
-      },
-      decks: {
-        2: {
+      ],
+      decks: [
+        {
+          id: 7
           subject: 'Physics',
           title: 'Kinematics',
           flashcards: [
@@ -39,7 +42,8 @@ import reducers from '../reducers';
             }
           ],
         },
-        10: {
+        {
+          id: 10,
           subject: 'Math',
           title: 'Derivatives',
           flashcards: [
@@ -52,8 +56,8 @@ import reducers from '../reducers';
               back: 'Another Math Answer',
             },
           ],
-        }
-      },
+        },
+      ],
       videos: [
         {
           title: 'Video Title',
