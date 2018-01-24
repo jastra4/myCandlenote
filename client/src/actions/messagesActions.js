@@ -26,7 +26,7 @@ export const setCurrentMessage = (messageId) => ({
 
 export const deleteMessage = (messageId) => {
   return (dispatch) => {
-    return axios.post('/deleteMessage', messageId)
+    return axios.post('/deleteMessage/', messageId)
       .then(res => {
         dispatch({
           type: 'DELETE_MESSAGE',

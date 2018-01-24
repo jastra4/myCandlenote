@@ -26,7 +26,7 @@ export const setCurrentFlashcard = (cardId) => ({
 
 export const deleteFlashcard = (cardId) => {
   return (dispatch) => {
-    return axios.post('/deleteCard', cardId)
+    return axios.post('/deleteCard/', cardId)
       .then(res => {
         dispatch({
           type: 'DELETE_FLASHCARD',
