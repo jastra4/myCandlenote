@@ -29,3 +29,5 @@ const flashcardsReducer = (state = {}, action) => {
       return state;
   }
 }
+
+export default flashcardsReducer;

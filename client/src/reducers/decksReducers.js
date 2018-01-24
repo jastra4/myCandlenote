@@ -1,6 +1,6 @@
 const dotProp = require('dot-prop-immutable');
 
-const deckReducer = (state = {}, action) => {
+const decksReducer = (state = {}, action) => {
   switch (action.type) {
     case 'ADD_DECK':
       return {
@@ -29,3 +29,5 @@ const deckReducer = (state = {}, action) => {
       return state;
   }
 };
+
+export default deckReducer;
