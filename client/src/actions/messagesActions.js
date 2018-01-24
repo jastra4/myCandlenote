@@ -1,37 +1,39 @@
 import axios from 'axios';
 
-export const addMessage = (messageInfo) => ({
+export const addMessage = messageInfo => ({
   type: 'ADD_MESSAGE',
   payload: messageInfo,
 });
 
-export const setMessages = (messages) => ({
+export const setMessages = messages => ({
   type: 'SET_MESSAGES',
-  payload: messages
+  payload: messages,
 });
 
-export const getMessages = (userId) => {
-  return (dispatch) => {
-    return axios.get('/messages/' + userId)
-      .then(res => {
+export const getMessages = userId => (
+  dispatch => (
+    axios.get(`/messages/${userId}`)
+      .then((res) => {
+        console.log('Getting message:', res.data);
         dispatch(setMessages(res.data));
-      }, err => console.log(err));
-  }
-}
+      }, err => console.log(err))
+  )
+);
 
-export const setCurrentMessage = (messageId) => ({
+export const setCurrentMessage = messageId => ({
   type: 'SET_CURRENT_MESSAGE',
-  payload: { id: messageId }
+  payload: { id: messageId },
 });
 
-export const deleteMessage = (messageId) => {
-  return (dispatch) => {
-    return axios.post('/deleteMessage/', messageId)
-      .then(res => {
+export const deleteMessage = messageId => (
+  dispatch => (
+    axios.post('/deleteMessage/', messageId)
+      .then((res) => {
+        console.log('Delete message res:', res.body);
         dispatch({
           type: 'DELETE_MESSAGE',
-          payload: { id: messageId }
-        })
-      });
-  }
-}
+          payload: { id: messageId },
+        });
+      })
+  )
+);
