@@ -9,7 +9,7 @@ import PageTwo from './pageTwo';
 import NotFoundPage from './notFoundPage';
 import DeckCreator from './decksPage/DeckCreatorContainer';
 import DeckView from './decksPage/DeckViewContainer';
-import FlashcardPage from './flashcardsPage';
+import FlashcardPage from './flashcardsPage/FlashcardCreatorContainer';
 import { store, persistor } from '../src/store';
 
 const App = () => (

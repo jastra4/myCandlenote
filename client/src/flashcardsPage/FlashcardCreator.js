@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { addFlashcard } from '../actions/flashcardsActions';
 
-const FlashcardCreator = ({ dispatch }) => {
+const FlashcardCreator = (props) => {
   let front;
   let back;
   let id = 1;
@@ -12,10 +10,7 @@ const FlashcardCreator = ({ dispatch }) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          if (!front.value.trim()) {
-            return;
-          }
-          dispatch(addFlashcard({ front: front.value, back: back.value, id }));
+          props.addFlashcard({ front: front.value, back: back.value, id });
           front.value = '';
           back.value = '';
           id += 1;
@@ -31,6 +26,8 @@ const FlashcardCreator = ({ dispatch }) => {
             back = node;
           }}
         />
+        <select>
+        </select>
         <button type="submit">
           Add Flashcard
         </button>
@@ -39,6 +36,4 @@ const FlashcardCreator = ({ dispatch }) => {
   );
 };
 
-const mapStateToProps = state => ({ currentDeck: state.decks.currentDeck });
-
-export default connect(mapStateToProps)(FlashcardCreator);
+export default FlashcardCreator;
