@@ -1,3 +1,5 @@
 node_modules/
 dist/bundle.js
 config/keys.js
+redux-setup
+client/dist/bundle.js

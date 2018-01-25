@@ -35,3 +35,13 @@ passport.use(new GoogleStrategy({
     }
   });
 }));
+
+passport.use(new GoogleStrategy({
+  // options for strategy
+  callbackURL: '/auth/facebook/redirect',
+  clientID: keys.facebook.appID,
+  clientSecret: keys.facebook.appSecret,
+}, (accessToken, refreshToken, profile, done) => {
+  // callback
+  console.log('Facebook profile data: ', profile);
+}));

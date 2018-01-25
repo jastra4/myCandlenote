@@ -18,4 +18,10 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   res.send(req.user);
 });
 
+router.get('/facebook', passport.authenticate('facebook', { scope: ['profile'] }));
+
+router.get('/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
+  res.send(req.user);
+});
+
 module.exports = router;
