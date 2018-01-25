@@ -1,2 +1,3 @@
 node_modules/
+redux-setup
 client/dist/bundle.js
