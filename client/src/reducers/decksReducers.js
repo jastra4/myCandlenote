@@ -13,7 +13,7 @@ const decksReducer = (state = defaultState, action) => {
         ...state,
         byId: {
           ...state.byId,
-          [action.payload.id]: action.paylaod,
+          [action.payload.id]: action.payload,
         },
       };
     case 'SET_DECKS': {

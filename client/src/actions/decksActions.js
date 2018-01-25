@@ -29,7 +29,7 @@ export const deleteDeck = deckId => (
   dispatch => (
     axios.post('/deleteDeck/', deckId)
       .then((res) => {
-        console.log('Delte deck response:', res.data);
+        console.log('Delete deck response:', res.data);
         dispatch({
           type: 'DELETE_DECK',
           payload: { id: deckId },

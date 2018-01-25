@@ -20,7 +20,7 @@ export const getNotes = userId => (
   )
 );
 
-export const setCurrentnote = noteId => ({
+export const setCurrentNote = noteId => ({
   type: 'SET_CURRENT_NOTES',
   payload: { id: noteId },
 });

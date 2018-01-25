@@ -29,7 +29,7 @@ export const deleteFlashcard = cardId => (
   dispatch => (
     axios.post('/deleteCard/', cardId)
       .then((res) => {
-        console.log('Delte Card response:', res.data);
+        console.log('Delete Card response:', res.data);
         dispatch({
           type: 'DELETE_FLASHCARD',
           payload: { id: cardId },

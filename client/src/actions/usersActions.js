@@ -15,4 +15,4 @@ export const getUser = userId => (
   )
 );
 
-export const removeCurrentUser = () => ({ type: 'SET_CURRENT_USER' });
+export const removeCurrentUser = () => ({ type: 'REMOVE_CURRENT_USER' });
