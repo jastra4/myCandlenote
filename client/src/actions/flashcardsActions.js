@@ -5,6 +5,17 @@ export const addFlashcard = cardInfo => ({
   payload: cardInfo,
 });
 
+export const createFlashcard = cardInfo => (
+  dispatch => (
+    axios.post('/api/flashcards', cardInfo)
+      .then(
+        res => dispatch(addFlashcard(res.data)),
+        err => console.log(err),
+      )
+  )
+);
+
+
 export const setFlashcards = cards => ({
   type: 'SET_FLASHCARDS',
   payload: cards,
@@ -12,7 +23,7 @@ export const setFlashcards = cards => ({
 
 export const getFlashcards = deckId => (
   dispatch => (
-    axios.get(`/flashCards/${deckId}`)
+    axios.get(`/api/flashcards/${deckId}`)
       .then(
         res => dispatch(setFlashcards(res.data)),
         err => console.log(err),
@@ -27,7 +38,7 @@ export const setCurrentFlashcard = cardId => ({
 
 export const deleteFlashcard = cardId => (
   dispatch => (
-    axios.post('/deleteCard/', cardId)
+    axios.post('/api/deleteCard/', cardId)
       .then((res) => {
         console.log('Delete Card response:', res.data);
         dispatch({
