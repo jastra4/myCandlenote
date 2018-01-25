@@ -1,5 +1,6 @@
 const dotProp = require('dot-prop-immutable');
 
+// v For Testing v
 const defaultState = {
   byId: {
     7: {
@@ -16,6 +17,12 @@ const defaultState = {
   currentDeck: -1,
   allIds: [],
 };
+
+// const defaultState = {
+//   byId: {},
+//   currentDeck: -1,
+//   allIds: [],
+// };
 
 const decksReducer = (state = defaultState, action) => {
   switch (action.type) {
