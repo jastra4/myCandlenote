@@ -18,6 +18,9 @@ const port = process.env.PORT || 3000;
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+
+app.use(passport.initialize());
+
 app.use('/auth', authRoutes);
 
 app.use(cookieSession({
@@ -25,7 +28,7 @@ app.use(cookieSession({
   keys: [keys.session.cookieKey],
 }));
 
-app.use(passport.initialize());
+
 app.use(passport.session());
 
 mongoose.connect(keys.mongodb.dbURI, () => {

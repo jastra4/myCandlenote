@@ -4,8 +4,8 @@ module.exports = {
     clientSecret: 'CLXad98mTAHKgle_agVPYxjX',
   },
   facebook: {
-    appID: '210594366155121',
-    appSecret: '491539075de8bc947e2aec62bac84d5e',
+    appID: '124123284954960',
+    appSecret: '7994d00d4e3b07994a5de7e7aa055eeb',
   },
   mongodb: {
     dbURI: 'mongodb://root:root@ds045604.mlab.com:45604/candlenote',
