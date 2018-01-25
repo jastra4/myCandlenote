@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 
 const DeckCreator = (props) => {
   const { length } = { length: Object.keys(props.decksById).length };
@@ -12,7 +13,10 @@ const DeckCreator = (props) => {
           return (<li
             id={deck.id}
             key={deck.id}
-            onClick={() => props.setCurrentDeck(deck.id)}
+            onClick={() => {
+              props.setCurrentDeck(deck.id);
+              props.history.push('/flashcard');
+            }}
           >
             Subject: {deck.subject}, Title: {deck.title}
           </li>);
@@ -22,4 +26,4 @@ const DeckCreator = (props) => {
   );
 };
 
-export default DeckCreator;
+export default withRouter(DeckCreator);
