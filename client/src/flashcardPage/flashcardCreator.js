@@ -39,4 +39,6 @@ const FlashcardCreator = ({ dispatch }) => {
   );
 };
 
-export default connect()(FlashcardCreator);
+const mapStateToProps = state => ({ currentDeck: state.decks.currentDeck });
+
+export default connect(mapStateToProps)(FlashcardCreator);
