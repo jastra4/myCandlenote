@@ -1,5 +1,5 @@
 import React from 'react';
-import FlashcardCreator from './flashcardCreator';
+import FlashcardCreator from './FlashcardCreator';
 
 const FlashcardPage = () => (
   <div>

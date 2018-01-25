@@ -5,7 +5,8 @@ import { Provider } from 'react-redux';
 import MainPage from './mainPage';
 import PageTwo from './pageTwo';
 import NotFoundPage from './notFoundPage';
-import FlashcardPage from './flashcardPage';
+import DeckCreator from './decksPage/DeckCreatorContainer';
+import FlashcardPage from './flashcardsPage';
 import store from '../src/store';
 
 const App = () => (
@@ -15,6 +16,7 @@ const App = () => (
         <Route path='/' component={ MainPage } exact={ true } ></Route>
         <Route path='/two' component={ PageTwo }></Route>
         <Route path='/flashcard' component={ FlashcardPage }></Route>
+        <Route path='/createDeck' component= { DeckCreator }></Route>
         <Route component={ NotFoundPage }></Route>
       </Switch>
     </BrowserRouter>
