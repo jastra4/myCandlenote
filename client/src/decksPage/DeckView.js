@@ -1,40 +1,17 @@
 import React from 'react';
 
 const DeckCreator = (props) => {
-  let subject;
-  let title;
-  let id = 1;
+  const { length } = { length: Object.keys(props.decksById).length };
 
   return (
     <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          props.addDeck({
-            subject: subject.value,
-            title: title.value,
-            userId: props.userId,
-            id,
-          });
-          subject.value = '';
-          title.value = '';
-          id += 1;
-        }}
-      >
-        <input type="text" placeholder="subject"
-          ref={(node) => {
-            subject = node;
-          }}
-        />
-        <input type="text" placeholder="title"
-          ref={(node) => {
-            title = node;
-          }}
-        />
-        <button type="submit">
-          Add Deck
-        </button>
-      </form>
+      <p>You have {length} decks!</p>
+      <ul>
+        {Object.keys(props.decksById).map((key) => {
+          const deck = props.decksById[key];
+          return (<li id={deck.id} key={deck.id}>Subject: {deck.subject}, Title: {deck.title}</li>);
+        })}
+      </ul>
     </div>
   );
 };

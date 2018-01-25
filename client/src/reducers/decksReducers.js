@@ -1,7 +1,18 @@
 const dotProp = require('dot-prop-immutable');
 
 const defaultState = {
-  byId: {},
+  byId: {
+    7: {
+      id: 7,
+      subject: 'Physics',
+      title: 'Kinematics',
+    },
+    10: {
+      id: 10,
+      subject: 'Math',
+      title: 'Derivatives',
+    },
+  },
   currentDeck: -1,
   allIds: [],
 };
