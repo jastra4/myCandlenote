@@ -13,7 +13,7 @@ $ npm run build                 # Spins up Webpack, with --watch flag
 
  ## Linting
 
- This repository uses TravisCI to enforce the Airbnb JavaScript Style Guide. Pull requests that are not compliant with the guide will be automatically blocked from merging.
+ This repository uses TravisCI to enforce the Airbnb JavaScript Style Guide. Pull requests that are not compliant with the guide will be automatically blocked from merging...
 
  To run the linting tests locally, run the following command in your terminal:
 
