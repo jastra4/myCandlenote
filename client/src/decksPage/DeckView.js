@@ -15,7 +15,7 @@ const DeckCreator = (props) => {
             key={deck.id}
             onClick={() => {
               props.setCurrentDeck(deck.id);
-              props.history.push('/flashcard');
+              props.history.push('/flashcards');
             }}
           >
             Subject: {deck.subject}, Title: {deck.title}
