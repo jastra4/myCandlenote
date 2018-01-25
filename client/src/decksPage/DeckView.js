@@ -9,7 +9,13 @@ const DeckCreator = (props) => {
       <ul>
         {Object.keys(props.decksById).map((key) => {
           const deck = props.decksById[key];
-          return (<li id={deck.id} key={deck.id}>Subject: {deck.subject}, Title: {deck.title}</li>);
+          return (<li
+            id={deck.id}
+            key={deck.id}
+            onClick={() => props.setCurrentDeck(deck.id)}
+          >
+            Subject: {deck.subject}, Title: {deck.title}
+          </li>);
         })}
       </ul>
     </div>
