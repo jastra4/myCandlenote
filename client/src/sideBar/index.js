@@ -1,13 +1,17 @@
-import React, { Component } from 'react'
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react'
+import React, { Component } from 'react';
+import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 
-class MenuBar extends Component {
-  state = { visible: true }
-
+export default class SideBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   render() {
+    const { ContentPage } = this.props;
     return (
       <div>
+        <Sidebar.Pushable as={Segment}>
           <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
             <Menu.Item name='home'>
               <Icon name='home' />
@@ -34,9 +38,19 @@ class MenuBar extends Component {
               Quizzlet
             </Menu.Item>
           </Sidebar>
+          <Sidebar.Pusher>
+            <Segment basic style={{
+                backgroundColor: 'red',
+                marginTop: '35px',
+                marginRight: '100px',
+                paddingRight: '75px',
+                minHeight: '10005px',
+              }}>
+              <ContentPage />
+            </Segment>
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
       </div>
-    )
+    );
   }
 }
-
-export default MenuBar
