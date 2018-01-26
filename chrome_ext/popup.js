@@ -11,6 +11,7 @@ function myFunction() {
     //chrome.pageCapture.saveAsMHTML({ tabId: activeTab.id }, function(mhtml) {console.log('callback ran: ', mhtml)});
     //chrome.tabs.sendMessage(activeTab.id, {'message': activeTab.url});
     //chrome.runtime.sendMessage(activeTab.id, {'message': activeTab.url});
+    console.log('activeTab: ', activeTab);
     chrome.runtime.sendMessage({url: activeTab.url}, function(response) {
   		//console.log(response.farewell);
   		console.log('done');

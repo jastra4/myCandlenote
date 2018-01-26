@@ -8,6 +8,7 @@ const morgan = require('morgan');
 var childProcess = require('child_process');
 var phantomjs = require('phantomjs');
 var webpage = require('webpage');
+var webshot = require('webshot');
 var binPath = phantomjs.path;
 //
 
@@ -23,15 +24,33 @@ app.use(bodyParser.json());
 
 /* ----------- GET Handlers --------- */
 
-// app.get('/makePDF', (req, res) => {
-//   console.log('received request');
-//   res.sendStatus(200);
-// })
-
 app.post('/makePDF', (req, res) => {
-  console.log('received request: ', req.body);
+  console.log('received request: ', req.body.tab_url);
+  var myUrl = req.body.tab_url;
+  var title = JSON.stringify(Date.now());
+
+  var options = {
+    streamType: 'pdf',
+    windowSize: {
+      width: 1024,
+      height: 786,
+    },
+    shotSize: {
+      width: 'all',
+      height: 'all',
+    }
+  };
+  console.log('title: ', title);
+  webshot(myUrl, 'PDFs/' + title + '.pdf', options, (err) => {
+    if (err) {
+      return console.log(err);
+    } else {
+      return console.log('image successfully created');
+    }
+  });
+
   res.sendStatus(201);
-})
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
@@ -40,16 +59,6 @@ app.get('*', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
-// phantomjs.create(function( error, ph) {
-//   ph.createPage(function(err, page) {
-//     page.open(url, function(err, status) {
-// 		  console.log('Status: ' + status);
-// 		  if (status === 'success') {
-// 		    page.render('example.png');
-// 		  }
-//     });
-//   });
-// });
 
 /* ----------- API Routes ------------ */
 
