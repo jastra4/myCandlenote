@@ -1,20 +1,27 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import MainPage from './mainPage';
-import PageTwo from './pageTwo';
-import NotFoundPage from './notFoundPage';
+import Notepad from './notepad';
+import MenuBar from './menuBar';
+import TopBar from './topBar';
+import { Menu } from 'semantic-ui-react'
+// import 'semantic-ui-css/semantic.min.css';
 
 const App = () => (
   <div>
-    <BrowserRouter>
-      <Switch>
-        <Route path='/' component={ MainPage } exact={ true } ></Route>
-        <Route path='/two' component={ PageTwo }></Route>
-        <Route component={ NotFoundPage }></Route>
-      </Switch>
-    </BrowserRouter>
+    <TopBar />
   </div>
+)
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
 );
 
-ReactDOM.render(<App />, document.getElementById('app'));
+
+// <div>
+//   <img src="/assets/CandleNote-Main-Logo.png"></img>
+// </div>
+// <MenuBar />
+
+// <Notepad />

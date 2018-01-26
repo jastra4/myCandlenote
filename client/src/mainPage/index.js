@@ -1,4 +1,5 @@
 import React from 'react';
+import DanteEditor from 'Dante2';
 
 export default class MainPage extends React.Component {
   constructor() {
@@ -10,6 +11,7 @@ export default class MainPage extends React.Component {
     <div>
       <h1>Main Page</h1>
       <p>Hello World :)</p>
+      <DanteEditor />
     </div>
   );
 }

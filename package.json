@@ -18,6 +18,7 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
+    "Dante2": "^0.4.3",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
@@ -28,12 +29,15 @@
     "body-parser": "^1.18.2",
     "eslint": "^4.16.0",
     "express": "^4.16.2",
+    "medium-draft": "^0.6.0-beta1",
     "mongoose": "^5.0.1",
     "morgan": "^1.9.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.2",
     "webpack": "^3.10.0",
     "webpack-css-loaders": "^1.0.0",
     "webpack-dev-server": "^2.9.7"

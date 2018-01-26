@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class PageTwo extends React.Component {
+export default class MenuBar extends React.Component {
   constructor() {
     super();
     this.state = {};
@@ -8,7 +8,7 @@ export default class PageTwo extends React.Component {
 
   render = () => (
     <div>
-      <h1>Page Two!!</h1>
+      <p>MenuBar!!!</p>
     </div>
   );
 }
