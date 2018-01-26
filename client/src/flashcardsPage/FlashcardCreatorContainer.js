@@ -4,7 +4,7 @@ import { addFlashcard } from '../actions/flashcardsActions';
 import FlashcardCreator from './FlashcardCreator';
 
 const mapStateToProps = state => ({
-  selectedDeck: state.decks.selectedDeck,
+  currentDeck: state.decks.currentDeck,
   decksById: state.decks.byId,
 });
 
