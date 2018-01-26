@@ -31,10 +31,7 @@ class FlashcardView extends React.Component {
           <button type="button" onClick={() => this.changeIndex(-1)}>Prev Card</button>
           <button type="button" onClick={() => this.changeIndex(1)}>Next Card</button>
         </div>
-        <div onClick={() => {
-          console.log(this.state);
-          this.flipCard();
-        }}>
+        <div onClick={() => this.flipCard()}>
           <ReactCardFlip isFlipped={this.state.flipped} infinite={true} onClick={() => {
             console.log(this.state);
             this.flipCard();
