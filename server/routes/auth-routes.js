@@ -15,7 +15,7 @@ router.get('/logout', (req, res) => {
 router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-  res.send(req.user);
+  res.redirect('/user/');
 });
 
 router.get('/facebook', passport.authenticate('facebook', { scope: ['profile'] }));

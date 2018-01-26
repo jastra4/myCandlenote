@@ -8,6 +8,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 
 const authRoutes = require('./routes/auth-routes.js');
+const userRoutes = require('./routes/user-routes.js');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 
 app.use('/auth', authRoutes);
+app.use('/user', userRoutes);
 
 app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000,
