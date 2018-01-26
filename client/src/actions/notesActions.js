@@ -5,6 +5,16 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
+export const createNote = noteInfo => (
+  dispatch => (
+    axios.post('/api/notes', noteInfo)
+      .then(
+        res => dispatch(addNote(res.data)),
+        err => console.log(err),
+      )
+  )
+);
+
 export const setNotes = notes => ({
   type: 'SET_NOTES',
   payload: notes,
@@ -12,7 +22,7 @@ export const setNotes = notes => ({
 
 export const getNotes = userId => (
   dispatch => (
-    axios.get(`/notes/${userId}`)
+    axios.get(`/api/notes/${userId}`)
       .then((res) => {
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
@@ -27,7 +37,7 @@ export const setCurrentNote = noteId => ({
 
 export const deleteNote = noteId => (
   dispatch => (
-    axios.post('/deleteNote/', noteId)
+    axios.post('/api/deleteNote/', noteId)
       .then((res) => {
         console.log('Delete note res:', res.body);
         dispatch({
