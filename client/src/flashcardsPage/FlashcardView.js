@@ -5,6 +5,12 @@ import { Segment, Button, Header, Icon, Checkbox } from 'semantic-ui-react';
 const styles = {
   containerDiv: {
     padding: '2vw',
+    veritcalAlign: 'top',
+  },
+  headerContainer: {
+    position: 'relative',
+    top: '-10vh',
+    display: 'inline-block',
   },
   cardText: {
     fontSize: '5em',
@@ -18,6 +24,7 @@ const styles = {
   mainDiv: {
     padding: '1vw 4vw',
     height: '35vw',
+    display: 'inline-block',
   },
 };
 
@@ -68,6 +75,15 @@ class FlashcardView extends React.Component {
     return (
       <div style={styles.containerDiv}>
         <Segment size="massive">
+          <div style={styles.headerContainer}>
+            <Header as='h2' icon>
+              <Icon name='clone' />
+              Deck:
+              <Header.Subheader>
+                {this.props.currentDeck.title}
+              </Header.Subheader>
+            </Header>
+          </div>
           <div style={styles.mainDiv}>
             <div onClick={() => this.flipCard()}>
               <ReactCardFlip isFlipped={this.state.flipped} infinite={true} onClick={() => {
