@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactCardFlip from 'react-card-flip';
-import { Segment, Button, Header, Icon } from 'semantic-ui-react';
+import { Segment, Button, Header, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   containerDiv: {
@@ -34,11 +34,24 @@ class FlashcardView extends React.Component {
       index: 0,
       cards: this.props.cards.length ? this.props.cards : [this.defaultCard],
       flipped: false,
+      checked: false,
     };
   }
 
+  onCheckboxChange(e, data) {
+    console.log(data);
+    this.setState({ checked: data.checked });
+  }
+
   flipCard() {
-    this.setState({ flipped: !this.state.flipped });
+    if (this.state.checked) {
+      this.setState({
+        flipped: !this.state.flipped,
+        index: this.state.index + 0.5,
+      });
+    } else {
+      this.setState({ flipped: !this.state.flipped });
+    }
   }
 
   changeIndex(amount) {
@@ -62,10 +75,10 @@ class FlashcardView extends React.Component {
                 this.flipCard();
               }}>
                 <Segment key="front">
-                  <p style={styles.cardText}>{cards[index % cards.length].front}</p>
+                  <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].front}</p>
                 </Segment>
                 <Segment key="back">
-                  <p style={styles.cardText}>{cards[index % cards.length].back}</p>
+                  <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].back}</p>
                 </Segment>
               </ReactCardFlip>
             </div>
@@ -85,6 +98,7 @@ class FlashcardView extends React.Component {
                   <Icon name='right arrow' />
                 </Button.Content>
               </Button>
+              <Checkbox label="Auto Flip to next card" onChange={this.onCheckboxChange.bind(this)} size="big" />
             </div>
           </div>
         </Segment>
