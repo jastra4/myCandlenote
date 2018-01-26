@@ -2,15 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-
-//
-//var path = require('path');
-var childProcess = require('child_process');
-var phantomjs = require('phantomjs');
-var webpage = require('webpage');
-var webshot = require('webshot');
-var binPath = phantomjs.path;
-//
+const webshot = require('webshot');
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,12 +16,19 @@ app.use(bodyParser.json());
 
 /* ----------- GET Handlers --------- */
 
-app.post('/makePDF', (req, res) => {
-  console.log('received request: ', req.body.tab_url);
-  var myUrl = req.body.tab_url;
-  var title = JSON.stringify(Date.now());
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
 
-  var options = {
+
+/* --------- POST Handlers ----------- */
+
+app.post('/makePDF', (req, res) => {
+  const myUrl = req.body.tab_url;
+  const title = JSON.stringify(Date.now());
+
+  // defaut webshot options
+  const options = {
     streamType: 'pdf',
     windowSize: {
       width: 1024,
@@ -38,27 +37,18 @@ app.post('/makePDF', (req, res) => {
     shotSize: {
       width: 'all',
       height: 'all',
-    }
+    },
   };
-  console.log('title: ', title);
-  webshot(myUrl, 'PDFs/' + title + '.pdf', options, (err) => {
+
+  // webshot wraps phantomjs and provides a simple API
+  // phantomjs is essentially a web browser with no GUI
+  webshot(myUrl, `PDFs/${title}.pdf`, options, (err) => {
     if (err) {
-      return console.log(err);
-    } else {
-      return console.log('image successfully created');
+      res.sendStatus(500);
     }
+    res.sendStatus(200);
   });
-
-  res.sendStatus(201);
 });
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
-});
-
-
-/* --------- POST Handlers ----------- */
-
 
 /* ----------- API Routes ------------ */
 

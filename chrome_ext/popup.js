@@ -1,24 +1,18 @@
- console.log('popup.js loaded!', chrome)
+console.log('popup.js loaded!');
 
-function myFunction() {
-  console.log('test')
-}
-
- function popup() {
-  chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
-    var activeTab = tabs[0];
-    console.log(activeTab.url);
-    //chrome.pageCapture.saveAsMHTML({ tabId: activeTab.id }, function(mhtml) {console.log('callback ran: ', mhtml)});
-    //chrome.tabs.sendMessage(activeTab.id, {'message': activeTab.url});
-    //chrome.runtime.sendMessage(activeTab.id, {'message': activeTab.url});
-    console.log('activeTab: ', activeTab);
-    chrome.runtime.sendMessage({url: activeTab.url}, function(response) {
-  		//console.log(response.farewell);
-  		console.log('done');
-		});
+// Input: none
+// Result: sends current url to event.js
+function popup() {
+  chrome.tabs.query({
+    currentWindow: true, active: true,
+  }, (tabs) => {
+    const activeTab = tabs[0];
+    chrome.runtime.sendMessage({ url: activeTab.url });
   });
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+// Input: none
+// Result: invokes popup when users click "save PDF" in chrome extension
+document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('saveArticle').addEventListener('click', popup);
 });
