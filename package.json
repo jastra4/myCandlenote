@@ -1,7 +1,7 @@
 {
-  "name": "DiscoverAustin",
+  "name": "CandleNote",
   "version": "1.0.0",
-  "description": "A gamified, geolocation-based, mobile-first web application to help Austinities &amp; Tourists alike discover new spots around town",
+  "description": "The world's finest note-taking application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
