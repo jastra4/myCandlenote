@@ -9,25 +9,32 @@ const DeckView = (props) => {
   return (
     <div>
       <p>You have {decks.length} decks!</p>
-      <Card.Group itemsPerRow={4}>
-        {decks.map(deck => (
-          <Card
-            key={deck.id}
-            raised
-            onClick={() => {
-              props.setCurrentDeck(deck.id);
-              props.history.push('/flashcards');
-            }}
-          >
-            <Card.Content>
-              <Icon floated="right" size="mini" name="remove" onClick={() => props.deleteDeck(deck.id)} />
-              <Segment stacked>
-                Subject: {deck.subject}
-                Title: {deck.title}
-              </Segment>
-            </Card.Content>
-          </Card>))}
-      </Card.Group>
+      <Segment>
+        <Card.Group itemsPerRow={4}>
+          {decks.map(deck => (
+            <Card
+              key={deck.id}
+              raised
+            >
+              <Card.Content>
+                <Icon floated="right" name="remove" onClick={() => props.deleteDeck(deck.id)} />
+                <Segment
+                  stacked
+                  onClick={() => {
+                    props.setCurrentDeck(deck.id);
+                    props.history.push('/flashcards');
+                  }}
+                >
+                  <p>
+                    Subject: {deck.subject}
+                    <br></br>
+                    Title: {deck.title}
+                  </p>
+                </Segment>
+              </Card.Content>
+            </Card>))}
+        </Card.Group>
+      </Segment>
     </div>
   );
 };

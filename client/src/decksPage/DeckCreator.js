@@ -1,42 +1,50 @@
 import React from 'react';
+import { Form, Input, TextArea, Button, Segment, Divider, Container } from 'semantic-ui-react';
+import { v1 } from 'uuid';
 
-const DeckCreator = (props) => {
-  let subject;
-  let title;
-  let id = 1;
+class DeckCreator extends React.Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          props.addDeck({
-            subject: subject.value,
-            title: title.value,
-            userId: props.userId,
-            id,
-          });
-          subject.value = '';
-          title.value = '';
-          id += 1;
-        }}
-      >
-        <input type="text" placeholder="subject"
-          ref={(node) => {
-            subject = node;
-          }}
-        />
-        <input type="text" placeholder="title"
-          ref={(node) => {
-            title = node;
-          }}
-        />
-        <button type="submit">
-          Add Deck
-        </button>
-      </form>
-    </div>
-  );
-};
+    this.state = {
+      subject: '',
+      title: '',
+    };
+  }
+
+  onSubjectChange(e) {
+    this.setState({ subject: e.target.value })
+  }
+
+  onTitleChange(e) {
+    this.setState({ title: e.target.value })
+  }
+
+  onFormSubmit(e) {
+    e.preventDefault();
+    const deckInfo = {
+      ...this.state,
+      id: v1(),
+      userId: this.props.userId,
+    };
+
+    this.props.addDeck(deckInfo);
+  }
+
+  render() {
+    return (
+      <Container>
+        <Segment>
+          <Form onSubmit={e => this.onFormSubmit(e)}>
+            <Form.Field control={Input} label='Subject' placeholder='Subject' onChange={e => this.onSubjectChange(e)} />
+            <Divider />
+            <Form.Field control={Input} label='Title' placeholder='Title' onChange={e => this.onTitleChange(e)} />
+            <Form.Field id='form-button-control-public' control={Button} content='Confirm' label='Create Deck' />
+          </Form>
+        </Segment>
+      </Container>
+    );
+  }
+}
 
 export default DeckCreator;
