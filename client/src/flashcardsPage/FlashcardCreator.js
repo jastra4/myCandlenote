@@ -1,11 +1,15 @@
 import React from 'react';
 import { v1 } from 'uuid';
+import { Segment, Button, Form, Dropdown } from 'semantic-ui-react';
 
 const mapDecksToOptions = decksById => (
-  Object.keys(decksById).map(key => (
-    <option value={decksById[key].id} key={key}>{decksById[key].title}</option>
-  ))
+  Object.keys(decksById).map(key => ({
+    key,
+    text: decksById[key].title,
+    value: decksById[key].id,
+  }))
 );
+
 
 class FlashcardCreator extends React.Component {
   constructor(props) {
@@ -26,8 +30,9 @@ class FlashcardCreator extends React.Component {
     this.setState({ back: e.target.value });
   }
 
-  onDeckChange(e) {
-    this.setState({ selectedDeck: e.target.value });
+  onDeckChange(e, selection) {
+    console.log(selection.value);
+    this.setState({ selectedDeck: selection.value });
   }
 
   onSubmit(e) {
@@ -36,26 +41,36 @@ class FlashcardCreator extends React.Component {
     this.props.addFlashcard({
       front: this.state.front,
       back: this.state.back,
-      deckId: this.props.currentDeck.id,
+      deckId: this.state.selectedDeck,
       id: v1(),
     });
   }
 
   render() {
+    console.log(this.state);
     return (
       <div>
-        <form
-          onSubmit={this.onSubmit.bind(this)}
-        >
-          <input type="text" placeholder="front" onChange={this.onFrontChange.bind(this)} />
-          <input type="text" placeholder="back" onChange={this.onBackChange.bind(this)} />
-          <select onChange={this.onDeckChange.bind(this)}>
-            {mapDecksToOptions(this.props.decksById)}
-          </select>
-          <button type="submit">
-            Add Flashcard
-          </button>
-        </form>
+        <Segment>
+          <Form onSubmit={this.onSubmit.bind(this)}>
+            <Form.Field>
+              <label>Prompt</label>
+              <Form.TextArea placeholder='Prompt' onChange={this.onFrontChange.bind(this)} rows="4" />
+            </Form.Field>
+            <Form.Field>
+              <label>Answer</label>
+              <Form.TextArea placeholder='Answer' onChange={this.onBackChange.bind(this)} rows="4" />
+            </Form.Field>
+            <Form.Group inline>
+              <Button type='submit'>Submit</Button>
+              <Form.Dropdown
+                selection
+                placeholder='Deck'
+                options={mapDecksToOptions(this.props.decksById)}
+                onChange={this.onDeckChange.bind(this)}
+              />
+            </Form.Group>
+          </Form>
+        </Segment>
       </div>
     );
   }
