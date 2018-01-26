@@ -20,7 +20,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-
 /* --------- POST Handlers ----------- */
 
 app.post('/makePDF', (req, res) => {
