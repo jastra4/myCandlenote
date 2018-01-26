@@ -1,10 +1,10 @@
 import React from 'react';
 
-const mapDecksToOptions = (decksById) => {
-  return Object.keys(decksById).map(key => (
+const mapDecksToOptions = decksById => (
+  Object.keys(decksById).map(key => (
     <option value={decksById[key].id} key={key}>{decksById[key].title}</option>
-  ));
-};
+  ))
+);
 
 const FlashcardCreator = (props) => {
   let front;
@@ -18,7 +18,12 @@ const FlashcardCreator = (props) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          props.addFlashcard({ front: front.value, back: back.value, id, deckId });
+          props.addFlashcard({
+            front: front.value,
+            back: back.value,
+            id,
+            deckId,
+          });
           front.value = '';
           back.value = '';
           id += 1;
