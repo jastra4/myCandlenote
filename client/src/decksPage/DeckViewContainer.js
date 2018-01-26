@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 
 import DeckView from './DeckView';
-import { setCurrentDeck } from '../actions/decksActions';
+import { setCurrentDeck, deleteDeck } from '../actions/decksActions';
 
 const mapStateToProps = state => ({ decksById: state.decks.byId });
 
-const mapDispatchToProps = dispatch => (
-  { setCurrentDeck: deckId => dispatch(setCurrentDeck(deckId)) });
+const mapDispatchToProps = dispatch => ({
+  setCurrentDeck: deckId => dispatch(setCurrentDeck(deckId)),
+  deleteDeck: deckId => deleteDeck(deckId),
+});
 
 export default connect(
   mapStateToProps,

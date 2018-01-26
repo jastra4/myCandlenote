@@ -1,29 +1,35 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { Card, Segment, Icon } from 'semantic-ui-react';
 
-const DeckCreator = (props) => {
-  const { length } = { length: Object.keys(props.decksById).length };
+const DeckView = (props) => {
+  const decks = Object.keys(props.decksById).map(key => props.decksById[key]);
+  console.log(decks);
 
   return (
     <div>
-      <p>You have {length} decks!</p>
-      <ul>
-        {Object.keys(props.decksById).map((key) => {
-          const deck = props.decksById[key];
-          return (<li
-            id={deck.id}
+      <p>You have {decks.length} decks!</p>
+      <Card.Group itemsPerRow={4}>
+        {decks.map(deck => (
+          <Card
             key={deck.id}
+            raised
             onClick={() => {
               props.setCurrentDeck(deck.id);
               props.history.push('/flashcards');
             }}
           >
-            Subject: {deck.subject}, Title: {deck.title}
-          </li>);
-        })}
-      </ul>
+            <Card.Content>
+              <Icon floated="right" size="mini" name="remove" onClick={() => props.deleteDeck(deck.id)} />
+              <Segment stacked>
+                Subject: {deck.subject}
+                Title: {deck.title}
+              </Segment>
+            </Card.Content>
+          </Card>))}
+      </Card.Group>
     </div>
   );
 };
 
-export default withRouter(DeckCreator);
+export default withRouter(DeckView);
