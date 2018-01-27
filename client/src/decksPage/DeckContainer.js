@@ -10,7 +10,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setCurrentDeck: deckId => dispatch(setCurrentDeck(deckId)),
-  deleteDeck: deckId => deleteDeck(deckId),
+  deleteDeck: deckId => dispatch(deleteDeck(deckId)),
   addDeck: deckInfo => dispatch(addDeck(deckInfo)),
 });
 

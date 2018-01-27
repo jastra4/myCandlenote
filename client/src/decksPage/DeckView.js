@@ -33,7 +33,12 @@ const DeckView = (props) => {
                 raised
               >
                 <Card.Content>
-                  <Icon floated="right" name="remove" onClick={() => props.deleteDeck(deck.id)} />
+                  <div onClick={() => {
+                    console.log('Delete button clicked');
+                    props.deleteDeck(deck.id);
+                  }}>
+                    <Icon floated="right" name="remove" />
+                  </div>
                   <Segment
                     color="brown"
                     textAlign="center"
