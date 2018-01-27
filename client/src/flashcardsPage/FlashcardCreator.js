@@ -39,11 +39,10 @@ class FlashcardCreator extends React.Component {
 
     const { front, back } = this.state;
 
-    this.props.addFlashcard({
+    this.props.createFlashcard({
       front,
       back,
       deckId: this.state.selectedDeck,
-      id: v1(),
     });
 
     this.setState({

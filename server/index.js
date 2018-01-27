@@ -106,19 +106,19 @@ app.post('/api/decks', (req, res) => {
     .catch(err => console.log(err));
 });
 
-// app.post('/api/flashcards', (req, res) => {
-//   inserts.insertFlashcard(req.body)
-//     .then((result) => {
-//       const { _id: id, subject, title, userId } = result._doc;
-//       res.send({
-//         id,
-//         subject,
-//         title,
-//         userId,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// });
+app.post('/api/flashcards', (req, res) => {
+  inserts.insertFlashcard(req.body)
+    .then((result) => {
+      const { _id: id, front, back, deckId } = result._doc;
+      res.send({
+        id,
+        front,
+        back,
+        deckId,
+      });
+    })
+    .catch(err => console.log(err));
+});
 
 /* -------- Initialize Server -------- */
 

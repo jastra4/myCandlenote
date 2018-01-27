@@ -24,7 +24,6 @@ class DeckCreator extends React.Component {
     e.preventDefault();
     const deckInfo = {
       ...this.state,
-      id: v1(),
       userId: this.props.userId,
     };
 
