@@ -75,7 +75,11 @@ class FlashcardView extends React.Component {
     return (
       <div style={styles.mainDiv}>
         <div onClick={() => this.flipCard()} style={styles.flipCard}>
-          <ReactCardFlip isFlipped={this.state.flipped} infinite={true} onClick={() => this.flipCard()}>
+          <ReactCardFlip
+            isFlipped={this.state.flipped}
+            infinite={true}
+            onClick={() => this.flipCard()}
+          >
             <Segment key="front">
               <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].front}</p>
             </Segment>
