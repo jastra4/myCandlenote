@@ -7,10 +7,8 @@ import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import DeckCreator from './decksPage/DeckCreatorContainer';
-import DeckView from './decksPage/DeckViewContainer';
+import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage';
-import FlashcardView from './flashcardsPage/FlashcardViewContainer';
-import DeckListVert from './decksPage/DeckListVertContainer';
 import { store, persistor } from '../src/store';
 
 const App = () => (
@@ -22,8 +20,7 @@ const App = () => (
         <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/createDeck' exact={true} render={() => <TopBar ContentPage={DeckCreator }/>} />
         <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
-        <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckView} />} />
-        <Route path='/deckList' exact={true} render={() => <TopBar ContentPage={DeckListVert} />} />
+        <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
 
         <Route component={ NotFoundPage }></Route>
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
