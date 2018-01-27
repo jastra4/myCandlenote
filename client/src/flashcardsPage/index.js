@@ -61,7 +61,7 @@ const FlashcardPage = props => (
             <Card.Header textAlign="center">
               Decks
               </Card.Header>
-            <DeckListVert />
+              <DeckListVert />
           </Card.Content>
         </Card>
       </div>

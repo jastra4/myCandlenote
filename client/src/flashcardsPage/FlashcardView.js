@@ -40,8 +40,14 @@ class FlashcardView extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      flipped: false,
+      cards: nextProps.cards.length ? nextProps.cards : [this.defaultCard],
+    });
+  }
+
   onCheckboxChange(e, data) {
-    console.log(data);
     this.setState({ checked: data.checked });
   }
 
@@ -66,7 +72,6 @@ class FlashcardView extends React.Component {
 
   render() {
     const { cards, index } = this.state;
-    console.log('Current Deck:', this.props.currentDeck, 'd', this.props.cardsById, 'props', this.props);
     return (
       <div style={styles.mainDiv}>
         <div onClick={() => this.flipCard()} style={styles.flipCard}>

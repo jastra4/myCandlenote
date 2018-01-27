@@ -40,11 +40,18 @@ class FlashcardCreator extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
+    const { front, back } = this.state;
+
     this.props.addFlashcard({
-      front: this.state.front,
-      back: this.state.back,
+      front,
+      back,
       deckId: this.state.selectedDeck,
       id: v1(),
+    });
+
+    this.setState({
+      front: '',
+      back: '',
     });
   }
 
@@ -56,11 +63,11 @@ class FlashcardCreator extends React.Component {
           <Form onSubmit={this.onSubmit.bind(this)}>
             <Form.Field>
               <label>Prompt</label>
-              <Form.TextArea placeholder='Prompt' onChange={this.onFrontChange.bind(this)} rows="4" />
+              <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
-              <Form.TextArea placeholder='Answer' onChange={this.onBackChange.bind(this)} rows="4" />
+              <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
             </Form.Field>
             <Form.Group inline>
               <Button type='submit'>Submit</Button>
