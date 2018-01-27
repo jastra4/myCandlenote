@@ -2,12 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-<<<<<<< HEAD
+
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 // const cookieSession = require('cookie-session');
 const passport = require('passport');
-var session = require('express-session');
+const session = require('express-session');
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
@@ -28,6 +28,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   cookie: { maxAge: 24 * 60 * 60 * 1000 },
+  name: 'candleNote',
 }));
 
 // app.use(cookieSession({
