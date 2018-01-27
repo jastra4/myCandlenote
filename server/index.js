@@ -7,6 +7,7 @@ const webshot = require('webshot');
 const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
+users = {};
 
 app.use(bodyParser.json());
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -55,6 +56,17 @@ app.post('/makePDF', (req, res) => {
 
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
+
+  socket.on('new user', (data, callback) => {
+    if(data in users) {
+      callback(false);
+    } else {
+      callback(true);
+      socket.username = data;
+      users[socket.username] = socket;
+      io.sockets.emit('usernames', Object.keys(users));
+    }
+  });
 
   socket.on('send message', (data) => {
     io.sockets.emit('new message', data);
