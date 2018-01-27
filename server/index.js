@@ -109,7 +109,8 @@ app.post('/api/decks', (req, res) => {
 
 app.post('/api/deleteDeck', (req, res) => {
   deletes.deleteDeck(req.body.deckId)
-    .then(() => {
+    .then((result) => {
+      console.log(result);
       const { _id: id } = req.body;
       res.send(id);
     })
