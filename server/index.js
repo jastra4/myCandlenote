@@ -13,6 +13,9 @@ const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
 const webshot = require('webshot');
 
+// db imports
+const inserts = require('../database/inserts');
+
 const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
@@ -103,6 +106,33 @@ io.sockets.on('connection', (socket) => {
 
 /* ----------- API Routes ------------ */
 
+app.post('/api/decks', (req, res) => {
+  inserts.insertDeck(req.body)
+    .then((result) => {
+      const { _id: id, subject, title, userId } = result._doc;
+      res.send({
+        id,
+        subject,
+        title,
+        userId,
+      });
+    })
+    .catch(err => console.log(err));
+});
+
+// app.post('/api/flashcards', (req, res) => {
+//   inserts.insertFlashcard(req.body)
+//     .then((result) => {
+//       const { _id: id, subject, title, userId } = result._doc;
+//       res.send({
+//         id,
+//         subject,
+//         title,
+//         userId,
+//       });
+//     })
+//     .catch(err => console.log(err));
+// });
 
 /* -------- Initialize Server -------- */
 

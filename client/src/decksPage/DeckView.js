@@ -12,7 +12,6 @@ const styles = {
 
 const DeckView = (props) => {
   const decks = Object.keys(props.decksById).map(key => props.decksById[key]);
-  console.log(decks);
 
   return (
     <div>
@@ -33,10 +32,7 @@ const DeckView = (props) => {
                 raised
               >
                 <Card.Content>
-                  <div onClick={() => {
-                    console.log('Delete button clicked');
-                    props.deleteDeck(deck.id);
-                  }}>
+                  <div onClick={() => props.deleteDeck(deck.id)}>
                     <Icon floated="right" name="remove" />
                   </div>
                   <Segment

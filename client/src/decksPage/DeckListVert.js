@@ -29,10 +29,7 @@ const DeckListVert = (props) => {
         {decks.map(deck => (
           <Card
             fluid={true}
-            onClick={() => {
-              console.log('Deck:', deck.id);
-              props.setCurrentDeck(deck.id);
-            }}
+            onClick={() => props.setCurrentDeck(deck.id)}
           >
             <Card.Content>
               <p style={styles.cardTitle}>{deck.title}</p>

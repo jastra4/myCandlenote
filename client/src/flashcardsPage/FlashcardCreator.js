@@ -20,8 +20,6 @@ class FlashcardCreator extends React.Component {
       back: '',
       selectedDeck: '',
     };
-
-    console.log('State:', this.props);
   }
 
   onFrontChange(e) {
@@ -33,7 +31,6 @@ class FlashcardCreator extends React.Component {
   }
 
   onDeckChange(e, selection) {
-    console.log(selection.value);
     this.setState({ selectedDeck: selection.value });
   }
 
@@ -56,7 +53,6 @@ class FlashcardCreator extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     return (
       <div>
         <Segment>
