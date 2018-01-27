@@ -7,6 +7,8 @@ router.get('/login', (req, res) => {
   res.send('login page!');
 });
 
+console.log(passportSetup);
+
 router.get('/logout', (req, res) => {
   // handle with passport
   req.logout();
