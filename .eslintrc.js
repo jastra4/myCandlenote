@@ -28,7 +28,8 @@ module.exports = {
     "object-curly-newline": ["error", {
       "ObjectExpression": { "minProperties": 2},
       "ObjectPattern": "never"
-    }]
+    }],
+    "no-underscore-dangle": 0
   },
 
   "plugins": [ "react" ]

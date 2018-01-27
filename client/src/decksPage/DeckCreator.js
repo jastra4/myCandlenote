@@ -28,7 +28,8 @@ class DeckCreator extends React.Component {
       userId: this.props.userId,
     };
 
-    this.props.addDeck(deckInfo);
+    // this.props.addDeck(deckInfo);
+    this.props.createDeck(deckInfo);
 
     this.setState({
       subject: '',
