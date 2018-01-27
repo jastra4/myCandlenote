@@ -15,7 +15,7 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
-        <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} />
+        {/* <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} /> */}
         <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
