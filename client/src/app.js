@@ -1,13 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-<<<<<<< HEAD
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-
-=======
 import TopBar from './topBar';
->>>>>>> master
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import DeckCreator from './decksPage/DeckCreatorContainer';
@@ -21,13 +17,13 @@ const App = () => (
   <div>
     <BrowserRouter>
       <Switch>
-        <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
-        <Route path='/two' component={ PageTwo }></Route>
-        <Route path='/createFlashcard' component={ FlashcardPage }></Route>
-        <Route path='/createDeck' component={DeckCreator}></Route>
-        <Route path='/flashcards' component={FlashcardView}></Route>
-        <Route path='/decks' component={DeckView}></Route>
-        <Route path='/deckList' component= { DeckListVert }></Route>
+        <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
+        <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} />
+        <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
+        <Route path='/createDeck' exact={true} render={() => <TopBar ContentPage={DeckCreator }/>} />
+        <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardView} />} />
+        <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckView} />} />
+        <Route path='/deckList' exact={true} render={() => <TopBar ContentPage={DeckListVert} />} />
 
         <Route component={ NotFoundPage }></Route>
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
