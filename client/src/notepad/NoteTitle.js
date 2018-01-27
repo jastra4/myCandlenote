@@ -1,11 +1,17 @@
 import React from 'react';
 // import Canvas from './canvas';
-import ReactQuill from 'react-quill';
+import ReactQuill , { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import 'react-quill/dist/quill.bubble.css';
+import './NoteTitle.css';
 
-export default class Notepad extends React.Component {
+const styles = {
+  fontWeight: 'bold',
+  fontSize: '50px'
+}
+
+export default class NoteTitle extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
@@ -18,7 +24,7 @@ export default class Notepad extends React.Component {
     const value = JSON.parse(window.localStorage.getItem('noteTitle'))
     console.log('value: ', value);
     this.setState({ value });
-    this.formats = ['bold']
+    // this.formats = ['bold']
   }
 
   handleEditorChange = (value, d, source, editor) => {
@@ -34,12 +40,16 @@ export default class Notepad extends React.Component {
 
 
   render = () => (
+    <div style={{fontSize: '50px !important'}}>
     <ReactQuill
+      className='note'
       theme=""
       value={ this.state.value }
       onChange={ this.handleEditorChange }
       placeholder="Untitled"
-      formats={this.formats}
+      styles={styles}
+      formats={[{"header":1}]}
     />
+    </div>
   );
 }
