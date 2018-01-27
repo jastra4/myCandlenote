@@ -1,5 +1,5 @@
 import React from 'react';
-import Chat from './Chat.js';
+import StudyHall from '../studyHallPage/StudyHallContainer.js';
 
 export default class MainPage extends React.Component {
   constructor() {
@@ -11,8 +11,8 @@ export default class MainPage extends React.Component {
     <div>
       <h1>Main Page</h1>
       <p>Hello World :)</p>
-      <Chat />
       <a href="/auth/google">Sign In with Google</a>
+      <StudyHall />
     </div>
   );
 }

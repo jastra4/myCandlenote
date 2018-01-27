@@ -8,6 +8,7 @@ import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
+import StudyHallContainer from './studyHallPage/StudyHallContainer.js';
 import { store, persistor } from '../src/store';
 
 const App = () => (
@@ -19,14 +20,14 @@ const App = () => (
         <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
-
+        <Route path='/studyHall' exact={true} render={() => <TopBar ContentPage={StudyHall} />} />
         <Route component={ NotFoundPage }></Route>
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
   </BrowserRouter>
   </div>
 );
-
+console.log('store: ', store)
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

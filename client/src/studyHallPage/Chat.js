@@ -39,7 +39,7 @@ export default class Chat extends React.Component {
   render = () =>
     (
       <div>
-        This is a Chat component
+        This is a chat component
         <div id="contentWrap">
           <div id="chatWrap"> {this.state.messages.map((message, i) => (
             <Message key={i} message={message} />
