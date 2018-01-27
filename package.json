@@ -1,7 +1,7 @@
 {
-  "name": "DiscoverAustin",
+  "name": "CandleNote",
   "version": "1.0.0",
-  "description": "A gamified, geolocation-based, mobile-first web application to help Austinities &amp; Tourists alike discover new spots around town",
+  "description": "The world's finest note-taking application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,17 +18,20 @@
   "license": "ISC",
   "homepage": "",
   "dependencies": {
+    "Dante2": "^0.4.3",
     "axios": "^0.17.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.2",
     "dot-prop-immutable": "^1.4.0",
     "eslint": "^4.16.0",
     "express": "^4.16.2",
+    "medium-draft": "^0.6.0-beta1",
     "mongoose": "^5.0.1",
     "morgan": "^1.9.0",
     "phantom": "^4.0.12",
@@ -45,6 +48,7 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-react": "^0.77.2",
     "uuid": "^3.2.1",
+    "semantic-ui-css": "^2.2.12",
     "webpack": "^3.10.0",
     "webpack-css-loaders": "^1.0.0",
     "webpack-dev-server": "^2.9.7",
@@ -52,7 +56,6 @@
     "webshot": "^0.18.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",

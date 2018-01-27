@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+<<<<<<< HEAD
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 
+=======
+import TopBar from './topBar';
+>>>>>>> master
 import MainPage from './mainPage';
-import PageTwo from './pageTwo';
 import NotFoundPage from './notFoundPage';
 import DeckCreator from './decksPage/DeckCreatorContainer';
 import DeckView from './decksPage/DeckViewContainer';
@@ -18,7 +21,7 @@ const App = () => (
   <div>
     <BrowserRouter>
       <Switch>
-        <Route path='/' component={ MainPage } exact={ true } ></Route>
+        <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
         <Route path='/two' component={ PageTwo }></Route>
         <Route path='/createFlashcard' component={ FlashcardPage }></Route>
         <Route path='/createDeck' component={DeckCreator}></Route>
@@ -27,8 +30,9 @@ const App = () => (
         <Route path='/deckList' component= { DeckListVert }></Route>
 
         <Route component={ NotFoundPage }></Route>
+        <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
-    </BrowserRouter>
+  </BrowserRouter>
   </div>
 );
 
