@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { deleteAllCardsFromDeck } from './flashcardsActions';
+
 export const addDeck = deckInfo => ({
   type: 'ADD_DECK',
   payload: deckInfo,
@@ -44,6 +46,7 @@ export const deleteDeck = deckId => (
           payload: { id: deckId },
         });
       })
+      .then(() => dispatch(deleteAllCardsFromDeck(deckId)))
   )
 );
 
