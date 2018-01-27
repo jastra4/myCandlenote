@@ -39,15 +39,15 @@ export default class NoteTitle extends React.Component {
 
   render = () => (
     <div style={{fontSize: '50px !important'}}>
-    <ReactQuill
-      className='note'
-      theme=""
-      value={ this.state.value }
-      onChange={ this.handleEditorChange }
-      placeholder="Untitled"
-      styles={styles}
-      formats={[{"header":1}]}
-    />
+      <ReactQuill
+        className='note'
+        theme=""
+        value={ this.state.value }
+        onChange={ this.handleEditorChange }
+        placeholder="Untitled"
+        styles={styles}
+        formats={[{"header":1}]}
+      />
     </div>
   );
 }
