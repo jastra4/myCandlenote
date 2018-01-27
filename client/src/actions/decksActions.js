@@ -31,6 +31,7 @@ export const getDecks = deckId => (
 );
 
 export const setCurrentDeck = deckId => ({
+  blarg: console.log('Setting deck', deckId),
   type: 'SET_CURRENT_DECK',
   payload: { id: deckId },
 });
