@@ -23,7 +23,11 @@ export default class SideBar extends Component {
             </Menu.Item>
             <Menu.Item name='write'>
               <Icon name='write' />
-              Notes
+              Create
+            </Menu.Item>
+            <Menu.Item name='inbox'>
+              <Icon name='inbox' />
+              NoteBox
             </Menu.Item>
             <Menu.Item name='vcard outline'>
               <Icon name='vcard outline' />
