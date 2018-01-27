@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { deleteAllCardsFromDeck } from './flashcardsActions';
+
 export const addDeck = deckInfo => ({
   type: 'ADD_DECK',
   payload: deckInfo,
@@ -35,20 +37,20 @@ export const setCurrentDeck = deckId => ({
   payload: { id: deckId },
 });
 
-// export const deleteDeck = deckId => (
-//   dispatch => (
-//     axios.post('/api/deleteDeck/', deckId)
-//       .then((res) => {
-//         console.log('Delete deck response:', res.data);
-//         dispatch({
-//           type: 'DELETE_DECK',
-//           payload: { id: deckId },
-//         });
-//       })
-//   )
-// );
+export const deleteDeck = deckId => (
+  dispatch => (
+    axios.post('/api/deleteDeck/', { deckId })
+      .then(() => {
+        dispatch({
+          type: 'DELETE_DECK',
+          payload: { id: deckId },
+        });
+      })
+      .then(() => dispatch(deleteAllCardsFromDeck(deckId)))
+  )
+);
 
-export const deleteDeck = deckId => ({
-  type: 'DELETE_DECK',
-  payload: { id: deckId },
-});
+// export const deleteDeck = deckId => ({
+//   type: 'DELETE_DECK',
+//   payload: { id: deckId },
+// });

@@ -51,6 +51,7 @@ const FlashcardPage = props => (
         <FlashcardCreator
           currentDeck={props.currentDeck}
           addFlashcard={props.addFlashcard}
+          createFlashcard={props.createFlashcard}
           decksById={props.decksById}
         />
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Input, Button, Segment, Divider, Container } from 'semantic-ui-react';
-import { v1 } from 'uuid';
 
 class DeckCreator extends React.Component {
   constructor(props) {
@@ -24,7 +23,6 @@ class DeckCreator extends React.Component {
     e.preventDefault();
     const deckInfo = {
       ...this.state,
-      id: v1(),
       userId: this.props.userId,
     };
 

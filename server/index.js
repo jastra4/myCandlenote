@@ -15,6 +15,7 @@ const webshot = require('webshot');
 
 // db imports
 const inserts = require('../database/inserts');
+const deletes = require('../database/deletes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -106,19 +107,35 @@ app.post('/api/decks', (req, res) => {
     .catch(err => console.log(err));
 });
 
-// app.post('/api/flashcards', (req, res) => {
-//   inserts.insertFlashcard(req.body)
-//     .then((result) => {
-//       const { _id: id, subject, title, userId } = result._doc;
-//       res.send({
-//         id,
-//         subject,
-//         title,
-//         userId,
-//       });
-//     })
-//     .catch(err => console.log(err));
-// });
+app.post('/api/deleteDeck', (req, res) => {
+  deletes.deleteDeck(req.body.deckId)
+    .then((result) => {
+      console.log(result);
+      const { _id: id } = req.body;
+      res.send(id);
+    })
+    .catch(err => console.log(err));
+});
+
+app.post('/api/flashcards', (req, res) => {
+  inserts.insertFlashcard(req.body)
+    .then((result) => {
+      const { _id: id, front, back, deckId } = result._doc;
+      res.send({
+        id,
+        front,
+        back,
+        deckId,
+      });
+    })
+    .catch(err => console.log(err));
+});
+
+app.post('/api/deleteCard', (req, res) => {
+  deletes.deleteFlashcard(req.body)
+    .then(() => res.send('Deleted'))
+    .catch(err => console.log(err));
+});
 
 /* -------- Initialize Server -------- */
 

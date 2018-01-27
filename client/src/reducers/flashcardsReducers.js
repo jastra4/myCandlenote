@@ -1,4 +1,5 @@
 const dotProp = require('dot-prop-immutable');
+const _ = require('lodash');
 
 // v For Testing v
 const defaultState = {
@@ -68,6 +69,15 @@ const flashcardsReducer = (state = defaultState, action) => {
       };
     case 'DELETE_FLASHCARD':
       return dotProp.delete(state, `byId.${action.payload.id}`);
+    case 'DELETE_ALL_CARDS_FOR_DECK': {
+      const filteredCards = _.filter(state.byId, entry => entry.deckId !== action.payload.id);
+      const newState = {
+        currentFlashcard: { ...state.currentFlashcard },
+        byId: {},
+      };
+      filteredCards.forEach((card) => { newState.byId[card.id] = card; });
+      return newState;
+    }
     default:
       return state;
   }

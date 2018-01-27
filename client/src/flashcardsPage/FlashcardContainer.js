@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import FlashcardPage from './index';
-import { addFlashcard } from '../actions/flashcardsActions';
+import { addFlashcard, createFlashcard } from '../actions/flashcardsActions';
 
 const mapStateToProps = (state) => {
   const cardsById = state.flashcards.byId;
@@ -15,8 +15,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  { addFlashcard: cardInfo => dispatch(addFlashcard(cardInfo)) });
+const mapDispatchToProps = dispatch => ({
+  createFlashcard: cardInfo => dispatch(createFlashcard(cardInfo)),
+  addFlashcard: cardInfo => dispatch(addFlashcard(cardInfo)),
+});
 
 export default connect(
   mapStateToProps,
