@@ -4,20 +4,13 @@ const path = require('path');
 const morgan = require('morgan');
 const webshot = require('webshot');
 
-
 const app = express();
-const port = process.env.PORT || 3000;
-var server = app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
-var io = require('socket.io').listen(server);
-// const http = require('http').Server(app); // socket stuff
-// const io = require('socket.io')(http); // socket stuff
+const server = require('http').createServer(app); // socket stuff
+const io = require('socket.io').listen(server); // socket stuff
 
 app.use(bodyParser.json());
 const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
-
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -60,8 +53,13 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- Sockets ------------ */
 
-io.on('connection', (socket) => {
+io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
+
+  socket.on('send message', (data) => {
+    io.sockets.emit('new message', data);
+  });
+
 });
 
 /* ----------- API Routes ------------ */
@@ -69,4 +67,9 @@ io.on('connection', (socket) => {
 
 /* -------- Initialize Server -------- */
 
+const port = process.env.PORT || 3000;
+
+server.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 
