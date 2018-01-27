@@ -48,7 +48,7 @@ export const deleteDeck = deckId => (
   )
 );
 
-export const deleteDeck = deckId => ({
-  type: 'DELETE_DECK',
-  payload: { id: deckId },
-});
+// export const deleteDeck = deckId => ({
+//   type: 'DELETE_DECK',
+//   payload: { id: deckId },
+// });
