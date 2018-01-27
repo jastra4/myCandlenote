@@ -18,9 +18,17 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        loaders: ['css-loader', 'style-loader'],
+        loaders: [
+          'style-loader',
+          'css-loader'
+        ],
         test: /\.css$/
-      }
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=fonts/[name].[ext]',
+        // exclude: /node_modules/
+      },
     ]
   },
   devtool: 'cheap-module-eval-source-map',
