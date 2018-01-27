@@ -1,5 +1,4 @@
 import React from 'react';
-import { v1 } from 'uuid';
 import { Segment, Button, Form } from 'semantic-ui-react';
 
 const mapDecksToOptions = decksById => (

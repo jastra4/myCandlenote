@@ -1,6 +1,5 @@
 import React from 'react';
 import { Form, Input, Button, Segment, Divider, Container } from 'semantic-ui-react';
-import { v1 } from 'uuid';
 
 class DeckCreator extends React.Component {
   constructor(props) {
