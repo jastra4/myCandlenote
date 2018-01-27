@@ -25,6 +25,10 @@ export default class SideBar extends Component {
               <Icon name='vcard outline' />
               Flashcards
             </Menu.Item>
+            <Menu.Item name='clone'>
+              <Icon name='clone' />
+              Decks
+            </Menu.Item>
             <Menu.Item name='book'>
               <Icon name='book' />
               Library

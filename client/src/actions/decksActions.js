@@ -35,15 +35,20 @@ export const setCurrentDeck = deckId => ({
   payload: { id: deckId },
 });
 
-export const deleteDeck = deckId => (
-  dispatch => (
-    axios.post('/api/deleteDeck/', deckId)
-      .then((res) => {
-        console.log('Delete deck response:', res.data);
-        dispatch({
-          type: 'DELETE_DECK',
-          payload: { id: deckId },
-        });
-      })
-  )
-);
+// export const deleteDeck = deckId => (
+//   dispatch => (
+//     axios.post('/api/deleteDeck/', deckId)
+//       .then((res) => {
+//         console.log('Delete deck response:', res.data);
+//         dispatch({
+//           type: 'DELETE_DECK',
+//           payload: { id: deckId },
+//         });
+//       })
+//   )
+// );
+
+export const deleteDeck = deckId => ({
+  type: 'DELETE_DECK',
+  payload: { id: deckId },
+});
