@@ -120,6 +120,20 @@ app.post('/api/flashcards', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.post('/api/deleteCard', (req, res) => {
+  inserts.deleteFlashcard(req.body)
+    .then((result) => {
+      const { _id: id, front, back, deckId } = result._doc;
+      res.send({
+        id,
+        front,
+        back,
+        deckId,
+      });
+    })
+    .catch(err => console.log(err));
+});
+
 /* -------- Initialize Server -------- */
 
 app.listen(port, () => {
