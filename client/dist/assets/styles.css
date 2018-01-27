@@ -1,5 +1,10 @@
+@import url('./notepad.css');
+
 body {
-  background-color: red;
+}
+
+.section-inner {
+  background-color: #EDEAD0;
 }
 /*#chat{
 	height: 500px;

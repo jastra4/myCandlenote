@@ -5,6 +5,16 @@ export const addMessage = messageInfo => ({
   payload: messageInfo,
 });
 
+export const createMessage = messageInfo => (
+  dispatch => (
+    axios.post('/api/messages', messageInfo)
+      .then(
+        res => dispatch(addMessage(res.data)),
+        err => console.log(err),
+      )
+  )
+);
+
 export const setMessages = messages => ({
   type: 'SET_MESSAGES',
   payload: messages,
@@ -12,7 +22,7 @@ export const setMessages = messages => ({
 
 export const getMessages = userId => (
   dispatch => (
-    axios.get(`/messages/${userId}`)
+    axios.get(`/api/messages/${userId}`)
       .then((res) => {
         console.log('Getting message:', res.data);
         dispatch(setMessages(res.data));
@@ -27,7 +37,7 @@ export const setCurrentMessage = messageId => ({
 
 export const deleteMessage = messageId => (
   dispatch => (
-    axios.post('/deleteMessage/', messageId)
+    axios.post('/api/deleteMessage/', messageId)
       .then((res) => {
         console.log('Delete message res:', res.body);
         dispatch({

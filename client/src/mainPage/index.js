@@ -12,6 +12,7 @@ export default class MainPage extends React.Component {
       <h1>Main Page</h1>
       <p>Hello World :)</p>
       <Chat />
+      <a href="/auth/google">Sign In with Google</a>
     </div>
   );
 }

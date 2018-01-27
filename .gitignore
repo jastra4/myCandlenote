@@ -1,4 +1,6 @@
 node_modules/
+dist/bundle.js
+config/keys.js
 .DS_Store
 redux-setup
 client/dist/bundle.js
