@@ -1,7 +1,5 @@
 import React from 'react';
-// import Canvas from './canvas';
 import ReactQuill , { Quill } from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.core.css';
 import 'react-quill/dist/quill.bubble.css';
 import './NoteTitle.css';
