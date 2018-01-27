@@ -2,9 +2,8 @@ import React from 'react';
 // import Canvas from './canvas';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
-
-import NoteTitle from './NoteTitle';
+import 'react-quill/dist/quill.core.css';
+import 'react-quill/dist/quill.bubble.css';
 
 export default class Notepad extends React.Component {
   constructor(props) {
@@ -13,12 +12,13 @@ export default class Notepad extends React.Component {
   }
 
   componentWillMount() {
-    this.props.changeBackgroundColor('#1F1F1F');
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('delta'))
+    const value = JSON.parse(window.localStorage.getItem('noteTitle'))
+    console.log('value: ', value);
     this.setState({ value });
+    this.formats = ['bold']
   }
 
   handleEditorChange = (value, d, source, editor) => {
@@ -29,18 +29,17 @@ export default class Notepad extends React.Component {
     console.log('packet: ', packet);
     const string = `${packet}`;
     console.log('string: ', string);
-    window.localStorage.setItem('noteContent', packet);
+    window.localStorage.setItem('noteTitle', packet);
   }
 
 
   render = () => (
-    <div>
-      <NoteTitle />
-      <ReactQuill
-        value={ this.state.value }
-        onChange={ this.handleEditorChange }
-        placeholder="Let's take some notes!"
-      />
-  </div>
+    <ReactQuill
+      theme=""
+      value={ this.state.value }
+      onChange={ this.handleEditorChange }
+      placeholder="Untitled"
+      formats={this.formats}
+    />
   );
 }
