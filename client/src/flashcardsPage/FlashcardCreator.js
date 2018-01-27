@@ -1,6 +1,6 @@
 import React from 'react';
 import { v1 } from 'uuid';
-import { Segment, Button, Form, Dropdown } from 'semantic-ui-react';
+import { Segment, Button, Form } from 'semantic-ui-react';
 
 const mapDecksToOptions = decksById => (
   Object.keys(decksById).map(key => ({
@@ -20,6 +20,8 @@ class FlashcardCreator extends React.Component {
       back: '',
       selectedDeck: '',
     };
+
+    console.log('State:', this.props);
   }
 
   onFrontChange(e) {

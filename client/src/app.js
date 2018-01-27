@@ -7,7 +7,7 @@ import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import DeckPage from './decksPage/DeckContainer';
-import FlashcardPage from './flashcardsPage';
+import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import { store, persistor } from '../src/store';
 
 const App = () => (
