@@ -4,11 +4,20 @@ const path = require('path');
 const morgan = require('morgan');
 const webshot = require('webshot');
 
+
 const app = express();
+const port = process.env.PORT || 3000;
+var server = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+var io = require('socket.io').listen(server);
+// const http = require('http').Server(app); // socket stuff
+// const io = require('socket.io')(http); // socket stuff
+
 app.use(bodyParser.json());
 const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
-const port = process.env.PORT || 3000;
+
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -49,11 +58,15 @@ app.post('/makePDF', (req, res) => {
   });
 });
 
+/* ----------- Sockets ------------ */
+
+io.on('connection', (socket) => {
+  console.log('socket connected: ', socket.id);
+});
+
 /* ----------- API Routes ------------ */
 
 
 /* -------- Initialize Server -------- */
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+
