@@ -6,7 +6,6 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
-import DeckCreator from './decksPage/DeckCreatorContainer';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage';
 import { store, persistor } from '../src/store';

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import DeckCreator from './DeckCreatorContainer';
-import DeckView from './DeckViewContainer';
+import DeckCreator from './DeckCreator';
+import DeckView from './DeckView';
 
 const Deck = props => (
   <div>
