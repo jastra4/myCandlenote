@@ -1,10 +1,10 @@
 import React from 'react';
 import io from 'socket.io-client';
 import $ from 'jquery';
+import Message from './Message.js';
 
 const socketUrl = 'http://localhost:3000';
-export default class Layout extends React.Component {
-
+export default class Chat extends React.Component {
   constructor(props) {
     super(props);
 
@@ -25,10 +25,7 @@ export default class Layout extends React.Component {
     });
 
     socket.on('new message', (data) => {
-      console.log(data);
-      this.setState({
-        messages: this.state.messages.concat([data]),
-      });
+      this.setState({ messages: this.state.messages.concat([data]) });
     });
   }
 
@@ -39,12 +36,14 @@ export default class Layout extends React.Component {
     $('#message').val('');
   }
 
-  render = () => {
-    return (
+  render = () =>
+    (
       <div>
-        This is the Chat component
+        This is a Chat component
         <div id="contentWrap">
-          <div id="chatWrap"> {this.state.messages}
+          <div id="chatWrap"> {this.state.messages.map((message, i) => (
+            <Message key={i} message={message} />
+          ))}
             <div id="chat"></div>
             <form id="send-messege">
               <input size="35" id="message"></input>
@@ -55,5 +54,4 @@ export default class Layout extends React.Component {
         </div>
       </div>
     );
-  }
 }
