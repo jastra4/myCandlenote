@@ -37,9 +37,8 @@ export const setCurrentDeck = deckId => ({
 
 export const deleteDeck = deckId => (
   dispatch => (
-    axios.post('/api/deleteDeck/', deckId)
-      .then((res) => {
-        console.log('Delete deck response:', res.data);
+    axios.post('/api/deleteDeck/', { deckId })
+      .then(() => {
         dispatch({
           type: 'DELETE_DECK',
           payload: { id: deckId },

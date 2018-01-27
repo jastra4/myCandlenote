@@ -107,6 +107,15 @@ app.post('/api/decks', (req, res) => {
     .catch(err => console.log(err));
 });
 
+app.post('/api/deleteDeck', (req, res) => {
+  deletes.deleteDeck(req.body.deckId)
+    .then(() => {
+      const { _id: id } = req.body;
+      res.send(id);
+    })
+    .catch(err => console.log(err));
+});
+
 app.post('/api/flashcards', (req, res) => {
   inserts.insertFlashcard(req.body)
     .then((result) => {
