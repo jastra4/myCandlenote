@@ -26,7 +26,7 @@ const videosReducer = (state = defaultState, action) => {
     case 'SET_CURRENT_VIDEO':
       return {
         ...state,
-        currentvideo: action.payload.id,
+        currentvideo: { ...state.byId[action.payload.id] },
       };
     case 'DELETE_VIDEO':
       return dotProp.delete(state, `byId.${action.payload.id}`);
