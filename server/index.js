@@ -13,6 +13,9 @@ const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
 const webshot = require('webshot');
 
+// db imports
+const inserts = require('../database/inserts');
+
 const app = express();
 app.use(bodyParser.json());
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -89,6 +92,19 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- API Routes ------------ */
 
+app.post('/api/decks', (req, res) => {
+  inserts.insertDeck(req.body)
+    .then((result) => {
+      const { _id: id, subject, title, userId } = result._doc;
+      res.send({
+        id,
+        subject,
+        title,
+        userId,
+      });
+    })
+    .catch(err => console.log(err));
+});
 
 /* -------- Initialize Server -------- */
 
