@@ -11,7 +11,6 @@ export default class Chat extends React.Component {
     this.state = {
       socket: null,
       messages: [],
-      users: [],
     };
   }
 
@@ -25,21 +24,9 @@ export default class Chat extends React.Component {
       this.setState({ socket });
     });
 
-    socket.on('usernames', (data) => {
-      this.setState({ users: data });
-    });
-
     socket.on('new message', (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
     });
-
-  }
-
-  signUp() {
-    e.preventDefault();
-    const socket = io.connect();
-    socket.emit('new user', $('#message').val());
-    $('#message').val('');    
   }
 
   sendMessage(e) {
