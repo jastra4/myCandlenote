@@ -4,7 +4,11 @@ import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 export default class SideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { backgroundColor: '' };
+  }
+
+  changeBackgroundColor = (backgroundColor) => {
+    this.setState({ backgroundColor });
   }
 
   render() {
@@ -38,15 +42,15 @@ export default class SideBar extends Component {
               Quizzlet
             </Menu.Item>
           </Sidebar>
-          <Sidebar.Pusher>
+          <Sidebar.Pusher>π
             <Segment basic style={{
-                backgroundColor: 'red',
-                marginTop: '35px',
+                backgroundColor: '#ffd1a3',
+                marginTop: '20px',
                 marginRight: '100px',
                 paddingRight: '75px',
                 minHeight: '10005px',
               }}>
-              <ContentPage />
+              <ContentPage changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>

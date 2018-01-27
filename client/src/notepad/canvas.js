@@ -1,6 +1,6 @@
 import React from 'react';
 import 'medium-draft/lib/index.css';
-import { Editor, createEditorState } from 'medium-draft';
+import Bob, { Editor, createEditorState, RichUtils } from 'medium-draft';
 
 const styles = { backgroundColor: '#EDEAD0 !important;' };
 
@@ -16,6 +16,11 @@ export default class Canvas extends React.Component {
     };
     */
 
+  componentWillMount() {
+    console.log('Bob: ', Bob)
+
+  }
+
   componentDidMount() {
     this.refs.editor.focus();
   }
@@ -24,14 +29,20 @@ export default class Canvas extends React.Component {
     this.setState({ editorState });
   };
 
+
   render() {
     const { editorState } = this.state;
+
+    console.log('ilineStiles: ', editorState.getCurrentInlineStyle());
+
     return (
       <Editor
         ref="editor"
         editorState={editorState}
         onChange={this.onChange}
         styles={styles}
+        placeholder="Take some notes..."
+        blockStyleFn={() => {'background-color: red'}}
       />
     );
   }
