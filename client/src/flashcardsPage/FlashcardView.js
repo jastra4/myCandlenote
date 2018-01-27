@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactCardFlip from 'react-card-flip';
-import { Segment, Button, Header, Icon, Checkbox } from 'semantic-ui-react';
+import { Segment, Button, Header, Icon, Checkbox, Card } from 'semantic-ui-react';
 
 import DeckListVert from '../decksPage/DeckListVertContainer';
 
@@ -17,14 +17,10 @@ const styles = {
   cardText: {
     maxHeight: '100%',
     maxWidth: '100%',
-    fontSize: '5em',
+    fontSize: '2em',
   },
-  cardButtons: {
-    marginTop: '10vw',
-  },
-  paddingDiv: {
-    height: '160px',
-  },
+  cardButtons: { marginTop: '1em' },
+  paddingDiv: { height: '160px' },
   mainDiv: {
     padding: '1vw 4vw',
     height: '35vw',
@@ -32,11 +28,13 @@ const styles = {
   },
   sideBar: {
     display: 'inline-block',
-    width: '19%',
+    width: '25%',
+    position: 'relative',
+    top: '-22vh',
   },
   mainSegment: {
     display: 'inline-block',
-    width: '80%',
+    width: '75%',
   },
 };
 
@@ -132,7 +130,14 @@ class FlashcardView extends React.Component {
               </div>
             </div>
             <div style={styles.sideBar}>
-              <DeckListVert />
+              <Card>
+                <Card.Content>
+                  <Card.Header textAlign="center">
+                    Decks
+                  </Card.Header>
+                  <DeckListVert />
+                </Card.Content>
+              </Card>
             </div>
           </Segment>
 
