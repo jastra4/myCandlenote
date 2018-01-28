@@ -15,13 +15,13 @@ const App = () => (
         <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
         <Route path='/notepad' render={() => <TopBar ContentPage={ Notepad }/>} />
         <Route path='/notebox' render={() => <TopBar ContentPage={ Notebox }/>} />
-        <Route path='/flashcards' render={() => <TopBar ContentPage={NotFoundPage} />} />
-        <Route path='/library' render={() => <TopBar ContentPage={NotFoundPage} />} />
-        <Route path='/studyhall' render={() => <TopBar ContentPage={NotFoundPage} />} />
-        <Route path='/quizzlet' render={() => <TopBar ContentPage={NotFoundPage} />} />
+        <Route path='/flashcards' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
-  </BrowserRouter>
+    </BrowserRouter>
   </div>
 );
 
