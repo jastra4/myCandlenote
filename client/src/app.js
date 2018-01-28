@@ -2,13 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
+// import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
-import { store, persistor } from '../src/store';
+// import { store, persistor } from '../src/store';
+import store from '../src/store';
 
 const App = () => (
   <div>
@@ -29,9 +30,9 @@ const App = () => (
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    {/* <PersistGate loading={null} persistor={persistor}> */}
       <App />
-    </PersistGate>
+    {/* </PersistGate> */}
   </Provider>,
   document.getElementById('app'),
 );
