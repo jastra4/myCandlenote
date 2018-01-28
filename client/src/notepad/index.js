@@ -15,13 +15,17 @@ export default class NotePage extends React.Component {
     this.props.changeBackgroundColor('#1F1F1F');
   }
 
+  handleTextChange = (content) => {
+    this.setState({ content });
+  }
+
   render = () => (
     <div>
       <Grid >
         <Grid.Column width={12}>
           <FileMenu />
           <NoteTitle />
-          <NotePad { ...this.props } />
+          <NotePad { ...this.props } handleTextChange={this.handleTextChange} />
         </Grid.Column>
         <Grid.Column width={4}>
           <IntelliSearch />
