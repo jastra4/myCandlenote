@@ -1,4 +1,6 @@
 import React from 'react';
+import YouTubeList from './youtubeList';
+
 
 export default class IntelliSearch extends React.Component {
   constructor(props) {
@@ -7,9 +9,6 @@ export default class IntelliSearch extends React.Component {
   }
 
   render = () => (
-    <div>
-      IntelliSearch!!!!
-  
-    </div>
+    <YouTubeList />
   );
 }
