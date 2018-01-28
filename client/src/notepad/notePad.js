@@ -20,14 +20,17 @@ export default class Notepad extends React.Component {
   handleEditorChange = (value, d, source, editor) => {
     this.setState({ value });
     const delta = editor.getContents();
-    console.log('delta: ', delta);
     const packet = JSON.stringify(delta);
-    console.log('packet: ', packet);
     const string = `${packet}`;
-    console.log('string: ', string);
     window.localStorage.setItem('noteContent', packet);
+    console.log('textString: ', this.parseTextMeaning(delta));
   }
 
+  parseTextMeaning = (delta) => {
+    const test = delta.ops.reduce((tv, cv) => (
+      tv.concat(cv.insert.replace(/↵/g, ''))
+    )}, []).join('');
+  }
 
   render = () => (
     <ReactQuill
