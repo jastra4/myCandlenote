@@ -22,8 +22,7 @@ export default class Notepad extends React.Component {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
     window.localStorage.setItem('noteContent', packet);
-    const content = parseTextMeaning(delta);
-    
+    // const content = this.parseTextMeaning(delta);
   }
 
   parseTextMeaning = delta => (

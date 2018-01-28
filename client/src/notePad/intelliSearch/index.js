@@ -1,6 +1,6 @@
 import React from 'react';
 import YouTubeList from './youtubeList';
-import axios from 'axios';
+// import axios from 'axios';
 
 
 export default class IntelliSearch extends React.Component {
@@ -9,9 +9,9 @@ export default class IntelliSearch extends React.Component {
     this.state = {};
   }
 
-  componentDidMount(){
-    axios.get('')
-  }
+  // componentDidMount() {
+  //   // axios.get('');
+  // }
 
   render = () => (
     <YouTubeList />
