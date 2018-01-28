@@ -6,6 +6,7 @@ import NoteTitle from './NoteTitle';
 export default class NotePage extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {};
   }
 
   componentWillMount() {

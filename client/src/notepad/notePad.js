@@ -13,23 +13,24 @@ export default class Notepad extends React.Component {
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('delta'))
+    const value = JSON.parse(window.localStorage.getItem('delta'));
     this.setState({ value });
   }
 
   handleEditorChange = (value, d, source, editor) => {
     this.setState({ value });
     const delta = editor.getContents();
+    console.log('delta: ', delta);
     const packet = JSON.stringify(delta);
-    const string = `${packet}`;
     window.localStorage.setItem('noteContent', packet);
     console.log('textString: ', this.parseTextMeaning(delta));
   }
 
   parseTextMeaning = (delta) => {
     const test = delta.ops.reduce((tv, cv) => (
-      tv.concat(cv.insert.replace(/↵/g, ''))
-    )}, []).join('');
+      tv.concat(cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, ''))
+    ), '');
+    return test;
   }
 
   render = () => (

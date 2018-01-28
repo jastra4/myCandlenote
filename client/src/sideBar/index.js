@@ -5,9 +5,9 @@ import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 export default class SideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       backgroundColor: '',
-      activeItem: 'home'
+      activeItem: 'home',
     };
   }
 
