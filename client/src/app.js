@@ -26,7 +26,6 @@ const App = () => (
         <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
         <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
         <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
-        {/* <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} /> */}
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
     </BrowserRouter>

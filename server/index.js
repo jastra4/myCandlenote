@@ -139,11 +139,12 @@ app.post('/api/deleteCard', (req, res) => {
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
-  console.log('lol')
+  console.log('lol');
   helpers.parseMeaningWithGoogleAPI(req.body.content)
-    .then((meaning) => { 
+    .then((meaning) => {
       console.log('meaning!: ', meaning);
-      res.send({ meaning }); })
+      res.send({ meaning });
+    })
     .catch(((e) => {
       console.error(e);
       res.status(500).end();
