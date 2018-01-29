@@ -27,6 +27,7 @@ class FlashcardImageUploader extends React.Component {
           const callback = this.props.onImageLoaded || (urlData => console.log(urlData));
           const MAX_WIDTH = this.props.maxWidth || 200;
           const MAX_HEIGHT = this.props.maxHeight || 250;
+
           let { width } = newImage;
           let { height } = newImage;
 
@@ -50,7 +51,7 @@ class FlashcardImageUploader extends React.Component {
           callback(dataURL);
         };
         // do whatever you want with the file content
-        this.setState({ url: fileAsDataURL }, () => console.log(this.state));
+        this.setState({ url: fileAsDataURL });
       };
       reader.onabort = () => console.log('file reading was aborted');
       reader.onerror = () => console.log('file reading has failed');
