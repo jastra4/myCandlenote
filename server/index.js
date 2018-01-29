@@ -18,7 +18,8 @@ const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ limit: '5mb' }));
 const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const port = process.env.PORT || 3000;

@@ -19,8 +19,8 @@ class FlashcardCreator extends React.Component {
     this.state = {
       front: '',
       back: '',
-      urlFront: '',
-      urlBack: '',
+      hasFrontImage: false,
+      hasBackImage: false,
       selectedDeck: '',
     };
   }
@@ -38,19 +38,25 @@ class FlashcardCreator extends React.Component {
   }
 
   onUploadFront(urlData) {
-    this.setState({ urlFront: urlData });
+    this.setState({
+      front: urlData,
+      hasFrontImage: true,
+    });
   }
 
   onUploadBack(urlData) {
-    this.setState({ urlBack: urlData });
+    this.setState({
+      back: urlData,
+      hasBackImage: true,
+    });
   }
 
   clearFields() {
     this.setState({
       front: '',
       back: '',
-      urlFront: '',
-      urlBack: '',
+      hasFrontImage: false,
+      hasBackImage: false,
     });
   }
 
@@ -68,8 +74,8 @@ class FlashcardCreator extends React.Component {
     this.setState({
       front: '',
       back: '',
-      urlFront: '',
-      urlBack: '',
+      hasFrontImage: false,
+      hasBackImage: false,
     });
   }
 
@@ -80,14 +86,14 @@ class FlashcardCreator extends React.Component {
           <Form onSubmit={this.onSubmit.bind(this)}>
             <Form.Field>
               <label>Prompt</label>
-              {this.state.urlFront ? <img src={this.state.urlFront}/> :
+              {this.state.hasFrontImage ? <img src={this.state.front}/> :
                 <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} buttonTag={'Upload Image Prompt'}>
                 <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
-              {this.state.urlBack ? <img src={this.state.urlBack} /> :
+              {this.state.hasBackImage ? <img src={this.state.back} /> :
               <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} buttonTag={'Upload Image Answer'}>
                 <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
