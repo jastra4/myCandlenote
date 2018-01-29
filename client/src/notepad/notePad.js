@@ -2,6 +2,7 @@ import React from 'react';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
+import _ from 'lodash';
 
 export default class Notepad extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ export default class Notepad extends React.Component {
     const packet = JSON.stringify(delta);
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
-    this.parseContentMeaning(content);
+    _.debounce(this.parseContentMeaning, 1000)(content);
   }
 
   getContentFromDelta = delta => (
@@ -34,13 +35,13 @@ export default class Notepad extends React.Component {
   )
 
   // TODO: Use return value from this function to build IntelliSearch
-  parseContentMeaning = content => (
-    axios.post('api/parseContentMeaning', { content })
+  parseContentMeaning = content => {
+    return axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
-        console.log('The meaning is: ', meaning);
+        console.log('Per Google, the meaning of your text is: ', meaning);
         return meaning;
       })
-  )
+    }
 
   render = () => (
     <ReactQuill
