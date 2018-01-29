@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
+import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 
 export default class Notepad extends React.Component {
@@ -13,7 +14,7 @@ export default class Notepad extends React.Component {
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('delta'));
+    const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
   }
 
@@ -22,20 +23,30 @@ export default class Notepad extends React.Component {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
     window.localStorage.setItem('noteContent', packet);
-    // const content = this.parseTextMeaning(delta);
+    const content = this.getContentFromDelta(delta);
+    this.parseContentMeaning(content);
   }
 
-  parseTextMeaning = delta => (
+  getContentFromDelta = delta => (
     delta.ops.reduce((tv, cv) => (
       tv.concat(cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, ''))
     ), '')
   )
 
+  // TODO: Use return value from this function to build IntelliSearch
+  parseContentMeaning = content => (
+    axios.post('api/parseContentMeaning', { content })
+      .then(({ data: { meaning } }) => {
+        console.log('The meaning is: ', meaning);
+        return meaning;
+      })
+  )
+
   render = () => (
     <ReactQuill
-        value={ this.state.value }
-        onChange={ this.handleEditorChange }
-        placeholder="Let's take some notes!"
+      value={ this.state.value }
+      onChange={ this.handleEditorChange }
+      placeholder="Let's take some notes!"
     />
   );
 }

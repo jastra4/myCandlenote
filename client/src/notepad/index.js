@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import NotePad from './notePad';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
-import IntelliSearch from './intelliSearch';
+// import IntelliSearch from './intelliSearch';
 
 export default class NotePage extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ export default class NotePage extends React.Component {
           <NotePad { ...this.props } handleTextChange={this.handleTextChange} />
         </Grid.Column>
         <Grid.Column width={4}>
-          <IntelliSearch />
+          <div>IntelliSearch Goes here :)</div>
         </Grid.Column>
       </Grid >
   </div>
