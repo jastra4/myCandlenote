@@ -82,15 +82,17 @@ class FlashcardCreator extends React.Component {
           <Form onSubmit={this.onSubmit.bind(this)}>
             <Form.Field>
               <label>Prompt</label>
-              <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
               {this.state.urlFront ? <img src={this.state.urlFront}/> :
-              <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} />}
+              <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)}>
+                <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
+              </FlashcardImageUploader>}
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
-              <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
               {this.state.urlBack ? <img src={this.state.urlBack} /> :
-              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} />}
+              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)}>
+                <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
+              </FlashcardImageUploader>}
             </Form.Field>
             <Form.Group inline>
               <Button type='submit'>Submit</Button>

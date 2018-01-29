@@ -1,9 +1,22 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
+import { Button } from 'semantic-ui-react';
+
+const styles = {
+  dropzoneDefault: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'red !important',
+  },
+  dropzoneActive: { border: '2px dashed grey' },
+};
 
 class FlashcardImageUploader extends React.Component {
   constructor(props) {
     super(props);
+
+    this.dropRef = null;
+
     this.state = {
       files: [],
       url: '',
@@ -60,56 +73,27 @@ class FlashcardImageUploader extends React.Component {
     });
   }
 
-  // $(img).load(function() {
-
-  //   canvas = $("#uploading_canvas").get(0);
-
-
-  //   var MAX_WIDTH = 600;
-  //   var MAX_HEIGHT = 450;
-  //   var width = img.width;
-  //   var height = img.height;
-
-  //   if (width > height) {
-  //     if (width > MAX_WIDTH) {
-  //       height *= MAX_WIDTH / width;
-  //       width = MAX_WIDTH;
-  //     }
-  //   } else {
-  //     if (height > MAX_HEIGHT) {
-  //       width *= MAX_HEIGHT / height;
-  //       height = MAX_HEIGHT;
-  //     }
-  //   }
-
-  //   canvas.width = width;
-  //   canvas.height = height;
-  //   var ctx = canvas.getContext("2d");
-  //   ctx.drawImage(img, 0, 0, width, height);
-
-  //   var dataurl = canvas.toDataURL("image/png");
-
-  // });
+  onUploadButtonClick() {
+    this.dropRef.open();
+  }
 
   render() {
     return (
       <section>
         <div className="dropzone">
           <Dropzone
+            style={styles.dropzoneDefault}
+            activeStyle={styles.dropzoneActive}
+            disableClick={true}
             onDrop={this.onDrop.bind(this)}
             multiple={false}
             accept="image/*"
+            ref={(dropRef) => { this.dropRef = dropRef; }}
           >
-            <p>Try dropping some files here, or click to select files to upload.</p>
+            {this.props.children}
           </Dropzone>
+          <Button type="button" onClick={this.onUploadButtonClick.bind(this)}>Upload Image</Button>
         </div>
-        <aside>
-          {/* <div>
-            {this.state.url ? <img src={this.state.url} /> : ''}
-            <br></br>
-            {this.state.newURL ? <img src={this.state.newURL} /> : ''}
-          </div> */}
-        </aside>
       </section>
     );
   }
