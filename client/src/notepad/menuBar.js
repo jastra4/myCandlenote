@@ -8,6 +8,8 @@ export default class MenuBar extends React.Component {
 
   render = () => (
     <div>
+      <h1>Page Two!!</h1>
+      <a href="/auth/logout">Logout</a>
       <p>MenuBar!!!</p>
     </div>
   );
