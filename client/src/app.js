@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
-import Notepad from './notePad';
+import Notepad from './notePad'; // eslint-disable-line 
 import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';

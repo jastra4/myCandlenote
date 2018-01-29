@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import NotePad from './notePad';
 import NoteTitle from './NoteTitle';
-import FileMenu from './fileMenu';
+import FileMenu from './fileMenu'; // eslint-disable-line 
 // import IntelliSearch from './intelliSearch';
 
 export default class NotePage extends React.Component {
