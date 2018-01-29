@@ -15,6 +15,7 @@ const webshot = require('webshot');
 
 // db imports
 const inserts = require('../database/inserts');
+const queries = require('../database/queries');
 
 const app = express();
 const server = require('http').createServer(app); // socket stuff
@@ -60,8 +61,18 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 
 // });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+// Invoked when main page renders
+// Controls whether to emit a socket connection
+app.get('/checkAuth', (req, res) => {
+  console.log('check auth ran!!');
+  const isAuth = req.isAuthenticated();
+  if (!isAuth) {
+    res.send(false);
+  } else {
+    const userId = req.session.passport.user;
+    console.log('userId: ', userId);
+    res.send(true);
+  }
 });
 
 /* --------- POST Handlers ----------- */
@@ -84,7 +95,7 @@ app.post('/makePDF', (req, res) => {
   };
 
   // webshot wraps phantomjs and provides a simple API
-  // phantomjs is essentially a web browser with no GUI
+  // phantomjs is basically a web browser with no GUI
   webshot(myUrl, `PDFs/${title}.pdf`, options, (err) => {
     if (err) {
       res.sendStatus(500);
@@ -95,13 +106,26 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- Sockets ------------ */
 
+app.get('/username', (req, res) => {
+  // const userId = req.session.passport.user;
+  // '5a6cc3c1da0212ef30d070fe'
+  // queries.getUserName(userId, (username) => {
+  //   console.log('FOUND USER: ', username);
+  //   res.send(username);
+  // });
+});
+
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
+  
+  // socket.on('new user', data => {
+  //   console.log('new user data: ', data);
+  //   socket.username = data;
+  // });
 
   socket.on('send message', (data) => {
     io.sockets.emit('new message', data);
   });
-
 });
 
 /* ----------- API Routes ------------ */
@@ -133,6 +157,10 @@ app.post('/api/decks', (req, res) => {
 //     })
 //     .catch(err => console.log(err));
 // });
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
 
 /* -------- Initialize Server -------- */
 

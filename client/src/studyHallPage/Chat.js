@@ -1,27 +1,43 @@
 import React from 'react';
 import io from 'socket.io-client';
 import $ from 'jquery';
-import Message from './Message.js';
+import axios from 'axios';
+import { connect } from 'react-redux'; // auth stuff
+import Message from './Message';
 
 const socketUrl = 'http://localhost:3000';
-export default class Chat extends React.Component {
+class Chat extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      socket: null,
+    this.state = { 
       messages: [],
+      socket: null,
+      username: null,
     };
   }
 
-  componentWillMount() {
-    this.initSocket();
+  componentWillReceiveProps() { // auth stuff
+    console.log('authenticated? ', this.props.isAuth.isAuth);
+    if (this.props.isAuth.isAuth) {
+      this.initSocket();
+    } else {
+      console.log('Not authenticated. Did not create connection.');
+    }
   }
 
-  initSocket = () => {
+  initSocket() {
     const socket = io(socketUrl);
     socket.on('connect', () => {
+      console.log('Connected!');
       this.setState({ socket });
+      return axios.get('/username')
+        .then((username) => {
+          this.setState({ username });
+          socket.emit('new user', this.state.username);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
 
     socket.on('new message', (data) => {
@@ -31,8 +47,7 @@ export default class Chat extends React.Component {
 
   sendMessage(e) {
     e.preventDefault();
-    const socket = io.connect();
-    socket.emit('send message', $('#message').val());
+    this.state.socket.emit('send message', $('#message').val());
     $('#message').val('');
   }
 
@@ -55,3 +70,14 @@ export default class Chat extends React.Component {
       </div>
     );
 }
+
+const mapStateToProps = state => (
+  {
+    isAuth: state.isAuth,
+    username: state.username,
+  }
+);
+
+const ChatConnected = connect(mapStateToProps)(Chat);
+
+export default ChatConnected;

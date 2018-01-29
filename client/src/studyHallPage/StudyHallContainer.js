@@ -1,16 +1,16 @@
 import React from 'react';
-import Chat from './Chat.js';
+import ChatConnected from './Chat';
 
 export default class StudyHallContainer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {};
   }
 
   render = () => (
     <div>
       <h1>Study Hall</h1>
-      <Chat />
+      <ChatConnected />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import StudyHall from '../studyHallPage/StudyHallContainer.js';
+import StudyHall from '../studyHallPage/StudyHallContainer';
 
 export default class MainPage extends React.Component {
   constructor() {
