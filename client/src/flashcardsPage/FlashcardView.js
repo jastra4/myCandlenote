@@ -87,10 +87,14 @@ class FlashcardView extends React.Component {
             onClick={() => this.flipCard()}
           >
             <Segment key="front">
-              <p style={styles.cardText}>{cards[index % cards.length].front}</p>
+              {cards[index % cards.length].front.slice(0, 11) === 'data:image/' ?
+                <img src={cards[index % cards.length].front} /> :
+                <p style={styles.cardText}>{cards[index % cards.length].front}</p>}
             </Segment>
             <Segment key="back">
-              <p style={styles.cardText}>{cards[index % cards.length].back}</p>
+              {cards[index % cards.length].back.slice(0, 11) === 'data:image/' ?
+                <img src={cards[index % cards.length].back} /> :
+                <p style={styles.cardText}>{cards[index % cards.length].back}</p>}
             </Segment>
           </ReactCardFlip>
         </div>
