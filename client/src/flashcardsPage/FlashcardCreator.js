@@ -47,6 +47,15 @@ class FlashcardCreator extends React.Component {
     this.setState({ urlBack: urlData });
   }
 
+  clearFields() {
+    this.setState({
+      front: '',
+      back: '',
+      urlFront: '',
+      urlBack: '',
+    });
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -85,6 +94,7 @@ class FlashcardCreator extends React.Component {
             </Form.Field>
             <Form.Group inline>
               <Button type='submit'>Submit</Button>
+              <Button type='button' onClick={this.clearFields.bind(this)}>Clear Fields</Button>
               <Form.Dropdown
                 selection
                 placeholder='Deck'
