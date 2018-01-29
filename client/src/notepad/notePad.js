@@ -4,6 +4,7 @@ import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
 
+
 export default class Notepad extends React.Component {
   constructor(props) {
     super(props);
