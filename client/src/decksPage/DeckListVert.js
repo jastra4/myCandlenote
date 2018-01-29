@@ -28,6 +28,7 @@ const DeckListVert = (props) => {
       <Card.Group itemsPerRow={1}>
         {decks.map(deck => (
           <Card
+            key={deck.id}
             fluid={true}
             onClick={() => props.setCurrentDeck(deck.id)}
           >

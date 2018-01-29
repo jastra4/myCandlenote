@@ -5,32 +5,32 @@ const _ = require('lodash');
 const defaultState = {
   byId: {
     11: {
-      id: 11,
-      deckId: 7,
+      id: '11',
+      deckId: '7',
       front: 'Sciency Question',
       back: 'Sciency Answer',
     },
     13: {
-      id: 13,
-      deckId: 7,
+      id: '13',
+      deckId: '7',
       front: 'Another Sciency Question',
       back: 'Another Sciency Answer',
     },
     17: {
-      id: 17,
-      deckId: 10,
+      id: '17',
+      deckId: '10',
       front: 'Math Question',
       back: 'Math Answer',
     },
     20: {
-      id: 20,
-      deckId: 10,
+      id: '20',
+      deckId: '10',
       front: 'Another Math Question',
       back: 'Another Math Answer',
     },
     23: {
-      id: 23,
-      deckId: 10,
+      id: '23',
+      deckId: '10',
       front: 'Yet Another Math Question',
       back: 'Yet Another Math Answer',
     },

@@ -4,15 +4,18 @@ import { Segment, Button, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   cardText: {
-    height: '100%',
-    width: '100%',
+    height: '6em',
+    width: '8em',
     fontSize: '2em',
+    display: 'tableCell',
+    verticalAlign: 'middle',
+    padding: '10px',
   },
   cardButtons: { marginTop: '1em' },
-  paddingDiv: { height: '160px' },
+  paddingDiv: { height: '10em' },
   mainDiv: {
     padding: '20px 4vw',
-    height: '35vw',
+    height: '35vh',
     display: 'inline-block',
     width: '70%',
   },
