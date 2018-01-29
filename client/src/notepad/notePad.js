@@ -35,13 +35,13 @@ export default class Notepad extends React.Component {
   )
 
   // TODO: Use return value from this function to build IntelliSearch
-  parseContentMeaning = content => {
-    return axios.post('api/parseContentMeaning', { content })
+  parseContentMeaning = content => (
+    axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
         console.log('Per Google, the meaning of your text is: ', meaning);
         return meaning;
       })
-    }
+  );
 
   render = () => (
     <ReactQuill
