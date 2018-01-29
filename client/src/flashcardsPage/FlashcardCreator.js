@@ -38,12 +38,10 @@ class FlashcardCreator extends React.Component {
   }
 
   onUploadFront(urlData) {
-    console.log('FRONT:', urlData);
     this.setState({ urlFront: urlData });
   }
 
   onUploadBack(urlData) {
-    console.log('BACK:', urlData);
     this.setState({ urlBack: urlData });
   }
 
@@ -83,14 +81,14 @@ class FlashcardCreator extends React.Component {
             <Form.Field>
               <label>Prompt</label>
               {this.state.urlFront ? <img src={this.state.urlFront}/> :
-              <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)}>
+                <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} buttonTag={'Upload Image Prompt'}>
                 <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
               {this.state.urlBack ? <img src={this.state.urlBack} /> :
-              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)}>
+              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} buttonTag={'Upload Image Answer'}>
                 <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
             </Form.Field>

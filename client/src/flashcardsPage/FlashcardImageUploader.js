@@ -78,6 +78,7 @@ class FlashcardImageUploader extends React.Component {
   }
 
   render() {
+    const buttonTag = this.props.buttonTag || 'Upload Image';
     return (
       <section>
         <div className="dropzone">
@@ -92,7 +93,7 @@ class FlashcardImageUploader extends React.Component {
           >
             {this.props.children}
           </Dropzone>
-          <Button type="button" onClick={this.onUploadButtonClick.bind(this)}>Upload Image</Button>
+          <Button type="button" onClick={this.onUploadButtonClick.bind(this)}>{buttonTag}</Button>
         </div>
       </section>
     );
