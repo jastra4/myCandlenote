@@ -52,19 +52,22 @@ class FlashcardView extends React.Component {
   }
 
   flipCard() {
-    if (this.state.checked) {
-      this.setState({
-        flipped: !this.state.flipped,
-        index: this.state.index + 0.5,
-      });
+    if (this.state.checked && this.state.flipped) {
+      this.changeIndex(1);
     } else {
       this.setState({ flipped: !this.state.flipped });
     }
   }
 
   changeIndex(amount) {
-    if (this.state.index === 0) {
-      this.setState({ index: this.state.cards.length - 1 });
+    if (this.state.index === 0 && amount < 0) {
+      this.setState({ flipped: false }, () => setTimeout(() => {
+        this.setState({ index: this.state.cards.length - 1 });
+      }, 200));
+    } else if (this.state.flipped) {
+      this.setState({ flipped: false }, () => setTimeout(() => {
+        this.setState({ index: this.state.index + amount });
+      }, 200));
     } else {
       this.setState({ index: this.state.index + amount });
     }
@@ -81,10 +84,10 @@ class FlashcardView extends React.Component {
             onClick={() => this.flipCard()}
           >
             <Segment key="front">
-              <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].front}</p>
+              <p style={styles.cardText}>{cards[index % cards.length].front}</p>
             </Segment>
             <Segment key="back">
-              <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].back}</p>
+              <p style={styles.cardText}>{cards[index % cards.length].back}</p>
             </Segment>
           </ReactCardFlip>
         </div>
@@ -92,13 +95,13 @@ class FlashcardView extends React.Component {
         <div style={styles.paddingDiv}></div>
 
         <div style={styles.cardButtons}>
-          <Button animated onClick={() => this.changeIndex(1)} size="big" attach="bottom">
+          <Button animated onClick={() => this.changeIndex(-1)} size="big" attach="bottom">
             <Button.Content visible>Prev Card</Button.Content>
             <Button.Content hidden>
               <Icon name='left arrow' />
             </Button.Content>
           </Button>
-          <Button animated onClick={() => this.changeIndex(-1)} size="big" attach="bottom">
+          <Button animated onClick={() => this.changeIndex(1)} size="big" attach="bottom">
             <Button.Content visible>Next Card</Button.Content>
             <Button.Content hidden>
               <Icon name='right arrow' />
