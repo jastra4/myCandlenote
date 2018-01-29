@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import OurSideBar from '../sideBar';
 
 export default class TopBar extends Component {
@@ -13,9 +14,9 @@ export default class TopBar extends Component {
       <Sidebar as={Menu} animation='push' direction='top' visible={true} inverted>
         <Menu.Item name='CandleNote' position='right'>
         </Menu.Item>
-        <Menu.Item name='logout' position='right'>
-          <Icon name='log out' />
-          Logout
+        <Menu.Item as={Link} to='/home' name='logout' position='right' onClick={ () => {} }>
+            <Icon name='log out' />
+            Logout
         </Menu.Item>
       </Sidebar>
       <OurSideBar { ...this.props }/>

@@ -16,6 +16,7 @@ const webshot = require('webshot');
 // db imports
 const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
+const helpers = require('./helpers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -135,6 +136,19 @@ app.post('/api/deleteCard', (req, res) => {
   deletes.deleteFlashcard(req.body)
     .then(() => res.send('Deleted'))
     .catch(err => console.log(err));
+});
+
+app.post('/api/parseContentMeaning', (req, res) => {
+  console.log('lol');
+  helpers.parseMeaningWithGoogleAPI(req.body.content)
+    .then((meaning) => {
+      console.log('meaning!: ', meaning);
+      res.send({ meaning });
+    })
+    .catch(((e) => {
+      console.error(e);
+      res.status(500).end();
+    }));
 });
 
 /* -------- Initialize Server -------- */
