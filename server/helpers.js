@@ -7,7 +7,7 @@ const parseMeaningWithGoogleAPI = content => (
     { document: {
       type: 'PLAIN_TEXT',
       content,
-    } },
+    } }
   )
     .then(({ data: { entities } }) => (
       entities.slice(0, 5).reduce((tv, cv) => tv.concat(' ', cv.name), '')
