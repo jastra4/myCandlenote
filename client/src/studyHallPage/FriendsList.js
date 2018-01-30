@@ -1,26 +1,38 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import io from 'socket.io-client';
 import Friend from './Friend';
 
 class FriendsList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: ['test1', 'test2', 'test3'],
+      friends: ['Bob', 'Alice', 'Tommy'],
+      socket: null,
     };
+  }
 
-    this.props.socket.on('update users', (data) => {
-      console.log('new user: ', data.data);
-      this.setState({ friends: this.state.friends.concat([data.data]) });
-    });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.socket !== null) {
+      this.setState({ socket: nextProps.socket });
+      // console.log('conditional ran!');
+      // this.listeners();
+    }
+  }
+
+  listeners() {
+    this.state.socket.on('update users', (data) => {
+      console.log('update user event received: ', [data.data]);
+      this.setState({ friends: [data.data] }); //this.state.friends.concat([data.data])
+    });  
   }
 
   render() {
     return (
       <div>
-        This is the FriendsList!
+        <h4>Friends:</h4>
         <div id="users">{this.state.friends.map((friend, i) => (
-          <Friend key={i} friend={friend} />
+          <Friend key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))}
         </div>
       </div>
@@ -28,8 +40,8 @@ class FriendsList extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({  });
+// const mapStateToProps = state => ({  });
 
-const FriendsListConnected = connect(mapStateToProps)(FriendsList);
+// const FriendsListConnected = connect(mapStateToProps)(FriendsList);
 
-export default FriendsListConnected;
+export default FriendsList;

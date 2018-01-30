@@ -1,10 +1,27 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import $ from 'jquery';
 
-const Search = (props) => (
-  <div>
-  	This is the search component
-  </div>
-);
+class Search extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    console.log(`searched: "${$('#search').val()}"`);
+    $('#search').val('');
+  }
+
+  render() {
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input id="search" className="input" placeholder="find a user or group"></input>
+        </form>
+      </div>
+    );
+  }
+}
 
 export default Search;

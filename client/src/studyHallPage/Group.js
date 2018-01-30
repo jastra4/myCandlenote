@@ -6,15 +6,14 @@ class Group extends React.Component {
     this.state = { };
   }
 
-  handleClick() {
-    // send request to server to query db for chat history
-    // re-render chat with returned data
+  handleClick = () => {
+    this.props.changeChat(this.props.group);
   }
 
   render() {
     return (
       <div onClick={this.handleClick.bind(this)}>
-        This is a group
+        {this.props.group}
       </div>
     );
   }

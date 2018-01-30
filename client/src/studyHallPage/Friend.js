@@ -6,9 +6,8 @@ class Friend extends React.Component {
     this.state = { };
   }
 
-  handleClick() {
-    // send request to server to query db for chat history
-    // re-render chat with returned data
+  handleClick = () => {
+    this.props.changeChat(this.props.friend);
   }
 
   render() {

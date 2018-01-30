@@ -29,7 +29,6 @@ body {
 }
 .studyContainer{
 	height: 44em;
-	border: 1px red solid;
 }
 .Groups{
 	height: 22em;
@@ -47,10 +46,10 @@ body {
 }
 .Search{
 	height: 3em;
-	width: 35%;
+	width: 75%;
 	position: relative;
 	bottom: 44em;
-	left: 65%;
+	left: 25%;
 }
 .Chat{
 	height: 41em;
@@ -58,4 +57,16 @@ body {
 	position: relative;
 	bottom: 44em;
 	left: 25%;
+}
+.input{
+	width:100%;
+}
+.chatHeader{
+	height: 2em;
+}
+.chatMessages{
+	height: 37em;
+}
+.chatInput{
+	height: 2em;
 }

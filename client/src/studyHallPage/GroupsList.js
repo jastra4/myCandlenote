@@ -1,24 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Segment } from 'semantic-ui-react';
+import Group from './Group';
 
 class GroupsList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { groups: ['math', 'english', 'science'] };
   }
 
   render() {
     return (
       <div>
-        This is the GroupsList
+        <h4>Groups:</h4>
+        <div>{this.state.groups.map((group, i) => (
+          <Group key={i} group={group} changeChat={this.props.changeChat}/>
+        ))}
+        </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({  });
-
-const GroupsListConnected = connect(mapStateToProps)(GroupsList);
-
-export default GroupsListConnected;
+export default GroupsList;

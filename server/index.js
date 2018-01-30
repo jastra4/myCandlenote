@@ -123,12 +123,15 @@ io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
   
   socket.on('new user', data => {
-    console.log('new user data: ', data);
     socket.username = data;
     io.sockets.emit('update users', socket.username);
   });
 
   socket.on('send message', (data) => {
+    console.log('received: ', data.text);
+    console.log('from: ', socket.username.data);
+    console.log('to: ', data.to);
+    console.log('at: ', Date.now());
     io.sockets.emit('new message', data);
   });
 });
