@@ -7,14 +7,12 @@ import FriendsList from './FriendsList';
 import GroupsList from './GroupsList';
 import Search from './Search';
 
-
 const socketUrl = 'http://localhost:3000';
 class StudyHall extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       socket: null,
-      messages: [],
       userId: '',
       chat: 'Bob',
     };
@@ -45,16 +43,15 @@ class StudyHall extends React.Component {
     });
   }
 
-  testRender() {
+  renderChat() {
     if (this.state.socket !== null) {
       return (
         <div className="Chat studyComp">
           <ChatBox chat={this.state.chat} socket={this.state.socket}/>
         </div>
       );
-    } else {
-      return;
     }
+    return (<div></div>);
   }
 
   changeChat(otherChat) {
@@ -74,7 +71,7 @@ class StudyHall extends React.Component {
         <Search />
       </div>
       <div>
-        {this.testRender()}
+        {this.renderChat()}
       </div>
     </div>
     );
@@ -90,7 +87,4 @@ const mapStateToProps = state => (
 
 const StudyHallConnected = connect(mapStateToProps)(StudyHall);
 
-export default StudyHallConnected; // Connected
-
-
-// export default StudyHall;
+export default StudyHallConnected;

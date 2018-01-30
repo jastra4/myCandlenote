@@ -12,7 +12,7 @@ import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import store from '../src/store';
-import StudyHall from './StudyHallPage/StudyHall';
+import StudyHallConnected from './StudyHallPage/StudyHall';
 import { isAuth } from './actions/isAuth'; // auth stuff
 
 class App extends React.Component {
@@ -24,10 +24,8 @@ class App extends React.Component {
   // Create connection when page loads if user is authenticated
   componentDidMount() {
     return axios.get('/checkAuth')
-      // .then((authStatus, username) => {
-        .then((body) => {
+      .then((body) => {
         this.props.isAuth(body.data.auth, body.data.userId);
-        // this.props.userId()
       });
   }
 
@@ -43,7 +41,7 @@ class App extends React.Component {
             <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
             <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
             <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
-            <Route path='/studyhall' render={() => <TopBar ContentPage={ StudyHall } />} />
+            <Route path='/studyhall' render={() => <TopBar ContentPage={ StudyHallConnected } />} />
             <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>

@@ -1,4 +1,4 @@
-const { Flashcards, Decks } = require('./index');
+const { Flashcards, Decks, Messages } = require('./index');
 
 const insertFlashcard = ({ front, back, deckId }) => (
   new Flashcards({
@@ -16,7 +16,22 @@ const insertDeck = ({ subject, title, userId }) => (
   }).save()
 );
 
+const insertMessage = ({ to, sentBy, text, timeStamp }) => {
+  // console.log(to);
+  // console.log(sentBy);
+  // console.log(text);
+  // console.log(timeStamp);
+  console.log('insertMessage invoked');
+  new Messages({
+    to,
+    sentBy,
+    text,
+    timeStamp,
+  }).save();
+};
+
 module.exports = {
   insertDeck,
   insertFlashcard,
+  insertMessage,
 };

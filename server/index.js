@@ -66,19 +66,24 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 // Invoked when main page renders
 // Controls whether to emit a socket connection
 app.get('/checkAuth', (req, res) => {
-  console.log('check auth ran!!');
+  console.log('check auth ran');
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.send(false);
   } else {
     const userId = req.session.passport.user;
-    console.log('userId: ', userId);
-    // res.send(true, userId);
     res.status(200).send({
       auth: true,
       userId,
     });
   }
+});
+
+app.get('/messages', (req, res) => {
+  console.log('messages request received');
+  queries.getMessages((messages) => {
+    res.send(messages);
+  });
 });
 
 /* --------- POST Handlers ----------- */
@@ -121,17 +126,19 @@ app.get('/username', (req, res) => {
 
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
-  
-  socket.on('new user', data => {
+
+  socket.on('new user', (data) => {
     socket.username = data;
     io.sockets.emit('update users', socket.username);
   });
 
   socket.on('send message', (data) => {
-    console.log('received: ', data.text);
-    console.log('from: ', socket.username.data);
-    console.log('to: ', data.to);
-    console.log('at: ', Date.now());
+    inserts.insertMessage({
+      to: data.to,
+      sentBy: socket.username.data,
+      text: data.text,
+      timeStamp: Date.now(),
+    });
     io.sockets.emit('new message', data);
   });
 });

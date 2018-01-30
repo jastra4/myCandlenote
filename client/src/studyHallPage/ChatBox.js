@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import axios from 'axios';
 import Message from './Message';
 
 class ChatBox extends React.Component {
@@ -12,15 +13,8 @@ class ChatBox extends React.Component {
 
     props.socket.on('new message', (data) => {
       const msg = `to ${data.to}: ${data.text}`;
-      console.log(msg);
       this.setState({ messages: this.state.messages.concat([msg]) });
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.socket !== null) {
-      this.setState({ socket: nextProps.socket });    
-    }
   }
 
   handleSubmit(e) {
@@ -29,8 +23,18 @@ class ChatBox extends React.Component {
       text: $('#message').val(),
       to: this.props.chat,
     };
-    this.state.socket.emit('send message', msg);
+    this.props.socket.emit('send message', msg);
     $('#message').val('');
+  }
+
+  componentDidMount() {
+    return axios.get('/messages')
+      .then((messages) => {
+        console.log('Messages: ', messages.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
