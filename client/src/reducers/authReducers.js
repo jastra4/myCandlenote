@@ -3,7 +3,6 @@ const authReducer = (state = false, action) => {
     case 'IS_AUTH':
       return {
         isAuth: action.authStatus,
-        username: action.username,
       };
     default:
       return state;

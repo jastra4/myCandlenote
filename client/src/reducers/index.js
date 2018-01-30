@@ -7,6 +7,7 @@ import usersReducer from './usersReducers';
 import messagesReducer from './messagesReducers';
 import videosReducer from './videosReducers';
 import authReducer from './authReducers'; // auth stuff
+import userIdReducer from './userIdReducers'; // auth stuff
 
 const reducers = combineReducers({
   decks: decksReducer,
@@ -16,6 +17,7 @@ const reducers = combineReducers({
   messages: messagesReducer,
   videos: videosReducer,
   isAuth: authReducer, // auth stuff
+  userId: userIdReducer,
 });
 
 export default reducers;

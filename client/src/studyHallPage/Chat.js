@@ -12,28 +12,27 @@ class Chat extends React.Component {
     this.state = { 
       messages: [],
       socket: null,
-      username: null,
     };
   }
 
   componentWillReceiveProps() { // auth stuff
-    console.log('authenticated? ', this.props.isAuth.isAuth);
-    if (this.props.isAuth.isAuth) {
-      this.initSocket();
+    console.log('authenticated? ', this.props);
+    if (this.props.isAuth) {
+      this.initSocket(this.props.userId);
     } else {
       console.log('Not authenticated. Did not create connection.');
     }
   }
 
-  initSocket() {
+  initSocket(userId) {
     const socket = io(socketUrl);
     socket.on('connect', () => {
       console.log('Connected!');
       this.setState({ socket });
-      return axios.get('/username')
+      return axios.get(`/username?id=${userId}`) //`/entry?id=${entryid}`
         .then((username) => {
-          this.setState({ username });
-          socket.emit('new user', this.state.username);
+          this.setState({ userId });
+          socket.emit('new user', this.state.userId);
         })
         .catch((error) => {
           console.log(error);
@@ -73,8 +72,8 @@ class Chat extends React.Component {
 
 const mapStateToProps = state => (
   {
-    isAuth: state.isAuth,
-    username: state.username,
+    isAuth: state.isAuth.isAuth,
+    userId: state.userId.userId,
   }
 );
 

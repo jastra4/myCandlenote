@@ -71,7 +71,11 @@ app.get('/checkAuth', (req, res) => {
   } else {
     const userId = req.session.passport.user;
     console.log('userId: ', userId);
-    res.send(true);
+    // res.send(true, userId);
+    res.status(200).send({
+      auth: true,
+      userId,
+    });
   }
 });
 
@@ -107,6 +111,7 @@ app.post('/makePDF', (req, res) => {
 /* ----------- Sockets ------------ */
 
 app.get('/username', (req, res) => {
+  console.log('q: ', req.query);
   // const userId = req.session.passport.user;
   // '5a6cc3c1da0212ef30d070fe'
   // queries.getUserName(userId, (username) => {

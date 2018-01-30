@@ -22,8 +22,10 @@ class App extends React.Component {
   // Create connection when page loads if user is authenticated
   componentDidMount() {
     return axios.get('/checkAuth')
-      .then((authStatus, username) => {
-        this.props.isAuth(authStatus.data, username);
+      // .then((authStatus, username) => {
+        .then((body) => {
+        this.props.isAuth(body.data.auth, body.data.userId);
+        // this.props.userId()
       });
   }
 
@@ -47,7 +49,7 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { isAuth: authStatus => dispatch(isAuth(authStatus)) }
+  { isAuth: (authStatus, userId) => dispatch(isAuth(authStatus, userId)) }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);

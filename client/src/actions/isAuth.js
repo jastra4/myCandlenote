@@ -1,5 +1,5 @@
-export const isAuth = (authStatus, username) => ({
+export const isAuth = (authStatus, userId) => ({
   type: 'IS_AUTH',
   authStatus,
-  username,
+  userId,
 });
