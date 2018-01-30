@@ -158,6 +158,7 @@ app.post('/api/tempSavePacket', (req, res) => {
     .then(() => {
       console.log('yay');
       const url = `${DOMAIN}/PDF/${fileName}`;
+      console.log('url: ', url);
       const pdfFilePath = path.join(__dirname, `PDFs/${fileName}.pdf`);
       makePDF(url, pdfFilePath, (err) => {
         if (err) { res.sendStatus(500); }
