@@ -1,3 +1,4 @@
-.ql-container .note {
-    font-size: 50px;
+.quill.note {
+  font-size: 50px !important;
+  font-weight: bold;
 }

@@ -10,6 +10,7 @@ import Notepad from './notePad'; // eslint-disable-line
 import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
+import Test from './test';
 import store from '../src/store';
 
 
@@ -26,7 +27,7 @@ const App = () => (
         <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
         <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
         <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
-        <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
+        <Route path='/test' render={props => <Test {...props} />} />
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
     </BrowserRouter>

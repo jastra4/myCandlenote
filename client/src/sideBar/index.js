@@ -76,7 +76,7 @@ export default class SideBar extends Component {
                 paddingRight: '75px',
                 minHeight: '10005px',
               }}>
-              <ContentPage changeBackgroundColor={ this.changeBackgroundColor }/>
+              <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>

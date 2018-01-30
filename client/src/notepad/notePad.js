@@ -44,7 +44,17 @@ export default class Notepad extends React.Component {
       })
   );
 
+
+  handlePrint = (packet) => {
+    axios.post('/api/tempSavePacket', { packet })
+    .then((res) => {
+      console.log('res: ', res);
+    })
+  }
+
+
   render = () => (
+    <Button onClick={ this.handlePrint }>Print</Button>
     <ReactQuill
       value={ this.state.value }
       onChange={ this.handleEditorChange }
