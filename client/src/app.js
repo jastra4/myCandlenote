@@ -62,7 +62,7 @@ const AppConnected = connect(null, mapDispatchToProps)(App);
 ReactDOM.render(
   <Provider store={store}>
     {/* <PersistGate loading={null} persistor={persistor}> */}
-      <App />
+      <AppConnected />
     {/* </PersistGate> */ }
   </Provider>,
   document.getElementById('app'),

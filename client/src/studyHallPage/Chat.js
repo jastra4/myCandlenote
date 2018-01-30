@@ -12,17 +12,42 @@ class Chat extends React.Component {
     this.state = { 
       messages: [],
       socket: null,
+      //auth: false,
     };
   }
 
-  componentWillReceiveProps() { // auth stuff
+  componentWillReceiveProps(nextProps) { // auth stuff
+    console.log(nextProps);
+    //this.setState({ auth: nextProps.authStatus });
     console.log('authenticated? ', this.props);
-    if (this.props.isAuth) {
-      this.initSocket(this.props.userId);
+    if (nextProps.isAuth) {
+    // if (this.props.isAuth) {
+      this.initSocket(nextProps.userId);
     } else {
       console.log('Not authenticated. Did not create connection.');
     }
   }
+
+  // componentDidMount() {
+  //   if (this.props.isAuth) {
+  //     this.initSocket(this.props.userId);
+  //   } else {
+  //     console.log('Not authenticated. Did not create connection.');
+  //   }    
+  // }
+
+  // componentShoulUpdate(nextProps, nextState) {
+  //   return this.props.isAuth !== nextProps.isAuth;
+  // }
+
+  // componentDidUpdate() { // auth stuff
+  //   console.log('authenticated? ', this.props);
+  //   if (this.props.isAuth) {
+  //     this.initSocket(this.props.userId);
+  //   } else {
+  //     console.log('Not authenticated. Did not create connection.');
+  //   }
+  // }
 
   initSocket(userId) {
     const socket = io(socketUrl);
