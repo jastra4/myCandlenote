@@ -6,6 +6,7 @@ import notesReducer from './notesReducers';
 import usersReducer from './usersReducers';
 import messagesReducer from './messagesReducers';
 import videosReducer from './videosReducers';
+import intellisearchReducer from './intellisearchReducers';
 
 const reducers = combineReducers({
   decks: decksReducer,
@@ -14,6 +15,7 @@ const reducers = combineReducers({
   user: usersReducer,
   messages: messagesReducer,
   videos: videosReducer,
+  intellisearch: intellisearchReducer,
 });
 
 export default reducers;
