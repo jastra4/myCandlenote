@@ -6,25 +6,30 @@ import { Provider } from 'react-redux';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
+import Notepad from './notePad'; // eslint-disable-line 
+import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
-// import { store, persistor } from '../src/store';
 import store from '../src/store';
+
 
 const App = () => (
   <div>
     <BrowserRouter>
       <Switch>
-        <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
-        {/* <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} /> */}
-        <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
+        <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
+        <Route path='/notepad' render={() => <TopBar ContentPage={ Notepad }/>} />
+        <Route path='/notebox' render={() => <TopBar ContentPage={ Notebox }/>} />
         <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
+        <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
-
-        <Route component={ NotFoundPage }></Route>
+        <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+        <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
         <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
       </Switch>
-  </BrowserRouter>
+    </BrowserRouter>
   </div>
 );
 
@@ -32,7 +37,7 @@ ReactDOM.render(
   <Provider store={store}>
     {/* <PersistGate loading={null} persistor={persistor}> */}
       <App />
-    {/* </PersistGate> */}
+    {/* </PersistGate> */ }
   </Provider>,
   document.getElementById('app'),
 );
