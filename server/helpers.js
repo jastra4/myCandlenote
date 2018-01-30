@@ -29,13 +29,17 @@ const defaultOptions = {
   },
 };
 
-const makePDF = (url, fileName, callback, options = defaultOptions) => {
+const makePDF = (url, fileName, callback, options = {}) => {
+  const finalOptions = {
+    ...defaultOptions,
+    ...options,
+  };
   const filePath = `PDFs/${fileName}.pdf`;
   console.log('url: ', url);
-  console.log('options: ', options);
+  console.log('options: ', finalOptions);
+  console.log('callback: ', callback);
   // console.log('filePath: ', filePath);
-  return (
-  webshot(url, filePath, options, (err) => {
+  webshot(url, filePath, finalOptions, (err) => {
     if (err) {
       console.log('PDF NOT Saved!!!')
       callback(err, null);
@@ -43,7 +47,7 @@ const makePDF = (url, fileName, callback, options = defaultOptions) => {
       console.log('PDF Saved!')
       callback(null, err);
     }
-  }))
+  })
 };
 
 module.exports = {

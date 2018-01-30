@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const axios = require('axios');
 
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
@@ -55,6 +56,7 @@ app.use(passport.session());
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
+// TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
@@ -160,9 +162,12 @@ app.post('/api/tempSavePacket', (req, res) => {
       const url = `${DOMAIN}/PDF/${fileName}`;
       const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);      
       makePDF(url, fileName, (err) => {
-        if (err) { res.sendStatus(500); }
-        res.download(pathToPDF);
-      });
+        if (err) { 
+          console.error(err);
+          res.sendStatus(500); 
+        } else { console.log('lol') }
+        // res.download(pathToPDF);
+      }, { takeShotOnCallback: true });
     })
     .catch((e) => { console.error(e); });
 });
@@ -185,3 +190,11 @@ app.post('/api/getEditorPacket', (req, res) => {
 app.listen(PORT, () => {
   console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
+
+
+
+axios.get('localhost:3000')
+.then((res) => {
+  console.log('res: ', res)
+})
+.catch((e) => { console.error(e) });

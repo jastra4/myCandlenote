@@ -21,6 +21,13 @@ export default class Notepad extends React.Component {
       .catch(e => console.error(e));
   }
 
+  componentDidMount() {
+    setTimeout(() => {
+      console.log('loaded!');
+      window.callPhantom('takeShot');
+    }, 500);
+  }
+
   render = () => (
       <ReactQuill
         value={ this.state.value }
