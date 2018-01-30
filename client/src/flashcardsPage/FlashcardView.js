@@ -4,24 +4,28 @@ import { Segment, Button, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   cardText: {
-    height: '6em',
-    width: '8em',
+    height: '10em',
+    width: '100%',
     fontSize: '2em',
-    display: 'tableCell',
+    display: 'table-cell',
     verticalAlign: 'middle',
     padding: '10px',
   },
+  cardImage: {
+    maxWidth: '100%',
+    height: 'auto',
+  },
   cardButtons: { marginTop: '1em' },
-  paddingDiv: { height: '10em' },
+  paddingDiv: { height: '13em' },
   mainDiv: {
-    padding: '20px 4vw',
+    padding: '20px 1vw',
     height: '35vh',
     display: 'inline-block',
     width: '70%',
   },
   flipCard: {
     display: 'inline-block',
-    width: '75%',
+    width: '100%',
     paddingTop: '3vh',
   },
 };

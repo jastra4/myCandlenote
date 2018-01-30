@@ -8,24 +8,26 @@ import DeckListVert from '../decksPage/DeckListVertContainer';
 const styles = {
   containerDiv: {
     padding: '2em',
-    veritcalAlign: 'top',
+    lineHeight: '100%',
   },
   headerContainer: {
-    position: 'relative',
-    top: '1vh',
     display: 'inline-block',
-    width: '30%',
+    verticalAlign: 'top',
+    width: '28%',
+    maxWidth: '130px',
+    marginTop: '20vh',
   },
   sideBar: {
     paddingLeft: '2em',
+    marginTop: '40px',
     display: 'inline-block',
     width: '25%',
-    position: 'relative',
-    top: '-80vh',
+    verticalAlign: 'top',
   },
   mainSegment: {
     display: 'inline-block',
     width: '70%',
+    lineHeight: '100%',
   },
 };
 
