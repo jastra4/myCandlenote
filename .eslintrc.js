@@ -30,11 +30,8 @@ module.exports = {
       "ObjectPattern": "never"
     }],
     "no-underscore-dangle": 0,
-    "no-unused-expressions": {
-      "allowShortCircuit": true,
-      "allowTernary": true
-    }
-  },
+    "no-unused-expressions": 0
+    },
 
   "plugins": [ "react" ]
 };

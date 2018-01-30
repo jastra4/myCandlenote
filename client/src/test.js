@@ -21,9 +21,6 @@ export default class Notepad extends React.Component {
       .catch(e => console.error(e));
   }
 
-  componentWillReceiveProps = (nextProps) => {
-  };
-
   render = () => (
       <ReactQuill
         value={ this.state.value }

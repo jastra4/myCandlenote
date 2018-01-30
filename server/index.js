@@ -74,12 +74,11 @@ app.get('*', (req, res) => {
 
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
-  const title = JSON.stringify(Date.now());
-  const filePath = `PDFs/${title}.pdf`;
+  const fileName = JSON.stringify(Date.now());
 
   // webshot wraps phantomjs and provides a simple API
   // phantomjs is essentially a web browser with no GUI
-  makePDF(url, filePath, (err) => {
+  makePDF(url, fileName, (err) => {
     if (err) {
       res.sendStatus(500);
     }
@@ -159,11 +158,10 @@ app.post('/api/tempSavePacket', (req, res) => {
     .then(() => {
       console.log('yay');
       const url = `${DOMAIN}/PDF/${fileName}`;
-      console.log('url: ', url);
-      const pdfFilePath = path.join(__dirname, `PDFs/${fileName}.pdf`);
-      makePDF(url, pdfFilePath, (err) => {
+      const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);      
+      makePDF(url, fileName, (err) => {
         if (err) { res.sendStatus(500); }
-        res.download(pdfFilePath);
+        res.download(pathToPDF);
       });
     })
     .catch((e) => { console.error(e); });
@@ -172,10 +170,8 @@ app.post('/api/tempSavePacket', (req, res) => {
 app.post('/api/getEditorPacket', (req, res) => {
   const { fileName } = req.body;
   const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-  console.log('filePath: ', filePath);
   readFile(filePath, 'utf8')
     .then((data) => {
-      console.log('data from readfile!');
       res.json({ data });
     })
     .catch((e) => { 

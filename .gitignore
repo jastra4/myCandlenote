@@ -4,3 +4,5 @@ config/keys.js
 .DS_Store
 redux-setup
 client/dist/bundle.js
+server/assets/temp/
+PDFs/
