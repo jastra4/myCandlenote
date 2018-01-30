@@ -1,5 +1,4 @@
 import React from 'react';
-import { v1 } from 'uuid';
 import { Segment, Button, Form } from 'semantic-ui-react';
 
 const mapDecksToOptions = decksById => (
@@ -39,11 +38,10 @@ class FlashcardCreator extends React.Component {
 
     const { front, back } = this.state;
 
-    this.props.addFlashcard({
+    this.props.createFlashcard({
       front,
       back,
       deckId: this.state.selectedDeck,
-      id: v1(),
     });
 
     this.setState({

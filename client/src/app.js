@@ -2,15 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux'; // auth stuff
-import { PersistGate } from 'redux-persist/lib/integration/react';
 import axios from 'axios';
+// import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
+import Notepad from './notePad'; // eslint-disable-line 
+import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
+import store from '../src/store';
 // import StudyHallContainer from './studyHallPage/StudyHallContainer';
-import { store, persistor } from '../src/store';
 import { isAuth } from './actions/isAuth'; // auth stuff
 
 class App extends React.Component {
@@ -34,16 +36,19 @@ class App extends React.Component {
       <div>
         <BrowserRouter>
           <Switch>
-            <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
-            {/* <Route path='/two' exact={true} render={() => <TopBar ContentPage={PageTwo} />} /> */}
-            <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
+            <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
+            <Route path='/notepad' render={() => <TopBar ContentPage={ Notepad }/>} />
+            <Route path='/notebox' render={() => <TopBar ContentPage={ Notebox }/>} />
             <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
+            <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
             <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
-            <Route path='/studyHall' exact={true} render={() => <TopBar ContentPage={StudyHall} />} />
-            <Route component={ NotFoundPage }></Route>
+            <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+            <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+            <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+            <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
           </Switch>
-      </BrowserRouter>
+        </BrowserRouter>
       </div>
     );
 }
@@ -56,9 +61,9 @@ const AppConnected = connect(null, mapDispatchToProps)(App);
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <AppConnected />
-    </PersistGate>
+    {/* <PersistGate loading={null} persistor={persistor}> */}
+      <App />
+    {/* </PersistGate> */ }
   </Provider>,
   document.getElementById('app'),
 );

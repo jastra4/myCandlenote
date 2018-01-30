@@ -1,10 +1,22 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 
 export default class SideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      backgroundColor: '',
+      activeItem: 'home',
+    };
+  }
+
+  handleItemClick = (e, { name }) => {
+    this.setState({ activeItem: name });
+  }
+
+  changeBackgroundColor = (backgroundColor) => {
+    this.setState({ backgroundColor });
   }
 
   render() {
@@ -13,44 +25,58 @@ export default class SideBar extends Component {
       <div>
         <Sidebar.Pushable as={Segment}>
           <Sidebar as={Menu} animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
-            <Menu.Item name='home'>
-              <Icon name='home' />
-              Home
-            </Menu.Item>
-            <Menu.Item name='write'>
-              <Icon name='write' />
-              Notes
-            </Menu.Item>
-            <Menu.Item name='vcard outline'>
-              <Icon name='vcard outline' />
-              Flashcards
-            </Menu.Item>
-            <Menu.Item name='clone'>
-              <Icon name='clone' />
-              Decks
-            </Menu.Item>
-            <Menu.Item name='book'>
-              <Icon name='book' />
-              Library
-            </Menu.Item>
-            <Menu.Item name='student'>
-              <Icon name='student' />
-              Study Hall
-            </Menu.Item>
-            <Menu.Item name='winner'>
-              <Icon name='winner' />
-              Quizzlet
-            </Menu.Item>
+            <Link to='/'>
+              <Menu.Item name='home' active={true} onClick={ this.handleItemClick }>
+                <Icon name='home' />
+                Home
+              </Menu.Item>
+            </Link>
+            <Link to='/notepad'>
+              <Menu.Item name='write' onClick={ this.handleItemClick }>
+                <Icon name='write' />
+                Create
+              </Menu.Item>
+            </Link>
+            <Link to='/notebox'>
+              <Menu.Item name='inbox' onClick={ this.handleItemClick }>
+                <Icon name='inbox' />
+                NoteBox
+              </Menu.Item>
+            </Link>
+            <Link to='/flashcards'>
+              <Menu.Item name='vcard outline' onClick={ this.handleItemClick }>
+                <Icon name='vcard outline' />
+                Flashcards
+              </Menu.Item>
+            </Link>
+            <Link to='/library'>
+              <Menu.Item name='book' onClick={ this.handleItemClick }>
+                <Icon name='book' />
+                Library
+              </Menu.Item>
+            </Link>
+            <Link to='/studyhall'>
+              <Menu.Item name='student' onClick={ this.handleItemClick }>
+                <Icon name='student' />
+                Study Hall
+              </Menu.Item>
+            </Link>
+              <Link to='/quizzlet'>
+              <Menu.Item name='winner' onClick={ this.handleItemClick }>
+                <Icon name='winner' />
+                Quizzlet
+              </Menu.Item>
+            </Link>
           </Sidebar>
-          <Sidebar.Pusher>
+          <Sidebar.Pusher>π
             <Segment basic style={{
-                backgroundColor: 'red',
-                marginTop: '35px',
+                backgroundColor: '#ffd1a3',
+                marginTop: '20px',
                 marginRight: '100px',
                 paddingRight: '75px',
                 minHeight: '10005px',
               }}>
-              <ContentPage />
+              <ContentPage changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>

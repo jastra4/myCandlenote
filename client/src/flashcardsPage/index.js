@@ -21,7 +21,7 @@ const styles = {
     display: 'inline-block',
     width: '25%',
     position: 'relative',
-    top: '-100vh',
+    top: '-80vh',
   },
   mainSegment: {
     display: 'inline-block',
@@ -38,7 +38,7 @@ const FlashcardPage = props => (
             <Icon name='clone' />
               Deck:
               <Header.Subheader>
-              {/* {this.props.currentDeck.title} */}
+              {props.currentDeck.title || 'No Deck Selected'}
             </Header.Subheader>
           </Header>
         </div>
@@ -51,6 +51,7 @@ const FlashcardPage = props => (
         <FlashcardCreator
           currentDeck={props.currentDeck}
           addFlashcard={props.addFlashcard}
+          createFlashcard={props.createFlashcard}
           decksById={props.decksById}
         />
       </div>

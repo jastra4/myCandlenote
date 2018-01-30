@@ -4,15 +4,18 @@ import { Segment, Button, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   cardText: {
-    height: '100%',
-    width: '100%',
+    height: '6em',
+    width: '8em',
     fontSize: '2em',
+    display: 'tableCell',
+    verticalAlign: 'middle',
+    padding: '10px',
   },
   cardButtons: { marginTop: '1em' },
-  paddingDiv: { height: '160px' },
+  paddingDiv: { height: '10em' },
   mainDiv: {
     padding: '20px 4vw',
-    height: '35vw',
+    height: '35vh',
     display: 'inline-block',
     width: '70%',
   },
@@ -52,19 +55,22 @@ class FlashcardView extends React.Component {
   }
 
   flipCard() {
-    if (this.state.checked) {
-      this.setState({
-        flipped: !this.state.flipped,
-        index: this.state.index + 0.5,
-      });
+    if (this.state.checked && this.state.flipped) {
+      this.changeIndex(1);
     } else {
       this.setState({ flipped: !this.state.flipped });
     }
   }
 
   changeIndex(amount) {
-    if (this.state.index === 0) {
-      this.setState({ index: this.state.cards.length - 1 });
+    if (this.state.index === 0 && amount < 0) {
+      this.setState({ flipped: false }, () => setTimeout(() => {
+        this.setState({ index: this.state.cards.length - 1 });
+      }, 200));
+    } else if (this.state.flipped) {
+      this.setState({ flipped: false }, () => setTimeout(() => {
+        this.setState({ index: this.state.index + amount });
+      }, 200));
     } else {
       this.setState({ index: this.state.index + amount });
     }
@@ -81,10 +87,10 @@ class FlashcardView extends React.Component {
             onClick={() => this.flipCard()}
           >
             <Segment key="front">
-              <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].front}</p>
+              <p style={styles.cardText}>{cards[index % cards.length].front}</p>
             </Segment>
             <Segment key="back">
-              <p style={styles.cardText}>{cards[Math.floor(index % cards.length)].back}</p>
+              <p style={styles.cardText}>{cards[index % cards.length].back}</p>
             </Segment>
           </ReactCardFlip>
         </div>
@@ -92,13 +98,13 @@ class FlashcardView extends React.Component {
         <div style={styles.paddingDiv}></div>
 
         <div style={styles.cardButtons}>
-          <Button animated onClick={() => this.changeIndex(1)} size="big" attach="bottom">
+          <Button animated onClick={() => this.changeIndex(-1)} size="big" attach="bottom">
             <Button.Content visible>Prev Card</Button.Content>
             <Button.Content hidden>
               <Icon name='left arrow' />
             </Button.Content>
           </Button>
-          <Button animated onClick={() => this.changeIndex(-1)} size="big" attach="bottom">
+          <Button animated onClick={() => this.changeIndex(1)} size="big" attach="bottom">
             <Button.Content visible>Next Card</Button.Content>
             <Button.Content hidden>
               <Icon name='right arrow' />

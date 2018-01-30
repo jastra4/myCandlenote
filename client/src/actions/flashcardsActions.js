@@ -39,8 +39,7 @@ export const setCurrentFlashcard = cardId => ({
 export const deleteFlashcard = cardId => (
   dispatch => (
     axios.post('/api/deleteCard/', cardId)
-      .then((res) => {
-        console.log('Delete Card response:', res.data);
+      .then(() => {
         dispatch({
           type: 'DELETE_FLASHCARD',
           payload: { id: cardId },
@@ -48,3 +47,8 @@ export const deleteFlashcard = cardId => (
       })
   )
 );
+
+export const deleteAllCardsFromDeck = deckId => ({
+  type: 'DELETE_ALL_CARDS_FOR_DECK',
+  payload: { id: deckId },
+});
