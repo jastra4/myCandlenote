@@ -21,9 +21,11 @@ export default class Notepad extends React.Component {
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    this.setState({ value });
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
+    this.setState({
+ value, packet 
+});
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
     _.debounce(this.parseContentMeaning, 1000)(content);
@@ -45,20 +47,21 @@ export default class Notepad extends React.Component {
   );
 
 
-  handlePrint = (packet) => {
+  handlePrint = () => {
+    const { packet } = this.state;
     axios.post('/api/tempSavePacket', { packet })
-    .then((res) => {
-      console.log('res: ', res);
-    })
+      .catch((e) => { console.log(e); });
   }
 
 
   render = () => (
-    <Button onClick={ this.handlePrint }>Print</Button>
-    <ReactQuill
-      value={ this.state.value }
-      onChange={ this.handleEditorChange }
-      placeholder="Let's take some notes!"
-    />
+    <div>
+      <button onClick={ this.handlePrint }>Print</button>
+      <ReactQuill
+        value={ this.state.value }
+        onChange={ this.handleEditorChange }
+        placeholder="Let's take some notes!"
+        />
+    </div>
   );
 }

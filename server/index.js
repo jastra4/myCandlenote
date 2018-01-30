@@ -11,18 +11,24 @@ const session = require('express-session');
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
-const webshot = require('webshot');
+const { promisify } = require('util');
+const fs = require('fs');
+const uuid = require('uuid');
+
+const writeFile = promisify(fs.writeFile);
 
 // db imports
 const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
-const helpers = require('./helpers');
+const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 
 const app = express();
 app.use(bodyParser.json());
 const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
+
+const DOMAIN = process.env.ENV === 'production' ? 'http://candlenote.io' : `localhost:${PORT}` ;
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -66,25 +72,13 @@ app.get('*', (req, res) => {
 /* --------- POST Handlers ----------- */
 
 app.post('/makePDF', (req, res) => {
-  const myUrl = req.body.tab_url;
+  const url = req.body.tab_url;
   const title = JSON.stringify(Date.now());
-
-  // defaut webshot options
-  const options = {
-    streamType: 'pdf',
-    windowSize: {
-      width: 1024,
-      height: 786,
-    },
-    shotSize: {
-      width: 'all',
-      height: 'all',
-    },
-  };
+  const filePath = `PDFs/${title}.pdf`;
 
   // webshot wraps phantomjs and provides a simple API
   // phantomjs is essentially a web browser with no GUI
-  webshot(myUrl, `PDFs/${title}.pdf`, options, (err) => {
+  makePDF(url, filePath, (err) => {
     if (err) {
       res.sendStatus(500);
     }
@@ -92,7 +86,13 @@ app.post('/makePDF', (req, res) => {
   });
 });
 
+
 /* ----------- API Routes ------------ */
+
+app.get('/api/PDF', (req, res) => {
+  const { fileName } = req.body;
+  res.download(`/PDFs/${fileName}.pdf`);
+});
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
@@ -139,10 +139,8 @@ app.post('/api/deleteCard', (req, res) => {
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
-  console.log('lol');
-  helpers.parseMeaningWithGoogleAPI(req.body.content)
+  parseMeaningWithGoogleAPI(req.body.content)
     .then((meaning) => {
-      console.log('meaning!: ', meaning);
       res.send({ meaning });
     })
     .catch(((e) => {
@@ -151,8 +149,26 @@ app.post('/api/parseContentMeaning', (req, res) => {
     }));
 });
 
+app.post('/api/tempSavePacket', (req, res) => {
+  const { packet } = req.body;
+  const fileName = uuid();
+  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
+
+  writeFile(filePath, packet)
+    .then(() => {
+      console.log('yay');
+      const url = `${DOMAIN}/PDF/${fileName}`;
+      const pdfFilePath = path.join(__dirname, `PDFs/${fileName}.pdf`);
+      makePDF(url, pdfFilePath, (err) => {
+        if (err) { res.sendStatus(500); }
+        res.download(pdfFilePath);
+      });
+    })
+    .catch((e) => { console.error(e); });
+});
+
 /* -------- Initialize Server -------- */
 
-app.listen(port, () => {
-  console.info(`🌎  Server now running on port ${port}.  🌎`);
+app.listen(PORT, () => {
+  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
