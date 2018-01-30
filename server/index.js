@@ -113,11 +113,8 @@ app.post('/makePDF', (req, res) => {
 /* ----------- Sockets ------------ */
 
 app.get('/username', (req, res) => {
-  console.log('q: ', req.query.id);
   const userId = req.query.id;
-  // '5a6cc3c1da0212ef30d070fe'
   queries.getUserName(userId, (username) => {
-    console.log('FOUND USER: ', username);
     res.send(username);
   });
 });
@@ -128,6 +125,7 @@ io.sockets.on('connection', (socket) => {
   socket.on('new user', data => {
     console.log('new user data: ', data);
     socket.username = data;
+    io.sockets.emit('update users', socket.username);
   });
 
   socket.on('send message', (data) => {

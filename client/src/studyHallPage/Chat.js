@@ -4,6 +4,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import { connect } from 'react-redux'; // auth stuff
 import Message from './Message';
+import ActiveUser from './ActiveUser';
 
 const socketUrl = 'http://localhost:3000';
 class Chat extends React.Component {
@@ -12,6 +13,7 @@ class Chat extends React.Component {
     this.state = { 
       messages: [],
       socket: null,
+      users: [],
       //auth: false,
     };
   }
@@ -37,11 +39,16 @@ class Chat extends React.Component {
         .then((username) => {
           this.setState({ userId });
           console.log('USRNAME: ', username);
-          socket.emit('new user', this.state.userId);
+          socket.emit('new user', username);
         })
         .catch((error) => {
           console.log(error);
         });
+    });
+
+    socket.on('update users', (data) => {
+      console.log('new user: ', data.data);
+      this.setState({ users: this.state.users.concat([data.data]) });
     });
 
     socket.on('new message', (data) => {
@@ -69,7 +76,10 @@ class Chat extends React.Component {
               <input type="submit" onClick={this.sendMessage.bind(this)}></input>
             </form>
             </div>
-          <div id="users"></div>
+          <div id="users">{this.state.users.map((username, i) => (
+            <ActiveUser key={i} username={username} />
+          ))}
+          </div>
         </div>
       </div>
     );
