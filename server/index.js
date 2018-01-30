@@ -125,10 +125,10 @@ app.get('/username', (req, res) => {
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
   
-  // socket.on('new user', data => {
-  //   console.log('new user data: ', data);
-  //   socket.username = data;
-  // });
+  socket.on('new user', data => {
+    console.log('new user data: ', data);
+    socket.username = data;
+  });
 
   socket.on('send message', (data) => {
     io.sockets.emit('new message', data);
