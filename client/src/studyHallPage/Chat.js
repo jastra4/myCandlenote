@@ -32,6 +32,7 @@ class Chat extends React.Component {
       return axios.get(`/username?id=${userId}`) //`/entry?id=${entryid}`
         .then((username) => {
           this.setState({ userId });
+          console.log('USRNAME: ', username);
           socket.emit('new user', this.state.userId);
         })
         .catch((error) => {

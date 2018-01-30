@@ -111,13 +111,13 @@ app.post('/makePDF', (req, res) => {
 /* ----------- Sockets ------------ */
 
 app.get('/username', (req, res) => {
-  console.log('q: ', req.query);
-  // const userId = req.session.passport.user;
+  console.log('q: ', req.query.id);
+  const userId = req.query.id;
   // '5a6cc3c1da0212ef30d070fe'
-  // queries.getUserName(userId, (username) => {
-  //   console.log('FOUND USER: ', username);
-  //   res.send(username);
-  // });
+  queries.getUserName(userId, (username) => {
+    console.log('FOUND USER: ', username);
+    res.send(username);
+  });
 });
 
 io.sockets.on('connection', (socket) => {
