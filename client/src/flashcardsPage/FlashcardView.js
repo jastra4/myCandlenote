@@ -118,6 +118,7 @@ class FlashcardView extends React.Component {
               <Icon name='right arrow' />
             </Button.Content>
           </Button>
+          <br></br>
           <Checkbox label="Auto Flip to next card" onChange={this.onCheckboxChange.bind(this)} size="big" />
         </div>
       </div>

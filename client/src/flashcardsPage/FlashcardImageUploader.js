@@ -38,8 +38,8 @@ class FlashcardImageUploader extends React.Component {
 
           // set defaults:
           const callback = this.props.onImageLoaded || (urlData => console.log(urlData));
-          const MAX_WIDTH = this.props.maxWidth || 200;
-          const MAX_HEIGHT = this.props.maxHeight || 250;
+          const MAX_WIDTH = this.props.maxWidth || 390;
+          const MAX_HEIGHT = this.props.maxHeight || 300;
 
           let { width } = newImage;
           let { height } = newImage;

@@ -16,6 +16,7 @@ const styles = {
     width: '28%',
     maxWidth: '130px',
     marginTop: '20vh',
+    // marginRight: '2vw',
   },
   sideBar: {
     paddingLeft: '2em',
