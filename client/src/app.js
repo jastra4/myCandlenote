@@ -12,7 +12,7 @@ import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import store from '../src/store';
-// import StudyHallContainer from './studyHallPage/StudyHallContainer';
+import StudyHall from './StudyHallPage/StudyHall';
 import { isAuth } from './actions/isAuth'; // auth stuff
 
 class App extends React.Component {
@@ -43,7 +43,7 @@ class App extends React.Component {
             <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
             <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
             <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
-            <Route path='/studyhall' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+            <Route path='/studyhall' render={() => <TopBar ContentPage={ StudyHall } />} />
             <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/' exact={true} render={() => <TopBar ContentPage={MainPage} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>

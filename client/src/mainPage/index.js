@@ -1,5 +1,4 @@
 import React from 'react';
-import StudyHall from '../studyHallPage/StudyHallContainer';
 
 export default class MainPage extends React.Component {
   constructor() {
@@ -12,7 +11,6 @@ export default class MainPage extends React.Component {
       <h1>Main Page</h1>
       <p>Hello World :)</p>
       <a href="/auth/google">Sign In with Google</a>
-      <StudyHall />
     </div>
   );
 }

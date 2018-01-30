@@ -1,32 +1,35 @@
 import React from 'react';
-import io from 'socket.io-client';
 import $ from 'jquery';
 import axios from 'axios';
-import { connect } from 'react-redux'; // auth stuff
+import io from 'socket.io-client';
+import { Segment } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import Message from './Message';
-import ActiveUser from './ActiveUser';
+import Friend from './Friend';
 
 const socketUrl = 'http://localhost:3000';
-class Chat extends React.Component {
+
+class ChatBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      messages: [],
+    this.state = {
       socket: null,
+      messages: [],
       users: [],
-      //auth: false,
+      chat: '',
     };
   }
 
-  componentWillReceiveProps(nextProps) { // auth stuff
-    console.log(nextProps);
-    //this.setState({ auth: nextProps.authStatus });
-    console.log('authenticated? ', this.props);
+  currentChat(forum) {
+    this.setState({ chat: forum });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log(`authenticated? ${this.props}`);
     if (nextProps.isAuth) {
-    // if (this.props.isAuth) {
       this.initSocket(nextProps.userId);
     } else {
-      console.log('Not authenticated. Did not create connection.');
+      console.log('Did not create connection');
     }
   }
 
@@ -35,10 +38,9 @@ class Chat extends React.Component {
     socket.on('connect', () => {
       console.log('Connected!');
       this.setState({ socket });
-      return axios.get(`/username?id=${userId}`) //`/entry?id=${entryid}`
+      return axios.get(`/username?id=${userId}`)
         .then((username) => {
           this.setState({ userId });
-          console.log('USRNAME: ', username);
           socket.emit('new user', username);
         })
         .catch((error) => {
@@ -46,10 +48,10 @@ class Chat extends React.Component {
         });
     });
 
-    socket.on('update users', (data) => {
-      console.log('new user: ', data.data);
-      this.setState({ users: this.state.users.concat([data.data]) });
-    });
+    // socket.on('update users', (data) => {
+    //   console.log('new user: ', data.data);
+    //   this.setState({ users: this.state.users.concat([data.data]) });
+    // });
 
     socket.on('new message', (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
@@ -62,10 +64,10 @@ class Chat extends React.Component {
     $('#message').val('');
   }
 
-  render = () =>
-    (
+  render() {
+    return (
       <div>
-        This is a chat component
+        This is a chat component!
         <div id="contentWrap">
           <div id="chatWrap"> {this.state.messages.map((message, i) => (
             <Message key={i} message={message} />
@@ -77,12 +79,13 @@ class Chat extends React.Component {
             </form>
             </div>
           <div id="users">{this.state.users.map((username, i) => (
-            <ActiveUser key={i} username={username} />
+            <Friend key={i} username={username} />
           ))}
           </div>
         </div>
       </div>
     );
+  }
 }
 
 const mapStateToProps = state => (
@@ -92,6 +95,11 @@ const mapStateToProps = state => (
   }
 );
 
-const ChatConnected = connect(mapStateToProps)(Chat);
+const ChatBoxConnected = connect(mapStateToProps)(ChatBox);
 
-export default ChatConnected;
+export default ChatBoxConnected;
+
+// a friend or group is clicked
+// chat state is reset
+// sends get request for chat history
+// ChatBox re-renders to display results
