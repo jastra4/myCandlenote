@@ -5,12 +5,24 @@ import NotePad from './notePad';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu'; // eslint-disable-line 
 import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
-// import IntelliSearch from './intelliSearch';
+import IntelliSearch from './intelliSearch';
 
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { videos: [] };
+    this.state = {
+      meaning: '',
+      limit: 10,
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('New props:', newProps);
+    const { meaning, limit } = newProps;
+    this.setState({
+      meaning,
+      limit,
+    });
   }
 
   componentWillMount() {
@@ -31,6 +43,8 @@ class NotePage extends React.Component {
         </Grid.Column>
         <Grid.Column width={4}>
           <div>IntelliSearch Goes here :)</div>
+          <div>Meaning: {this.state.meaning}</div>
+          <IntelliSearch meaning={this.state.meaning} limit={this.state.limit} />
         </Grid.Column>
       </Grid >
   </div>
@@ -38,8 +52,8 @@ class NotePage extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  meaning: state.meaning,
-  limit: state.limit,
+  meaning: state.intelliSearch.meaning,
+  limit: state.intelliSearch.limit,
 });
 
 const mapDispatchToProps = dispatch => ({
