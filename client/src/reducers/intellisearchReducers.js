@@ -9,12 +9,12 @@ const intellisearchReducer = (state = defaultState, action) => {
     case 'SET_CURRENT_MEANING':
       return {
         ...state,
-        meaning: action.meaningString,
+        meaning: action.payload.meaningString,
       };
     case 'SET_MAX_RESULTS':
       return {
         ...state,
-        limit: action.limit,
+        limit: action.payload.limit,
       };
     default:
       return state;

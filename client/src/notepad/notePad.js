@@ -39,7 +39,7 @@ export default class Notepad extends React.Component {
   parseContentMeaning = content => (
     axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
-        console.log('Per Google, the meaning of your text is: ', meaning);
+        this.props.setCurrentMeaning(meaning);
         return meaning;
       })
   );

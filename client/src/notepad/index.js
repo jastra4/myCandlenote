@@ -1,14 +1,16 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 import NotePad from './notePad';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu'; // eslint-disable-line 
+import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
 // import IntelliSearch from './intelliSearch';
 
-export default class NotePage extends React.Component {
+class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { videos: [] };
   }
 
   componentWillMount() {
@@ -34,3 +36,18 @@ export default class NotePage extends React.Component {
   </div>
   );
 }
+
+const mapStateToProps = state => ({
+  meaning: state.meaning,
+  limit: state.limit,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setCurrentMeaning: meaning => dispatch(setCurrentMeaning(meaning)),
+  setMaxResults: limit => dispatch(setMaxResults(limit)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NotePage);
