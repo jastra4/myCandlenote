@@ -10,13 +10,23 @@ export default class Notepad extends React.Component {
     console.log('props: ', props);
   }
 
-  render = () => {
-    
-    const { location: { pathname:ext } } = this.props;
-    const formattedExt = ext.split('/').pop();
-    return (
-      <div>{formattedExt}</div>
+  componentWillMount() {
+    const { location: { pathname } } = this.props;
+    const fileName = pathname.split('/').pop();
+    console.log('fileName: ', fileName);
+    fileName && axios.post('/api/getEditorPacket', { fileName })
+      .then(({ data:packet }) => {
+        console.log('Packet receieved!: ', packet);
+      })
+      .catch((e) => console.error(e));
+  }
 
+  componentWillReceiveProps = (nextProps) => {
+  };
+
+  render = () => {
+    return (
+      <div>{'Hehe'}</div>
     )
   }
     // <ReactQuill

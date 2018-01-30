@@ -24,8 +24,8 @@ export default class Notepad extends React.Component {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
     this.setState({
- value, packet 
-});
+      value, packet,
+    });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
     _.debounce(this.parseContentMeaning, 1000)(content);
@@ -58,10 +58,31 @@ export default class Notepad extends React.Component {
     <div>
       <button onClick={ this.handlePrint }>Print</button>
       <ReactQuill
+        theme='snow'
         value={ this.state.value }
         onChange={ this.handleEditorChange }
         placeholder="Let's take some notes!"
+        formats={ Notepad.formats }
+        modules={ Notepad.modules }
         />
     </div>
   );
 }
+
+
+Notepad.formats = [
+  'header', 'font', 'size',
+  'bold', 'italic', 'underline', 'strike', 'blockquote',
+  'list', 'bullet', 'indent',
+  'link', 'image', 'video',
+];
+
+Notepad.modules = { toolbar: [
+  [{ header: '1' }, { header: '2' }, { font: [] }],
+  [{ size: [] }],
+  ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+  [{ list: 'ordered' }, { list: 'bullet' },
+    { indent: '-1' }, { indent: '+1' }],
+  ['link', 'image', 'video'],
+  ['clean'],
+] };

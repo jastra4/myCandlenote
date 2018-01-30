@@ -16,6 +16,7 @@ const fs = require('fs');
 const uuid = require('uuid');
 
 const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
 
 // db imports
 const inserts = require('../database/inserts');
@@ -166,6 +167,21 @@ app.post('/api/tempSavePacket', (req, res) => {
       });
     })
     .catch((e) => { console.error(e); });
+});
+
+app.post('/api/getEditorPacket', (req, res) => {
+  const { fileName } = req.body;
+  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
+  console.log('filePath: ', filePath);
+  readFile(filePath, 'utf8')
+    .then((data) => {
+      console.log('data from readfile!');
+      res.json({ data });
+    })
+    .catch((e) => { 
+      console.error(e);
+      res.sendStatus(500);
+    })
 });
 
 /* -------- Initialize Server -------- */
