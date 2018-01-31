@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const axios = require('axios');
 
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
@@ -150,6 +151,21 @@ app.post('/api/parseContentMeaning', (req, res) => {
       console.error(e);
       res.status(500).end();
     }));
+});
+
+// key=INSERT_YOUR_API_KEY&cx=017576662512468239146:omuauf_lfve&q=lectures
+app.post('/api/suggestedResources', (req, res) => {
+  console.log('SOMEITalskejl;kFJ;lkdfsja;ldfkja');
+  console.log('Params:', req.body);
+  axios.get('https://www.googleapis.com/customsearch/v1', {
+    params: {
+      q: req.body.searchTerms,
+      key: process.env.GOOGLE_SEARCH_API_KEY,
+      cx: process.env.GOOGLE_SEARCH_API_ID,
+    },
+  })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
 });
 
 /* -------- Initialize Server -------- */

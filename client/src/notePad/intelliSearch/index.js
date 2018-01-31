@@ -11,30 +11,12 @@ export default class IntelliSearch extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('Props before:', this.props);
-    const searchTerms = newProps.meaning.trim().split(' ').join('+');
-    const params = {
-      maxResults: newProps.limit,
-      part: 'snippet',
-      q: searchTerms,
-      type: 'video',
-      key: process.env.YOUTUBE_DATA_API_KEY,
-      videoEmbeddable: 'true',
-    };
-    console.log('Params:', params);
-
-    axios({
-      method: 'get',
-      url: 'https://www.googleapis.com/youtube/v3/search',
-      maxResults: newProps.limit,
-      part: 'snippet',
-      q: searchTerms,
-      type: 'video',
-      key: process.env.YOUTUBE_DATA_API_KEY,
-      videoEmbeddable: 'true',
-    })
+    console.log('Props before:', this.props, newProps);
+    const searchTerms = newProps.meaning.trim().split('').join('+');
+    console.log('Search Terms:', searchTerms);
+    axios.post('/api/suggestedResources', { searchTerms })
       .then(res => console.log('Response data:', res.data))
-      .catch(err => console.log('Youtube API err:', err));
+      .catch(err => console.log('ERR:', err));
   }
 
   mountVideos = (videos) => {
