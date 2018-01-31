@@ -19,18 +19,16 @@ export default class Notepad extends React.Component {
         this.setState({ value });
       })
       .catch(e => console.error(e));
-    axios.post('/api/wemadeit');
   }
 
   componentDidMount() {
-    axios.post('/api/wemadeitHeref');
     
     // setTimeout(() => {
     //   console.log('loaded!');
     //   window.callPhantom('takeShot');
     // }, 500);
-    const tab_url = window.location.href;
-    axios.post('/makePDF', { tab_url });
+    // const tab_url = window.location.href;
+    // axios.post('/makePDF', { tab_url });
 
   }
 

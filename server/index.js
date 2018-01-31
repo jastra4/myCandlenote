@@ -3,14 +3,14 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const axios = require('axios');
-const phantom = require('phantom');
+const puppeteer = require('puppeteer');
+
 
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
 // const cookieSession = require('cookie-session');
 const passport = require('passport');
 const session = require('express-session');
-const nightmare = require('nightmare');
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
@@ -32,7 +32,7 @@ const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const PORT = process.env.PORT || 3000;
 
-const DOMAIN = process.env.ENV === 'production' ? 'http://candlenote.io' : `localhost:${PORT}`;
+const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -162,68 +162,32 @@ app.post('/api/tempSavePacket', (req, res) => {
 
   writeFile(filePath, packet)
     .then(() => {
-      console.log('yay');
-      const url = `${DOMAIN}/PDF/${fileName}`;
+      console.log('File successfully written');
+      const url = `http://${DOMAIN}/pdf/${fileName}`;
       const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
-      // makePDF(url, fileName, (err) => {
-      //   if (err) {
-      //     console.error(err);
-      //     res.sendStatus(500);
-      //   } else { console.log('lol') }
-      //   // res.download(pathToPDF);
-      // }, { takeShotOnCallback: true });
-      // console.log('Loading a web page');
-      // var page = require('webpage').create();
-      // page.open(url, function (status) {
-      //   //Page is loaded!
-      //   phantom.exit();
-      // });
-
-      // (async function () {
-      //   const instance = await phantom.create();
-      //   const page = await instance.createPage();
-      //   await page.on('onResourceRequested', function (requestData) {
-      //     console.info('Requesting', requestData.url);
-      //   });
-
-      //   const status = await page.open(url);
-      //   const content = await page.property('content');
-      //   console.log(content);
-
-      //   const timer = await function(){
-      //     return (
-      //       setTimeout(() => {
-      //         instance.exit();
-      //         res.sendStatus(200);
-      //       }, 200)
-      //     )}
-      // })();
-      const puppeteer = require('puppeteer');
 
       (async () => {
         function resolveAfter1Seconds() {
           return new Promise((resolve) => {
             setTimeout(() => {
               resolve('resolved');
-            }, 2000);
+            }, 1000);
           });
         }
 
         function logAfterPDF() {
           return new Promise((resolve) => {
-            console.log('PDF printed :)');
-            resolve('PDF printed :)');
+            console.log('PDF printed 🖨️  👍');
+            resolve('PDF printed');
           });
         }
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        await page.goto('http://localhost:3000/pdf/fa2426de-f73e-4a2d-b3bd-b69f2080fd6d', { waitUntil: 'networkidle0' });
-        // await page.goto('http://localhost:3000/pdf/fa2426de-f73e-4a2d-b3bd-b69f2080fd6d', { waitUntil: 'networkidle0' });
-        // await page.emulateMedia('screen');
-        // await resolveAfter1Seconds();
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await resolveAfter1Seconds();
         await page.pdf({
-          path: 'page.pdf',
+          path: pathToPDF,
           format: 'Letter',
           printBackground: true,
           margin: {
@@ -236,30 +200,7 @@ app.post('/api/tempSavePacket', (req, res) => {
         await logAfterPDF();
         await browser.close();
       })();
-
-      // let _ph, _page, _outObj;
-
-      // phantom.create().then(function (ph) {
-      //   _ph = ph;
-      //   return _ph.createPage();
-      // }).then(function (page) {
-      //   _page = page;
-      //   return _page.open('http://localhost:3000/pdf/fa2426de-f73e-4a2d-b3bd-b69f2080fd6d');
-      // }).then(function (status) {
-      //   res.sendStatus(201);
-      //   // console.log(status);
-      //   // console.log('_page: ', _page);
-      //   // return _page.property('content')
-      // // }).then(function (content) {
-      //   // console.log(content);
-      //   // _page.close()
-      //     // res.sendStatus(201);
-      //     // _ph.exit();
-      // }).catch(function (e) {
-      //   console.log(e);
-      // });
     });
-  // .catch((e) => { console.error(e); });
 });
 
 app.post('/api/getEditorPacket', (req, res) => {
@@ -278,5 +219,5 @@ app.post('/api/getEditorPacket', (req, res) => {
 /* -------- Initialize Server -------- */
 
 app.listen(PORT, () => {
-  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
+  console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
