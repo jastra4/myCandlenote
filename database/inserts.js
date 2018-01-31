@@ -17,10 +17,6 @@ const insertDeck = ({ subject, title, userId }) => (
 );
 
 const insertMessage = ({ to, sentBy, text, timeStamp }) => {
-  // console.log(to);
-  // console.log(sentBy);
-  // console.log(text);
-  // console.log(timeStamp);
   console.log('insertMessage invoked');
   new Messages({
     to,

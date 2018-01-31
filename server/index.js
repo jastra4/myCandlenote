@@ -67,6 +67,14 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 // Controls whether to emit a socket connection
 app.get('/checkAuth', (req, res) => {
   console.log('check auth ran');
+// drop messages collection
+// mongoose.connection.db.dropCollection('messages', function(err, result) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log('dropped Messages');
+//   }
+// });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.send(false);

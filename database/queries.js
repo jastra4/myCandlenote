@@ -14,14 +14,20 @@ const getUserName = (id, callback) => {
 };
 
 const getMessages = (callback) => {
-  console.log('getMessages invoked: ', db.Messages);
-  db.Messages.find({}, (err, messages) => {
+  const query = db.Messages.find({}).sort('created').limit(6);
+  query.exec((err, docs) => {
     if (err) {
       callback(err);
-    } else {
-      callback(messages);
     }
+    callback(docs);
   });
+  // db.Messages.find({}, (err, messages) => {
+  //   if (err) {
+  //     callback(err);
+  //   } else {
+  //     callback(messages);
+  //   }
+  // });
 };
 
 module.exports = {

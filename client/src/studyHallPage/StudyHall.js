@@ -19,7 +19,7 @@ class StudyHall extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(`authenticated? ${this.props}`);
+    console.log(`authenticated? ${nextProps.isAuth}`);
     if (nextProps.isAuth) {
       this.initSocket(nextProps.userId);
     } else {
@@ -31,7 +31,7 @@ class StudyHall extends React.Component {
     const socket = io(socketUrl);
     this.setState({ socket });
     socket.on('connect', () => {
-      console.log('Connected!');
+      console.log('Socket connected!');
       return axios.get(`/username?id=${userId}`)
         .then((username) => {
           this.setState({ userId });

@@ -42,6 +42,7 @@ const messagesSchema = mongoose.Schema({
   sentBy: String,
   text: String,
   timeStamp: Number,
+  created: { type: Date, default: Date.now },
 });
 
 const Messages = mongoose.model('messages', messagesSchema);
