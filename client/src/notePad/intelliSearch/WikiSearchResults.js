@@ -6,6 +6,7 @@ export default props => (
     {
       props.results.map(result => (
         <WikiSearchResultsEntry
+          key={result.title}
           result={result}
         />
       ))

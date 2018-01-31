@@ -1,8 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import YouTubeList from './youtubeList';
 import SearchResults from './SearchResults';
 import WikiSearchResults from './WikiSearchResults';
+import './intelliSearch.css';
 // import axios from 'axios';
 
 
@@ -19,8 +22,8 @@ export default class IntelliSearch extends React.Component {
   componentWillReceiveProps(newProps) {
     console.log('Props before:', this.props, newProps);
     const searchTerms = newProps.meaning.trim().split(' ').join('+');
-    // this.grabGoogleSearch(searchTerms);
-    // this.grabYoutubeSearch(searchTerms);
+    this.grabGoogleSearch(searchTerms);
+    this.grabYoutubeSearch(searchTerms);
     this.grabWikiSearch(searchTerms);
   }
 
@@ -46,7 +49,7 @@ export default class IntelliSearch extends React.Component {
 
   grabWikiSearch(searchTerms) {
     console.log('Search Terms:', searchTerms);
-    axios.post('/api/suggestedWiki', { searchTerms: 'cats' })
+    axios.post('/api/suggestedWiki', { searchTerms })
       .then((res) => {
         console.log('Response data:', res.data);
         const titles = res.data[1];
@@ -71,10 +74,22 @@ export default class IntelliSearch extends React.Component {
   render = () => (
     <div>
       <p>Hello</p>
-      {console.log('Videos:', this.state.wikiResults)}
-      {/* <YouTubeList videos={this.state.videos} /> */}
-      {/* <SearchResults results={this.state.searchResults} /> */}
-      <WikiSearchResults results={this.state.wikiResults}/>
+      <Tabs>
+        <TabList>
+          <Tab>Google</Tab>
+          <Tab>Youtube</Tab>
+          <Tab>Wikipedia</Tab>
+        </TabList>
+        <TabPanel>
+          <SearchResults results={this.state.searchResults} />
+        </TabPanel>
+        <TabPanel>
+          <YouTubeList videos={this.state.videos} />
+        </TabPanel>
+        <TabPanel>
+          <WikiSearchResults results={this.state.wikiResults}/>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }
