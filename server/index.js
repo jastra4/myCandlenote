@@ -80,8 +80,8 @@ app.get('/checkAuth', (req, res) => {
 });
 
 app.get('/messages', (req, res) => {
-  console.log('messages request received');
   queries.getMessages((messages) => {
+    console.log('messages: ', messages);
     res.send(messages);
   });
 });
