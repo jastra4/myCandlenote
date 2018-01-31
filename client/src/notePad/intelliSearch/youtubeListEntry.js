@@ -3,7 +3,6 @@ import React from 'react';
 export default props => (
   <div className="video-list-entry media" onClick={props.handleCurrentVideoChange}>
     <div className="media-left media-middle">
-    {/* https://www.youtube.com/watch?v=zU7co2-yn_Q */}
       <a href={`https://www.youtube.com/watch?v=${props.video.id.videoId}`} target="_blank">
         <img className="media-object" src={props.video.snippet.thumbnails.default.url} alt="video entry" />
       </a>
