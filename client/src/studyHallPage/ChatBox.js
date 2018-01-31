@@ -14,8 +14,9 @@ class ChatBox extends React.Component {
     };
 
     props.socket.on('new message', (data) => {
+      console.log('new message received')
       const msg = `to ${data.to}: ${data.text}`;
-      this.setState({ messages: this.state.messages.concat([msg]) });
+      this.setState({ messages: this.props.messages.concat([data]) });
     });
   }
 
@@ -28,25 +29,28 @@ class ChatBox extends React.Component {
     this.props.socket.emit('send message', msg);
     $('#message').val('');
   }
+ 
+  componentWillReceiveProps(newProps) {
+    console.log('newProps: ', newProps);
+    if (newProps.messages.length !== this.state.messages.length) {
+      this.setState({ messages: newProps.messages });
+    }
+  }
 
   componentDidMount() {
     return axios.get('/messages')
       .then((messages) => {
-        
-        // add to store // redux
-        // const messageInfo = {
-        //   id: messages.data._id,
-        //   sentBy: messages.data.sentBy,
-        //   to: messages.data.to,
-        //   test: messages.data.text,
-        //   timeStamp: messages.data.timeStamp,
-        // };
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
       })
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  onClick() {
+    console.log('props: ', this.props.messages);
+    console.log('state: ', this.state.messages);
   }
 
   render() {
@@ -56,7 +60,7 @@ class ChatBox extends React.Component {
           <h4>{this.props.chat}</h4>
         </div>
         <div className="chatMessages">
-          {this.props.messages.map((message, i) => (
+          {this.state.messages.map((message, i) => (
             <Message key={i} message={message.text}/>
           ))}
         </div>
@@ -65,6 +69,7 @@ class ChatBox extends React.Component {
             <input id="message" className="input" placeholder="type a message"></input>
           </form>
         </div>
+        <button onClick={this.onClick.bind(this)}> test </button>
       </div>
     );
   }
@@ -87,19 +92,6 @@ const mapStateToProps = state => {
     messages: messagesForChat
   };
 };
-
-// const mapStateToProps = (state) => {
-//   console.log('state: ', state);
-//   const cardsById = state.flashcards.byId;
-//   const cardsForDeck = Object.keys(cardsById).map(key => cardsById[key])
-//     .filter(card => card.deckId === state.decks.currentDeck.id);
-
-//   return {
-//     cards: cardsForDeck,
-//     currentDeck: state.decks.currentDeck,
-//     decksById: state.decks.byId,
-//   };
-// };
 
 // redux
 const ChatBoxConnected = connect(mapStateToProps, mapDispatchToProps)(ChatBox);
