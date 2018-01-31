@@ -10,22 +10,18 @@ class FriendsList extends React.Component {
       friends: ['Bob', 'Alice', 'Tommy'],
       socket: null,
     };
-  }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.socket !== null) {
-      this.setState({ socket: nextProps.socket });
-      // console.log('conditional ran!');
-      // this.listeners();
-    }
-  }
-
-  listeners() {
-    this.state.socket.on('update users', (data) => {
+    props.socket.on('update users', (data) => {
       console.log('update user event received: ', [data.data]);
-      this.setState({ friends: [data.data] }); //this.state.friends.concat([data.data])
-    });  
+      this.setState({ friends: this.state.friends.concat([data.data]) });
+    });
   }
+
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.socket !== null) {
+  //     this.setState({ socket: nextProps.socket });
+  //   }
+  // }
 
   render() {
     return (

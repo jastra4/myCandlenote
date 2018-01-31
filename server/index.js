@@ -138,6 +138,7 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('new user', (data) => {
     socket.username = data;
+    console.log('New user!: ', socket.username);
     io.sockets.emit('update users', socket.username);
   });
 

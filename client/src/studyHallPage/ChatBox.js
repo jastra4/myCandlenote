@@ -9,12 +9,11 @@ class ChatBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      socket: null,
+      // socket: null,
       messages: [],
     };
 
     props.socket.on('new message', (data) => {
-      console.log('socket received new message');
       this.setState({ messages: this.state.messages.concat([data]) });
     });
   }
@@ -31,35 +30,33 @@ class ChatBox extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('ChatBox received new props: ', newProps);
     if (newProps.messages.length !== this.state.messages.length) {
       this.setState({ messages: newProps.messages });
     }
     if (newProps.chat !== this.props.chat) {
-      this.loadMessages();
+      this.getMessages();
     }
   }
 
-  componentDidMount() {
-    this.loadMessages();
-  }
+  // componentDidMount() {
+  //   this.loadMessages();
+  // }
 
-  loadMessages() {
-    return axios.get('/messages')
+  getMessages() {
+    return axios.get('/messages') // `/username?id=${userId}`
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
-        console.log('loaded messages');
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  onClick() {
-    console.log('props: ', this.props.messages);
-    console.log('state: ', this.state.messages);
-  }
+  // onClick() {
+  //   console.log('props: ', this.props.messages);
+  //   console.log('state: ', this.state.messages);
+  // }
 
   render() {
     return (
@@ -77,7 +74,6 @@ class ChatBox extends React.Component {
             <input id="message" className="input" placeholder="type a message"></input>
           </form>
         </div>
-        <button onClick={this.onClick.bind(this)}> test </button>
       </div>
     );
   }

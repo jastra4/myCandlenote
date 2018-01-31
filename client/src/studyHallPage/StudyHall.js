@@ -14,7 +14,7 @@ class StudyHall extends React.Component {
     this.state = {
       socket: null,
       username: '',
-      chat: 'Bob',
+      chat: '',
     };
   }
 
@@ -59,22 +59,26 @@ class StudyHall extends React.Component {
   }
 
   render() {
-    return (
-    <div className="studyContainer">
-      <div className="Groups studyComp">
-        <GroupsList changeChat={this.changeChat.bind(this)}/>
+    if (this.state.socket !== null) {
+      return (
+      <div className="studyContainer">
+        <div className="Groups studyComp">
+          <GroupsList changeChat={this.changeChat.bind(this)}/>
+        </div>
+        <div className="Friends studyComp">
+          <FriendsList socket={this.state.socket} changeChat={this.changeChat.bind(this)}/>
+        </div>
+        <div className="Search studyComp">
+          <Search />
+        </div>
+        <div>
+          {this.renderChat()}
+        </div>
       </div>
-      <div className="Friends studyComp">
-        <FriendsList socket={this.state.socket} changeChat={this.changeChat.bind(this)}/>
-      </div>
-      <div className="Search studyComp">
-        <Search />
-      </div>
-      <div>
-        {this.renderChat()}
-      </div>
-    </div>
-    );
+      );
+    } else {
+      return (<div></div>);
+    }
   }
 }
 
