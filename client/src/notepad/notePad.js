@@ -11,6 +11,7 @@ export default class Notepad extends React.Component {
     this.state = { value: '' };
 
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    // this.debouncedParseContentMeaning = _.throttle(this.parseContentMeaning, 2000);
   }
 
   componentWillMount() {
@@ -24,14 +25,20 @@ export default class Notepad extends React.Component {
 
   handleEditorChange = (value, d, source, editor) => {
     if (true) {
-      this.setState({ value, buffer: 0 });
+      this.setState({
+        value,
+        buffer: 0,
+      });
       const delta = editor.getContents();
       const packet = JSON.stringify(delta);
       window.localStorage.setItem('noteContent', packet);
       const content = this.getContentFromDelta(delta);
       this.debouncedParseContentMeaning(content);
     } else {
-      this.setState({ value, buffer: this.state.buffer + 1 });
+      this.setState({
+        value,
+        buffer: this.state.buffer + 1,
+      });
     }
   }
 

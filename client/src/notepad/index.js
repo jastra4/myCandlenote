@@ -17,7 +17,6 @@ class NotePage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('New props:', newProps);
     const { meaning, limit } = newProps;
     this.setState({
       meaning,

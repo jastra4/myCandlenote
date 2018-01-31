@@ -112,8 +112,7 @@ app.post('/api/decks', (req, res) => {
 
 app.post('/api/deleteDeck', (req, res) => {
   deletes.deleteDeck(req.body.deckId)
-    .then((result) => {
-      console.log(result);
+    .then(() => {
       const { _id: id } = req.body;
       res.send(id);
     })
@@ -141,45 +140,32 @@ app.post('/api/deleteCard', (req, res) => {
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
-  console.log('lol');
   helpers.parseMeaningWithGoogleAPI(req.body.content)
-    .then((meaning) => {
-      console.log('meaning!: ', meaning);
-      res.send({ meaning });
-    })
-    .catch(((e) => {
-      console.error(e);
+    .then(meaning => res.send({ meaning }))
+    .catch((() => {
       res.status(500).end();
     }));
 });
 
 app.post('/api/suggestedResources', (req, res) => {
-  console.log('SOMEITalskejl;kFJ;lkdfsja;ldfkja');
-  console.log('Params:', req.body);
-  axios.get('https://www.googleapis.com/customsearch/v1', {
-    params: {
-      q: req.body.searchTerms,
-      key: process.env.GOOGLE_SEARCH_API_KEY,
-      cx: process.env.GOOGLE_SEARCH_API_ID,
-    },
-  })
+  axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+    q: req.body.searchTerms,
+    key: process.env.GOOGLE_SEARCH_API_KEY,
+    cx: process.env.GOOGLE_SEARCH_API_ID,
+  } })
     .then(result => res.send(result.data))
     .catch(err => res.send(err));
 });
 
 app.post('/api/suggestedVideos', (req, res) => {
-  console.log('SOMEITalskejl;kFJ;lkdfsja;ldfkja');
-  console.log('Params:', req.body);
-  axios.get('https://www.googleapis.com/youtube/v3/search', {
-    params: {
-      maxResults: 5,
-      part: 'snippet',
-      q: req.body.searchTerms,
-      type: 'video',
-      key: process.env.YOUTUBE_DATA_API_KEY,
-      videoEmbeddable: 'true',
-    },
-  })
+  axios.get('https://www.googleapis.com/youtube/v3/search', { params: {
+    maxResults: 5,
+    part: 'snippet',
+    q: req.body.searchTerms,
+    type: 'video',
+    key: process.env.YOUTUBE_DATA_API_KEY,
+    videoEmbeddable: 'true',
+  } })
     .then(result => res.send(result.data))
     .catch(err => res.send(err));
 });
@@ -187,31 +173,23 @@ app.post('/api/suggestedVideos', (req, res) => {
 // https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
 
 app.post('/api/suggestedWiki', (req, res) => {
-  console.log('WIKIWIKIWIKI ;kFJ;lkdfsja;ldfkja');
-  console.log('Params:', req.body);
-  const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join(' ');
-  axios.get('https://en.wikipedia.org/w/api.php', {
-    params: {
-      action: 'opensearch',
-      search: searchTerms,
-      limit: 10,
-      namespace: 0,
-      format: 'json',
-    },
-  })
+  const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join('+');
+  axios.get('https://en.wikipedia.org/w/api.php', { params: {
+    action: 'opensearch',
+    search: req.body.searchTerms,
+    limit: 10,
+    namespace: 0,
+    format: 'json',
+  } })
     .then((result) => {
-      console.log('Wiki results:', result.data);
       // If no results
       if (!result.data[1].length) {
-        axios.get('https://www.googleapis.com/customsearch/v1', {
-          params: {
-            q: req.body.searchTerms + '+wikipedia',
-            key: process.env.GOOGLE_SEARCH_API_KEY,
-            cx: process.env.GOOGLE_WIKI_SEARCH_KEY,
-          },
-        })
+        axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+          q: `${searchTerms}+wikipedia`,
+          key: process.env.GOOGLE_SEARCH_API_KEY,
+          cx: process.env.GOOGLE_WIKI_SEARCH_KEY,
+        } })
           .then((googleResult) => {
-            console.log('GOOGLE RESULTS:', googleResult.data);
             const { data } = googleResult;
             data.isFromGoogle = true;
             res.send(data);
