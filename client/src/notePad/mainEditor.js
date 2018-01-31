@@ -15,7 +15,6 @@ export default class MainEditor extends React.Component {
   }
 
   componentDidMount() {
-    console.log('pakcet???', window.localStorage.getItem('noteContent'));
     const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
   }
@@ -23,9 +22,6 @@ export default class MainEditor extends React.Component {
   handleEditorChange = (value, d, source, editor) => {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
-    console.log('value: ', value);
-    console.log('delta: ', delta);
-    console.log('packet: ', packet);
     this.setState({
       value, packet,
     });
