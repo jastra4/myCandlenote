@@ -17,7 +17,8 @@ export default class IntelliSearch extends React.Component {
   componentWillReceiveProps(newProps) {
     console.log('Props before:', this.props, newProps);
     const searchTerms = newProps.meaning.trim().split(' ').join('+');
-    this.grabGoogleSearch(searchTerms);
+    // this.grabGoogleSearch(searchTerms);
+    this.grabYoutubeSearch('cats');
   }
 
   grabGoogleSearch(searchTerms) {
@@ -35,7 +36,7 @@ export default class IntelliSearch extends React.Component {
     axios.post('/api/suggestedVideos', { searchTerms })
       .then((res) => {
         console.log('Response data:', res.data);
-        this.setState({ searchResults: res.data.items });
+        this.setState({ videos: res.data.items });
       })
       .catch(err => console.log('ERR:', err));
   }
@@ -47,8 +48,9 @@ export default class IntelliSearch extends React.Component {
   render = () => (
     <div>
       <p>Hello</p>
-      {/* <YouTubeList /> */}
-      <SearchResults results={this.state.searchResults} />
+      {console.log('Videos:', this.state.videos)}
+      <YouTubeList videos={this.state.videos} />
+      {/* <SearchResults results={this.state.searchResults} /> */}
     </div>
   );
 }
