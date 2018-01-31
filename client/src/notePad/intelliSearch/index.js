@@ -16,11 +16,11 @@ export default class IntelliSearch extends React.Component {
       searchResults: [],
       videos: [],
       wikiResults: [],
+      fromGoogle: false,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('Props before:', this.props, newProps);
     const searchTerms = newProps.meaning.trim().split(' ').join('+');
     this.grabGoogleSearch(searchTerms);
     this.grabYoutubeSearch(searchTerms);
@@ -28,41 +28,38 @@ export default class IntelliSearch extends React.Component {
   }
 
   grabGoogleSearch(searchTerms) {
-    console.log('Search Terms:', searchTerms);
     axios.post('/api/suggestedResources', { searchTerms })
-      .then((res) => {
-        console.log('Response data:', res.data);
-        this.setState({ searchResults: res.data.items });
-      })
+      .then(res => this.setState({ searchResults: res.data.items }))
       .catch(err => console.log('ERR:', err));
   }
 
   grabYoutubeSearch(searchTerms) {
-    console.log('Search Terms:', searchTerms);
     axios.post('/api/suggestedVideos', { searchTerms })
-      .then((res) => {
-        console.log('Response data:', res.data);
-        this.setState({ videos: res.data.items });
-      })
+      .then(res => this.setState({ videos: res.data.items }))
       .catch(err => console.log('ERR:', err));
   }
 
   grabWikiSearch(searchTerms) {
-    console.log('Search Terms:', searchTerms);
     axios.post('/api/suggestedWiki', { searchTerms })
       .then((res) => {
-        console.log('Response data:', res.data);
-        const titles = res.data[1];
-        const descriptions = res.data[2];
-        const urls = res.data[3];
+        if (res.data.isFromGoogle) {
+          this.setState({
+            wikiResults: res.data.items,
+            fromGoogle: true,
+          });
+        } else {
+          const titles = res.data[1];
+          const descriptions = res.data[2];
+          const urls = res.data[3];
 
-        const wikiResults = titles.map((title, index) => ({
-          title,
-          description: descriptions[index],
-          url: urls[index],
-        }));
+          const wikiResults = titles.map((title, index) => ({
+            title,
+            description: descriptions[index],
+            url: urls[index],
+          }));
 
-        this.setState({ wikiResults });
+          this.setState({ wikiResults });
+        }
       })
       .catch(err => console.log('ERR:', err));
   }
@@ -86,7 +83,8 @@ export default class IntelliSearch extends React.Component {
           <YouTubeList videos={this.state.videos} />
         </TabPanel>
         <TabPanel>
-          <WikiSearchResults results={this.state.wikiResults}/>
+          {this.state.fromGoogle ? <SearchResults results={this.state.wikiResults} /> :
+          <WikiSearchResults results={this.state.wikiResults}/>}
         </TabPanel>
       </Tabs>
     </div>

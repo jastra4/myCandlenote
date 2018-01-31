@@ -9,7 +9,6 @@ export default props => (
           <YouTubeListEntry
             key={video.id.videoId}
             video={video}
-            // handleCurrentVideoChange={props.handleCurrentVideoChange}
           />
         ))
       }

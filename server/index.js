@@ -198,7 +198,28 @@ app.post('/api/suggestedWiki', (req, res) => {
       format: 'json',
     },
   })
-    .then(result => res.send(result.data))
+    .then((result) => {
+      console.log('Wiki results:', result.data);
+      // If no results
+      if (!result.data[1].length) {
+        axios.get('https://www.googleapis.com/customsearch/v1', {
+          params: {
+            q: req.body.searchTerms + '+wikipedia',
+            key: process.env.GOOGLE_SEARCH_API_KEY,
+            cx: process.env.GOOGLE_WIKI_SEARCH_KEY,
+          },
+        })
+          .then((googleResult) => {
+            console.log('GOOGLE RESULTS:', googleResult.data);
+            const { data } = googleResult;
+            data.isFromGoogle = true;
+            res.send(data);
+          })
+          .catch(err => res.send(err));
+      } else {
+        res.send(result.data);
+      }
+    })
     .catch(err => res.send(err));
 });
 

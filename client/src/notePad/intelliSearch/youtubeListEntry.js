@@ -22,21 +22,5 @@ export default props => (
       </a>
       <div className="video-list-entry-detail">{props.video.snippet.description}</div>
     </div>
-
-    {/* <YouTube
-      videoId={props.video.id.videoId}
-      // id={string}
-      className={''}
-      opts={opts}
-      // onPlay={func}
-      // onReady={func}
-      // onPause={func}
-      // onEnd={func}
-      // onError={func}
-      // onStateChange={func}
-      // onPlaybackRateChange={func}
-      // onPlaybackQualityChange={func}
-    /> */}
-
   </div>
 );
