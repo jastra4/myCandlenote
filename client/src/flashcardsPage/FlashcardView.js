@@ -4,24 +4,28 @@ import { Segment, Button, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   cardText: {
-    height: '6em',
-    width: '8em',
+    height: '10em',
+    width: '100%',
     fontSize: '2em',
-    display: 'tableCell',
+    display: 'table-cell',
     verticalAlign: 'middle',
     padding: '10px',
   },
+  cardImage: {
+    maxWidth: '100%',
+    height: 'auto',
+  },
   cardButtons: { marginTop: '1em' },
-  paddingDiv: { height: '10em' },
+  paddingDiv: { height: '13em' },
   mainDiv: {
-    padding: '20px 4vw',
+    padding: '20px 1vw',
     height: '35vh',
     display: 'inline-block',
     width: '70%',
   },
   flipCard: {
     display: 'inline-block',
-    width: '75%',
+    width: '100%',
     paddingTop: '3vh',
   },
 };
@@ -87,10 +91,14 @@ class FlashcardView extends React.Component {
             onClick={() => this.flipCard()}
           >
             <Segment key="front">
-              <p style={styles.cardText}>{cards[index % cards.length].front}</p>
+              {cards[index % cards.length].front.slice(0, 11) === 'data:image/' ?
+                <img src={cards[index % cards.length].front} /> :
+                <p style={styles.cardText}>{cards[index % cards.length].front}</p>}
             </Segment>
             <Segment key="back">
-              <p style={styles.cardText}>{cards[index % cards.length].back}</p>
+              {cards[index % cards.length].back.slice(0, 11) === 'data:image/' ?
+                <img src={cards[index % cards.length].back} /> :
+                <p style={styles.cardText}>{cards[index % cards.length].back}</p>}
             </Segment>
           </ReactCardFlip>
         </div>
@@ -110,6 +118,7 @@ class FlashcardView extends React.Component {
               <Icon name='right arrow' />
             </Button.Content>
           </Button>
+          <br></br>
           <Checkbox label="Auto Flip to next card" onChange={this.onCheckboxChange.bind(this)} size="big" />
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Segment, Button, Form } from 'semantic-ui-react';
 
+import FlashcardImageUploader from './FlashcardImageUploader';
+
 const mapDecksToOptions = decksById => (
   Object.keys(decksById).map(key => ({
     key,
@@ -17,6 +19,8 @@ class FlashcardCreator extends React.Component {
     this.state = {
       front: '',
       back: '',
+      hasFrontImage: false,
+      hasBackImage: false,
       selectedDeck: '',
     };
   }
@@ -33,6 +37,29 @@ class FlashcardCreator extends React.Component {
     this.setState({ selectedDeck: selection.value });
   }
 
+  onUploadFront(urlData) {
+    this.setState({
+      front: urlData,
+      hasFrontImage: true,
+    });
+  }
+
+  onUploadBack(urlData) {
+    this.setState({
+      back: urlData,
+      hasBackImage: true,
+    });
+  }
+
+  clearFields() {
+    this.setState({
+      front: '',
+      back: '',
+      hasFrontImage: false,
+      hasBackImage: false,
+    });
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -47,6 +74,8 @@ class FlashcardCreator extends React.Component {
     this.setState({
       front: '',
       back: '',
+      hasFrontImage: false,
+      hasBackImage: false,
     });
   }
 
@@ -57,14 +86,21 @@ class FlashcardCreator extends React.Component {
           <Form onSubmit={this.onSubmit.bind(this)}>
             <Form.Field>
               <label>Prompt</label>
-              <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
+              {this.state.hasFrontImage ? <img src={this.state.front}/> :
+                <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} buttonTag={'Upload Image Prompt'}>
+                <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
+              </FlashcardImageUploader>}
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
-              <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
+              {this.state.hasBackImage ? <img src={this.state.back} /> :
+              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} buttonTag={'Upload Image Answer'}>
+                <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
+              </FlashcardImageUploader>}
             </Form.Field>
             <Form.Group inline>
               <Button type='submit'>Submit</Button>
+              <Button type='button' onClick={this.clearFields.bind(this)}>Clear Fields</Button>
               <Form.Dropdown
                 selection
                 placeholder='Deck'
