@@ -10,9 +10,8 @@ import Notepad from './notePad'; // eslint-disable-line
 import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
-import PDF from './test';
+import PDF from './notePad/invisibleEditor';
 import store from '../src/store';
-
 
 const App = () => (
   <div>

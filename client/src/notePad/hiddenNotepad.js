@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
-import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 
 export default class Notepad extends React.Component {

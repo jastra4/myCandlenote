@@ -2,21 +2,18 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-const axios = require('axios');
 const puppeteer = require('puppeteer');
-
-
 const mongoose = require('mongoose');
-const keys = require('./config/keys');
-// const cookieSession = require('cookie-session');
 const passport = require('passport');
 const session = require('express-session');
-
-const authRoutes = require('./routes/auth-routes.js');
-const userRoutes = require('./routes/user-routes.js');
 const { promisify } = require('util');
 const fs = require('fs');
 const uuid = require('uuid');
+// const cookieSession = require('cookie-session');
+
+const keys = require('./config/keys');
+const authRoutes = require('./routes/auth-routes.js');
+const userRoutes = require('./routes/user-routes.js');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -24,15 +21,17 @@ const readFile = promisify(fs.readFile);
 // db imports
 const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
+
+// Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
+
+// const SRC_DIR = path.join(__dirname,  "../client/src/");
+const DIST_DIR = path.join(__dirname, '../client/dist');
+const PORT = process.env.PORT || 3000;
+const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
 const app = express();
 app.use(bodyParser.json());
-const DIST_DIR = path.join(__dirname, '../client/dist');
-// const SRC_DIR = path.join(__dirname,  "../client/src/");
-const PORT = process.env.PORT || 3000;
-
-const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -82,12 +81,9 @@ app.get('*', (req, res) => {
 /* --------- POST Handlers ----------- */
 
 app.post('/makePDF', (req, res) => {
-  console.log('called!');
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());
 
-  // webshot wraps phantomjs and provides a simple API
-  // phantomjs is essentially a web browser with no GUI
   makePDF(url, fileName, (err) => {
     if (err) {
       res.sendStatus(500);
@@ -178,16 +174,14 @@ app.post('/api/tempSavePacket', (req, res) => {
 
         function logAfterPDF(pdfLocation, title = 'notes.pdf') {
           return new Promise((resolve) => {
-            console.log('PDF printed 🖨️  👍');
-            console.log('res: ', res);
-            console.log('pdfLocation: ', pdfLocation);
+            console.log('PDF successfully printed 🖨️  👍');
             // res.download(pdfLocation, title)
             res.sendFile(pathToPDF, title, (err) => {
-              if (err) { console.error(err) 
+              if (err) {
+                console.error(err);
               } else {
-                console.log('yes!')
+                console.log('yes!');
               }
-
             });
             resolve('PDF printed');
           });
@@ -208,7 +202,7 @@ app.post('/api/tempSavePacket', (req, res) => {
             right: '10mm',
           },
         });
-        await logAfterPDF(`PDFs/${ fileName }.pdf`);
+        await logAfterPDF(`PDFs/${fileName}.pdf`);
         await browser.close();
       })();
     });

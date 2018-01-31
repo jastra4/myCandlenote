@@ -3,8 +3,6 @@ import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
-import { Document, Page } from 'react-pdf/build/entry.webpack';
-
 
 export default class Notepad extends React.Component {
   constructor(props) {
@@ -36,15 +34,12 @@ export default class Notepad extends React.Component {
     _.debounce(this.parseContentMeaning, 1000)(content);
   }
 
-  
 
-  getContentFromDelta = delta => {
-    console.log('delta: ', delta.ops);
-    return (
+  getContentFromDelta = delta => (
     delta.ops.reduce((tv, cv) => (
-      tv.concat(cv.insert.replace ? cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, ''): cv.insert)
+      tv.concat(cv.insert.replace ? cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, '') : cv.insert)
     ), '')
-  )}
+  );
 
   // TODO: Use return value from this function to build IntelliSearch
   parseContentMeaning = content => (

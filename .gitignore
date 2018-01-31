@@ -6,4 +6,3 @@ redux-setup
 client/dist/bundle.js
 server/assets/temp/
 PDFs/
-ngrok
