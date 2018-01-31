@@ -42,8 +42,6 @@ class NotePage extends React.Component {
           <NotePad { ...this.props } handleTextChange={this.handleTextChange} />
         </Grid.Column>
         <Grid.Column width={4}>
-          <div>IntelliSearch Goes here :)</div>
-          <div>Meaning: {this.state.meaning}</div>
           <IntelliSearch meaning={this.state.meaning} limit={this.state.limit} />
         </Grid.Column>
       </Grid >

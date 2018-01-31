@@ -1,8 +1,10 @@
 import React from 'react';
 
 export default props => (
-  <li>
-    <a href={props.result.formattedUrl} target="_blank">{props.result.htmlTitle}</a>
-    <p>{props.result.htmlSnippet}</p>
-  </li>
+  <div className="google-list-entry">
+    <a href={props.result.formattedUrl} target="_blank">
+      <div className="google-list-entry-title">{props.result.title}</div>
+    </a>
+    <p className="google-list-entry-description">{props.result.snippet}</p>
+  </div>
 );

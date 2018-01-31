@@ -73,7 +73,6 @@ export default class IntelliSearch extends React.Component {
 
   render = () => (
     <div>
-      <p>Hello</p>
       <Tabs>
         <TabList>
           <Tab>Google</Tab>
