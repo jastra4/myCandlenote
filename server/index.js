@@ -184,6 +184,24 @@ app.post('/api/suggestedVideos', (req, res) => {
     .catch(err => res.send(err));
 });
 
+// https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
+
+app.post('/api/suggestedWiki', (req, res) => {
+  console.log('WIKIWIKIWIKI ;kFJ;lkdfsja;ldfkja');
+  console.log('Params:', req.body);
+  axios.get('https://en.wikipedia.org/w/api.php', {
+    params: {
+      action: 'opensearch',
+      search: req.body.searchTerms,
+      limit: 10,
+      namespace: 0,
+      format: 'json',
+    },
+  })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 app.listen(port, () => {
