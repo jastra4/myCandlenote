@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
+import { Document, Page } from 'react-pdf/build/entry.webpack';
 
 
 export default class Notepad extends React.Component {
@@ -35,6 +36,8 @@ export default class Notepad extends React.Component {
     _.debounce(this.parseContentMeaning, 1000)(content);
   }
 
+  
+
   getContentFromDelta = delta => {
     console.log('delta: ', delta.ops);
     return (
@@ -62,7 +65,13 @@ export default class Notepad extends React.Component {
 
   render = () => (
     <div>
-      <a href="http://localhost:3000/api/pdf?file=0c00a9b1-a825-4fb6-ac18-d2698802de33">Download</a>
+      <Document
+        file="http://localhost:3000/api/pdf?fileName=0c00a9b1-a825-4fb6-ac18-d2698802de33"
+        onLoadSuccess={this.onDocumentLoad}
+      >
+        <Page pageNumber={1} />
+      </Document>
+      <a href="http://localhost:3000/api/pdf?fileName=0c00a9b1-a825-4fb6-ac18-d2698802de33">Download</a>
       <button onClick={ this.handlePrint }>Print</button>
       <ReactQuill
         theme='snow'

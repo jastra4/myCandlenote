@@ -69,10 +69,10 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 //   console.log('authenticated at /user? : ', req.isAuthenticated())
 
 // });
-app.get('/api/pdf', (req, res) => {
-  const { file } = req.query;
-  console.log('file: ', file);
-  res.download(`./PDFs/${file}.pdf`);
+app.get('/api/pdf/:id', (req, res) => {
+  const { id: fileName } = req.params;
+  console.log('fileName: ', fileName);
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
 app.get('*', (req, res) => {
