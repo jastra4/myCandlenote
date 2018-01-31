@@ -189,10 +189,11 @@ app.post('/api/suggestedVideos', (req, res) => {
 app.post('/api/suggestedWiki', (req, res) => {
   console.log('WIKIWIKIWIKI ;kFJ;lkdfsja;ldfkja');
   console.log('Params:', req.body);
+  const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join(' ');
   axios.get('https://en.wikipedia.org/w/api.php', {
     params: {
       action: 'opensearch',
-      search: req.body.searchTerms,
+      search: searchTerms,
       limit: 10,
       namespace: 0,
       format: 'json',
