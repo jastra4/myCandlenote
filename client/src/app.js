@@ -6,11 +6,11 @@ import { Provider } from 'react-redux';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
-import Notepad from './notePad'; // eslint-disable-line 
+import Notes from './notesPage'; // eslint-disable-line 
 import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
-import PDF from './notePad/invisibleEditor';
+import PDF from './notesPage/invisibleEditor';
 import store from '../src/store';
 
 const App = () => (
@@ -18,7 +18,7 @@ const App = () => (
     <BrowserRouter>
       <Switch>
         <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
-        <Route path='/notepad' render={() => <TopBar ContentPage={ Notepad }/>} />
+        <Route path='/notepad' render={() => <TopBar ContentPage={ Notes }/>} />
         <Route path='/notebox' render={() => <TopBar ContentPage={ Notebox }/>} />
         <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
         <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPage} />} />
