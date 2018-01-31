@@ -172,7 +172,7 @@ app.post('/api/suggestedVideos', (req, res) => {
   console.log('Params:', req.body);
   axios.get('https://www.googleapis.com/youtube/v3/search', {
     params: {
-      maxResults: 10,
+      maxResults: 5,
       part: 'snippet',
       q: req.body.searchTerms,
       type: 'video',

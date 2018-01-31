@@ -18,7 +18,7 @@ export default class IntelliSearch extends React.Component {
     console.log('Props before:', this.props, newProps);
     const searchTerms = newProps.meaning.trim().split(' ').join('+');
     // this.grabGoogleSearch(searchTerms);
-    this.grabYoutubeSearch('cats');
+    this.grabYoutubeSearch(searchTerms);
   }
 
   grabGoogleSearch(searchTerms) {

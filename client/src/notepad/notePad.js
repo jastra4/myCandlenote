@@ -8,7 +8,10 @@ import _ from 'lodash';
 export default class Notepad extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = {
+      value: '',
+      buffer: 0,
+    };
   }
 
   componentWillMount() {
@@ -21,12 +24,16 @@ export default class Notepad extends React.Component {
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    this.setState({ value });
-    const delta = editor.getContents();
-    const packet = JSON.stringify(delta);
-    window.localStorage.setItem('noteContent', packet);
-    const content = this.getContentFromDelta(delta);
-    _.debounce(this.parseContentMeaning, 1000)(content);
+    if (this.state.buffer > 15) {
+      this.setState({ value, buffer: 0 });
+      const delta = editor.getContents();
+      const packet = JSON.stringify(delta);
+      window.localStorage.setItem('noteContent', packet);
+      const content = this.getContentFromDelta(delta);
+      _.debounce(this.parseContentMeaning, 1000)(content);
+    } else {
+      this.setState({ value, buffer: this.state.buffer + 1 });
+    }
   }
 
   getContentFromDelta = delta => (
