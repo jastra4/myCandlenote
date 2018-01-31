@@ -60,12 +60,6 @@ export default class Notepad extends React.Component {
 
   render = () => (
     <div>
-      <Document
-        file="http://localhost:3000/api/pdf?fileName=0c00a9b1-a825-4fb6-ac18-d2698802de33"
-        onLoadSuccess={this.onDocumentLoad}
-      >
-        <Page pageNumber={1} />
-      </Document>
       <a href="http://localhost:3000/api/pdf?fileName=0c00a9b1-a825-4fb6-ac18-d2698802de33">Download</a>
       <button onClick={ this.handlePrint }>Print</button>
       <ReactQuill
