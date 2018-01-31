@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
-import NotePad from './notePad';
+// import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu'; // eslint-disable-line 
 // import IntelliSearch from './intelliSearch';
@@ -25,7 +25,7 @@ export default class NotePage extends React.Component {
         <Grid.Column width={12}>
           <FileMenu />
           <NoteTitle />
-          <NotePad { ...this.props } handleTextChange={this.handleTextChange} />
+          {/* <MainEditor { ...this.props } handleTextChange={this.handleTextChange} /> */}
         </Grid.Column>
         <Grid.Column width={4}>
           <div>IntelliSearch Goes here :)</div>

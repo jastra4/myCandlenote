@@ -2,28 +2,37 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
-
+const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
-const keys = require('./config/keys');
-// const cookieSession = require('cookie-session');
 const passport = require('passport');
 const session = require('express-session');
+const { promisify } = require('util');
+const fs = require('fs');
+const uuid = require('uuid');
+// const cookieSession = require('cookie-session');
 
+const keys = require('./config/keys');
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
-const webshot = require('webshot');
+
+const writeFile = promisify(fs.writeFile);
+const readFile = promisify(fs.readFile);
 
 // db imports
 const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
-const helpers = require('./helpers');
+
+// Helpers
+const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
+
+// const SRC_DIR = path.join(__dirname,  "../client/src/");
+const DIST_DIR = path.join(__dirname, '../client/dist');
+const PORT = process.env.PORT || 3000;
+const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
 const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
-const DIST_DIR = path.join(__dirname, '../client/dist');
-// const SRC_DIR = path.join(__dirname,  "../client/src/");
-const port = process.env.PORT || 3000;
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -49,6 +58,7 @@ app.use(passport.session());
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 
+// TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
@@ -59,6 +69,11 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 //   console.log('authenticated at /user? : ', req.isAuthenticated())
 
 // });
+app.get('/api/pdf/:id', (req, res) => {
+  const { id: fileName } = req.params;
+  console.log('fileName: ', fileName);
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
@@ -67,33 +82,21 @@ app.get('*', (req, res) => {
 /* --------- POST Handlers ----------- */
 
 app.post('/makePDF', (req, res) => {
-  const myUrl = req.body.tab_url;
-  const title = JSON.stringify(Date.now());
+  const url = req.body.tab_url;
+  const fileName = JSON.stringify(Date.now());
 
-  // defaut webshot options
-  const options = {
-    streamType: 'pdf',
-    windowSize: {
-      width: 1024,
-      height: 786,
-    },
-    shotSize: {
-      width: 'all',
-      height: 'all',
-    },
-  };
-
-  // webshot wraps phantomjs and provides a simple API
-  // phantomjs is essentially a web browser with no GUI
-  webshot(myUrl, `PDFs/${title}.pdf`, options, (err) => {
+  makePDF(url, fileName, (err) => {
     if (err) {
       res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
     }
-    res.sendStatus(200);
   });
 });
 
+
 /* ----------- API Routes ------------ */
+
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
@@ -140,10 +143,8 @@ app.post('/api/deleteCard', (req, res) => {
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
-  console.log('lol');
-  helpers.parseMeaningWithGoogleAPI(req.body.content)
+  parseMeaningWithGoogleAPI(req.body.content)
     .then((meaning) => {
-      console.log('meaning!: ', meaning);
       res.send({ meaning });
     })
     .catch(((e) => {
@@ -152,8 +153,77 @@ app.post('/api/parseContentMeaning', (req, res) => {
     }));
 });
 
+app.post('/api/tempSavePacket', (req, res) => {
+  const { packet } = req.body;
+  const fileName = uuid();
+  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
+
+  writeFile(filePath, packet)
+    .then(() => {
+      console.log('File successfully written');
+      const url = `http://${DOMAIN}/pdf/${fileName}`;
+      const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
+
+      (async () => {
+        function resolveAfter1Seconds() {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve('resolved');
+            }, 1000);
+          });
+        }
+
+        function logAfterPDF(pdfLocation, title = 'notes.pdf') {
+          return new Promise((resolve) => {
+            console.log('PDF successfully printed 🖨️  👍');
+            // res.download(pdfLocation, title)
+            res.sendFile(pathToPDF, title, (err) => {
+              if (err) {
+                console.error(err);
+              } else {
+                console.log('yes!');
+              }
+            });
+            resolve('PDF printed');
+          });
+        }
+
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: 'networkidle2' });
+        await resolveAfter1Seconds();
+        await page.pdf({
+          path: pathToPDF,
+          format: 'Letter',
+          printBackground: true,
+          margin: {
+            top: '10mm',
+            bottom: '10mm',
+            left: '10mm',
+            right: '10mm',
+          },
+        });
+        await logAfterPDF(`PDFs/${fileName}.pdf`);
+        await browser.close();
+      })();
+    });
+});
+
+app.post('/api/getEditorPacket', (req, res) => {
+  const { fileName } = req.body;
+  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
+  readFile(filePath, 'utf8')
+    .then((data) => {
+      res.json({ data });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500);
+    });
+});
+
 /* -------- Initialize Server -------- */
 
-app.listen(port, () => {
-  console.info(`🌎  Server now running on port ${port}.  🌎`);
+app.listen(PORT, () => {
+  console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });

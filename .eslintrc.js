@@ -29,8 +29,9 @@ module.exports = {
       "ObjectExpression": { "minProperties": 2},
       "ObjectPattern": "never"
     }],
-    "no-underscore-dangle": 0
-  },
+    "no-underscore-dangle": 0,
+    "no-unused-expressions": 0
+    },
 
   "plugins": [ "react" ]
 };
