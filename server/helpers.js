@@ -30,6 +30,7 @@ const defaultOptions = {
 };
 
 const makePDF = (url, fileName, callback, options = {}) => {
+  console.log('makepdf invoked')
   const finalOptions = {
     ...defaultOptions,
     ...options,
@@ -38,13 +39,14 @@ const makePDF = (url, fileName, callback, options = {}) => {
   console.log('url: ', url);
   console.log('options: ', finalOptions);
   console.log('callback: ', callback);
-  // console.log('filePath: ', filePath);
+  console.log('filePath: ', filePath);
   webshot(url, filePath, finalOptions, (err) => {
+    console.log('filePath: ', filePath);
     if (err) {
       console.log('PDF NOT Saved!!!')
       callback(err, null);
     } else {
-      console.log('PDF Saved!')
+      console.log('PDF Saved!', filePath)
       callback(null, err);
     }
   })
