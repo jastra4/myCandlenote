@@ -35,11 +35,13 @@ export default class Notepad extends React.Component {
     _.debounce(this.parseContentMeaning, 1000)(content);
   }
 
-  getContentFromDelta = delta => (
+  getContentFromDelta = delta => {
+    console.log('delta: ', delta.ops);
+    return (
     delta.ops.reduce((tv, cv) => (
-      tv.concat(cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, ''))
+      tv.concat(cv.insert.replace ? cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, ''): cv.insert)
     ), '')
-  )
+  )}
 
   // TODO: Use return value from this function to build IntelliSearch
   parseContentMeaning = content => (
@@ -60,6 +62,7 @@ export default class Notepad extends React.Component {
 
   render = () => (
     <div>
+      <a href="http://localhost:3000/api/pdf?file=0c00a9b1-a825-4fb6-ac18-d2698802de33">Download</a>
       <button onClick={ this.handlePrint }>Print</button>
       <ReactQuill
         theme='snow'

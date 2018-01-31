@@ -69,6 +69,11 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 //   console.log('authenticated at /user? : ', req.isAuthenticated())
 
 // });
+app.get('/api/pdf', (req, res) => {
+  const { file } = req.query;
+  console.log('file: ', file);
+  res.download(`./PDFs/${file}.pdf`);
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
@@ -95,10 +100,6 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- API Routes ------------ */
 
-app.get('/api/PDF', (req, res) => {
-  const { fileName } = req.body;
-  res.download(`/PDFs/${fileName}.pdf`);
-});
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
@@ -175,9 +176,19 @@ app.post('/api/tempSavePacket', (req, res) => {
           });
         }
 
-        function logAfterPDF() {
+        function logAfterPDF(pdfLocation, title = 'notes.pdf') {
           return new Promise((resolve) => {
             console.log('PDF printed 🖨️  👍');
+            console.log('res: ', res);
+            console.log('pdfLocation: ', pdfLocation);
+            // res.download(pdfLocation, title)
+            res.sendFile(pathToPDF, title, (err) => {
+              if (err) { console.error(err) 
+              } else {
+                console.log('yes!')
+              }
+
+            });
             resolve('PDF printed');
           });
         }
@@ -197,7 +208,7 @@ app.post('/api/tempSavePacket', (req, res) => {
             right: '10mm',
           },
         });
-        await logAfterPDF();
+        await logAfterPDF(`PDFs/${ fileName }.pdf`);
         await browser.close();
       })();
     });
