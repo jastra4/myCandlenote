@@ -153,7 +153,6 @@ app.post('/api/parseContentMeaning', (req, res) => {
     }));
 });
 
-// key=INSERT_YOUR_API_KEY&cx=017576662512468239146:omuauf_lfve&q=lectures
 app.post('/api/suggestedResources', (req, res) => {
   console.log('SOMEITalskejl;kFJ;lkdfsja;ldfkja');
   console.log('Params:', req.body);
@@ -162,6 +161,23 @@ app.post('/api/suggestedResources', (req, res) => {
       q: req.body.searchTerms,
       key: process.env.GOOGLE_SEARCH_API_KEY,
       cx: process.env.GOOGLE_SEARCH_API_ID,
+    },
+  })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
+app.post('/api/suggestedVideos', (req, res) => {
+  console.log('SOMEITalskejl;kFJ;lkdfsja;ldfkja');
+  console.log('Params:', req.body);
+  axios.get('https://www.googleapis.com/youtube/v3/search', {
+    params: {
+      maxResults: 10,
+      part: 'snippet',
+      q: req.body.searchTerms,
+      type: 'video',
+      key: process.env.YOUTUBE_DATA_API_KEY,
+      videoEmbeddable: 'true',
     },
   })
     .then(result => res.send(result.data))

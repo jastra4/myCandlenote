@@ -32,7 +32,7 @@ export default class IntelliSearch extends React.Component {
 
   grabYoutubeSearch(searchTerms) {
     console.log('Search Terms:', searchTerms);
-    axios.post('/api/suggestedResources', { searchTerms })
+    axios.post('/api/suggestedVideos', { searchTerms })
       .then((res) => {
         console.log('Response data:', res.data);
         this.setState({ searchResults: res.data.items });
