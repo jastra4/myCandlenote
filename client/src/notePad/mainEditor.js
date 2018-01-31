@@ -4,7 +4,7 @@ import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
 
-export default class Notepad extends React.Component {
+export default class MainEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
@@ -67,22 +67,22 @@ export default class Notepad extends React.Component {
         value={ this.state.value }
         onChange={ this.handleEditorChange }
         placeholder="Let's take some notes!"
-        formats={ Notepad.formats }
-        modules={ Notepad.modules }
+        formats={ MainEditor.formats }
+        modules={ MainEditor.modules }
         />
     </div>
   );
 }
 
 
-Notepad.formats = [
+MainEditor.formats = [
   'header', 'font', 'size',
   'bold', 'italic', 'underline', 'strike', 'blockquote',
   'list', 'bullet', 'indent',
   'link', 'image', 'video',
 ];
 
-Notepad.modules = { toolbar: [
+MainEditor.modules = { toolbar: [
   [{ header: '1' }, { header: '2' }, { font: [] }],
   [{ size: [] }],
   ['bold', 'italic', 'underline', 'strike', 'blockquote'],
