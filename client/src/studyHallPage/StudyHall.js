@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import ChatBox from './ChatBox';
-import FriendsList from './FriendsList';
+import FriendsListConnected from './FriendsList';
 import GroupsList from './GroupsList';
 import Search from './Search';
 
@@ -66,7 +66,7 @@ class StudyHall extends React.Component {
           <GroupsList changeChat={this.changeChat.bind(this)}/>
         </div>
         <div className="Friends studyComp">
-          <FriendsList socket={this.state.socket} changeChat={this.changeChat.bind(this)}/>
+          <FriendsListConnected socket={this.state.socket} changeChat={this.changeChat.bind(this)}/>
         </div>
         <div className="Search studyComp">
           <Search />

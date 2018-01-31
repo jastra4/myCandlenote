@@ -7,16 +7,18 @@ class Friend extends React.Component {
   }
 
   handleClick = () => {
-    this.props.changeChat(this.props.friend);
+    this.props.changeChat(this.props.friend.username);
   }
 
   render() {
     return (
       <div onClick={this.handleClick.bind(this)}>
-        {this.props.friend}
+        {this.props.friend.username}
       </div>
     );
   }
 }
 
 export default Friend;
+
+// {this.props.friend}

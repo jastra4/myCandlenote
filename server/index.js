@@ -89,12 +89,17 @@ app.get('/checkAuth', (req, res) => {
 });
 
 app.get('/messages', (req, res) => {
-  // console.log('query: ', req.query);
   const to = req.query.to;
   const sentBy = req.query.from;
   queries.getMessages(sentBy, to, (messages) => {
-    // console.log('messages: ', messages);
     res.send(messages);
+  });
+});
+
+app.get('/users', (req, res) => {
+  console.log('get users received');
+  queries.getUsers((users) => {
+    res.send(users);
   });
 });
 

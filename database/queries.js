@@ -14,10 +14,6 @@ const getUserName = (id, callback) => {
 };
 
 const getMessages = (sentBy, to, callback) => {
-  console.log('query from: ', sentBy);
-  console.log('query to: ', to);
-  // const query = db.Messages.find({}).where().equals(sentBy).where().equals(to).sort('created').limit(6);
-
   const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created').limit(6);
   query.exec((err, docs) => {
     if (err) {
@@ -25,16 +21,21 @@ const getMessages = (sentBy, to, callback) => {
     }
     callback(docs);
   });
-  // db.Messages.find({}, (err, messages) => {
-  //   if (err) {
-  //     callback(err);
-  //   } else {
-  //     callback(messages);
-  //   }
-  // });
+};
+
+const getUsers = (callback) => {
+  console.log('getUsers ran');
+  const query = User.find({});
+  query.exec((err, docs) => {
+    if (err) {
+      callback(err);
+    }
+    callback(docs);
+  });
 };
 
 module.exports = {
   getUserName,
   getMessages,
+  getUsers,
 };

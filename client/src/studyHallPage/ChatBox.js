@@ -46,11 +46,6 @@ class ChatBox extends React.Component {
       });
   }
 
-  // onClick() {
-  //   console.log('props: ', this.props.messages);
-  //   console.log('state: ', this.state.messages);
-  // }
-
   render() {
     return (
       <div>
