@@ -8,10 +8,7 @@ import { setMessages } from '../actions/messagesActions';
 class ChatBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // socket: null,
-      messages: [],
-    };
+    this.state = { messages: [] };
 
     props.socket.on('new message', (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
@@ -34,16 +31,12 @@ class ChatBox extends React.Component {
       this.setState({ messages: newProps.messages });
     }
     if (newProps.chat !== this.props.chat) {
-      this.getMessages();
+      this.getMessages(newProps.chat);
     }
   }
 
-  // componentDidMount() {
-  //   this.loadMessages();
-  // }
-
-  getMessages() {
-    return axios.get('/messages') // `/username?id=${userId}`
+  getMessages(to) {
+    return axios.get(`/messages?from=${this.props.username.data}&&to=${to}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);

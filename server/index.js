@@ -89,8 +89,11 @@ app.get('/checkAuth', (req, res) => {
 });
 
 app.get('/messages', (req, res) => {
-  queries.getMessages((messages) => {
-    console.log('messages: ', messages);
+  // console.log('query: ', req.query);
+  const to = req.query.to;
+  const sentBy = req.query.from;
+  queries.getMessages(sentBy, to, (messages) => {
+    // console.log('messages: ', messages);
     res.send(messages);
   });
 });
@@ -138,7 +141,7 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('new user', (data) => {
     socket.username = data;
-    console.log('New user!: ', socket.username);
+    // console.log('New user!: ', socket.username);
     io.sockets.emit('update users', socket.username);
   });
 

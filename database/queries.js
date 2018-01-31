@@ -13,8 +13,12 @@ const getUserName = (id, callback) => {
   });
 };
 
-const getMessages = (callback) => {
-  const query = db.Messages.find({}).sort('created').limit(6);
+const getMessages = (sentBy, to, callback) => {
+  console.log('query from: ', sentBy);
+  console.log('query to: ', to);
+  // const query = db.Messages.find({}).where().equals(sentBy).where().equals(to).sort('created').limit(6);
+
+  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created').limit(6);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
