@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const axios = require('axios');
+
 const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -114,8 +116,7 @@ app.post('/api/decks', (req, res) => {
 
 app.post('/api/deleteDeck', (req, res) => {
   deletes.deleteDeck(req.body.deckId)
-    .then((result) => {
-      console.log(result);
+    .then(() => {
       const { _id: id } = req.body;
       res.send(id);
     })
@@ -151,6 +152,61 @@ app.post('/api/parseContentMeaning', (req, res) => {
       console.error(e);
       res.status(500).end();
     }));
+});
+
+app.post('/api/suggestedResources', (req, res) => {
+  axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+    q: req.body.searchTerms,
+    key: process.env.GOOGLE_SEARCH_API_KEY,
+    cx: process.env.GOOGLE_SEARCH_API_ID,
+  } })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
+app.post('/api/suggestedVideos', (req, res) => {
+  axios.get('https://www.googleapis.com/youtube/v3/search', { params: {
+    maxResults: 5,
+    part: 'snippet',
+    q: req.body.searchTerms,
+    type: 'video',
+    key: process.env.YOUTUBE_DATA_API_KEY,
+    videoEmbeddable: 'true',
+  } })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
+// https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
+
+app.post('/api/suggestedWiki', (req, res) => {
+  const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join('+');
+  axios.get('https://en.wikipedia.org/w/api.php', { params: {
+    action: 'opensearch',
+    search: req.body.searchTerms,
+    limit: 10,
+    namespace: 0,
+    format: 'json',
+  } })
+    .then((result) => {
+      // If no results
+      if (!result.data[1].length) {
+        axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+          q: `${searchTerms}+wikipedia`,
+          key: process.env.GOOGLE_SEARCH_API_KEY,
+          cx: process.env.GOOGLE_WIKI_SEARCH_KEY,
+        } })
+          .then((googleResult) => {
+            const { data } = googleResult;
+            data.isFromGoogle = true;
+            res.send(data);
+          })
+          .catch(err => res.send(err));
+      } else {
+        res.send(result.data);
+      }
+    })
+    .catch(err => res.send(err));
 });
 
 app.post('/api/tempSavePacket', (req, res) => {
