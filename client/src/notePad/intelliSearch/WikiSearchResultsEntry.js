@@ -1,8 +1,10 @@
 import React from 'react';
 
 export default props => (
-  <li>
-    <a href={props.result.url} target="_blank">{props.result.title}</a>
-    <p>{props.result.description}</p>
-  </li>
+  <div className="wiki-list-entry">
+    <a href={props.result.url} target="_blank">
+      <div className="wiki-list-entry-title">{props.result.title}</div>
+    </a>
+    <p className="wiki-list-entry-description">{props.result.description}</p>
+  </div>
 );

@@ -17,7 +17,9 @@ export default props => (
       </a>
     </div>
     <div className="media-body">
-      <div className="video-list-entry-title">{props.video.snippet.title}</div>
+      <a href={`https://www.youtube.com/watch?v=${props.video.id.videoId}`} target="_blank">
+        <div className="video-list-entry-title">{props.video.snippet.title}</div>
+      </a>
       <div className="video-list-entry-detail">{props.video.snippet.description}</div>
     </div>
 

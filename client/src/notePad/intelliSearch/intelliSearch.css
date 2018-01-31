@@ -1,9 +1,59 @@
-/* .media-left {
-  display: none;
-} */
+/* NotePad Page */
+
+ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+/* Youtube results */
+
+.video-list-entry {
+  margin-bottom: 20px;
+}
 
 .media-object {
   width: 100%;
   height: auto;
+  border: 2px solid rgb(0, 0, 0);
 }
 
+.media-body {
+  padding-left: 10px;
+}
+
+.video-list-entry-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.video-list-entry-detail {
+  color: rgb(46, 46, 46);
+  padding-left: 5px;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
+  background-color: white;
+  padding: 3px;
+  border: 1px solid black;
+}
+
+.react-tabs__tab-list {
+  margin: 0;
+}
+
+/* Wikipedia results */
+
+.wiki-list-entry {
+  margin-bottom: 20px;
+  padding: 0 10px;
+}
+
+.wiki-list-entry-title {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.wiki-list-entry-description {
+  padding-left: 5px;
+}
