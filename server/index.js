@@ -1,3 +1,6 @@
+const { ExpressPeerServer } = require('peer');
+const http = require('http');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -18,12 +21,16 @@ const inserts = require('../database/inserts');
 const deletes = require('../database/deletes');
 const helpers = require('./helpers');
 
+
 const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
 const DIST_DIR = path.join(__dirname, '../client/dist');
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const port = process.env.PORT || 3000;
+
+const server = http.createServer(app);
+const peerServer = ExpressPeerServer(server, { debug: true });
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -52,6 +59,9 @@ app.use('/user', userRoutes);
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
+
+app.use('/peerjs', peerServer);
+
 
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
@@ -156,4 +166,9 @@ app.post('/api/parseContentMeaning', (req, res) => {
 
 app.listen(port, () => {
   console.info(`🌎  Server now running on port ${port}.  🌎`);
+});
+
+peerServer.on('connection', (id) => {
+  console.log(id);
+  console.log(server._clients);
 });
