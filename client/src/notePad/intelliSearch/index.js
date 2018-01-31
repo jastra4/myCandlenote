@@ -49,7 +49,17 @@ export default class IntelliSearch extends React.Component {
     axios.post('/api/suggestedWiki', { searchTerms: 'cats' })
       .then((res) => {
         console.log('Response data:', res.data);
-        this.setState({ wikiResults: res.data.items });
+        const titles = res.data[1];
+        const descriptions = res.data[2];
+        const urls = res.data[3];
+
+        const wikiResults = titles.map((title, index) => ({
+          title,
+          description: descriptions[index],
+          url: urls[index],
+        }));
+
+        this.setState({ wikiResults });
       })
       .catch(err => console.log('ERR:', err));
   }
@@ -61,7 +71,7 @@ export default class IntelliSearch extends React.Component {
   render = () => (
     <div>
       <p>Hello</p>
-      {console.log('Videos:', this.state.videos)}
+      {console.log('Videos:', this.state.wikiResults)}
       {/* <YouTubeList videos={this.state.videos} /> */}
       {/* <SearchResults results={this.state.searchResults} /> */}
       <WikiSearchResults results={this.state.wikiResults}/>
