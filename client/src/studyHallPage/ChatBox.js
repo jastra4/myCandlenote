@@ -24,6 +24,7 @@ class ChatBox extends React.Component {
     const msg = {
       text: $('#message').val(),
       to: this.props.chat,
+      sentBy: this.props.username.data,
     };
     this.props.socket.emit('send message', msg);
     $('#message').val('');
@@ -34,13 +35,21 @@ class ChatBox extends React.Component {
     if (newProps.messages.length !== this.state.messages.length) {
       this.setState({ messages: newProps.messages });
     }
+    if (newProps.chat !== this.props.chat) {
+      this.loadMessages();
+    }
   }
 
   componentDidMount() {
+    this.loadMessages();
+  }
+
+  loadMessages() {
     return axios.get('/messages')
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
+        console.log('loaded messages');
       })
       .catch((error) => {
         console.log(error);

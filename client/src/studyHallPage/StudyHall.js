@@ -13,7 +13,7 @@ class StudyHall extends React.Component {
     super(props);
     this.state = {
       socket: null,
-      userId: '',
+      username: '',
       chat: 'Bob',
     };
   }
@@ -34,7 +34,7 @@ class StudyHall extends React.Component {
       console.log('Socket connected!');
       return axios.get(`/username?id=${userId}`)
         .then((username) => {
-          this.setState({ userId });
+          this.setState({ username });
           socket.emit('new user', username);
         })
         .catch((error) => {
@@ -47,7 +47,7 @@ class StudyHall extends React.Component {
     if (this.state.socket !== null) {
       return (
         <div className="Chat studyComp">
-          <ChatBox chat={this.state.chat} socket={this.state.socket}/>
+          <ChatBox chat={this.state.chat} socket={this.state.socket} username={this.state.username}/>
         </div>
       );
     }

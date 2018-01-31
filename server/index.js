@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const dateFormat = require('dateformat');
 
 const mongoose = require('mongoose');
 const keys = require('./config/keys');
@@ -141,12 +142,16 @@ io.sockets.on('connection', (socket) => {
   });
 
   socket.on('send message', (data) => {
+    const now = new Date();
     inserts.insertMessage({
       to: data.to,
       sentBy: socket.username.data,
       text: data.text,
-      timeStamp: Date.now(),
+      timeStamp: dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT")
+      // timeStamp: Date.now(),
     });
+    // data.timeStamp = Date.now();
+    data.timeStamp = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
     io.sockets.emit('new message', data);
   });
 });
