@@ -121,6 +121,15 @@ app.get('/users', (req, res) => {
   });
 });
 
+app.get('/userProfile', (req, res) => {
+  console.log('PROFILE ROUTE PINGED');
+  console.log('USER:', req.user);
+  queries.getCurrentUser(req.user)
+    .then(response => console.log('User from db:', response))
+    .catch(err => console.log(err));
+  res.send(req.user);
+});
+
 /* --------- POST Handlers ----------- */
 
 app.post('/makePDF', (req, res) => {

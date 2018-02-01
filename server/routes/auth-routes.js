@@ -20,7 +20,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   console.log('Logged in user: ', req.user.username);
   console.log('authenticated? : ', req.isAuthenticated());
-  res.redirect('/two#');
+  res.redirect('/profile');
 });
 
 // router.get('/facebook', passport.authenticate('facebook', { scope: ['profile'] }));
