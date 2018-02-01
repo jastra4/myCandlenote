@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Card, Segment, Icon, Header } from 'semantic-ui-react';
+import { Card, Icon, Header } from 'semantic-ui-react';
 
 const styles = {
   deckStyle: {
@@ -39,7 +39,7 @@ const DeckView = (props) => {
                 key={deck.id}
               >
                 <Card.Content>
-                  <div onClick={() => props.deleteDeck(deck.id)} style={{cursor: 'pointer'}}>
+                  <div onClick={() => props.deleteDeck(deck.id)} style={{ cursor: 'pointer' }}>
                     <Icon name="remove" />
                   </div>
                   <Card

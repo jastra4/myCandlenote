@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Header, Icon, Card, Divider, Grid } from 'semantic-ui-react';
+import { Header, Icon, Divider, Grid } from 'semantic-ui-react';
 
 import FlashcardCreator from './FlashcardCreator';
 import FlashcardView from './FlashcardView';
@@ -40,7 +40,7 @@ const FlashcardPage = props => (
               <Icon name='clone' />
               <h3>Deck:</h3>
               {/* <Header.Subheader textAlign="center"> */}
-              <p style={{width: '100%'}}>
+              <p style={{ width: '100%' }}>
                 {props.currentDeck.title || 'No Deck Selected'}
               </p>
               {/* </Header.Subheader> */}

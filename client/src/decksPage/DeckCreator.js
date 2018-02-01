@@ -51,7 +51,7 @@ class DeckCreator extends React.Component {
                   <Form.Field id='form-button-control-public' control={Button} content='Confirm' label='Create Deck' />
                 </Grid.Column>
                 <Grid.Column width={10}>
-                  <div style={{paddingTop: '1.65em'}}>
+                  <div style={{ paddingTop: '1.65em' }}>
                     <Form.TextArea placeholder="Description (optional)" rows="10" />
                   </div>
                 </Grid.Column>
