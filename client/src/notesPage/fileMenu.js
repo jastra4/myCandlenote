@@ -1,22 +1,27 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import axios from 'axios';
+import EmailModal from './emailModal';
 
-export default class fileMenu extends React.Component {
+export default class FileMenu extends React.Component {
   state = { };
 
   renderPDF = () => {
     window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
   }
 
+
+
   render = () => (
     <div>
+      <EmailModal />
       <Button animated='fade'>
         <Button.Content hidden>New</Button.Content>
         <Button.Content visible>
           <Icon name='file' />
         </Button.Content>
       </Button>
-      <Button animated='fade'>
+      <Button animated='fade' onClick={ this.emailPDF }>
         <Button.Content hidden>Email</Button.Content>
         <Button.Content visible>
           <Icon name='mail' />
@@ -28,7 +33,7 @@ export default class fileMenu extends React.Component {
           <Icon name='share alternate' />
         </Button.Content>
       </Button>
-    <Button animated='fade' onClick={this.renderPDF}>
+    <Button animated='fade' onClick={ this.renderPDF }>
         <Button.Content hidden>Download</Button.Content>
         <Button.Content visible>
           <Icon name='download' />
