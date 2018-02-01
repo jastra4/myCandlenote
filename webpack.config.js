@@ -10,6 +10,9 @@ module.exports = {
     path: DIST_DIR,
     filename: 'bundle.js'
   },
+  watchOptions: {
+    poll: true
+  },
   module: {
     rules: [
       {
