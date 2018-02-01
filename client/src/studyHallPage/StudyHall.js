@@ -18,16 +18,16 @@ class StudyHall extends React.Component {
   render() {
     return (
       <div className="studyContainer">
-        <div className="Groups studyComp">
+        <div className="Groups studyBackground">
           <GroupsList changeChat={this.changeChat.bind(this)}/>
         </div>
-        <div className="Friends studyComp">
+        <div className="Friends studyBackground">
           <FriendsListConnected changeChat={this.changeChat.bind(this)}/>
         </div>
-        <div className="Search studyComp">
+        <div className="Search studyBackground">
           <Search />
         </div>
-        <div className="Chat studyComp">
+        <div className="Chat studyBackground">
           <ChatBox chat={this.state.chat}/>
         </div>
       </div>

@@ -7,7 +7,7 @@ body {
   background-color: #EDEAD0;
 }
 
-.studyComp{
+.studyBackground{
 	background: white;
 	border: 1px #000 solid;
 }
@@ -27,6 +27,7 @@ body {
 	position: relative;
 	top: 0em;
 	right: 0em;
+	margin-right: .5em;
 }
 .Search{
 	height: 3em;
