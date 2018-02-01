@@ -15,7 +15,12 @@ class VideoConference extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    navigator.getUserMedia = (
+      navigator.getUserMedia || navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia || navigator.msGetUserMedia
+    );
+
     this.state.peer.on('open', (id) => {
       console.log('My Peer id is: ', id);
       this.setState({
@@ -27,8 +32,27 @@ class VideoConference extends React.Component {
     this.state.peer.on('connection', (connection) => {
       console.log('Someone connected!');
       console.log(connection);
-      
-    })
+      this.setState({ conn: connection }, () => {
+        this.state.conn.on('open', () => {
+          this.setState({ connected: true });
+        });
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.peer.destroy();
+  }
+
+  connect() {
+    let peer_id = this.state.peer_id;
+    let connection = this.state.peer.connect(peer_id);
+    this.setState({ conn: connection }, () => {
+      this.state.conn.on('open', () => {
+        this.setState({ connected: true });
+      });
+      this.state.conn.on('data')
+    });
   }
 
 };
