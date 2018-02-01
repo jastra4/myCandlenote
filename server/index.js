@@ -40,16 +40,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const emailNoteOptions = (email, path) => ({
+const emailNoteOptions = (email, filePath) => ({
   from: 'no-reply@theworldsgreatesthue.com',
   to: email,
   subject: 'Fresh CandleNote! ✔',
   html: '<b>Hello world?</b>',
   attachments: [{
     contentType: 'application/pdf',
-    path,
+    path: filePath,
     filename: 'note.pdf',
-  }]
+  }],
 });
 
 const app = express();
