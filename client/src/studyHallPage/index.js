@@ -1,13 +1,13 @@
 import React from 'react';
 import { Segment } from 'semantic-ui-react';
 
-import VideoConferenceView from './VideoConferenceView';
+import VideoConference from './VideoConference';
 
 
 const StudyHallPage = props => (
   <div>
     <Segment size="massive">
-      <VideoConferenceView />
+      <VideoConference />
     </Segment>
   </div>
 );
