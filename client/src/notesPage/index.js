@@ -1,10 +1,9 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-// import NotePad from './notePad';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
-import FileMenu from './fileMenu'; // eslint-disable-line 
+import FileMenu from './fileMenu';
 import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
 import IntelliSearch from './intelliSearch';
 
