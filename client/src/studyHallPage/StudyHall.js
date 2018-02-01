@@ -14,25 +14,33 @@ class StudyHall extends React.Component {
     this.state = {
       socket: null,
       username: '',
+      userid: '',
       chat: '',
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(`authenticated? ${nextProps.isAuth}`);
-    if (nextProps.isAuth) {
-      this.initSocket(nextProps.userId);
-    } else {
-      console.log('Did not create connection');
-    }
+  componentWillMount(){
+    axios.get('/api/userid')
+      .then((res) => {
+        this.setState({ userid: res.data.userid });
+        this.initSocket(res.data.userid);
+      });
   }
 
-  initSocket(userId) {
+  componentWillReceiveProps(nextProps) {
+    // console.log(`authenticated? ${nextProps.isAuth}`);
+    // if (nextProps.isAuth) {
+      // this.initSocket(nextProps.userId);
+    // } else {
+      // console.log('Did not create connection');
+    // }
+  }
+
+  initSocket(userid) {
     const socket = io(socketUrl);
     this.setState({ socket });
     socket.on('connect', () => {
-      console.log('Socket connected!');
-      return axios.get(`/username?id=${userId}`)
+      return axios.get(`/username?id=${userid}`)
         .then((username) => {
           this.setState({ username });
           socket.emit('new user', username);
@@ -81,7 +89,7 @@ class StudyHall extends React.Component {
       </div>
       );
     }
-    return (<div></div>);
+    return (<div>no socket connection</div>);
   }
 }
 

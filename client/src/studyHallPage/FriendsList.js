@@ -11,7 +11,6 @@ class FriendsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps: ', nextProps.contacts);
     const users = Object.keys(nextProps.contacts).map(key => nextProps.contacts[key]);
     this.setState({ friends: users });
   }
@@ -24,7 +23,6 @@ class FriendsList extends React.Component {
     return axios.get('/users')
       .then((users) => {
         const usersList = users.data;
-        console.log('usersList: ', usersList);
         this.props.loadUsers(usersList);
       })
       .catch((error) => {
@@ -49,7 +47,6 @@ const mapDispatchToProps = dispatch => (
 );
 
 const mapStateToProps = (state) => {
-  console.log('state: ', state);
   const usersById = state.users.byId;
   return { contacts: usersById };
 };

@@ -4,10 +4,8 @@ const db = require('./index');
 const getUserName = (id, callback) => {
   User.findOne({ _id: id }, (err, person) => {
     if (err) {
-      console.log(err);
       callback(err);
     } else {
-      console.log('person: ', person.username);
       callback(person.username);
     }
   });
@@ -24,7 +22,6 @@ const getMessages = (sentBy, to, callback) => {
 };
 
 const getUsers = (callback) => {
-  console.log('getUsers ran');
   const query = User.find({});
   query.exec((err, docs) => {
     if (err) {

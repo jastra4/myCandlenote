@@ -46,6 +46,7 @@ class App extends React.Component {
             <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
+            <Route path='/login' render={() => (<div>Please log in</div>)} />
           </Switch>
         </BrowserRouter>
       </div>

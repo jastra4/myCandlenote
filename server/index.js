@@ -74,18 +74,36 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 // app.get('/user', (req, res) => {
 //   console.log('You are logged in this is your user profile: ', req.user);
 //   console.log('authenticated at /user? : ', req.isAuthenticated())
-
 // });
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+
+app.get('*', (req, res, next) => {
+  const isAuth = req.isAuthenticated();
+  if (!isAuth) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+  // res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+app.get('/api/userid', (req, res) => {
+  const userid = req.session.passport.user;
+  res.status(200).send({ userid });
+});
+
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
-
 // Invoked when main page renders
 // Controls whether to emit a socket connection
 app.get('/checkAuth', (req, res) => {
-  console.log('check auth ran');
   // drop messages collection
   // mongoose.connection.db.dropCollection('messages', function(err, result) {
   //   if (err) {
@@ -94,28 +112,9 @@ app.get('/checkAuth', (req, res) => {
   //     console.log('dropped Messages');
   //   }
   // });
-  const isAuth = req.isAuthenticated();
-  if (!isAuth) {
-    res.send(false);
-  } else {
-    const userId = req.session.passport.user;
-    res.status(200).send({
-      auth: true,
-      userId,
-    });
-  }
-});
-
-app.get('/messages', (req, res) => {
-  const { to } = req.query;
-  const sentBy = req.query.from;
-  queries.getMessages(sentBy, to, (messages) => {
-    res.send(messages);
-  });
 });
 
 app.get('/users', (req, res) => {
-  console.log('get users received');
   queries.getUsers((users) => {
     res.send(users);
   });
@@ -138,9 +137,17 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- Sockets ------------ */
 
+app.get('/messages', (req, res) => {
+  const { to } = req.query;
+  const sentBy = req.query.from;
+  queries.getMessages(sentBy, to, (messages) => {
+    res.send(messages);
+  });
+});
+
 app.get('/username', (req, res) => {
-  const userId = req.query.id;
-  queries.getUserName(userId, (username) => {
+  const userid = req.query.id;
+  queries.getUserName(userid, (username) => {
     res.send(username);
   });
 });
@@ -150,7 +157,6 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('new user', (data) => {
     socket.username = data; // eslint-disable-line
-    // console.log('New user!: ', socket.username);
     io.sockets.emit('update users', socket.username);
   });
 
@@ -161,16 +167,13 @@ io.sockets.on('connection', (socket) => {
       sentBy: socket.username.data,
       text: data.text,
       timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
-      // timeStamp: Date.now(),
     });
-    // data.timeStamp = Date.now();
     data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
     io.sockets.emit('new message', data);
   });
 });
 
 /* ----------- API Routes ------------ */
-
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
