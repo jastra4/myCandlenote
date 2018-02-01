@@ -1,6 +1,7 @@
 import React from 'react';
-import { Grid, Icon } from 'semantic-ui-react';
+import { Grid, Icon, Image, Segment, Header } from 'semantic-ui-react';
 import axios from 'axios';
+import '../../dist/assets/profilePage.css';
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -19,7 +20,7 @@ export default class UserProfile extends React.Component {
         .then((res) => {
           const profileImage = this.resizeProfileImage(res.data.profileImage);
           this.setState({
-            ...res.data,
+            username: res.data.username,
             profileImage,
           }, () => console.log('STATE', this.state));
           this.props.setCurrentUser(res.data);
@@ -28,7 +29,7 @@ export default class UserProfile extends React.Component {
     } else {
       const profileImage = this.resizeProfileImage(this.props.user.profileImage);
       this.setState({
-        ...this.props.user,
+        username: this.props.user.username,
         profileImage,
       });
     }
@@ -47,11 +48,15 @@ export default class UserProfile extends React.Component {
       <Grid columns="equal">
         <Grid.Column>
         </Grid.Column>
-        <Grid.Column width={10}>
-          <Icon name="user" />
-          Hello, {this.props.user.username}
-          id: {this.props.id}
-          <img src={this.state.profileImage}/>
+        <Grid.Column width={12}>
+          <Segment raised>
+            <div className="user-info">
+              <Image src={this.state.profileImage} circular centered />
+              <Header as="h1" textAlign="center">{this.state.username}</Header>
+              <Header textAlign="center">A subheader</Header>
+              <Icon name="user" />
+            </div>
+          </Segment>
         </Grid.Column>
         <Grid.Column>
         </Grid.Column>
