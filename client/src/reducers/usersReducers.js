@@ -1,7 +1,8 @@
 const defaultState = {
   username: '',
   userId: -1,
-  oathId: '',
+  googleId: '',
+  profileImage: '',
 };
 
 const usersReducer = (state = defaultState, action) => {
