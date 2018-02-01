@@ -30,8 +30,6 @@ const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
 
-app.use(bodyParser.json());
-const DIST_DIR = path.join(__dirname, '../client/dist');
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 
@@ -40,7 +38,6 @@ const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
-const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
 
@@ -231,6 +228,7 @@ app.post('/api/parseContentMeaning', (req, res) => {
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
 
 app.post('/api/suggestedResources', (req, res) => {
   axios.get('https://www.googleapis.com/customsearch/v1', { params: {
@@ -358,7 +356,6 @@ app.post('/api/getEditorPacket', (req, res) => {
 
 /* -------- Initialize Server -------- */
 
-server.listen(port, () => {
-  console.info(`🌎  Server now running on port ${port}.  🌎`);
+server.listen(PORT, () => {
+  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
-
