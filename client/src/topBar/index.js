@@ -3,6 +3,7 @@ import { Sidebar, Menu, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import OurSideBar from '../sideBar';
+import { removeCurrentUser } from '../actions/usersActions';
 
 class TopBar extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class TopBar extends Component {
         {this.props.user.userId !== -1 ?
           <Menu.Item as={Link} to='/profile' name='user' position='right' onClick={() => { }}>
             <Icon name='user' />
-            {this.props.user.name}
+            {this.props.user.username}
           </Menu.Item>
           :
           <Menu.Item as={Link} to='/' name='user' position='right' onClick={() => { }}>
@@ -27,7 +28,7 @@ class TopBar extends Component {
             Login
           </Menu.Item>}
 
-        <Menu.Item as={Link} to='/home' name='logout' position='right' onClick={ () => {} }>
+        <Menu.Item as={Link} to='/home' name='logout' position='right' onClick={ () => { this.props.removeCurrentUser(); } }>
             <Icon name='log out' />
             Logout
         </Menu.Item>
@@ -39,4 +40,9 @@ class TopBar extends Component {
 
 const mapStateToProps = state => ({ user: state.user });
 
-export default connect(mapStateToProps)(TopBar);
+const mapDispatchToProps = dispatch => ({ removeCurrentUser: () => dispatch(removeCurrentUser()) });
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TopBar);
