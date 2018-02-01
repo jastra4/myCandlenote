@@ -1,11 +1,19 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Card, Segment, Icon, Header } from 'semantic-ui-react';
+import { Card, Icon, Header } from 'semantic-ui-react';
 
 const styles = {
   deckStyle: {
-    fontSize: '130%',
+    display: 'table-cell',
+    fontSize: '1.6em',
     overflowWrap: 'break-word',
+    textAlign: 'center',
+    verticalAlign: 'middle',
+    height: '5em',
+  },
+  deckTable: {
+    display: 'table',
+    margin: '0 auto',
   },
   container: { padding: '5em' },
 };
@@ -15,7 +23,6 @@ const DeckView = (props) => {
 
   return (
     <div>
-      <Segment>
         <div style={styles.container}>
           <Header as='h2' icon textAlign="center">
             <Icon name='clone' />
@@ -25,30 +32,29 @@ const DeckView = (props) => {
             </Header.Subheader>
           </Header>
           <br></br>
-          <Card.Group itemsPerRow={3}>
+          <br></br>
+          <Card.Group itemsPerRow={4}>
             {decks.map(deck => (
               <Card
                 key={deck.id}
-                raised
               >
                 <Card.Content>
-                  <div onClick={() => props.deleteDeck(deck.id)}>
-                    <Icon floated="right" name="remove" />
+                  <div onClick={() => props.deleteDeck(deck.id)} style={{ cursor: 'pointer' }}>
+                    <Icon name="remove" />
                   </div>
-                  <Segment
+                  <Card
                     color="brown"
-                    textAlign="center"
-                    padded
-                    stacked
                     onClick={() => {
                       props.setCurrentDeck(deck.id);
                       props.history.push('/flashcards');
                     }}
                   >
-                    <p style={styles.deckStyle}>
-                      {deck.title}
-                    </p>
-                  </Segment>
+                    <div style={styles.deckTable}>
+                      <p style={styles.deckStyle}>
+                        {deck.title}
+                      </p>
+                    </div>
+                  </Card>
                   <Card.Meta>
                     Subject: {deck.subject}
                   </Card.Meta>
@@ -56,7 +62,6 @@ const DeckView = (props) => {
               </Card>))}
           </Card.Group>
         </div>
-      </Segment>
     </div>
   );
 };

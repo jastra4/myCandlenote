@@ -3,7 +3,7 @@ import { Card } from 'semantic-ui-react';
 
 const styles = {
   cardTitle: {
-    fontSize: '1em',
+    fontSize: '1.5em',
     fontWeight: 'bold',
     color: 'black',
     overflowWrap: 'break-word',
@@ -11,12 +11,20 @@ const styles = {
   container: {
     paddingTop: '1em',
     paddingBottom: '15px',
+    width: '25em',
   },
   cardMeta: {
-    fontSize: '11px',
+    fontSize: '1em',
     color: 'gray',
     marginBottom: '5px',
     marginLeft: '5px',
+  },
+  cardContent: {
+    paddingTop: '10px',
+    paddingLeft: '8px',
+    width: '10em',
+    height: '5em',
+    fontSize: '15px',
   },
 };
 
@@ -32,6 +40,7 @@ const DeckListVert = (props) => {
             fluid={true}
             onClick={() => props.setCurrentDeck(deck.id)}
           >
+          <div style={styles.cardContent}>
             <Card.Content>
               <p style={styles.cardTitle}>{deck.title}</p>
             </Card.Content>
@@ -40,6 +49,7 @@ const DeckListVert = (props) => {
                 {deck.subject}
               </p>
             </Card.Meta>
+          </div>
           </Card>
         ))}
       </Card.Group>
