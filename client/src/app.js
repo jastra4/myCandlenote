@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux'; // auth stuff
 import axios from 'axios';
-import { PersistGate } from 'redux-persist/lib/integration/react';
+// import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
@@ -13,7 +13,7 @@ import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
-import { store, persistor } from '../src/store';
+import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
 import isAuth from './actions/isAuth'; // auth stuff
 
@@ -62,9 +62,9 @@ const AppConnected = connect(null, mapDispatchToProps)(App);
 
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+    {/* <PersistGate loading={null} persistor={persistor}> */}
       <AppConnected />
-    </PersistGate>
+    {/* </PersistGate> */}
   </Provider>,
   document.getElementById('app'),
 );
