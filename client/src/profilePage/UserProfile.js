@@ -8,8 +8,6 @@ export default class UserProfile extends React.Component {
     super(props);
     this.state = {
       username: '',
-      userId: '',
-      googleId: '',
       profileImage: '',
     };
   }
@@ -35,6 +33,10 @@ export default class UserProfile extends React.Component {
     }
   }
 
+  getDecks(userId) {
+    axios.post('api/userDecks')
+  }
+
   resizeProfileImage(imageUrl) {
     this.state;
     const sizeIndex = imageUrl.indexOf('sz=') + 3;
@@ -49,14 +51,17 @@ export default class UserProfile extends React.Component {
         <Grid.Column>
         </Grid.Column>
         <Grid.Column width={12}>
-          <Segment raised>
-            <div className="user-info">
-              <Image src={this.state.profileImage} circular centered />
-              <Header as="h1" textAlign="center">{this.state.username}</Header>
-              <Header textAlign="center">A subheader</Header>
-              <Icon name="user" />
-            </div>
-          </Segment>
+         <div style={{ height: '30px' }}></div>
+          <div className="user-info-container">
+            <Segment raised>
+              <div className="user-info">
+                <Image src={this.state.profileImage} circular centered />
+                <Header as="h1" textAlign="center">{this.state.username}</Header>
+                <Header textAlign="center">A subheader</Header>
+                <Icon name="user" />
+              </div>
+            </Segment>
+          </div>
         </Grid.Column>
         <Grid.Column>
         </Grid.Column>
