@@ -47,7 +47,11 @@ class StudyHall extends React.Component {
     if (this.state.socket !== null) {
       return (
         <div className="Chat studyComp">
-          <ChatBox chat={this.state.chat} socket={this.state.socket} username={this.state.username}/>
+          <ChatBox
+            chat={this.state.chat}
+            socket={this.state.socket}
+            username={this.state.username}
+          />
         </div>
       );
     }
@@ -76,9 +80,8 @@ class StudyHall extends React.Component {
         </div>
       </div>
       );
-    } else {
-      return (<div></div>);
     }
+    return (<div></div>);
   }
 }
 

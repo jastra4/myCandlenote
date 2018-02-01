@@ -10,25 +10,6 @@ export const setUsers = userList => ({
   payload: userList,
 });
 
-// export const getusers = userList => (
-// 	dispatch => (
-// 		axios.get('/users')
-// 			.then((res) => {
-// 				disatch(setUsers(res.data));
-// 			})
-// 	)
-// );
-
-// return axios.get('/users')
-//   .then((users) => {
-//     const usersList = users.data;
-//     console.log('usersList: ', usersList);
-//     this.props.loadUsers(usersList);
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-
 export const getUser = userId => (
   dispatch => (
     axios.get(`/user/${userId}`)

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import Friend from './Friend';
 import { setUsers } from '../actions/usersActions';
-import PropTypes from 'prop-types';
 
 class FriendsList extends React.Component {
   constructor(props) {
@@ -15,7 +14,6 @@ class FriendsList extends React.Component {
     console.log('componentWillReceiveProps: ', nextProps.contacts);
     const users = Object.keys(nextProps.contacts).map(key => nextProps.contacts[key]);
     this.setState({ friends: users });
-    // console.log('users: ', users);
   }
 
   componentDidMount() {
@@ -34,12 +32,6 @@ class FriendsList extends React.Component {
       });
   }
 
-  onClick() {
-    console.log(this.state)
-    // console.log('props.contacts: ', this.props.contacts);
-    // console.log(Object.keys(this.props.contacts).map(key => this.props.contacts[key]));
-  }
-
   render() {
     return (
       <div>
@@ -47,7 +39,6 @@ class FriendsList extends React.Component {
         <div> {this.state.friends.map((friend, i) => (
           <Friend key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>
-        <button onClick={this.onClick.bind(this)}>test</button>
       </div>
     );
   }
