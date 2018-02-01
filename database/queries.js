@@ -34,8 +34,11 @@ const getUsers = (callback) => {
   });
 };
 
+const getCurrentUser = currentId => User.findOne({ _id: currentId });
+
 module.exports = {
   getUserName,
   getMessages,
   getUsers,
+  getCurrentUser,
 };
