@@ -43,6 +43,12 @@ export default class SideBar extends Component {
                 NoteBox
               </Menu.Item>
             </Link>
+            <Link to='/decks'>
+              <Menu.Item name='clone' onClick={this.handleItemClick}>
+                <Icon name='clone' />
+                Decks
+              </Menu.Item>
+            </Link>
             <Link to='/flashcards'>
               <Menu.Item name='vcard outline' onClick={ this.handleItemClick }>
                 <Icon name='vcard outline' />
