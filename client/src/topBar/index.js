@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Image, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import OurSideBar from '../sideBar';
@@ -11,15 +11,24 @@ class TopBar extends Component {
     this.state = {};
   }
 
+  resizeProfileImage(imageUrl) {
+    this.state;
+    const sizeIndex = imageUrl.indexOf('sz=') + 3;
+    const newUrl = `${imageUrl.slice(0, sizeIndex)}25`;
+    return newUrl;
+  }
+
   render = () => (
     <div>
       <Sidebar as={Menu} animation='push' direction='top' visible={true} inverted>
         <Menu.Item name='CandleNote' position='right'>
         </Menu.Item>
 
-        {this.props.user.userId !== -1 ?
+        {this.props.user.userId !== '' ?
           <Menu.Item as={Link} to='/profile' name='user' position='right' onClick={() => { }}>
-            <Icon name='user' />
+            <div style={{ marginRight: '5px' }}>
+              <Image src={this.resizeProfileImage(this.props.user.profileImage)} circular centered spaced="right" />
+            </div>
             {this.props.user.username}
           </Menu.Item>
           :
