@@ -21,7 +21,6 @@ const usersReducer = (state = defaultState, action) => {
         profileImage: '',
       };
     case 'SET_USERS': {
-      console.log('PAYLOAD: ', action.payload);
       const usersById = action.payload.reduce((users, user) => ({
         ...users,
         [user._id]: user,

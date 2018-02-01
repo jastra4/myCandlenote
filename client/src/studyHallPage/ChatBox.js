@@ -10,9 +10,11 @@ class ChatBox extends React.Component {
     super(props);
     this.state = { messages: [] };
 
-    props.socket.on('new message', (data) => {
-      this.setState({ messages: this.state.messages.concat([data]) });
-    });
+    if (props.socket !== undefined) {
+      props.socket.on('new message', (data) => {
+        this.setState({ messages: this.state.messages.concat([data]) });
+      });
+    }
   }
 
   handleSubmit(e) {
@@ -20,7 +22,7 @@ class ChatBox extends React.Component {
     const msg = {
       text: $('#message').val(),
       to: this.props.chat,
-      sentBy: this.props.username.data,
+      sentBy: this.props.username,
     };
     this.props.socket.emit('send message', msg);
     $('#message').val('');
@@ -36,7 +38,7 @@ class ChatBox extends React.Component {
   }
 
   getMessages(to) {
-    return axios.get(`/messages?from=${this.props.username.data}&&to=${to}`) // `/username?id=${this.props.username}`
+    return axios.get(`/messages?from=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
@@ -74,7 +76,11 @@ const mapDispatchToProps = dispatch => (
 const mapStateToProps = (state) => {
   const messagesById = state.messages.byId;
   const messagesForChat = Object.keys(messagesById).map(key => messagesById[key]);
-  return { messages: messagesForChat };
+  return {
+    messages: messagesForChat,
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  };
 };
 
 const ChatBoxConnected = connect(mapStateToProps, mapDispatchToProps)(ChatBox);
