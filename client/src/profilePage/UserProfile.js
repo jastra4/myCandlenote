@@ -17,14 +17,28 @@ export default class UserProfile extends React.Component {
     if (this.props.user.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
-          console.log('RES DATA:', res.data);
-          this.setState({ ...res.data }, () => console.log('STATE', this.state));
+          const profileImage = this.resizeProfileImage(res.data.profileImage);
+          this.setState({
+            ...res.data,
+            profileImage,
+          }, () => console.log('STATE', this.state));
           this.props.setCurrentUser(res.data);
         })
         .catch(err => console.log(err));
     } else {
-      this.setState({ ...this.props.user });
+      const profileImage = this.resizeProfileImage(this.props.user.profileImage);
+      this.setState({
+        ...this.props.user,
+        profileImage,
+      });
     }
+  }
+
+  resizeProfileImage(imageUrl) {
+    this.state;
+    const sizeIndex = imageUrl.indexOf('sz=') + 3;
+    const newUrl = `${imageUrl.slice(0, sizeIndex)}300`;
+    return newUrl;
   }
 
   render() {
