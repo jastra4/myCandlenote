@@ -26,6 +26,13 @@ export default class EmailModal extends Component {
       .catch((e) => { console.error(e); });
   }
 
+  handleModalClose = () => {
+    this.setState({
+      modalOpen: false,
+      email: '',
+    });
+  }
+
   handleIncrementProgress = () => {
     const incrementProgress = () => {
       const { progress } = this.state;
@@ -81,21 +88,24 @@ export default class EmailModal extends Component {
        { this.state.stage === 0 &&
         <Modal.Content image>
           <Modal.Description>
-            <p>Please enter the email address you would like to send your note to</p>
-            <Input
-              iconPosition='left'
-              value={ this.state.email }
-              onChange={ this.handleEmailChange }
-              placeholder='Email'
-              focus={true}
-              >
-               <Icon name='mail' />
-               <input autoFocus/>
-            </Input>
+            <span style={{width: '60%'}}>
+              <p>Please enter the email address you would like to send your note to</p>
+              <Input
+                iconPosition='left'
+                value={ this.state.email }
+                onChange={ this.handleEmailChange }
+                placeholder='Email'
+                focus={true}
+                >
+                <Icon name='mail' />
+                <input autoFocus/>
+              </Input>
+            </span>
             <EmailModalButton 
               emailPDF={ this.emailPDF } 
               disabled={ this.state.disabled } 
               handleStage0Click={ this.handleStage0Click } 
+              handleStage1Click={this.handleStage1Click} 
               handleIncrementProgress={ this.handleIncrementProgress }
             />
           </Modal.Description>
@@ -113,11 +123,13 @@ export default class EmailModal extends Component {
               : <div>Email successfully sent! 😎</div>
             }
             <Progress percent={this.state.progress} indicating autoSuccess></Progress>
+            
             { 
               this.state.progress === 100 && 
               <Button 
                 onClick={ this.handleStage1Click } 
                 floated='right'  
+                positive
               >Close</Button> 
             }
           </Modal.Description>

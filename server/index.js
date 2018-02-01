@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const dateFormat = require('dateformat');
+const axios = require('axios');
+
 const puppeteer = require('puppeteer');
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -21,7 +24,12 @@ const readFile = promisify(fs.readFile);
 
 // db imports
 const inserts = require('../database/inserts');
+const queries = require('../database/queries');
 const deletes = require('../database/deletes');
+
+const app = express();
+const server = require('http').createServer(app); // socket stuff
+const io = require('socket.io').listen(server); // socket stuff
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -30,7 +38,6 @@ const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
-
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -52,7 +59,6 @@ const emailNoteOptions = (email, filePath) => ({
   }],
 });
 
-const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
 
@@ -97,8 +103,43 @@ app.get('/api/pdf/:id', (req, res) => {
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+// Invoked when main page renders
+// Controls whether to emit a socket connection
+app.get('/checkAuth', (req, res) => {
+  console.log('check auth ran');
+  // drop messages collection
+  // mongoose.connection.db.dropCollection('messages', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped Messages');
+  //   }
+  // });
+  const isAuth = req.isAuthenticated();
+  if (!isAuth) {
+    res.send(false);
+  } else {
+    const userId = req.session.passport.user;
+    res.status(200).send({
+      auth: true,
+      userId,
+    });
+  }
+});
+
+app.get('/messages', (req, res) => {
+  const { to } = req.query;
+  const sentBy = req.query.from;
+  queries.getMessages(sentBy, to, (messages) => {
+    res.send(messages);
+  });
+});
+
+app.get('/users', (req, res) => {
+  console.log('get users received');
+  queries.getUsers((users) => {
+    res.send(users);
+  });
 });
 
 /* --------- POST Handlers ----------- */
@@ -116,6 +157,38 @@ app.post('/makePDF', (req, res) => {
   });
 });
 
+/* ----------- Sockets ------------ */
+
+app.get('/username', (req, res) => {
+  const userId = req.query.id;
+  queries.getUserName(userId, (username) => {
+    res.send(username);
+  });
+});
+
+io.sockets.on('connection', (socket) => {
+  console.log('socket connected: ', socket.id);
+
+  socket.on('new user', (data) => {
+    socket.username = data; // eslint-disable-line
+    // console.log('New user!: ', socket.username);
+    io.sockets.emit('update users', socket.username);
+  });
+
+  socket.on('send message', (data) => {
+    const now = new Date();
+    inserts.insertMessage({
+      to: data.to,
+      sentBy: socket.username.data,
+      text: data.text,
+      timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
+      // timeStamp: Date.now(),
+    });
+    // data.timeStamp = Date.now();
+    data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
+    io.sockets.emit('new message', data);
+  });
+});
 
 /* ----------- API Routes ------------ */
 
@@ -149,8 +222,7 @@ app.post('/api/decks', (req, res) => {
 
 app.post('/api/deleteDeck', (req, res) => {
   deletes.deleteDeck(req.body.deckId)
-    .then((result) => {
-      console.log(result);
+    .then(() => {
       const { _id: id } = req.body;
       res.send(id);
     })
@@ -186,6 +258,65 @@ app.post('/api/parseContentMeaning', (req, res) => {
       console.error(e);
       res.status(500).end();
     }));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+app.post('/api/suggestedResources', (req, res) => {
+  axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+    q: req.body.searchTerms,
+    key: process.env.GOOGLE_SEARCH_API_KEY,
+    cx: process.env.GOOGLE_SEARCH_API_ID,
+  } })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
+app.post('/api/suggestedVideos', (req, res) => {
+  axios.get('https://www.googleapis.com/youtube/v3/search', { params: {
+    maxResults: 5,
+    part: 'snippet',
+    q: req.body.searchTerms,
+    type: 'video',
+    key: process.env.YOUTUBE_DATA_API_KEY,
+    videoEmbeddable: 'true',
+  } })
+    .then(result => res.send(result.data))
+    .catch(err => res.send(err));
+});
+
+// https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
+
+app.post('/api/suggestedWiki', (req, res) => {
+  const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join('+');
+  axios.get('https://en.wikipedia.org/w/api.php', { params: {
+    action: 'opensearch',
+    search: req.body.searchTerms,
+    limit: 10,
+    namespace: 0,
+    format: 'json',
+  } })
+    .then((result) => {
+      // If no results
+      if (!result.data[1].length) {
+        axios.get('https://www.googleapis.com/customsearch/v1', { params: {
+          q: `${searchTerms}+wikipedia`,
+          key: process.env.GOOGLE_SEARCH_API_KEY,
+          cx: process.env.GOOGLE_WIKI_SEARCH_KEY,
+        } })
+          .then((googleResult) => {
+            const { data } = googleResult;
+            data.isFromGoogle = true;
+            res.send(data);
+          })
+          .catch(err => res.send(err));
+      } else {
+        res.send(result.data);
+      }
+    })
+    .catch(err => res.send(err));
 });
 
 app.post('/api/tempSavePacket', (req, res) => {
@@ -259,6 +390,6 @@ app.post('/api/getEditorPacket', (req, res) => {
 
 /* -------- Initialize Server -------- */
 
-app.listen(PORT, () => {
-  console.info(`🌎  Server now running on port ${PORT} 🌎`);
+server.listen(PORT, () => {
+  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });

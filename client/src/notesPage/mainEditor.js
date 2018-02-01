@@ -8,6 +8,9 @@ export default class MainEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
+
+    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    // this.debouncedParseContentMeaning = _.throttle(this.parseContentMeaning, 2000);
   }
 
   componentWillMount() {
@@ -27,7 +30,8 @@ export default class MainEditor extends React.Component {
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
-    _.debounce(this.parseContentMeaning, 1000)(content);
+    // _.debounce(this.parseContentMeaning, 1000)(content);
+    this.debouncedParseContentMeaning(content);
   }
 
 
@@ -42,6 +46,7 @@ export default class MainEditor extends React.Component {
     axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
         console.log('Per Google, the meaning of your text is: ', meaning);
+        this.props.setCurrentMeaning(meaning);
         return meaning;
       })
   );

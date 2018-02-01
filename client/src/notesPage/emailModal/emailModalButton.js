@@ -23,7 +23,9 @@ export default class EmailModalButton extends Component {
 
   render = () => (
     <Button.Group>
-      <Button disabled={this.state.disabled} >Cancel</Button>
+      <Button 
+        onClick={ this.props.handleStage1Click }
+        >Cancel</Button>
       <Button.Or />
       <Button
         disabled={this.state.disabled}

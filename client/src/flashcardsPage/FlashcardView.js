@@ -4,7 +4,7 @@ import { Segment, Button, Icon, Checkbox } from 'semantic-ui-react';
 
 const styles = {
   cardText: {
-    height: '10em',
+    height: '13em',
     width: '100%',
     fontSize: '2em',
     display: 'table-cell',
@@ -16,7 +16,7 @@ const styles = {
     height: 'auto',
   },
   cardButtons: { marginTop: '1em' },
-  paddingDiv: { height: '13em' },
+  paddingDiv: { height: '30em' },
   mainDiv: {
     padding: '20px 1vw',
     height: '35vh',

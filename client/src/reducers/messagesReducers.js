@@ -19,7 +19,7 @@ const messagesReducer = (state = defaultState, action) => {
     case 'SET_MESSAGES': {
       const messagesById = action.payload.reduce((messages, message) => ({
         ...messages,
-        [message.id]: message,
+        [message._id]: message,
       }), {});
       return { byId: messagesById };
     }
