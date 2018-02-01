@@ -26,6 +26,8 @@ class App extends React.Component {
   componentDidMount() {
     return axios.get('/checkAuth')
       .then((body) => {
+        // create connection here, add to store
+        // disconnect on logout or browser close
         this.props.isAuth(body.data.auth, body.data.userId);
       });
   }

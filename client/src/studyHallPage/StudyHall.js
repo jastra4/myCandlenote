@@ -19,7 +19,11 @@ class StudyHall extends React.Component {
     };
   }
 
-  componentWillMount(){
+  componentWillUnmount() {
+    this.state.socket.emit('disconnect');
+  }
+
+  componentWillMount() {
     axios.get('/api/userid')
       .then((res) => {
         this.setState({ userid: res.data.userid });
@@ -27,20 +31,11 @@ class StudyHall extends React.Component {
       });
   }
 
-  componentWillReceiveProps(nextProps) {
-    // console.log(`authenticated? ${nextProps.isAuth}`);
-    // if (nextProps.isAuth) {
-      // this.initSocket(nextProps.userId);
-    // } else {
-      // console.log('Did not create connection');
-    // }
-  }
-
   initSocket(userid) {
     const socket = io(socketUrl);
     this.setState({ socket });
     socket.on('connect', () => {
-      return axios.get(`/username?id=${userid}`)
+      axios.get(`/username?id=${userid}`)
         .then((username) => {
           this.setState({ username });
           socket.emit('new user', username);

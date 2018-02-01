@@ -104,6 +104,7 @@ app.get('/api/pdf/:id', (req, res) => {
 // Invoked when main page renders
 // Controls whether to emit a socket connection
 app.get('/checkAuth', (req, res) => {
+  res.send(true);
   // drop messages collection
   // mongoose.connection.db.dropCollection('messages', function(err, result) {
   //   if (err) {
@@ -170,6 +171,10 @@ io.sockets.on('connection', (socket) => {
     });
     data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
     io.sockets.emit('new message', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnect!');
   });
 });
 
