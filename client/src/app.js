@@ -25,16 +25,33 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/api/userid') // get user id
+    this.identifyUser();
+  }
+
+  identifyUser() {
+    axios.get('/api/userid')
       .then((res) => {
-        const userid = res.data.userid;
-        const socket = io(socketUrl); // create connection
-        socket.on('connect', () => {
-          axios.get(`/username?id=${userid}`) // add user id to connection
-            .then((username) => {
-              socket.emit('new user', username);
-            });
-        });
+        if (res.data.userid !== undefined) {
+          this.initSocket(res.data.userid);
+        } else {
+          console.log('Not logged in');
+        }
+      });
+  }
+
+  initSocket(userid) {
+    const socket = io(socketUrl);
+    socket.on('connect', () => {
+      this.nameSocket(socket, userid);
+    });
+  }
+
+  nameSocket = (socket, userid) => {
+    axios.get(`/username?id=${userid}`)
+      .then((res) => {
+        socket.emit('new user', res.data);
+        this.props.activeSocket(socket, res.data);
+        console.log(`${res.data} connected!`);
       });
   }
 
@@ -62,7 +79,7 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { activeSocket: (socket) => dispatch(activeSocket(socket)) }
+  { activeSocket: (socket, username) => dispatch(activeSocket(socket, username)) }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);

@@ -18,7 +18,7 @@ const reducers = combineReducers({
   users: usersReducer,
   messages: messagesReducer,
   videos: videosReducer,
-  socket: socketReducer,
+  activeSocket: socketReducer,
   userId: userIdReducer,
   intelliSearch: intelliSearchReducer,
 });
