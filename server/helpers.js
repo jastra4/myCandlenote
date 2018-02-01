@@ -29,10 +29,12 @@ const defaultOptions = {
 };
 
 const makePDF = (url, fileName, callback, options = {}) => {
-  const finalOptions = {
-    ...defaultOptions,
-    ...options,
-  };
+  // const finalOptions = {
+  //   // ...defaultOptions,
+  //   // ...options,
+  // };
+
+  const finalOptions = Object.assign(defaultOptions, options);
   const filePath = `PDFs/${fileName}.pdf`;
   webshot(url, filePath, finalOptions, (err) => {
     if (err) {
