@@ -143,9 +143,10 @@ app.get('/username', (req, res) => {
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
 
+  // log on event
   socket.on('new user', (data) => {
     socket.username = data; // eslint-disable-line
-    io.sockets.emit('update users', socket.username);
+    io.sockets.emit('logged on', socket.username);
   });
 
   socket.on('send message', (data) => {
@@ -160,8 +161,10 @@ io.sockets.on('connection', (socket) => {
     io.sockets.emit('new message', data);
   });
 
+  // log off event
   socket.on('disconnect', () => {
-    console.log('Disconnect!');
+    io.sockets.emit('logged off', socket.username);
+    console.log(`${socket.username} disconnected!`);
   });
 });
 

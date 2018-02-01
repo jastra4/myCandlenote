@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import axios from 'axios';
+import io from 'socket.io-client';
 import { connect } from 'react-redux';
 import Message from './Message';
 import { setMessages } from '../actions/messagesActions';
@@ -10,10 +11,49 @@ class ChatBox extends React.Component {
     super(props);
     this.state = { messages: [] };
 
-    props.socket.on('new message', (data) => {
-      this.setState({ messages: this.state.messages.concat([data]) });
+    if (props.socket !== undefined) {
+      props.socket.on('new message', (data) => {
+        this.setState({ messages: this.state.messages.concat([data]) });
+      });      
+    }
+  }
+
+ //
+  componentDidMount() {
+    if (this.props.socket === false) {
+      this.identifyUser();
+    }
+  }
+
+  identifyUser() {
+    axios.get('/api/userid')
+      .then((res) => {
+        if (res.data.userid !== undefined) {
+          this.initSocket(res.data.userid);
+        } else {
+          console.log('Not logged in');
+        }
+      });
+  }
+
+  initSocket(userid) {
+    const socketUrl = 'http://localhost:3000';
+    const socket = io(socketUrl);
+    socket.on('connect', () => {
+      this.nameSocket(socket, userid);
     });
   }
+
+  nameSocket = (socket, userid) => {
+    axios.get(`/username?id=${userid}`)
+      .then((res) => {
+        socket.emit('new user', res.data);
+        this.props.activeSocket(socket, res.data);
+        console.log(`${res.data} connected!`);
+      });
+  }
+  //
+
 
   handleSubmit(e) {
     e.preventDefault();

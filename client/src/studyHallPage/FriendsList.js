@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import Friend from './Friend';
+import FriendConnected from './Friend';
 import { setUsers } from '../actions/usersActions';
 
 class FriendsList extends React.Component {
@@ -35,7 +35,7 @@ class FriendsList extends React.Component {
       <div>
         <h4>Friends</h4>
         <div> {this.state.friends.map((friend, i) => (
-          <Friend key={i} friend={friend} changeChat={this.props.changeChat}/>
+          <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>
       </div>
     );
