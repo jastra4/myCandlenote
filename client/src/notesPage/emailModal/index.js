@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Input, Icon, Progress, Grid } from 'semantic-ui-react';
+import { Button, Modal, Input, Icon, Progress } from 'semantic-ui-react';
 import axios from 'axios';
 import { isEmail } from 'validator';
 import EmailModalButton from './emailModalButton';
