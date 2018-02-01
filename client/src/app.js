@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux'; // auth stuff
 import axios from 'axios';
+<<<<<<< HEAD
+=======
+import io from 'socket.io-client';
+>>>>>>> master
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
@@ -11,22 +15,47 @@ import Notes from './notesPage'; // eslint-disable-line
 import Notebox from './noteBox';
 import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
+import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
-import { store, persistor } from '../src/store';
+import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
-import isAuth from './actions/isAuth'; // auth stuff
+import activeSocket from './actions/activeSocket'; // auth stuff
 
+const socketUrl = 'http://localhost:3000';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  // Create connection when page loads if user is authenticated
   componentDidMount() {
-    return axios.get('/checkAuth')
-      .then((body) => {
-        this.props.isAuth(body.data.auth, body.data.userId);
+    this.identifyUser();
+  }
+
+  identifyUser() {
+    axios.get('/api/userid')
+      .then((res) => {
+        if (res.data.userid !== undefined) {
+          this.initSocket(res.data.userid);
+        } else {
+          console.log('Not logged in');
+        }
+      });
+  }
+
+  initSocket(userid) {
+    const socket = io(socketUrl);
+    socket.on('connect', () => {
+      this.nameSocket(socket, userid);
+    });
+  }
+
+  nameSocket = (socket, userid) => {
+    axios.get(`/username?id=${userid}`)
+      .then((res) => {
+        socket.emit('new user', res.data);
+        this.props.activeSocket(socket, res.data);
+        console.log(`${res.data} connected!`);
       });
   }
 
@@ -43,9 +72,11 @@ class App extends React.Component {
             <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPage} />} />
             <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/studyhall' render={() => <TopBar ContentPage={ StudyHallConnected } />} />
-            <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
+            <Route path='/quizzlet' render={() => <TopBar ContentPage={NotFoundPage} />} />
+            <Route path='/profile' render={() => <TopBar ContentPage={ UserProfile } />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
+            <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />
           </Switch>
         </BrowserRouter>
       </div>
@@ -53,7 +84,7 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { isAuth: (authStatus, userId) => dispatch(isAuth(authStatus, userId)) }
+  { activeSocket: (socket, username) => dispatch(activeSocket(socket, username)) }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);

@@ -6,23 +6,7 @@ body {
 .section-inner {
   background-color: #EDEAD0;
 }
-/*#chat{
-	height: 500px;
-}*/
-/*#contentWrap{
-	display: none;
-}*/
-/*#chatWrap{
-	float: left;
-	border: 1px #000 solid;
-}*/
-/*.error{
-	color: red;
-}*/
-/*.whisper{
-	color: gray;
-	font-style: italic;
-}*/
+
 .studyComp{
 	background: white;
 	border: 1px #000 solid;
@@ -69,4 +53,12 @@ body {
 }
 .chatInput{
 	height: 2em;
+}
+.inactiveUser{
+	background-color: #f44336;
+	color: #f44336; /* Red */
+}
+.activeUser{
+	background-color: green;
+	color: green; /* Red */
 }

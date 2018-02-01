@@ -44,7 +44,7 @@ class NotePage extends React.Component {
           <IntelliSearch meaning={this.state.meaning} limit={this.state.limit} />
         </Grid.Column>
       </Grid >
-  </div>
+    </div>
   );
 }
 
