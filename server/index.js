@@ -12,6 +12,7 @@ const session = require('express-session');
 const { promisify } = require('util');
 const fs = require('fs');
 const uuid = require('uuid');
+const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
 const keys = require('./config/keys');
@@ -37,6 +38,26 @@ const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'theworldsgreatesthue@gmail.com',
+    pass: 'discoverAustin1!',
+  },
+});
+
+const emailNoteOptions = (email, filePath) => ({
+  from: 'no-reply@theworldsgreatesthue.com',
+  to: email,
+  subject: 'Fresh CandleNote! ✔',
+  html: '<b>Hello world?</b>',
+  attachments: [{
+    contentType: 'application/pdf',
+    path: filePath,
+    filename: 'note.pdf',
+  }],
+});
 
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
@@ -74,51 +95,44 @@ mongoose.connect(keys.mongodb.dbURI, () => {
 // app.get('/user', (req, res) => {
 //   console.log('You are logged in this is your user profile: ', req.user);
 //   console.log('authenticated at /user? : ', req.isAuthenticated())
-
 // });
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+
+app.get('*', (req, res, next) => {
+  const isAuth = req.isAuthenticated();
+  if (!isAuth) {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+  // res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+app.get('/api/userid', (req, res) => {
+  const userid = req.session.passport.user;
+  res.status(200).send({ userid });
+});
+
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
-// Invoked when main page renders
-// Controls whether to emit a socket connection
-app.get('/checkAuth', (req, res) => {
-  console.log('check auth ran');
-  // drop messages collection
-  // mongoose.connection.db.dropCollection('messages', function(err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('dropped Messages');
-  //   }
-  // });
-  const isAuth = req.isAuthenticated();
-  if (!isAuth) {
-    res.send(false);
-  } else {
-    const userId = req.session.passport.user;
-    res.status(200).send({
-      auth: true,
-      userId,
-    });
-  }
-});
-
-app.get('/messages', (req, res) => {
-  const { to } = req.query;
-  const sentBy = req.query.from;
-  queries.getMessages(sentBy, to, (messages) => {
-    res.send(messages);
-  });
-});
-
 app.get('/users', (req, res) => {
-  console.log('get users received');
-  queries.getUsers((users) => {
+  queries.getAllUsers((users) => {
     res.send(users);
   });
+});
+
+
+app.post('/friendrequest', (req, res) => {
+  console.log('friendrequest: ', req.body.username);
+  res.send(201);
 });
 
 app.get('/userProfile', (req, res) => {
@@ -157,9 +171,17 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- Sockets ------------ */
 
+app.get('/messages', (req, res) => {
+  const { to } = req.query;
+  const sentBy = req.query.from;
+  queries.getMessages(sentBy, to, (messages) => {
+    res.send(messages);
+  });
+});
+
 app.get('/username', (req, res) => {
-  const userId = req.query.id;
-  queries.getUserName(userId, (username) => {
+  const userid = req.query.id;
+  queries.getUserName(userid, (username) => {
     res.send(username);
   });
 });
@@ -167,10 +189,10 @@ app.get('/username', (req, res) => {
 io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
 
+  // log on event
   socket.on('new user', (data) => {
     socket.username = data; // eslint-disable-line
-    // console.log('New user!: ', socket.username);
-    io.sockets.emit('update users', socket.username);
+    io.sockets.emit('logged on', socket.username);
   });
 
   socket.on('send message', (data) => {
@@ -180,16 +202,33 @@ io.sockets.on('connection', (socket) => {
       sentBy: socket.username.data,
       text: data.text,
       timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
-      // timeStamp: Date.now(),
     });
-    // data.timeStamp = Date.now();
     data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
     io.sockets.emit('new message', data);
+  });
+
+  // log off event
+  socket.on('disconnect', () => {
+    io.sockets.emit('logged off', socket.username);
+    console.log(`${socket.username} disconnected!`);
   });
 });
 
 /* ----------- API Routes ------------ */
 
+app.post('/api/emailPDF', (req, res) => {
+  const { email } = req.body;
+  const filePath = path.join(__dirname, '../PDFs/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e.pdf');
+  transporter.sendMail(emailNoteOptions(email, filePath), (error) => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      console.log(`PDF successfully emailed to ${email}!`);
+      res.status(201).end();
+    }
+  });
+});
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)

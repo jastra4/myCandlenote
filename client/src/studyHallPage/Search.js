@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import $ from 'jquery';
 
 class Search extends React.Component {
@@ -9,7 +10,12 @@ class Search extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`searched: "${$('#search').val()}"`);
+    const username = $('#search').val();
+    axios.post('/friendrequest', { username })
+      .then((res) => {
+        console.log(res);
+      });
+    console.log(`searched: "${username}"`);
     $('#search').val('');
   }
 
