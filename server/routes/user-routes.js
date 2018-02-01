@@ -5,6 +5,7 @@ const authCheck = (req, res, next) => {
     console.log('You are not logged in!');
     res.redirect('/auth/login');
   } else {
+    console.log('Logged in as:', req.user);
     next();
   }
 };

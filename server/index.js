@@ -108,9 +108,29 @@ app.get('/users', (req, res) => {
   });
 });
 
+
 app.post('/friendrequest', (req, res) => {
   console.log('friendrequest: ', req.body.username);
   res.send(201);
+});
+
+app.get('/userProfile', (req, res) => {
+  console.log('PROFILE ROUTE PINGED');
+  console.log('USER:', req.user);
+  queries.getCurrentUser(req.user)
+    .then((response) => {
+      const { _id: userId, username, googleId, profileImage } = response;
+      res.send({
+        userId,
+        username,
+        googleId,
+        profileImage,
+      });
+    })
+    .catch((err) => {
+      res.write(err);
+      res.sendStatus(400);
+    });
 });
 
 /* --------- POST Handlers ----------- */
