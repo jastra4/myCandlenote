@@ -4,6 +4,7 @@ import ChatBox from './ChatBox';
 import FriendsListConnected from './FriendsList';
 import GroupsList from './GroupsList';
 import Search from './Search';
+import VideoConference from './VideoConference';
 
 class StudyHall extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class StudyHall extends React.Component {
         <div className="Chat studyBackground">
           <ChatBox chat={this.state.chat}/>
         </div>
+        <VideoConference />
       </div>
     );
   }

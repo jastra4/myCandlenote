@@ -5,4 +5,5 @@ config/keys.js
 redux-setup
 client/dist/bundle.js
 server/assets/temp/
-PDFs/
+PDFs/*
+!PDFs/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e.pdf

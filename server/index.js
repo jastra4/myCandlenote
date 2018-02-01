@@ -1,3 +1,6 @@
+const { ExpressPeerServer } = require('peerjs');
+// const http = require('http');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -6,12 +9,14 @@ const dateFormat = require('dateformat');
 const axios = require('axios');
 
 const puppeteer = require('puppeteer');
+
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const { promisify } = require('util');
 const fs = require('fs');
 const uuid = require('uuid');
+const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
 const keys = require('./config/keys');
@@ -20,6 +25,7 @@ const userRoutes = require('./routes/user-routes.js');
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
+
 
 // db imports
 const inserts = require('../database/inserts');
@@ -30,6 +36,8 @@ const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
 
+const peerServer = ExpressPeerServer(server, { debug: true });
+
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 
@@ -37,6 +45,26 @@ const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'theworldsgreatesthue@gmail.com',
+    pass: 'discoverAustin1!',
+  },
+});
+
+const emailNoteOptions = (email, filePath) => ({
+  from: 'no-reply@theworldsgreatesthue.com',
+  to: email,
+  subject: 'Fresh CandleNote! ✔',
+  html: '<b>Hello world?</b>',
+  attachments: [{
+    contentType: 'application/pdf',
+    path: filePath,
+    filename: 'note.pdf',
+  }],
+});
 
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
@@ -64,11 +92,14 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/peerjs', peerServer);
+
 
 // TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
+
 
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
@@ -194,6 +225,20 @@ io.sockets.on('connection', (socket) => {
 });
 
 /* ----------- API Routes ------------ */
+
+app.post('/api/emailPDF', (req, res) => {
+  const { email } = req.body;
+  const filePath = path.join(__dirname, '../PDFs/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e.pdf');
+  transporter.sendMail(emailNoteOptions(email, filePath), (error) => {
+    if (error) {
+      console.error(error);
+      res.status(500).end();
+    } else {
+      console.log(`PDF successfully emailed to ${email}!`);
+      res.status(201).end();
+    }
+  });
+});
 
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
@@ -381,4 +426,9 @@ app.post('/api/getEditorPacket', (req, res) => {
 
 server.listen(PORT, () => {
   console.info(`🌎  Server now running on port ${PORT}.  🌎`);
+});
+
+peerServer.on('connection', (id) => {
+  console.log(id);
+  console.log(server._clients);
 });
