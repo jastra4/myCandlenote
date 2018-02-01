@@ -1,3 +1,6 @@
+const { ExpressPeerServer } = require('peerjs');
+// const http = require('http');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -6,6 +9,7 @@ const dateFormat = require('dateformat');
 const axios = require('axios');
 
 const puppeteer = require('puppeteer');
+
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
@@ -22,6 +26,7 @@ const userRoutes = require('./routes/user-routes.js');
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 
+
 // db imports
 const inserts = require('../database/inserts');
 const queries = require('../database/queries');
@@ -30,6 +35,8 @@ const deletes = require('../database/deletes');
 const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
+
+const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -85,11 +92,14 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/peerjs', peerServer);
+
 
 // TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
+
 
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
@@ -416,4 +426,9 @@ app.post('/api/getEditorPacket', (req, res) => {
 
 server.listen(PORT, () => {
   console.info(`🌎  Server now running on port ${PORT}.  🌎`);
+});
+
+peerServer.on('connection', (id) => {
+  console.log(id);
+  console.log(server._clients);
 });
