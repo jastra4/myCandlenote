@@ -6,6 +6,7 @@ import ChatBox from './ChatBox';
 import FriendsListConnected from './FriendsList';
 import GroupsList from './GroupsList';
 import Search from './Search';
+import VideoConference from './VideoConference';
 
 const socketUrl = 'http://localhost:3000';
 class StudyHall extends React.Component {
@@ -78,6 +79,7 @@ class StudyHall extends React.Component {
         <div>
           {this.renderChat()}
         </div>
+        <VideoConference />
       </div>
       );
     }

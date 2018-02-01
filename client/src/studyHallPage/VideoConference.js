@@ -1,10 +1,12 @@
 import React from 'react';
-import Peer from 'peer';
+import Peer from 'peerjs';
 
 class VideoConference extends React.Component {
   constructor(props) {
     super(props);
+    const id = parseInt(Math.random() * 1e4, 10).toString(16);
     this.state = {
+      hash: id,
       peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
       my_id: '',
       peer_id: '',
@@ -37,6 +39,13 @@ class VideoConference extends React.Component {
     });
 
     this.prepareSelfVideo();
+
+    const url = window.location.href;
+    const match = url.match(/#(.+)/);
+    if (match != null) {
+      this.setState({ caller: true });
+      this.call(match[1]);
+    }
   }
 
   getMedia(options, success, error) {
@@ -86,7 +95,7 @@ class VideoConference extends React.Component {
   }
 
   componentWillUnmount() {
-    this.state.peer.destroy();
+    this.state.peer.disconnect();
   }
 
   connect() {
@@ -98,6 +107,21 @@ class VideoConference extends React.Component {
       });
       this.state.conn.on('data');
     });
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <nav>Video Chat</nav>
+        <div className="video-container">
+          <video className="video-call" autoPlay></video>
+          <video className="video-self" autoPlay></video>
+          <div className="share">
+            <a>Share - {`http://localhost:3000/studyhall/${this.state.hash}`}</a>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

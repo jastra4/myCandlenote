@@ -1,4 +1,4 @@
-const { ExpressPeerServer } = require('peer');
+const { ExpressPeerServer } = require('peerjs');
 const http = require('http');
 
 const express = require('express');
@@ -25,6 +25,7 @@ const userRoutes = require('./routes/user-routes.js');
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 
+
 // db imports
 const inserts = require('../database/inserts');
 const queries = require('../database/queries');
@@ -33,6 +34,8 @@ const deletes = require('../database/deletes');
 const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
+
+const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -44,8 +47,6 @@ const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:$
 
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
-
-const peerServer = ExpressPeerServer(server, { debug: true });
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -70,13 +71,13 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/peerjs', peerServer);
+
 
 // TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
   console.log('connecting to mongodb');
 });
-
-app.use('/peerjs', peerServer);
 
 
 /* ----------- GET Handlers --------- */

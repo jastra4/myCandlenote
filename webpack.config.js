@@ -37,5 +37,9 @@ module.exports = {
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: DIST_DIR
+  },
+  node: {
+    fs: 'empty',
+    net: 'empty',
   }
 };
