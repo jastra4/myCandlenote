@@ -1,6 +1,6 @@
 const defaultState = {
   username: '',
-  userId: -1,
+  userId: '',
   googleId: '',
   profileImage: '',
 };
@@ -16,7 +16,7 @@ const usersReducer = (state = defaultState, action) => {
     case 'REMOVE_CURRENT_USER':
       return {
         username: '',
-        userId: -1,
+        userId: '',
         googleId: '',
         profileImage: '',
       };
