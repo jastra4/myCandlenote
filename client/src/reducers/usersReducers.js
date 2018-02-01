@@ -17,7 +17,8 @@ const usersReducer = (state = defaultState, action) => {
       return {
         username: '',
         userId: -1,
-        oathId: '',
+        googleId: '',
+        profileImage: '',
       };
     case 'SET_USERS': {
       console.log('PAYLOAD: ', action.payload);
