@@ -6,3 +6,67 @@ body {
 .section-inner {
   background-color: #EDEAD0;
 }
+/*#chat{
+	height: 500px;
+}*/
+/*#contentWrap{
+	display: none;
+}*/
+/*#chatWrap{
+	float: left;
+	border: 1px #000 solid;
+}*/
+/*.error{
+	color: red;
+}*/
+/*.whisper{
+	color: gray;
+	font-style: italic;
+}*/
+.studyComp{
+	background: white;
+	border: 1px #000 solid;
+}
+.studyContainer{
+	height: 44em;
+}
+.Groups{
+	height: 22em;
+	width: 25%;
+	position: relative;
+	top: 0em;
+	right: 0em;
+}
+.Friends{
+	height: 22em;
+	width: 25%;
+	position: relative;
+	top: 0em;
+	right: 0em;
+}
+.Search{
+	height: 3em;
+	width: 75%;
+	position: relative;
+	bottom: 44em;
+	left: 25%;
+}
+.Chat{
+	height: 41em;
+	width: 75%;
+	position: relative;
+	bottom: 44em;
+	left: 25%;
+}
+.input{
+	width:100%;
+}
+.chatHeader{
+	height: 2em;
+}
+.chatMessages{
+	height: 37em;
+}
+.chatInput{
+	height: 2em;
+}
