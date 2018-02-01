@@ -103,9 +103,14 @@ app.get('/api/pdf/:id', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-  queries.getUsers((users) => {
+  queries.getAllUsers((users) => {
     res.send(users);
   });
+});
+
+app.post('/friendrequest', (req, res) => {
+  console.log('friendrequest: ', req.body.username);
+  res.send(201);
 });
 
 /* --------- POST Handlers ----------- */

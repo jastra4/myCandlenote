@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 class Friend extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-    };
+    this.state = { active: false };
 
     if (props.socket !== undefined) {
       this.props.socket.on('logged off', (data) => {

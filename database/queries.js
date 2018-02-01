@@ -21,7 +21,7 @@ const getMessages = (sentBy, to, callback) => {
   });
 };
 
-const getUsers = (callback) => {
+const getAllUsers = (callback) => {
   const query = User.find({});
   query.exec((err, docs) => {
     if (err) {
@@ -34,5 +34,5 @@ const getUsers = (callback) => {
 module.exports = {
   getUserName,
   getMessages,
-  getUsers,
+  getAllUsers,
 };
