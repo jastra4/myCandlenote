@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Input, Icon } from 'semantic-ui-react';
+import { Button, Modal, Input, Icon, Progress } from 'semantic-ui-react';
 import axios from 'axios';
 import { isEmail } from 'validator';
 
@@ -20,7 +20,10 @@ class EmailModalButton extends Component {
   handleButtonClick = () => {
     this.props.handleStage0Click();
     this.props.emailPDF();
+    this.props.handleIncrementProgress();
+
   }
+
 
   render = () => (
     <Button.Group>
@@ -45,22 +48,36 @@ const EmailButtonFileMenu = () => (
 );
 
 export default class EmailModal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       email: '',
       disabled: true,
       stage: 0,
+      progress: 30,
+      modalOpen: false,
     };
+    this.progressTimer;
   }
+  
 
   emailPDF = () => {
     const { email } = this.state;
     axios.post('/api/emailPDF', { email })
       .then(() => {
-        alert(`Email successfully sent to ${email} ✔`);
+        this.setState({ progress: 100 });
       })
       .catch((e) => { console.error(e); });
+  }
+
+  handleIncrementProgress = () => {
+    const incrementProgress = () => {
+      const { progress } = this.state;
+      const distance = 100 - progress;
+      const newProgress = progress + (distance / 2);
+      this.setState({ progress: newProgress });
+    };
+    this.progressTimer = setTimeout(incrementProgress, 500);
   }
 
 
@@ -73,12 +90,16 @@ export default class EmailModal extends Component {
       this.setState({ disabled: true });
     }
   }
-  handleStage1Click = () => {
+  handleStage0Click = () => {
     this.setState({ stage: 1 });
   }
 
   handleStage1Click = () => {
-    this.setState({ stage: 2 });
+    this.setState({ 
+      stage: 2,
+      modalOpen: false,
+    });
+
   }
 
   handleStage2Click = () => {
@@ -88,15 +109,21 @@ export default class EmailModal extends Component {
 
 /* eslint-disable */
   render = () => (
-    <Modal trigger={
-      <Button animated='fade'>
-        <Button.Content hidden>Email</Button.Content>
-        <Button.Content visible>
-          <Icon name='mail' />
-        </Button.Content>
-      </Button>
-    }>
-       <Modal.Header>Select an Email Recipient</Modal.Header>
+    <Modal 
+      trigger={
+        <Button 
+          animated='fade'
+          onClick={()=>{ this.setState({ modalOpen: true }) }}
+        >
+          <Button.Content hidden>Email</Button.Content>
+          <Button.Content visible>
+            <Icon name='mail' />
+          </Button.Content>
+        </Button>
+      }
+      open={ this.state.modalOpen }
+    >
+       <Modal.Header>Send a CandleNote via Email</Modal.Header>
        { this.state.stage === 0 &&
         <Modal.Content image>
           {/* <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' /> */}
@@ -116,6 +143,7 @@ export default class EmailModal extends Component {
               emailPDF={ this.emailPDF } 
               disabled={ this.state.disabled } 
               handleStage0Click={ this.handleStage0Click } 
+              handleIncrementProgress={ this.handleIncrementProgress }
             />
           </Modal.Description>
         </Modal.Content>
@@ -126,8 +154,19 @@ export default class EmailModal extends Component {
         <Modal.Content image>
           {/* <Image wrapped size='medium' src='/assets/images/avatar/large/rachel.png' /> */}
           <Modal.Description>
-            <div>In Progress Son</div>
-            <Button onClick={ this.handleStage1Click } ></Button>
+            { 
+              this.state.progress < 100 
+              ? <div>In Progress Son</div> 
+              : <div>Email successfully sent! 😎</div>
+            }
+            <Progress percent={this.state.progress} indicating autoSuccess></Progress>
+            { 
+              this.state.progress === 100 && 
+              <Button 
+                onClick={ this.handleStage1Click } 
+                floated='right'  
+              >Close</Button> 
+            }
           </Modal.Description>
         </Modal.Content>
 
