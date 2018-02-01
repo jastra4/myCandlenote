@@ -4,6 +4,7 @@ import FlashcardPage from './index';
 import { addFlashcard, createFlashcard } from '../actions/flashcardsActions';
 
 const mapStateToProps = (state) => {
+  console.log('state: ', state);
   const cardsById = state.flashcards.byId;
   const cardsForDeck = Object.keys(cardsById).map(key => cardsById[key])
     .filter(card => card.deckId === state.decks.currentDeck.id);

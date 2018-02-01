@@ -5,6 +5,11 @@ export const setCurrentUser = userInfo => ({
   payload: userInfo,
 });
 
+export const setUsers = userList => ({
+  type: 'SET_USERS',
+  payload: userList,
+});
+
 export const getUser = userId => (
   dispatch => (
     axios.get(`/user/${userId}`)

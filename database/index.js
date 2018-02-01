@@ -37,10 +37,24 @@ const videosSchema = mongoose.Schema({
 
 const Videos = mongoose.model('videos', videosSchema);
 
+const messagesSchema = mongoose.Schema({
+  to: String,
+  sentBy: String,
+  text: String,
+  timeStamp: String,
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const Messages = mongoose.model('messages', messagesSchema);
+
 module.exports = {
   db,
   Decks,
   Flashcards,
   Notes,
   Videos,
+  Messages,
 };

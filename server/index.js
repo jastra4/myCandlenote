@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
+const dateFormat = require('dateformat');
 const axios = require('axios');
 
 const puppeteer = require('puppeteer');
@@ -26,7 +27,12 @@ const readFile = promisify(fs.readFile);
 
 // db imports
 const inserts = require('../database/inserts');
+const queries = require('../database/queries');
 const deletes = require('../database/deletes');
+
+const app = express();
+const server = require('http').createServer(app); // socket stuff
+const io = require('socket.io').listen(server); // socket stuff
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -36,12 +42,9 @@ const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
-
-const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(bodyParser.urlencoded({ limit: '5mb' }));
 
-const server = http.createServer(app);
 const peerServer = ExpressPeerServer(server, { debug: true });
 
 app.use(express.static(DIST_DIR));
@@ -88,8 +91,43 @@ app.get('/api/pdf/:id', (req, res) => {
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+// Invoked when main page renders
+// Controls whether to emit a socket connection
+app.get('/checkAuth', (req, res) => {
+  console.log('check auth ran');
+  // drop messages collection
+  // mongoose.connection.db.dropCollection('messages', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped Messages');
+  //   }
+  // });
+  const isAuth = req.isAuthenticated();
+  if (!isAuth) {
+    res.send(false);
+  } else {
+    const userId = req.session.passport.user;
+    res.status(200).send({
+      auth: true,
+      userId,
+    });
+  }
+});
+
+app.get('/messages', (req, res) => {
+  const { to } = req.query;
+  const sentBy = req.query.from;
+  queries.getMessages(sentBy, to, (messages) => {
+    res.send(messages);
+  });
+});
+
+app.get('/users', (req, res) => {
+  console.log('get users received');
+  queries.getUsers((users) => {
+    res.send(users);
+  });
 });
 
 /* --------- POST Handlers ----------- */
@@ -107,6 +145,38 @@ app.post('/makePDF', (req, res) => {
   });
 });
 
+/* ----------- Sockets ------------ */
+
+app.get('/username', (req, res) => {
+  const userId = req.query.id;
+  queries.getUserName(userId, (username) => {
+    res.send(username);
+  });
+});
+
+io.sockets.on('connection', (socket) => {
+  console.log('socket connected: ', socket.id);
+
+  socket.on('new user', (data) => {
+    socket.username = data; // eslint-disable-line
+    // console.log('New user!: ', socket.username);
+    io.sockets.emit('update users', socket.username);
+  });
+
+  socket.on('send message', (data) => {
+    const now = new Date();
+    inserts.insertMessage({
+      to: data.to,
+      sentBy: socket.username.data,
+      text: data.text,
+      timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
+      // timeStamp: Date.now(),
+    });
+    // data.timeStamp = Date.now();
+    data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
+    io.sockets.emit('new message', data);
+  });
+});
 
 /* ----------- API Routes ------------ */
 
@@ -163,6 +233,10 @@ app.post('/api/parseContentMeaning', (req, res) => {
       console.error(e);
       res.status(500).end();
     }));
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
 app.post('/api/suggestedResources', (req, res) => {
@@ -291,8 +365,8 @@ app.post('/api/getEditorPacket', (req, res) => {
 
 /* -------- Initialize Server -------- */
 
-app.listen(PORT, () => {
-  console.info(`🌎  Server now running on port ${PORT} 🌎`);
+server.listen(PORT, () => {
+  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
 
 peerServer.on('connection', (id) => {

@@ -65,7 +65,7 @@ const flashcardsReducer = (state = defaultState, action) => {
           [action.payload.id]: action.payload,
         },
       };
-    case 'SET_FLASHCARDS': {
+    case 'SET_FLASHCARDS': { // ***
       const cardsById = action.payload.reduce((cards, card) => ({
         ...cards,
         [card.id]: card,
