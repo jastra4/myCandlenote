@@ -11,19 +11,13 @@ export default class FileMenu extends React.Component {
 
   render = () => (
     <div>
-      <EmailModal />
       <Button animated='fade'>
         <Button.Content hidden>New</Button.Content>
         <Button.Content visible>
           <Icon name='file' />
         </Button.Content>
       </Button>
-      <Button animated='fade' onClick={ this.emailPDF }>
-        <Button.Content hidden>Email</Button.Content>
-        <Button.Content visible>
-          <Icon name='mail' />
-        </Button.Content>
-      </Button>
+      <EmailModal />
       <Button animated='fade'>
         <Button.Content hidden>Share</Button.Content>
         <Button.Content visible>
