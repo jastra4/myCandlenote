@@ -9,6 +9,7 @@ const session = require('express-session');
 const { promisify } = require('util');
 const fs = require('fs');
 const uuid = require('uuid');
+const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
 const keys = require('./config/keys');
@@ -29,6 +30,32 @@ const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'theworldsgreatesthue@gmail.com',
+    pass: 'discoverAustin1!'
+  }
+});
+
+const welcomeMailOptions = (email, username, endpoint) => ({
+  from: 'no-reply@theworldsgreatesthue.com',
+  to: email,
+  subject: 'Welcome to Hue!',
+  html: loginEmail(email, username, endpoint)
+});
+
+const resetMailOptions = (email, username, endpoint) => ({
+  from: 'no-reply@theworldsgreatesthue.com',
+  to: email,
+  subject: 'Password Reset Request',
+  html: resetEmail(email, username, endpoint)
+});
+
+
+
 
 const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));

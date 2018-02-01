@@ -5,7 +5,7 @@ export default class fileMenu extends React.Component {
   state = { };
 
   renderPDF = () => {
-    window.open('http://localhost:3000/api/pdf/0c00a9b1-a825-4fb6-ac18-d2698802de33');
+    window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
   }
 
   render = () => (
@@ -23,9 +23,21 @@ export default class fileMenu extends React.Component {
         </Button.Content>
       </Button>
       <Button animated='fade'>
+        <Button.Content hidden>Share</Button.Content>
+        <Button.Content visible>
+          <Icon name='share alternate' />
+        </Button.Content>
+      </Button>
+    <Button animated='fade' onClick={this.renderPDF}>
+        <Button.Content hidden>Download</Button.Content>
+        <Button.Content visible>
+          <Icon name='download' />
+        </Button.Content>
+      </Button>
+      <Button animated='fade' onClick={ this.renderPDF } >
         <Button.Content hidden>Print</Button.Content>
         <Button.Content visible>
-          <Icon name='print' />
+          <Icon name='print'/>
         </Button.Content>
       </Button>
       <Button animated='fade' onClick={ this.renderPDF } >

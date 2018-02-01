@@ -56,7 +56,7 @@ export default class MainEditor extends React.Component {
 
   render = () => (
     <div>
-      <a href="http://localhost:3000/api/pdf?fileName=0c00a9b1-a825-4fb6-ac18-d2698802de33">Download</a>
+      <a href="http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e">Download</a>
       <button onClick={ this.handlePrint }>Print</button>
       <ReactQuill
         theme='snow'
