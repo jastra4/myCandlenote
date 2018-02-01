@@ -1,7 +1,4 @@
 import React from 'react';
-import $ from 'jquery';
-import axios from 'axios';
-import { connect } from 'react-redux';
 import Peer from 'peer';
 
 class VideoConference extends React.Component {
@@ -38,6 +35,54 @@ class VideoConference extends React.Component {
         });
       });
     });
+
+    this.prepareSelfVideo();
+  }
+
+  getMedia(options, success, error) {
+    this.state;
+    navigator.getUserMedia(options, success, error);
+  }
+
+  onReceiveCall(call) {
+    this.getMedia({
+      audio: true,
+      video: true,
+    }, (stream) => {
+      console.log('answering...');
+      call.answer(stream);
+    }, (err) => { console.log(err); });
+    call.on('stream', (stream) => {
+      const video = document.querySelector('video');
+      video.src = window.URL.createObjectURL(stream);
+    });
+  }
+
+  onReceiveStream(stream) {
+    this.state;
+    const video = document.querySelector('.video-call');
+    video.src = window.URL.createObjectURL(stream);
+  }
+
+  prepareSelfVideo() {
+    this.getMedia({
+      audio: false,
+      video: true,
+    }, (stream) => {
+      const video = document.querySelector('.video-self');
+      video.src = window.URL.createObjectURL(stream);
+    }, (err) => { console.log(err); });
+  }
+
+  call(id) {
+    this.getMedia({
+      audio: true,
+      video: true,
+    }, (stream) => {
+      const call = this.state.peer.call(id, stream);
+      console.log('calling...');
+      call.on('stream', this.onReceiveStream);
+    }, (err) => { console.log(err); });
   }
 
   componentWillUnmount() {
@@ -45,14 +90,15 @@ class VideoConference extends React.Component {
   }
 
   connect() {
-    let peer_id = this.state.peer_id;
-    let connection = this.state.peer.connect(peer_id);
+    const peerId = this.state.peer_id;
+    const connection = this.state.peer.connect(peerId);
     this.setState({ conn: connection }, () => {
       this.state.conn.on('open', () => {
         this.setState({ connected: true });
       });
-      this.state.conn.on('data')
+      this.state.conn.on('data');
     });
   }
+}
 
-};
+export default VideoConference;
