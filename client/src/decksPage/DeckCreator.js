@@ -50,8 +50,10 @@ class DeckCreator extends React.Component {
                   <Form.Field control={Input} value={this.state.title} label='Title' placeholder='Title' onChange={e => this.onTitleChange(e)} />
                   <Form.Field id='form-button-control-public' control={Button} content='Confirm' label='Create Deck' />
                 </Grid.Column>
-                <Grid.Column width={6}>
-                  <Form.TextArea placeholder="Description (optional)" rows="8" />
+                <Grid.Column width={10}>
+                  <div style={{paddingTop: '1.65em'}}>
+                    <Form.TextArea placeholder="Description (optional)" rows="10" />
+                  </div>
                 </Grid.Column>
               </Grid>
             </Form>

@@ -15,13 +15,13 @@ const Deck = props => (
       </div>
     </Grid.Row>
     <Grid.Row>
-      <div style={{ width: '100%' }}>
-        <DeckCreator
-          createDeck={props.createDeck}
-          userId={props.userId}
-          addDeck={props.addDeck}
-        />
-      </div>
+        <div style={{ width: '100%' }}>
+          <DeckCreator
+            createDeck={props.createDeck}
+            userId={props.userId}
+            addDeck={props.addDeck}
+          />
+        </div>
     </Grid.Row>
   </Grid>
 );

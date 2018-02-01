@@ -16,12 +16,11 @@ const styles = {
     width: '28%',
     maxWidth: '130px',
     marginTop: '13em',
-    // marginRight: '2vw',
   },
   sideBar: {
-    marginTop: '3.5em',
+    marginTop: '2.5em',
     position: 'relative',
-    right: '-25px',
+    right: '-35px',
   },
   mainSegment: {
     display: 'inline-block',
@@ -31,7 +30,7 @@ const styles = {
 };
 
 const FlashcardPage = props => (
-  <div style={{marginLeft: '20px'}}>
+  <div style={{ marginLeft: '20px' }}>
     {/* <Segment size="massive"> */}
     <Grid>
       <Grid.Column width={13}>
@@ -40,9 +39,11 @@ const FlashcardPage = props => (
             <Header as='h2' icon>
               <Icon name='clone' />
               <h3>Deck:</h3>
-              <Header.Subheader>
+              {/* <Header.Subheader textAlign="center"> */}
+              <p style={{width: '100%'}}>
                 {props.currentDeck.title || 'No Deck Selected'}
-              </Header.Subheader>
+              </p>
+              {/* </Header.Subheader> */}
             </Header>
           </div>
           <FlashcardView
@@ -61,14 +62,10 @@ const FlashcardPage = props => (
       </Grid.Column>
       <Grid.Column width={3}>
         <div style={styles.sideBar}>
-          <Card fluid>
-            <Card.Content>
-              <Card.Header textAlign="center">
-                <h2>Decks</h2>
-                </Card.Header>
-                <DeckListVert />
-            </Card.Content>
-          </Card>
+          <Header as="h2">
+            Decks
+          </Header>
+          <DeckListVert />
         </div>
       </Grid.Column>
     </Grid>
