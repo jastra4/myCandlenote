@@ -13,7 +13,8 @@ export default class UserProfile extends React.Component {
     axios.get('/userProfile')
       .then((res) => {
         console.log('RES DATA:', res.data);
-        this.setState({ user: res.data });
+        this.setState({ ...res.data }, () => console.log('STATE', this.state));
+        this.props.setCurrentUser(res.data);
       })
       .catch(err => console.log(err));
   }
