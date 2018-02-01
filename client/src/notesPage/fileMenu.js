@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
-import axios from 'axios';
 import EmailModal from './emailModal';
 
 export default class FileMenu extends React.Component {
