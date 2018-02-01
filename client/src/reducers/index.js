@@ -8,6 +8,7 @@ import messagesReducer from './messagesReducers';
 import videosReducer from './videosReducers';
 import authReducer from './authReducers';
 import userIdReducer from './userIdReducers';
+import intelliSearchReducer from './intellisearchReducers';
 
 const reducers = combineReducers({
   decks: decksReducer,
@@ -19,6 +20,7 @@ const reducers = combineReducers({
   videos: videosReducer,
   isAuth: authReducer,
   userId: userIdReducer,
+  intelliSearch: intelliSearchReducer,
 });
 
 export default reducers;
