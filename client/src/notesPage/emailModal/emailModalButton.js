@@ -22,7 +22,7 @@ export default class EmailModalButton extends Component {
   }
 
   render = () => (
-    <Button.Group>
+    <Button.Group floated='right' >
       <Button 
         onClick={ this.props.handleStage1Click }
         >Cancel</Button>
