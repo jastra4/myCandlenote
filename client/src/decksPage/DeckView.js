@@ -15,7 +15,6 @@ const DeckView = (props) => {
 
   return (
     <div>
-      <Segment>
         <div style={styles.container}>
           <Header as='h2' icon textAlign="center">
             <Icon name='clone' />
@@ -25,7 +24,7 @@ const DeckView = (props) => {
             </Header.Subheader>
           </Header>
           <br></br>
-          <Card.Group itemsPerRow={3}>
+          <Card.Group itemsPerRow={4}>
             {decks.map(deck => (
               <Card
                 key={deck.id}
@@ -56,7 +55,6 @@ const DeckView = (props) => {
               </Card>))}
           </Card.Group>
         </div>
-      </Segment>
     </div>
   );
 };
