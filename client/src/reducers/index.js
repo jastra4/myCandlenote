@@ -6,7 +6,7 @@ import notesReducer from './notesReducers';
 import usersReducer from './usersReducers';
 import messagesReducer from './messagesReducers';
 import videosReducer from './videosReducers';
-import authReducer from './authReducers';
+import socketReducer from './socketReducers';
 import userIdReducer from './userIdReducers';
 import intelliSearchReducer from './intellisearchReducers';
 
@@ -18,7 +18,7 @@ const reducers = combineReducers({
   users: usersReducer,
   messages: messagesReducer,
   videos: videosReducer,
-  isAuth: authReducer,
+  socket: socketReducer,
   userId: userIdReducer,
   intelliSearch: intelliSearchReducer,
 });

@@ -101,19 +101,6 @@ app.get('/api/pdf/:id', (req, res) => {
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
-// Invoked when main page renders
-// Controls whether to emit a socket connection
-app.get('/checkAuth', (req, res) => {
-  res.send(true);
-  // drop messages collection
-  // mongoose.connection.db.dropCollection('messages', function(err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('dropped Messages');
-  //   }
-  // });
-});
 
 app.get('/users', (req, res) => {
   queries.getUsers((users) => {

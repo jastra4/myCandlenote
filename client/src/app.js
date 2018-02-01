@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux'; // auth stuff
 import axios from 'axios';
+import io from 'socket.io-client';
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
@@ -14,21 +15,26 @@ import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import PDF from './notesPage/invisibleEditor';
 import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
-import isAuth from './actions/isAuth'; // auth stuff
+import activeSocket from './actions/activeSocket'; // auth stuff
 
+const socketUrl = 'http://localhost:3000';
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  // Create connection when page loads if user is authenticated
   componentDidMount() {
-    return axios.get('/checkAuth')
-      .then((body) => {
-        // create connection here, add to store
-        // disconnect on logout or browser close
-        this.props.isAuth(body.data.auth, body.data.userId);
+    axios.get('/api/userid') // get user id
+      .then((res) => {
+        const userid = res.data.userid;
+        const socket = io(socketUrl); // create connection
+        socket.on('connect', () => {
+          axios.get(`/username?id=${userid}`) // add user id to connection
+            .then((username) => {
+              socket.emit('new user', username);
+            });
+        });
       });
   }
 
@@ -48,7 +54,7 @@ class App extends React.Component {
             <Route path='/quizzlet' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
-            <Route path='/login' render={() => (<div>Please log in</div>)} />
+            <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />
           </Switch>
         </BrowserRouter>
       </div>
@@ -56,7 +62,7 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { isAuth: (authStatus, userId) => dispatch(isAuth(authStatus, userId)) }
+  { activeSocket: (socket) => dispatch(activeSocket(socket)) }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);
