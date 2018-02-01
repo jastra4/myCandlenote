@@ -86,14 +86,14 @@ app.get('/api/pdf/:id', (req, res) => {
 // Controls whether to emit a socket connection
 app.get('/checkAuth', (req, res) => {
   console.log('check auth ran');
-// drop messages collection
-// mongoose.connection.db.dropCollection('messages', function(err, result) {
-//   if (err) {
-//     console.log(err);
-//   } else {
-//     console.log('dropped Messages');
-//   }
-// });
+  // drop messages collection
+  // mongoose.connection.db.dropCollection('messages', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped Messages');
+  //   }
+  // });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.send(false);
@@ -107,7 +107,7 @@ app.get('/checkAuth', (req, res) => {
 });
 
 app.get('/messages', (req, res) => {
-  const to = req.query.to;
+  const { to } = req.query;
   const sentBy = req.query.from;
   queries.getMessages(sentBy, to, (messages) => {
     res.send(messages);
@@ -149,7 +149,7 @@ io.sockets.on('connection', (socket) => {
   console.log('socket connected: ', socket.id);
 
   socket.on('new user', (data) => {
-    socket.username = data;
+    socket.username = data; // eslint-disable-line
     // console.log('New user!: ', socket.username);
     io.sockets.emit('update users', socket.username);
   });
@@ -160,11 +160,11 @@ io.sockets.on('connection', (socket) => {
       to: data.to,
       sentBy: socket.username.data,
       text: data.text,
-      timeStamp: dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT")
+      timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
       // timeStamp: Date.now(),
     });
     // data.timeStamp = Date.now();
-    data.timeStamp = dateFormat(now, "dddd, mmmm dS, yyyy, h:MM:ss TT");
+    data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
     io.sockets.emit('new message', data);
   });
 });

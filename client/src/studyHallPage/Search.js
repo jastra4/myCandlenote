@@ -7,7 +7,7 @@ class Search extends React.Component {
     this.state = {};
   }
 
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
     console.log(`searched: "${$('#search').val()}"`);
     $('#search').val('');

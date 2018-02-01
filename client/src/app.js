@@ -13,8 +13,8 @@ import DeckPage from './decksPage/DeckContainer';
 import FlashcardPage from './flashcardsPage/FlashcardContainer';
 import PDF from './notesPage/invisibleEditor';
 import store from '../src/store';
-import StudyHallConnected from './StudyHallPage/StudyHall';
-import { isAuth } from './actions/isAuth'; // auth stuff
+import StudyHallConnected from './studyHallPage/StudyHall';
+import isAuth from './actions/isAuth'; // auth stuff
 
 class App extends React.Component {
   constructor(props) {

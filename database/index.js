@@ -43,7 +43,7 @@ const messagesSchema = mongoose.Schema({
   text: String,
   timeStamp: String,
   created: {
-    type: Date, 
+    type: Date,
     default: Date.now,
   },
 });
