@@ -10,8 +10,6 @@ export default class FileMenu extends React.Component {
     window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
   }
 
-
-
   render = () => (
     <div>
       <EmailModal />

@@ -21,9 +21,7 @@ class EmailModalButton extends Component {
     this.props.handleStage0Click();
     this.props.emailPDF();
     this.props.handleIncrementProgress();
-
   }
-
 
   render = () => (
     <Button.Group>
@@ -38,15 +36,6 @@ class EmailModalButton extends Component {
   )
 }
 
-const EmailButtonFileMenu = () => (
-  <Button animated='fade'>
-    <Button.Content hidden>Email</Button.Content>
-    <Button.Content visible>
-      <Icon name='mail' />
-    </Button.Content>
-  </Button>
-);
-
 export default class EmailModal extends Component {
   constructor(props) {
     super(props);
@@ -60,6 +49,9 @@ export default class EmailModal extends Component {
     this.progressTimer;
   }
   
+  // componentWillUpdate() {
+  //   console.log('progress: ', this.state.progress);
+  // }
 
   emailPDF = () => {
     const { email } = this.state;
@@ -75,9 +67,10 @@ export default class EmailModal extends Component {
       const { progress } = this.state;
       const distance = 100 - progress;
       const newProgress = progress + (distance / 2);
+      console.log('p', progress, newProgress);
       this.setState({ progress: newProgress });
     };
-    this.progressTimer = setTimeout(incrementProgress, 500);
+    setTimeout(incrementProgress, 500);
   }
 
 
