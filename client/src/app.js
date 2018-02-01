@@ -3,10 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux'; // auth stuff
 import axios from 'axios';
-<<<<<<< HEAD
-=======
 import io from 'socket.io-client';
->>>>>>> master
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';

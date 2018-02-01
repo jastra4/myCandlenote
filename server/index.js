@@ -216,7 +216,6 @@ io.sockets.on('connection', (socket) => {
 
 /* ----------- API Routes ------------ */
 
-<<<<<<< HEAD
 app.post('/api/emailPDF', (req, res) => {
   const { email } = req.body;
   const filePath = path.join(__dirname, '../PDFs/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e.pdf');
@@ -231,8 +230,6 @@ app.post('/api/emailPDF', (req, res) => {
   });
 });
 
-=======
->>>>>>> master
 app.post('/api/decks', (req, res) => {
   inserts.insertDeck(req.body)
     .then((result) => {
