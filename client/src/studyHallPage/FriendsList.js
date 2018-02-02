@@ -11,6 +11,7 @@ class FriendsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextProps: ', nextProps);
     const users = Object.keys(nextProps.contacts).map(key => nextProps.contacts[key]);
     this.setState({ friends: users });
   }
@@ -20,8 +21,10 @@ class FriendsList extends React.Component {
   }
 
   getUsers() {
-    return axios.get('/users')
+    console.log('getFriends for: ', this.props.username);
+    return axios.get(`/users?currentUser=${this.props.username}`)
       .then((users) => {
+        console.log('friends: ', users);
         const usersList = users.data;
         this.props.loadUsers(usersList);
       })
@@ -37,6 +40,7 @@ class FriendsList extends React.Component {
         <div> {this.state.friends.map((friend, i) => (
           <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>
+        <button onClick={this.getUsers.bind(this)}>test</button>
       </div>
     );
   }
@@ -48,7 +52,10 @@ const mapDispatchToProps = dispatch => (
 
 const mapStateToProps = (state) => {
   const usersById = state.users.byId;
-  return { contacts: usersById };
+  return {
+    contacts: usersById,
+    username: state.activeSocket.username,
+  };
 };
 
 const FriendsListConnected = connect(mapStateToProps, mapDispatchToProps)(FriendsList);

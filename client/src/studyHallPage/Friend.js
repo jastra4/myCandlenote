@@ -23,25 +23,21 @@ class Friend extends React.Component {
     }
   }
 
-  handleClick = () => {
+  handleClick() {
     this.props.changeChat(this.props.friend.username);
-    this.setState({ active: true });
   }
 
   otherRender() {
     if (this.state.active) {
-      return (<div>online</div>);
+      return (<div className="online" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
     }
-    return (<div>offline</div>);
+    return (<div className="offline" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
   }
 
   render() {
     return (
       <div>
         <div>{this.otherRender()}</div>
-        <div onClick={this.handleClick.bind(this)}>
-          {this.props.friend.username}
-        </div>
       </div>
     );
   }

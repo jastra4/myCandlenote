@@ -13,6 +13,7 @@ class ChatBox extends React.Component {
     if (props.socket !== undefined) {
       props.socket.on('new message', (data) => {
         this.setState({ messages: this.state.messages.concat([data]) });
+        this.updateScroll();
       });
     }
   }
@@ -26,11 +27,21 @@ class ChatBox extends React.Component {
     };
     this.props.socket.emit('send message', msg);
     $('#message').val('');
+    this.updateScroll();
+  }
+
+  updateScroll() {
+    const chatbox = document.getElementById("chatBox");
+    const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
+    if (!isScrolledToBottom) {
+      chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
+    }
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.messages.length !== this.state.messages.length) {
       this.setState({ messages: newProps.messages });
+      this.updateScroll();
     }
     if (newProps.chat !== this.props.chat) {
       this.getMessages(newProps.chat);
@@ -54,14 +65,14 @@ class ChatBox extends React.Component {
         <div className="chatHeader">
           <h4>{this.props.chat}</h4>
         </div>
-        <div className="chatMessages">
+        <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
             <Message key={i} message={message}/>
           ))}
         </div>
         <div className="chatInput">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message"></input>
+            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>

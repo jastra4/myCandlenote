@@ -1,4 +1,4 @@
-const { ExpressPeerServer } = require('peerjs');
+// const { ExpressPeerServer } = require('peerjs');
 // const http = require('http');
 
 const express = require('express');
@@ -36,7 +36,7 @@ const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
 
-const peerServer = ExpressPeerServer(server, { debug: true });
+// const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -92,12 +92,12 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
-app.use('/peerjs', peerServer);
+// app.use('/peerjs', peerServer);
 
 
 // TODO: Investigate
 mongoose.connect(keys.mongodb.dbURI, () => {
-  console.log('connecting to mongodb');
+  console.log('connected to mongodb');
 });
 
 
@@ -113,6 +113,13 @@ app.get('/login', (req, res) => {
 
 
 app.get('*', (req, res, next) => {
+  // mongoose.connection.db.dropCollection('users', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped users');
+  //   }
+  // });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -134,15 +141,20 @@ app.get('/api/pdf/:id', (req, res) => {
 });
 
 app.get('/users', (req, res) => {
-  queries.getAllUsers((users) => {
+  const currentUser = req.query.currentUser;
+  queries.getAllUsers(currentUser, (users) => {
     res.send(users);
   });
 });
 
 
 app.post('/friendrequest', (req, res) => {
-  console.log('friendrequest: ', req.body.username);
-  res.send(201);
+  const { newFriend, currentUser } = req.body;
+  // check if they exist
+  // send them a message if they do
+  inserts.addFriend(currentUser, newFriend, (response) => {
+    res.send(response);
+  });
 });
 
 app.get('/userProfile', (req, res) => {
@@ -209,11 +221,11 @@ io.sockets.on('connection', (socket) => {
     const now = new Date();
     inserts.insertMessage({
       to: data.to,
-      sentBy: socket.username.data,
+      sentBy: socket.username,
       text: data.text,
-      timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
+      timeStamp: dateFormat(now, 'dddd, mmm dS, h:MM TT'),
     });
-    data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
+    data.timeStamp = dateFormat(now, 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
     io.sockets.emit('new message', data);
   });
 
@@ -428,7 +440,7 @@ server.listen(PORT, () => {
   console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
 
-peerServer.on('connection', (id) => {
-  console.log(id);
-  console.log(server._clients);
-});
+// peerServer.on('connection', (id) => {
+//   console.log(id);
+//   console.log(server._clients);
+// });

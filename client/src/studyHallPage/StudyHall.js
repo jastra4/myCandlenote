@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import ChatBox from './ChatBox';
 import FriendsListConnected from './FriendsList';
 import GroupsList from './GroupsList';
-import Search from './Search';
+import SearchConnected from './Search';
 import VideoConference from './VideoConference';
 
 class StudyHall extends React.Component {
@@ -12,8 +12,8 @@ class StudyHall extends React.Component {
     this.state = { chat: '' };
   }
 
-  changeChat(otherChat) {
-    this.setState({ chat: otherChat });
+  changeChat(username) {
+    this.setState({ chat: username });
   }
 
   render() {
@@ -26,12 +26,12 @@ class StudyHall extends React.Component {
           <FriendsListConnected changeChat={this.changeChat.bind(this)}/>
         </div>
         <div className="Search studyBackground">
-          <Search />
+          <SearchConnected />
         </div>
         <div className="Chat studyBackground">
           <ChatBox chat={this.state.chat}/>
         </div>
-        <VideoConference />
+        
       </div>
     );
   }
@@ -44,3 +44,5 @@ const mapStateToProps = state => (
 const StudyHallConnected = connect(mapStateToProps)(StudyHall);
 
 export default StudyHallConnected;
+
+// <VideoConference />

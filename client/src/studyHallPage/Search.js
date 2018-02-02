@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import $ from 'jquery';
 
 class Search extends React.Component {
@@ -10,12 +11,15 @@ class Search extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const username = $('#search').val();
-    axios.post('/friendrequest', { username })
+    const newFriend = $('#search').val();
+    axios.post('/friendrequest', {
+      currentUser: this.props.username,
+      newFriend: newFriend,
+    })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
       });
-    console.log(`searched: "${username}"`);
+    // console.log(`searched: "${newFriend}"`);
     $('#search').val('');
   }
 
@@ -30,4 +34,15 @@ class Search extends React.Component {
   }
 }
 
-export default Search;
+// export default Search;
+
+const mapStateToProps = (state) => {
+  return {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  };
+};
+
+const SearchConnected = connect(mapStateToProps)(Search);
+
+export default SearchConnected;

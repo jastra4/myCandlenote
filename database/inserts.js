@@ -1,6 +1,5 @@
 const { Flashcards, Decks, Messages } = require('./index');
 const User = require('../server/models/user-model');
-const db = require('./index');
 
 const insertFlashcard = ({ front, back, deckId }) => (
   new Flashcards({
@@ -28,33 +27,19 @@ const insertMessage = ({ to, sentBy, text, timeStamp }) => {
 };
 
 const addFriend = (currentUser, newFriend, callback) => {
-  User.findOne({ username: currentUser }, (err, user) => {
-    if (err) {
+  User.findOne({ username: newFriend }, (err, friend) => {
+    if (err || friend === null) {
       callback('error finding user');
-    }
-    user.friends.push(newFriend);
-    user.save((error) => {
-      if (error) {
-        callback('error saving');
-      } else {
-        // callback('Added friend!');
-      }
-    });
-  });
-  User.findOne({ username: newFriend }, (err, user) => {
-    if (err) {
-      callback('error finding user');
-    }
-    user.friends.push(currentUser);
-    user.save((error) => {
-      if (error) {
-        callback('error saving');
-      } else {
+    } else {
+      friend.friends.push(currentUser);
+      friend.save();
+      User.findOne({ username: currentUser }, (error, user) => {
+        user.friends.push(newFriend);
+        user.save();
         callback('Added friend!');
-      }
-    });
+      });
+    }
   });
-
 };
 
 module.exports = {

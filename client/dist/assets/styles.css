@@ -27,7 +27,6 @@ body {
 	position: relative;
 	top: 0em;
 	right: 0em;
-	margin-right: .5em;
 }
 .Search{
 	height: 3em;
@@ -55,11 +54,30 @@ body {
 .chatInput{
 	height: 2em;
 }
-.inactiveUser{
-	background-color: #f44336;
-	color: #f44336; /* Red */
+.offline{
+	color: grey; /* Red */
+	padding-left: 1em;
 }
-.activeUser{
-	background-color: green;
+.online{
 	color: green; /* Red */
+	font-weight: bold;
+	padding-left: 1em;
+}
+.message{
+	padding-left: 1em;
+	padding-top: .5em;
+}
+.messageUserName{
+	font-weight: bold;
+}
+.messageDate{
+	font-style: italic;
+	font-size: .9em;
+	font-color: gray;
+}
+.messageText{
+	font-size: 1em;
+}
+.scroll{
+	overflow: auto;
 }
