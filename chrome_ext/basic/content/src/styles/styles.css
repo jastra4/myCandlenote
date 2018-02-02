@@ -14,11 +14,12 @@
   font-weight: 300;
   text-orientation: sideways;
   text-align: center;
-  transform: rotate(270deg);
   transform-origin: left top 0;
   padding: 0px 0px 0px 5px;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   cursor: pointer; 
+  transform: rotate(270deg) translateY(600px);
+  -webkit-transform: rotate(270deg) translateY(600px);
   /* transition-duration: 1s; */
   
 }
@@ -39,7 +40,7 @@
   -webkit-transform: translateX(0%);
   animation: 1.4s slide-in 0s forwards;
   -webkit-animation: 1.4s slide-in 0s forwards; */
-  transform: translateX(600px);
+  transform: translateX(100%);
   -webkit-transform: translateX(100%);
 
   
@@ -50,87 +51,13 @@
   -webkit-animation: 1.4s slide-in 0s forwards;
 }
 
-/* background-color: #191a1c;
-min-height: 200px;
-max-height: 300px;
-width: 30px;
-position: fixed;
-z-index: 99999999999999999999;
-right: 600px;
-border-radius: 10px 0px 0px 10px;
-top: calc(100vh - 300px);
-border: 1px solid #191a1c;
-color: white;
-font-size: 25px;
-text-orientation: sideways;
-transform: rotate(270deg);
-transform-origin: left top 0; */
-/* .CN-Window-Close {
-  background-color: red;
-  width: 100px;
-  min-height: 300px;
-  max-height: 300px;
-  top: calc(100vh - 350px);
-  right: 0px;
-  position: fixed;
-  z-index: 99999999999999999999;
-  border-radius: 10px 0px 0px 10px
-}; */
-/* 
-html,
-body {
-  overflow: hidden;
-  max-width: 100%
-} */
-
-/* .notification-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 300px;
-  display: none;
-  height: 100%;
-  overflow: hidden;
-  background: #107b10;
-  z-index: 999;
-  /* transform: translateX(100%);
-  -webkit-transform: translateX(100%); */
-/* } */ 
-
-
-/* .candlenote-window.cn-open {
-  width: 600px;
-  transition-timing-function: ease-in;
-} 
-
-.candlenote-window.cn-dismiss {
-  width: 0px;
-  transition-timing-function: ease-in;
-}
-
-.candlenote-tab.cn-dismiss{
-  right: -100px;
-  transition-timing-function: ease-in;
-}
-
-.candlenote-tab.cn-open{
-  right: 490px;
-  transition-timing-function: ease-in;
-} */
-
-
-
 div.cn-dismiss {
-  /* transform: translateX(100%);
   -webkit-transform: translateX(100%); */
   animation: 1.4s slide-window-in 0s forwards;
   -webkit-animation: 1.4s slide-window-in 0s forwards;
 } 
 
 .cn-open {
-  /* transform: translateX(0%);
-  -webkit-transform: translateX(0%); */
-  animation: 1.4s slide-window-out 0s forwards;
   -webkit-animation: 1.4s slide-window-out 0s forwards;
 }
 
