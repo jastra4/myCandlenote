@@ -20,11 +20,11 @@ class VideoConference extends React.Component {
 
     // const dataConnection = this.state.peer.connect(id);
 
-    this.state.peer.on('connection', function(id) {
-    	console.log('ID on connection: ', id);
-    })
+    this.state.peer.on('connection', (id) => {
+      console.log('ID on connection: ', id);
+    });
 
-    this.state.peer.on('open', (id) => console.log('Peer ID: ' + id));
+    this.state.peer.on('open', (id) => console.log('Peer ID: ' + id)); // eslint-disable-line 
     this.state.peer.on('call', this.onReceiveCall.bind(this));
 
 
@@ -48,7 +48,7 @@ class VideoConference extends React.Component {
 
     this.prepareSelfVideo();
 
-    const url = window.location.href + `/${this.state.hash}`;
+    const url = window.location.href + `/${this.state.hash}`; // eslint-disable-line
     console.log('URL: ', url);
     const match = url.match(/#(.+)/);
     console.log('Match: ', match);
@@ -131,8 +131,8 @@ class VideoConference extends React.Component {
             <a>Share - {`http://localhost:3000/studyhall/${this.state.hash}`}</a>
           </div>
           <div>
-          	<input type="text" className="peer-id"></input>
-          	<button onClick={this.call}>Call</button>
+            <input type="text" className="peer-id"></input>
+            <button onClick={this.call}>Call</button>
           </div>
         </div>
       </div>
