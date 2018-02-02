@@ -98,28 +98,28 @@ class FlashcardCreator extends React.Component {
             <Form.Field>
               <label>Prompt</label>
               {this.state.hasFrontImage ? <img src={this.state.front}/> :
-                <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} buttonTag={'Upload Image Prompt'}>
-                <Form.TextArea placeholder='Prompt' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
+                <FlashcardImageUploader onImageLoaded={this.onUploadFront.bind(this)} buttonTag={'Upload Prompt Image'}>
+                <Form.TextArea placeholder='Text prompt or...' value={this.state.front} onChange={this.onFrontChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
             </Form.Field>
             <Form.Field>
               <label>Answer</label>
               {this.state.hasBackImage ? <img src={this.state.back} /> :
-              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} buttonTag={'Upload Image Answer'}>
-                <Form.TextArea placeholder='Answer' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
+              <FlashcardImageUploader onImageLoaded={this.onUploadBack.bind(this)} buttonTag={'Upload Answer Image'}>
+                  <Form.TextArea placeholder='Text answer or...' value={this.state.back} onChange={this.onBackChange.bind(this)} rows="4" />
               </FlashcardImageUploader>}
             </Form.Field>
             <Form.Group inline>
               <Button type='submit'>Submit</Button>
               <Button type='button' onClick={this.clearFields.bind(this)}>Clear Fields</Button>
-              <From.Field>
+              <Form.Field>
                 <Form.Dropdown
                   selection
                   placeholder='Deck'
                   options={mapDecksToOptions(this.props.decksById)}
                   onChange={this.onDeckChange.bind(this)}
                 />
-              </From.Field>
+              </Form.Field>
             </Form.Group>
           </Form>
         </Segment>
