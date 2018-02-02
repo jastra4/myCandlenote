@@ -6,7 +6,8 @@ class App extends Component {
     super(props);
     this.state = {
       windowState: '',
-      intermediateAnimation: ''
+      intermediateAnimation: '',
+      tabState: ''
     };
     this.toggleWindowState = this.toggleWindowState.bind(this);
   }
@@ -16,11 +17,16 @@ class App extends Component {
       this.setState({ intermediateAnimation: 'cn-intermediate'})
     }
     if (this.state.windowState === 'cn-dismiss' || !this.state.windowState) {
-      this.setState({ windowState: 'cn-open' });
+      this.setState({ 
+        windowState: 'cn-open',
+        tabState: 'cn-tab-open'
+      });
     
     } else {
-      this.setState({ windowState: 'cn-dismiss' });
-    
+      this.setState({ 
+        windowState: 'cn-dismiss',
+        tabState: 'cn-tab-dismiss'
+      });
     }
   }
 
@@ -29,7 +35,7 @@ class App extends Component {
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
         </div>
-        <div className={`candlenote-tab`}  onClick={ this.toggleWindowState }>
+        <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote
         </div>
       </div>
