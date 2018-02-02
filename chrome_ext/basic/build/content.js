@@ -9655,16 +9655,33 @@ var App = function (_Component) {
   function App(props) {
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.state = {
+      windowState: 'cn-dismiss'
+    };
+    _this.handleWindowClose = _this.handleWindowClose.bind(_this);
+    return _this;
   }
 
   _createClass(App, [{
+    key: 'handleWindowClose',
+    value: function handleWindowClose() {
+      this.state.windowState === 'cn-dismiss' ? this.setState({ windowState: 'cn-open' }) : this.setState({ windowState: 'cn-dismiss' });
+    }
+  }, {
     key: 'render',
     value: function render() {
+      console.log('lolooll');
       return _react2.default.createElement(
         'div',
-        { className: 'CN-Window' },
-        'Hi Kendrick Gardner!!! :)'
+        null,
+        _react2.default.createElement('div', { className: 'cn-window-open' }),
+        _react2.default.createElement(
+          'div',
+          { className: 'cn-tab-open', onClick: this.toggleWindowState },
+          'CandleNote'
+        )
       );
     }
   }]);
@@ -10617,7 +10634,7 @@ exports = module.exports = __webpack_require__(86)(false);
 
 
 // module
-exports.push([module.i, ".CN-Window {\n  background-color: red\n};", ""]);
+exports.push([module.i, ".cn-window-open {\n  background-color: #ffcb99;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n    /* transform: translateX(100%); */\n  /* -webkit-transform: translateX(100%); */\n};\n\n.cn-tab-open {\n    background-color: #191a1c;\n    min-height: 30px;\n    max-height: 30px;\n    width: 150px;\n    position: fixed;\n    z-index: 99999999999999999999;\n    right: 485px;\n    border-radius: 10px 10px 0px 0px;\n    top: calc(100vh - 180px);\n    border: 5px solid #191a1c;\n    color: white;\n    font-size: 20px;\n    font-weight: 100;\n    text-orientation: sideways;\n    text-align: center;\n    transform: rotate(270deg);\n    transform-origin: left top 0;\n    padding-top: 5px;\n    /* background-color: #191a1c;\n    min-height: 200px;\n    max-height: 300px;\n    width: 30px;\n    position: fixed;\n    z-index: 99999999999999999999;\n    right: 600px;\n    border-radius: 10px 0px 0px 10px;\n    top: calc(100vh - 300px);\n    border: 1px solid #191a1c;\n    color: white;\n    font-size: 25px;\n    text-orientation: sideways;\n    transform: rotate(270deg);\n    transform-origin: left top 0; */\n};\n.CN-Window-Close {\n  background-color: red;\n  width: 100px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px\n};\n/* \nhtml,\nbody {\n  overflow: hidden;\n  max-width: 100%\n} */\n\n.notification-container {\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 300px;\n  display: none;\n  height: 100%;\n  overflow: hidden;\n  background: #107b10;\n  z-index: 999;\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n}\n\n/* .cn-open {\n  animation: slide-in 0.5s forwards;\n  -webkit-animation: slide-in 0.5s forwards;\n}\n\n.cn-dismiss {\n  animation: slide-out 0.5s forwards;\n  -webkit-animation: slide-out 0.5s forwards;\n} */\n\n@keyframes slide-in {\n  0 {\n    -webkit-transform: translateX(100%);\n  }\n  100% {\n    -webkit-transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-in {\n  0 {\n    transform: translateX(100%);\n  }\n  100% {\n    transform: translateX(0%);\n  }\n}\n\n@keyframes slide-out {\n  0% {\n    transform: translateX(0%);\n  }\n  100% {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-out {\n  0% {\n    -webkit-transform: translateX(0%);\n  }\n  100% {\n    -webkit-transform: translateX(100%);\n  }\n}", ""]);
 
 // exports
 
