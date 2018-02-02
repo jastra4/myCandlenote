@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Icon } from 'semantic-ui-react';
 
-const UserData = props => (
+const UserFriendsList = props => (
   <div className="user-data-container">
     {console.log('PROPS IN USER DATA:', props)}
     <Card raised className="user-data-container">
@@ -19,4 +19,4 @@ const UserData = props => (
   </div>
 );
 
-export default UserData;
+export default UserFriendsList;

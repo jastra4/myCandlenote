@@ -87,7 +87,6 @@ export default class UserProfile extends React.Component {
                 <div className="user-info">
                   <Image src={this.state.profileImage} circular centered />
                   <Header as="h1" textAlign="center">{this.state.username}</Header>
-                  <Header textAlign="center">A subheader</Header>
                 </div>
               </Segment>
             </div>

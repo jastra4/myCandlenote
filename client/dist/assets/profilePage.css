@@ -3,5 +3,13 @@
 }
 
 .user-info-container {
-  /* margin-top: 3em; */
+  margin-top: 3em;
+}
+
+.user-info-deck-count {
+  margin-bottom: 0.5em;
+}
+
+.user-data-container {
+  width: max-content;
 }
