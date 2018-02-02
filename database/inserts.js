@@ -19,11 +19,6 @@ const insertDeck = ({ subject, title, userId }) => (
 );
 
 const insertMessage = ({ to, sentBy, text, timeStamp }) => {
-  // console.log('insert: ');
-  // console.log(to);
-  // console.log(sentBy);
-  // console.log(text);
-  // console.log(timeStamp);
   new Messages({
     to,
     sentBy,
@@ -32,12 +27,8 @@ const insertMessage = ({ to, sentBy, text, timeStamp }) => {
   }).save();
 };
 
-const addFriend = (id, newFriend, callback) => {
-  console.log('insertFriend:');
-  console.log(id);
-  console.log(newFriend);
-  // update my friends list
-  User.findById(id, (err, user) => {
+const addFriend = (currentUser, newFriend, callback) => {
+  User.findOne({ username: currentUser }, (err, user) => {
     if (err) {
       callback('error finding user');
     }
@@ -46,19 +37,25 @@ const addFriend = (id, newFriend, callback) => {
       if (error) {
         callback('error saving');
       } else {
+        // callback('Added friend!');
+      }
+    });
+  });
+  User.findOne({ username: newFriend }, (err, user) => {
+    if (err) {
+      callback('error finding user');
+    }
+    user.friends.push(currentUser);
+    user.save((error) => {
+      if (error) {
+        callback('error saving');
+      } else {
         callback('Added friend!');
       }
     });
   });
-};
 
-// db.inventory.updateOne(
-//    { item: "paper" },
-//    {
-//      $set: { "size.uom": "cm", status: "P" },
-//      $currentDate: { lastModified: true }
-//    }
-// )
+};
 
 module.exports = {
   insertDeck,

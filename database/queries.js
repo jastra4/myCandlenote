@@ -12,25 +12,19 @@ const getUserName = (id, callback) => {
 };
 
 const getMessages = (sentBy, to, callback) => {
-  console.log('getMessages: ');
-  console.log(sentBy);
-  console.log(to);
   const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created'); // .limit(8);
-  // const query = db.Messages.find({});
   query.exec((err, docs) => {
     if (err) {
       callback(err);
+    } else {
+      callback(docs);
     }
-    callback(docs);
   });
 };
 
 const getAllUsers = (currentUser, callback) => {
-  // where my name is in they're friends list
-  // const query = User.find({});
-  console.log('Query friends for: ', currentUser);
-  const query = User.find({ friends: { $elemMatch: { username: currentUser } } });
-  // { results: { $elemMatch: { $gte: 80, $lt: 85 } } }
+  const query = User.find({}); // change to search for friends
+  // const query = User.find({ friends: { $elemMatch: { username: currentUser } } });
   query.exec((err, docs) => {
     if (err) {
       console.log('err: ', err);
