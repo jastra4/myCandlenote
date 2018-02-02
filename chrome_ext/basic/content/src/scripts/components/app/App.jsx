@@ -10,6 +10,22 @@ class App extends Component {
       tabState: ''
     };
     this.toggleWindowState = this.toggleWindowState.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
+  componentWillMount() {
+    document.addEventListener('keydown', this.handleKeyPress)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyPress)
+  }
+
+  handleKeyPress (e) {
+    if (e.metaKey && e.keyCode === 77) {
+      e.preventDefault();
+      this.toggleWindowState();
+    };
   }
 
   toggleWindowState () {

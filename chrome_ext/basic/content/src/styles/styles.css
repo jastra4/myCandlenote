@@ -20,8 +20,6 @@
   cursor: pointer; 
   transform: rotate(270deg) translateY(600px);
   -webkit-transform: rotate(270deg) translateY(600px);
-  /* transition-duration: 1s; */
-  
 }
 
 .candlenote-window {
@@ -36,14 +34,10 @@
   border-radius: 10px 0px 0px 10px;
   border: 1px solid #191a1c;
   border-right: none;
-  /* transform: translateX(0%);
-  -webkit-transform: translateX(0%);
   animation: 1.4s slide-in 0s forwards;
   -webkit-animation: 1.4s slide-in 0s forwards; */
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
-
-  
 };
 
 .cn-intermediate {

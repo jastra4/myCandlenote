@@ -9663,10 +9663,29 @@ var App = function (_Component) {
       tabState: ''
     };
     _this.toggleWindowState = _this.toggleWindowState.bind(_this);
+    _this.handleKeyPress = _this.handleKeyPress.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      document.addEventListener('keydown', this.handleKeyPress);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      document.removeEventListener('keydown', this.handleKeyPress);
+    }
+  }, {
+    key: 'handleKeyPress',
+    value: function handleKeyPress(e) {
+      if (e.metaKey && e.keyCode === 77) {
+        e.preventDefault();
+        this.toggleWindowState();
+      };
+    }
+  }, {
     key: 'toggleWindowState',
     value: function toggleWindowState() {
       if (!this.state.windowState) {
@@ -10648,7 +10667,7 @@ exports = module.exports = __webpack_require__(86)(false);
 
 
 // module
-exports.push([module.i, ".candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n  transform: rotate(270deg) translateY(600px);\n  -webkit-transform: rotate(270deg) translateY(600px);\n  /* transition-duration: 1s; */\n  \n}\n\n.candlenote-window {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  /* transform: translateX(0%);\n  -webkit-transform: translateX(0%);\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards; */\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n\n  \n};\n\n.cn-intermediate {\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards;\n}\n\ndiv.cn-dismiss {\n  -webkit-transform: translateX(100%); */\n  animation: 1.4s slide-window-in 0s forwards;\n  -webkit-animation: 1.4s slide-window-in 0s forwards;\n} \n\n.cn-open {\n  -webkit-animation: 1.4s slide-window-out 0s forwards;\n}\n\n@keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n.cn-tab-open {\n  animation: 1.4s slide-tab-out 0s forwards;\n  -webkit-animation: 1.4s slide-tab-out 0s forwards;\n}\n\n.cn-tab-dismiss {\n  animation: 1.4s slide-tab-in 0s forwards;\n  -webkit-animation: 1.4s slide-tab-in 0s forwards;\n}\n\n@keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}@-webkit-keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}\n\n@keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n\n@-webkit-keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n", ""]);
+exports.push([module.i, ".candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n  transform: rotate(270deg) translateY(600px);\n  -webkit-transform: rotate(270deg) translateY(600px);\n}\n\n.candlenote-window {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards; */\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n};\n\n.cn-intermediate {\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards;\n}\n\ndiv.cn-dismiss {\n  -webkit-transform: translateX(100%); */\n  animation: 1.4s slide-window-in 0s forwards;\n  -webkit-animation: 1.4s slide-window-in 0s forwards;\n} \n\n.cn-open {\n  -webkit-animation: 1.4s slide-window-out 0s forwards;\n}\n\n@keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n.cn-tab-open {\n  animation: 1.4s slide-tab-out 0s forwards;\n  -webkit-animation: 1.4s slide-tab-out 0s forwards;\n}\n\n.cn-tab-dismiss {\n  animation: 1.4s slide-tab-in 0s forwards;\n  -webkit-animation: 1.4s slide-tab-in 0s forwards;\n}\n\n@keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}@-webkit-keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}\n\n@keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n\n@-webkit-keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n", ""]);
 
 // exports
 
