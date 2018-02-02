@@ -12,6 +12,7 @@ export default class UserProfile extends React.Component {
       profileImage: '',
       deckCount: 0,
       flashcardCount: 0,
+      dateJoined: '',
     };
   }
 
@@ -19,11 +20,13 @@ export default class UserProfile extends React.Component {
     if (this.props.currentUser.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
+          const { username, dateJoined } = res.data;
           const profileImage = this.resizeProfileImage(res.data.profileImage);
           this.setState({
-            username: res.data.username,
+            username,
             profileImage,
-          }, () => console.log('STATE', this.state));
+            dateJoined,
+          });
           this.props.setCurrentUser(res.data);
           this.getDecksAndFlashcards(res.data.userId);
         })
@@ -33,6 +36,7 @@ export default class UserProfile extends React.Component {
       this.setState({
         username: this.props.currentUser.username,
         profileImage,
+        dateJoined: this.props.id,
       });
     }
   }
@@ -59,7 +63,6 @@ export default class UserProfile extends React.Component {
   }
 
   render() {
-    console.log('USER STATE:', this.state);
     return (
       <Grid columns="equal">
         <Grid.Row>
@@ -82,7 +85,11 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <UserData />
+          <UserData
+            deckCount={this.state.deckCount}
+            flashcardCount={this.state.flashcardCount}
+            dateJoined={this.state.dateJoined}
+          />
         </Grid.Row>
       </Grid>
     );

@@ -136,16 +136,16 @@ app.post('/friendrequest', (req, res) => {
 });
 
 app.get('/userProfile', (req, res) => {
-  console.log('PROFILE ROUTE PINGED');
-  console.log('USER:', req.user);
   queries.getCurrentUser(req.user)
     .then((response) => {
       const { _id: userId, username, googleId, profileImage } = response;
+      const dateJoined = response._id.getTimestamp();
       res.send({
         userId,
         username,
         googleId,
         profileImage,
+        dateJoined,
       });
     })
     .catch((err) => {
