@@ -64,11 +64,12 @@ class FlashcardCreator extends React.Component {
     e.preventDefault();
 
     const { front, back } = this.state;
-
+    console.log('PROPSSSSS:', this.props);
     this.props.createFlashcard({
       front,
       back,
       deckId: this.state.selectedDeck,
+      userId: this.props.currentUser.userId,
     });
 
     this.setState({

@@ -57,6 +57,7 @@ const FlashcardPage = props => (
             addFlashcard={props.addFlashcard}
             createFlashcard={props.createFlashcard}
             decksById={props.decksById}
+            currentUser={props.currentUser}
           />
         {/* </div> */}
       </Grid.Column>

@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
     cards: cardsForDeck,
     currentDeck: state.decks.currentDeck,
     decksById: state.decks.byId,
+    currentUser: state.user.currentUser,
   };
 };
 

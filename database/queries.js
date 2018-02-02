@@ -36,6 +36,8 @@ const getCurrentUser = currentId => User.findOne({ _id: currentId });
 
 const getDecksForUser = userId => Decks.find({ userId });
 
+// const getFlashcardsForDecks = decks => 
+
 module.exports = {
   getUserName,
   getMessages,

@@ -38,7 +38,7 @@ export default class UserProfile extends React.Component {
     axios.post('/api/userDecks', { userId })
       .then((res) => {
         this.props.setDecks(res.data);
-        return axios.post('/api/userFlashcards', res.data);
+        // return axios.post('/api/userFlashcards', res.data);
       })
       .then(res => console.log('FLAHSCARDS!!!:', res.data))
       .catch(err => console.log(err));
