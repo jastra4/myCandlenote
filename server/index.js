@@ -412,6 +412,13 @@ app.post('/api/getEditorPacket', (req, res) => {
     });
 });
 
+app.post('api/userDecks/:userId', (req, res) => {
+  const { userId } = req.params;
+  queries.getDecksForUser(userId)
+    .then(response => res.send(response))
+    .catch(err => res.send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
