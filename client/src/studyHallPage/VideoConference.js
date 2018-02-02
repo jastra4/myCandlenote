@@ -18,6 +18,12 @@ class VideoConference extends React.Component {
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
 
+    // const dataConnection = this.state.peer.connect(id);
+
+    this.state.peer.on('connection', function(id) {
+    	console.log('ID on connection: ', id);
+    })
+
     this.state.peer.on('open', (id) => console.log('Peer ID: ' + id));
     this.state.peer.on('call', this.onReceiveCall.bind(this));
 
@@ -64,7 +70,7 @@ class VideoConference extends React.Component {
     }, (stream) => {
       console.log('answering...');
       call.answer(stream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in on receive call: ', err); });
     call.on('stream', (stream) => {
       const video = document.querySelector('video');
       video.src = window.URL.createObjectURL(stream);
@@ -84,7 +90,7 @@ class VideoConference extends React.Component {
     }, (stream) => {
       const video = document.querySelector('.video-self');
       video.src = window.URL.createObjectURL(stream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
   call() {
@@ -96,7 +102,7 @@ class VideoConference extends React.Component {
       const call = this.state.peer.call(id, stream);
       console.log('calling...');
       call.on('stream', this.onReceiveStream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in call: ', err); });
   }
 
   componentWillUnmount() {
