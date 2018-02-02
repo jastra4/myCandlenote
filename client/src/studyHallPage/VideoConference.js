@@ -8,10 +8,8 @@ class VideoConference extends React.Component {
     this.state = {
       hash: id,
       peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
-      my_id: '',
-      peer_id: '',
-      initialized: false,
     };
+    this.call = this.call.bind(this);
   }
 
   componentDidMount() {
@@ -20,28 +18,40 @@ class VideoConference extends React.Component {
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
 
-    this.state.peer.on('open', (id) => {
-      console.log('My Peer id is: ', id);
-      this.setState({
-        my_id: id,
-        initialized: true,
-      });
+    // const dataConnection = this.state.peer.connect(id);
+
+    this.state.peer.on('connection', (id) => {
+      console.log('ID on connection: ', id);
     });
 
-    this.state.peer.on('connection', (connection) => {
-      console.log('Someone connected!');
-      console.log(connection);
-      this.setState({ conn: connection }, () => {
-        this.state.conn.on('open', () => {
-          this.setState({ connected: true });
-        });
-      });
-    });
+    this.state.peer.on('open', (id) => console.log('Peer ID: ' + id)); // eslint-disable-line 
+    this.state.peer.on('call', this.onReceiveCall.bind(this));
+
+
+    // this.state.peer.on('open', (id) => {
+    //   console.log('My Peer id is: ', id);
+    //   this.setState({
+    //     my_id: id,
+    //     initialized: true,
+    //   });
+    // });
+
+    // this.state.peer.on('connection', (connection) => {
+    //   console.log('Someone connected!');
+    //   console.log(connection);
+    //   this.setState({ conn: connection }, () => {
+    //     this.state.conn.on('open', () => {
+    //       this.setState({ connected: true });
+    //     });
+    //   });
+    // });
 
     this.prepareSelfVideo();
 
-    const url = window.location.href;
+    const url = window.location.href + `/${this.state.hash}`; // eslint-disable-line
+    console.log('URL: ', url);
     const match = url.match(/#(.+)/);
+    console.log('Match: ', match);
     if (match != null) {
       this.setState({ caller: true });
       this.call(match[1]);
@@ -60,7 +70,7 @@ class VideoConference extends React.Component {
     }, (stream) => {
       console.log('answering...');
       call.answer(stream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in on receive call: ', err); });
     call.on('stream', (stream) => {
       const video = document.querySelector('video');
       video.src = window.URL.createObjectURL(stream);
@@ -80,10 +90,11 @@ class VideoConference extends React.Component {
     }, (stream) => {
       const video = document.querySelector('.video-self');
       video.src = window.URL.createObjectURL(stream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
-  call(id) {
+  call() {
+    const id = document.querySelector('.peer-id');
     this.getMedia({
       audio: true,
       video: true,
@@ -91,23 +102,23 @@ class VideoConference extends React.Component {
       const call = this.state.peer.call(id, stream);
       console.log('calling...');
       call.on('stream', this.onReceiveStream);
-    }, (err) => { console.log(err); });
+    }, (err) => { console.log('Error in call: ', err); });
   }
 
   componentWillUnmount() {
     this.state.peer.disconnect();
   }
 
-  connect() {
-    const peerId = this.state.peer_id;
-    const connection = this.state.peer.connect(peerId);
-    this.setState({ conn: connection }, () => {
-      this.state.conn.on('open', () => {
-        this.setState({ connected: true });
-      });
-      this.state.conn.on('data');
-    });
-  }
+  // connect() {
+  //   const peerId = this.state.peer_id;
+  //   const connection = this.state.peer.connect(peerId);
+  //   this.setState({ conn: connection }, () => {
+  //     this.state.conn.on('open', () => {
+  //       this.setState({ connected: true });
+  //     });
+  //     this.state.conn.on('data');
+  //   });
+  // }
 
   render() {
     return (
@@ -118,6 +129,10 @@ class VideoConference extends React.Component {
           <video className="video-self" autoPlay></video>
           <div className="share">
             <a>Share - {`http://localhost:3000/studyhall/${this.state.hash}`}</a>
+          </div>
+          <div>
+            <input type="text" className="peer-id"></input>
+            <button onClick={this.call}>Call</button>
           </div>
         </div>
       </div>
