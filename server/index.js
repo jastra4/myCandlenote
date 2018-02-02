@@ -256,12 +256,13 @@ app.post('/api/deleteDeck', (req, res) => {
 app.post('/api/flashcards', (req, res) => {
   inserts.insertFlashcard(req.body)
     .then((result) => {
-      const { _id: id, front, back, deckId } = result._doc;
+      const { _id: id, front, back, deckId, userId } = result._doc;
       res.send({
         id,
         front,
         back,
         deckId,
+        userId,
       });
     })
     .catch(err => console.log(err));
@@ -431,9 +432,22 @@ app.post('/api/userDecks', (req, res) => {
 });
 
 app.post('/api/userFlashcards', (req, res) => {
-  const { decks } = req.body;
-  queries.getFlashcardsForDecks(decks)
-    .then(result => res.send(result))
+  const { userId } = req.body;
+  console.log('USER IN SERVER:', userId);
+  queries.getFlashcardsForUser(userId)
+    .then((response) => {
+      const flashcards = response.map((card) => {
+        const { _id: id, front, back, deckId, userId: uid } = card;
+        return {
+          id,
+          front,
+          back,
+          deckId,
+          userId: uid,
+        };
+      });
+      res.send(flashcards);
+    })
     .catch(err => res.send(err));
 });
 
