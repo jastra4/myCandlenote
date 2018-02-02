@@ -7,22 +7,21 @@ class App extends Component {
     this.state = {
       windowState: 'cn-dismiss'
     };
-    this.handleWindowClose = this.handleWindowClose.bind(this);
+    this.toggleWindowState = this.toggleWindowState.bind(this);
   }
 
-  handleWindowClose () {
+  toggleWindowState () {
     this.state.windowState === 'cn-dismiss'
       ? this.setState({ windowState: 'cn-open' })
       : this.setState({ windowState: 'cn-dismiss' })
   }
 
   render() {
-    console.log('lolooll')
     return (
       <div>
         <div className={`cnwindowopen`} >
         </div>
-        <div className={`tabopen` } >
+        <div className={`tabopen`} onClick={this.toggleWindowState}>
           CandleNote
         </div>
       </div>

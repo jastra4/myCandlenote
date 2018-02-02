@@ -9660,26 +9660,25 @@ var App = function (_Component) {
     _this.state = {
       windowState: 'cn-dismiss'
     };
-    _this.handleWindowClose = _this.handleWindowClose.bind(_this);
+    _this.toggleWindowState = _this.toggleWindowState.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
-    key: 'handleWindowClose',
-    value: function handleWindowClose() {
+    key: 'toggleWindowState',
+    value: function toggleWindowState() {
       this.state.windowState === 'cn-dismiss' ? this.setState({ windowState: 'cn-open' }) : this.setState({ windowState: 'cn-dismiss' });
     }
   }, {
     key: 'render',
     value: function render() {
-      console.log('lolooll');
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement('div', { className: 'cnwindowopen' }),
         _react2.default.createElement(
           'div',
-          { className: 'tabopen' },
+          { className: 'tabopen', onClick: this.toggleWindowState },
           'CandleNote'
         )
       );
@@ -10634,7 +10633,7 @@ exports = module.exports = __webpack_require__(86)(false);
 
 
 // module
-exports.push([module.i, ".tabopen {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 180px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 20px;\n  font-weight: 100;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding-top: 5px;\n}\n.cnwindowopen {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n    /* transform: translateX(100%); */\n  /* -webkit-transform: translateX(100%); */\n};\n.cntabopen {\n  background-color: #191a1c;\n  min-height: 30px;\n  max-height: 30px;\n  width: 150px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 180px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 20px;\n  font-weight: 100;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding-top: 5px;\n};\n/* background-color: #191a1c;\nmin-height: 200px;\nmax-height: 300px;\nwidth: 30px;\nposition: fixed;\nz-index: 99999999999999999999;\nright: 600px;\nborder-radius: 10px 0px 0px 10px;\ntop: calc(100vh - 300px);\nborder: 1px solid #191a1c;\ncolor: white;\nfont-size: 25px;\ntext-orientation: sideways;\ntransform: rotate(270deg);\ntransform-origin: left top 0; */\n.CN-Window-Close {\n  background-color: red;\n  width: 100px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px\n};\n/* \nhtml,\nbody {\n  overflow: hidden;\n  max-width: 100%\n} */\n\n.notification-container {\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 300px;\n  display: none;\n  height: 100%;\n  overflow: hidden;\n  background: #107b10;\n  z-index: 999;\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n}\n\n/* .cn-open {\n  animation: slide-in 0.5s forwards;\n  -webkit-animation: slide-in 0.5s forwards;\n}\n\n.cn-dismiss {\n  animation: slide-out 0.5s forwards;\n  -webkit-animation: slide-out 0.5s forwards;\n} */\n\n@keyframes slide-in {\n  0 {\n    -webkit-transform: translateX(100%);\n  }\n  100% {\n    -webkit-transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-in {\n  0 {\n    transform: translateX(100%);\n  }\n  100% {\n    transform: translateX(0%);\n  }\n}\n\n@keyframes slide-out {\n  0% {\n    transform: translateX(0%);\n  }\n  100% {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-out {\n  0% {\n    -webkit-transform: translateX(0%);\n  }\n  100% {\n    -webkit-transform: translateX(100%);\n  }\n}", ""]);
+exports.push([module.i, "div.tabopen {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 180px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 20px;\n  font-weight: 100;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n}\ndiv.cnwindowopen {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n    /* transform: translateX(100%); */\n  /* -webkit-transform: translateX(100%); */\n};\n.cntabopen {\n  background-color: #191a1c;\n  min-height: 30px;\n  max-height: 30px;\n  width: 150px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 180px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 20px;\n  font-weight: 100;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding-top: 5px;\n};\n/* background-color: #191a1c;\nmin-height: 200px;\nmax-height: 300px;\nwidth: 30px;\nposition: fixed;\nz-index: 99999999999999999999;\nright: 600px;\nborder-radius: 10px 0px 0px 10px;\ntop: calc(100vh - 300px);\nborder: 1px solid #191a1c;\ncolor: white;\nfont-size: 25px;\ntext-orientation: sideways;\ntransform: rotate(270deg);\ntransform-origin: left top 0; */\n.CN-Window-Close {\n  background-color: red;\n  width: 100px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px\n};\n/* \nhtml,\nbody {\n  overflow: hidden;\n  max-width: 100%\n} */\n\n.notification-container {\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 300px;\n  display: none;\n  height: 100%;\n  overflow: hidden;\n  background: #107b10;\n  z-index: 999;\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n}\n\n/* .cn-open {\n  animation: slide-in 0.5s forwards;\n  -webkit-animation: slide-in 0.5s forwards;\n}\n\n.cn-dismiss {\n  animation: slide-out 0.5s forwards;\n  -webkit-animation: slide-out 0.5s forwards;\n} */\n\n@keyframes slide-in {\n  0 {\n    -webkit-transform: translateX(100%);\n  }\n  100% {\n    -webkit-transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-in {\n  0 {\n    transform: translateX(100%);\n  }\n  100% {\n    transform: translateX(0%);\n  }\n}\n\n@keyframes slide-out {\n  0% {\n    transform: translateX(0%);\n  }\n  100% {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-out {\n  0% {\n    -webkit-transform: translateX(0%);\n  }\n  100% {\n    -webkit-transform: translateX(100%);\n  }\n}", ""]);
 
 // exports
 
