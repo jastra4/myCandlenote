@@ -211,6 +211,11 @@ io.sockets.on('connection', (socket) => {
     io.sockets.emit('notify available', socket.username);
   });
 
+  socket.on('acknowledged', (data) => {
+    console.log('acknowledged: ', data);
+    io.sockets.emit('notify acknowledged', data);
+  });
+
   // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
     // const now = new Date();

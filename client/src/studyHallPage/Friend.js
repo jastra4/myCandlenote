@@ -18,6 +18,14 @@ class Friend extends React.Component {
         if (data === this.props.friend.username) {
           console.log(`${data} is available`);
           this.setState({ active: true });
+          setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 10000);
+        }
+      });
+
+      this.props.socket.on('notify acknowledged', (data) => {
+        if (data === this.props.friend.username) {
+          this.setState({ active: true });
+          console.log(data, ' sees youre available');
         }
       });
     }
@@ -36,7 +44,10 @@ class Friend extends React.Component {
 }
 
 const mapStateToProps = state => (
-  { socket: state.activeSocket.socket }
+  {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  }
 );
 
 const FriendConnected = connect(mapStateToProps)(Friend);
