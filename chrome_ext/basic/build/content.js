@@ -9658,7 +9658,9 @@ var App = function (_Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      windowState: 'cn-dismiss'
+      windowState: '',
+      windowState2: ''
+
     };
     _this.toggleWindowState = _this.toggleWindowState.bind(_this);
     return _this;
@@ -9667,15 +9669,29 @@ var App = function (_Component) {
   _createClass(App, [{
     key: 'toggleWindowState',
     value: function toggleWindowState() {
-      this.state.windowState === 'cn-dismiss' ? this.setState({ windowState: 'cn-open' }) : this.setState({ windowState: 'cn-dismiss' });
+      var _this2 = this;
+
+      console.log('this.state.windowState: ', this.state.windowState);
+      if (this.state.windowState === 'cn-dismiss' || !this.state.windowState) {
+        this.setState({ windowState2: 'cn-open' });
+        setTimeout(function () {
+          _this2.setState({ windowState: 'cn-open' });
+        });
+      } else {
+        this.setState({ windowState2: 'cn-dismiss' });
+        setTimeout(function () {
+          _this2.setState({ windowState: 'cn-dismiss' });
+        });
+      }
     }
   }, {
     key: 'render',
     value: function render() {
+      console.log('currentState: ', this.state);
       return _react2.default.createElement(
         'div',
-        null,
-        _react2.default.createElement('div', { className: 'candlenote-window ' + this.state.windowState }),
+        { className: 'candlenote-parent ' },
+        _react2.default.createElement('div', { className: 'candlenote-window ' + this.state.windowState + ' ' + this.state.windowState2 }),
         _react2.default.createElement(
           'div',
           { className: 'candlenote-tab', onClick: this.toggleWindowState },
@@ -10633,7 +10649,7 @@ exports = module.exports = __webpack_require__(86)(false);
 
 
 // module
-exports.push([module.i, "div.candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n}\ndiv.candlenote-window {\n  background-color: #dea86e;\n  /* width: 600px; */\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  transform: translateX(0%);\n  -webkit-transform: translateX(0%);\n};\n.cntabopen {\n  background-color: #191a1c;\n  min-height: 30px;\n  max-height: 30px;\n  width: 150px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 180px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 20px;\n  font-weight: 100;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding-top: 5px;\n};\n/* background-color: #191a1c;\nmin-height: 200px;\nmax-height: 300px;\nwidth: 30px;\nposition: fixed;\nz-index: 99999999999999999999;\nright: 600px;\nborder-radius: 10px 0px 0px 10px;\ntop: calc(100vh - 300px);\nborder: 1px solid #191a1c;\ncolor: white;\nfont-size: 25px;\ntext-orientation: sideways;\ntransform: rotate(270deg);\ntransform-origin: left top 0; */\n.CN-Window-Close {\n  background-color: red;\n  width: 100px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px\n};\n/* \nhtml,\nbody {\n  overflow: hidden;\n  max-width: 100%\n} */\n\n.notification-container {\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 300px;\n  display: none;\n  height: 100%;\n  overflow: hidden;\n  background: #107b10;\n  z-index: 999;\n  /* transform: translateX(100%);\n  -webkit-transform: translateX(100%); */\n}\n\n\n div.cn-open {\n   width: 600px;\n   transition-timing-function: ease-in;\n} \n\ndiv.cn-dismiss {\n  width: 0px;\n  transition-timing-function: ease-in;\n}\n\ndiv.candlenote-tab.cn-dismiss{\n  right: 0px;\n   transition-timing-function: ease-in;\n}\n\ndiv.candlenote-tab.cn-open{\n  right: 485px;\n  transition-timing-function: ease-in;\n}\n\n/* div.cn-open {\n  animation: slide-in 0.5s forwards;\n  -webkit-animation: slide-in 0.5s forwards;\n} \n\ndiv.cn-dismiss {\n  animation: 1.4s slide-out 0.5s forwards;\n  -webkit-animation: 1.4s slide-out 0.5s forwards;\n}\n\n@keyframes slide-in {\n  0 {\n    -webkit-transform: translateX(100%);\n  }\n  100% {\n    -webkit-transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-in {\n  0 {\n    transform: translateX(100%);\n  }\n  100% {\n    transform: translateX(0%);\n  }\n}\n\n@keyframes slide-out {\n  0% {\n    transform: translateX(0%);\n  }\n  100% {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-out {\n  0% {\n    -webkit-transform: translateX(0%);\n  }\n  100% {\n    -webkit-transform: translateX(100%);\n  }\n} */", ""]);
+exports.push([module.i, ".candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform: rotate(270deg);\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n  /* transition-duration: 1s; */\n  \n}\n\n.candlenote-window {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  /* transform: translateX(100%);\n  -webkit-transform: translateX(100%); */\n    /* animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards; */\n  \n};\n\n/* background-color: #191a1c;\nmin-height: 200px;\nmax-height: 300px;\nwidth: 30px;\nposition: fixed;\nz-index: 99999999999999999999;\nright: 600px;\nborder-radius: 10px 0px 0px 10px;\ntop: calc(100vh - 300px);\nborder: 1px solid #191a1c;\ncolor: white;\nfont-size: 25px;\ntext-orientation: sideways;\ntransform: rotate(270deg);\ntransform-origin: left top 0; */\n/* .CN-Window-Close {\n  background-color: red;\n  width: 100px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px\n}; */\n/* \nhtml,\nbody {\n  overflow: hidden;\n  max-width: 100%\n} */\n\n/* .notification-container {\n  position: absolute;\n  top: 0;\n  right: 0;\n  width: 300px;\n  display: none;\n  height: 100%;\n  overflow: hidden;\n  background: #107b10;\n  z-index: 999;\n  /* transform: translateX(100%);\n  -webkit-transform: translateX(100%); */\n/* } */ \n\n\n/* .candlenote-window.cn-open {\n  width: 600px;\n  transition-timing-function: ease-in;\n} \n\n.candlenote-window.cn-dismiss {\n  width: 0px;\n  transition-timing-function: ease-in;\n}\n\n.candlenote-tab.cn-dismiss{\n  right: -100px;\n  transition-timing-function: ease-in;\n}\n\n.candlenote-tab.cn-open{\n  right: 490px;\n  transition-timing-function: ease-in;\n} */\n\ndiv.cn-dismiss {\n  /* transform: translateX(100%);\n  -webkit-transform: translateX(100%); */\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards;\n} \n\n.cn-open {\n  /* transform: translateX(0%);\n  -webkit-transform: translateX(0%); */\n  animation: 1.4s slide-out 0s forwards;\n  -webkit-animation: 1.4s slide-out 0s forwards;\n}\n\n@keyframes slide-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@keyframes slide-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n", ""]);
 
 // exports
 
