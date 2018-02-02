@@ -113,13 +113,6 @@ app.get('/login', (req, res) => {
 
 
 app.get('*', (req, res, next) => {
-  // mongoose.connection.db.dropCollection('users', function(err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('dropped users');
-  //   }
-  // });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -129,6 +122,7 @@ app.get('*', (req, res, next) => {
   // res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
+// called by app.js
 app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
   res.status(200).send({ userid });
@@ -140,20 +134,11 @@ app.get('/api/pdf/:id', (req, res) => {
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
-app.get('/users', (req, res) => {
-  const currentUser = req.query.currentUser;
-  queries.getAllUsers(currentUser, (users) => {
-    res.send(users);
-  });
-});
-
-
-app.post('/friendrequest', (req, res) => {
-  const { newFriend, currentUser } = req.body;
-  // check if they exist
-  // send them a message if they do
-  inserts.addFriend(currentUser, newFriend, (response) => {
-    res.send(response);
+// called by FriendsList.js
+app.get('/loadFriendsList', (req, res) => {
+  const { currentUser } = req.query;
+  queries.loadFriendsList(currentUser, (friends) => {
+    res.send(friends);
   });
 });
 
@@ -178,6 +163,14 @@ app.get('/userProfile', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
+// called by Search.js
+app.post('/handleFriendRequest', (req, res) => {
+  const { newFriend, currentUser } = req.body;
+  inserts.addFriend(currentUser, newFriend, (response) => {
+    res.send(response);
+  });
+});
+
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());
@@ -193,15 +186,16 @@ app.post('/makePDF', (req, res) => {
 
 /* ----------- Sockets ------------ */
 
-app.get('/messages', (req, res) => {
-  const { to } = req.query;
-  const sentBy = req.query.from;
-  queries.getMessages(sentBy, to, (messages) => {
+// called by ChatBox.js
+app.get('/loadChatHistory', (req, res) => {
+  const { sentBy, to } = req.query;
+  queries.loadChatHistory(sentBy, to, (messages) => {
     res.send(messages);
   });
 });
 
-app.get('/username', (req, res) => {
+// called by app.js
+app.get('/identifySocket', (req, res) => {
   const userid = req.query.id;
   queries.getUserName(userid, (username) => {
     res.send(username);
@@ -209,29 +203,31 @@ app.get('/username', (req, res) => {
 });
 
 io.sockets.on('connection', (socket) => {
-  console.log('socket connected: ', socket.id);
+  console.log(`socket connected: ${socket.id}`);
 
-  // log on event
-  socket.on('new user', (data) => {
+  // listening to app.js and emitting to Friend.js
+  socket.on('available', (data) => {
     socket.username = data; // eslint-disable-line
-    io.sockets.emit('logged on', socket.username);
+    io.sockets.emit('notify available', socket.username);
   });
 
+  // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
-    const now = new Date();
-    inserts.insertMessage({
+    // const now = new Date();
+    const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
+    inserts.saveMessage({
       to: data.to,
       sentBy: socket.username,
       text: data.text,
-      timeStamp: dateFormat(now, 'dddd, mmm dS, h:MM TT'),
+      timeStamp: now,
     });
-    data.timeStamp = dateFormat(now, 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
-    io.sockets.emit('new message', data);
+    data.timeStamp = now; // eslint-disable-line
+    io.sockets.emit('receive message', data);
   });
 
-  // log off event
+  // trigged by closing browser and emtting to Friend.js
   socket.on('disconnect', () => {
-    io.sockets.emit('logged off', socket.username);
+    io.sockets.emit('notify offline', socket.username);
     console.log(`${socket.username} disconnected!`);
   });
 });

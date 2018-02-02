@@ -7,16 +7,16 @@ class Friend extends React.Component {
     this.state = { active: false };
 
     if (props.socket !== undefined) {
-      this.props.socket.on('logged off', (data) => {
-        console.log('logged off: ', data);
+      this.props.socket.on('notify offline', (data) => {
         if (data === this.props.friend.username) {
+          console.log(`${data} signed off`);
           this.setState({ active: false });
         }
       });
 
-      this.props.socket.on('logged on', (data) => {
-        console.log('logged on: ', data);
+      this.props.socket.on('notify available', (data) => {
         if (data === this.props.friend.username) {
+          console.log(`${data} is available`);
           this.setState({ active: true });
         }
       });
@@ -27,27 +27,17 @@ class Friend extends React.Component {
     this.props.changeChat(this.props.friend.username);
   }
 
-  otherRender() {
+  render() {
     if (this.state.active) {
       return (<div className="online" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
     }
     return (<div className="offline" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
-  }
-
-  render() {
-    return (
-      <div>
-        <div>{this.otherRender()}</div>
-      </div>
-    );
   }
 }
 
 const mapStateToProps = state => (
   { socket: state.activeSocket.socket }
 );
-
-// export default Friend;
 
 const FriendConnected = connect(mapStateToProps)(Friend);
 

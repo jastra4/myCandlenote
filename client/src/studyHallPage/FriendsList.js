@@ -11,8 +11,7 @@ class FriendsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps: ', nextProps);
-    const users = Object.keys(nextProps.contacts).map(key => nextProps.contacts[key]);
+    const users = Object.keys(nextProps.friends).map(key => nextProps.friends[key]);
     this.setState({ friends: users });
   }
 
@@ -21,12 +20,10 @@ class FriendsList extends React.Component {
   }
 
   getUsers() {
-    console.log('getFriends for: ', this.props.username);
-    return axios.get(`/users?currentUser=${this.props.username}`)
-      .then((users) => {
-        console.log('friends: ', users);
-        const usersList = users.data;
-        this.props.loadUsers(usersList);
+    return axios.get(`/loadFriendsList?currentUser=${this.props.username}`)
+      .then((friends) => {
+        const friendsList = friends.data;
+        this.props.setFriends(friendsList);
       })
       .catch((error) => {
         console.log(error);
@@ -40,20 +37,19 @@ class FriendsList extends React.Component {
         <div> {this.state.friends.map((friend, i) => (
           <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>
-        <button onClick={this.getUsers.bind(this)}>test</button>
       </div>
     );
   }
 }
 
 const mapDispatchToProps = dispatch => (
-  { loadUsers: usersList => dispatch(setUsers(usersList)) }
+  { setFriends: friendsList => dispatch(setUsers(friendsList)) }
 );
 
 const mapStateToProps = (state) => {
   const usersById = state.users.byId;
   return {
-    contacts: usersById,
+    friends: usersById,
     username: state.activeSocket.username,
   };
 };

@@ -48,9 +48,9 @@ class App extends React.Component {
   }
 
   nameSocket = (socket, userid) => {
-    axios.get(`/username?id=${userid}`)
+    axios.get(`/identifySocket?id=${userid}`)
       .then((res) => {
-        socket.emit('new user', res.data);
+        socket.emit('available', res.data);
         this.props.activeSocket(socket, res.data);
         console.log(`${res.data} connected!`);
       });

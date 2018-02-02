@@ -11,7 +11,7 @@ const getUserName = (id, callback) => {
   });
 };
 
-const getMessages = (sentBy, to, callback) => {
+const loadChatHistory = (sentBy, to, callback) => {
   const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created'); // .limit(8);
   query.exec((err, docs) => {
     if (err) {
@@ -22,24 +22,17 @@ const getMessages = (sentBy, to, callback) => {
   });
 };
 
-const getAllUsers = (currentUser, callback) => {
-  // const query = User.find({}); // change to search for friends
-  console.log('currentUser: ', currentUser);
+const loadFriendsList = (currentUser, callback) => {
   User.findOne({ username: currentUser }, (err, person) => {
     const myFriends = person.friends;
-    console.log('myFriends: ', myFriends);
-
     const query = User.find({ username: { $in: myFriends } });
     query.exec((error, docs) => {
       if (error) {
-        console.log('err: ', error);
         callback(err);
       } else {
-        console.log('docs: ', docs);
         callback(docs);
       }
     });
-
   });
 };
 
@@ -47,7 +40,7 @@ const getCurrentUser = currentId => User.findOne({ _id: currentId });
 
 module.exports = {
   getUserName,
-  getMessages,
-  getAllUsers,
+  loadChatHistory,
+  loadFriendsList,
   getCurrentUser,
 };

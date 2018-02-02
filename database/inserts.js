@@ -17,7 +17,7 @@ const insertDeck = ({ subject, title, userId }) => (
   }).save()
 );
 
-const insertMessage = ({ to, sentBy, text, timeStamp }) => {
+const saveMessage = ({ to, sentBy, text, timeStamp }) => {
   new Messages({
     to,
     sentBy,
@@ -45,6 +45,6 @@ const addFriend = (currentUser, newFriend, callback) => {
 module.exports = {
   insertDeck,
   insertFlashcard,
-  insertMessage,
+  saveMessage,
   addFriend,
 };

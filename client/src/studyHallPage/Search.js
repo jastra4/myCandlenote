@@ -11,15 +11,13 @@ class Search extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const newFriend = $('#search').val();
-    axios.post('/friendrequest', {
+    axios.post('/handleFriendRequest', {
       currentUser: this.props.username,
-      newFriend: newFriend,
+      newFriend: $('#search').val(),
     })
       .then((res) => {
         console.log(res.data);
       });
-    // console.log(`searched: "${newFriend}"`);
     $('#search').val('');
   }
 
@@ -34,14 +32,10 @@ class Search extends React.Component {
   }
 }
 
-// export default Search;
-
-const mapStateToProps = (state) => {
-  return {
-    socket: state.activeSocket.socket,
-    username: state.activeSocket.username,
-  };
-};
+const mapStateToProps = state => ({
+  socket: state.activeSocket.socket,
+  username: state.activeSocket.username,
+});
 
 const SearchConnected = connect(mapStateToProps)(Search);
 
