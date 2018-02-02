@@ -48,15 +48,15 @@ class DeckCreator extends React.Component {
             <Form onSubmit={e => this.onFormSubmit(e)}>
               <Grid>
                 <Grid.Column width={6}>
+                  {this.state.improperSubmit ?
+                    <Message negative onDismiss={() => this.setState({ improperSubmit: false })}>
+                      <Message.Header>Missing Field(s)</Message.Header>
+                      <p>You must provide a subject and title to create a deck.</p>
+                    </Message> : ''}
                   <Form.Field control={Input} value={this.state.subject} label='Subject' placeholder='Subject' onChange={e => this.onSubjectChange(e)} />
                   <Divider />
                   <Form.Field control={Input} value={this.state.title} label='Title' placeholder='Title' onChange={e => this.onTitleChange(e)} />
                   <Form.Field id='form-button-control-public' control={Button} content='Confirm' label='Create Deck' />
-                  {this.state.improperSubmit ?
-                    <Message negative onDismiss={() => this.setState({ improperSubmit: false })}>
-                      <Message.Header>Missing Field</Message.Header>
-                      <p>You must provide both a subject and title</p>
-                    </Message> : ''}
                 </Grid.Column>
                 <Grid.Column width={10}>
                   <div style={{ paddingTop: '1.65em' }}>

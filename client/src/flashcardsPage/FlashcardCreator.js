@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Button, Form } from 'semantic-ui-react';
+import { Segment, Button, Form, Message } from 'semantic-ui-react';
 
 import FlashcardImageUploader from './FlashcardImageUploader';
 
@@ -21,7 +21,8 @@ class FlashcardCreator extends React.Component {
       back: '',
       hasFrontImage: false,
       hasBackImage: false,
-      selectedDeck: '',
+      selectedDeckId: '',
+      improperSubmit: false,
     };
   }
 
@@ -34,7 +35,7 @@ class FlashcardCreator extends React.Component {
   }
 
   onDeckChange(e, selection) {
-    this.setState({ selectedDeck: selection.value });
+    this.setState({ selectedDeckId: selection.value });
   }
 
   onUploadFront(urlData) {
@@ -63,27 +64,36 @@ class FlashcardCreator extends React.Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const { front, back } = this.state;
-    console.log('PROPSSSSS:', this.props);
-    this.props.createFlashcard({
-      front,
-      back,
-      deckId: this.state.selectedDeck,
-      userId: this.props.currentUser.userId,
-    });
+    const { front, back, selectedDeckId } = this.state;
+    if (front && back && selectedDeckId) {
+      this.props.createFlashcard({
+        front,
+        back,
+        deckId: this.state.selectedDeckId,
+        userId: this.props.currentUser.userId,
+      });
 
-    this.setState({
-      front: '',
-      back: '',
-      hasFrontImage: false,
-      hasBackImage: false,
-    });
+      this.setState({
+        front: '',
+        back: '',
+        hasFrontImage: false,
+        hasBackImage: false,
+        improperSubmit: false,
+      });
+    } else {
+      this.setState({ improperSubmit: true });
+    }
   }
 
   render() {
     return (
       <div>
         <Segment>
+          {this.state.improperSubmit ?
+            <Message negative compact onDismiss={() => this.setState({ improperSubmit: false })}>
+              <Message.Header>Missing Field(s)</Message.Header>
+              <p>You must provide a front, back and deck to create a flashcard</p>
+            </Message> : ''}
           <Form onSubmit={this.onSubmit.bind(this)}>
             <Form.Field>
               <label>Prompt</label>
@@ -102,12 +112,14 @@ class FlashcardCreator extends React.Component {
             <Form.Group inline>
               <Button type='submit'>Submit</Button>
               <Button type='button' onClick={this.clearFields.bind(this)}>Clear Fields</Button>
-              <Form.Dropdown
-                selection
-                placeholder='Deck'
-                options={mapDecksToOptions(this.props.decksById)}
-                onChange={this.onDeckChange.bind(this)}
-              />
+              <From.Field>
+                <Form.Dropdown
+                  selection
+                  placeholder='Deck'
+                  options={mapDecksToOptions(this.props.decksById)}
+                  onChange={this.onDeckChange.bind(this)}
+                />
+              </From.Field>
             </Form.Group>
           </Form>
         </Segment>
