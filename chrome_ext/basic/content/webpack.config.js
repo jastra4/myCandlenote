@@ -27,6 +27,18 @@ module.exports = {
         query: {
           presets: ['es2015', 'react']
         }
+      },
+      {
+        test: /\.css?$/,
+        loader: 'style-loader',
+        exclude: /(node_modules)/,
+        include: path.join(__dirname, 'src')
+      }, 
+      {
+        test: /\.css?$/,
+        loader: 'css-loader',
+        exclude: /(node_modules)/,
+        include: path.join(__dirname, 'src')
       }
     ]
   }
