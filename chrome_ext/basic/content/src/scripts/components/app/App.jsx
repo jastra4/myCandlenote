@@ -19,9 +19,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <div className={`cnwindowopen`} >
+        <div className={ `candlenote-window ${this.state.windowState}` } >
         </div>
-        <div className={`tabopen`} onClick={this.toggleWindowState}>
+        <div className={ `candlenote-tab`}  onClick={ this.toggleWindowState }>
           CandleNote
         </div>
       </div>

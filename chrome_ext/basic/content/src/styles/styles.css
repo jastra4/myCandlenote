@@ -1,4 +1,4 @@
-div.tabopen {
+div.candlenote-tab {
   background-color: #191a1c;
   min-height: 50px;
   max-height: 50px;
@@ -7,20 +7,22 @@ div.tabopen {
   z-index: 1000000000;
   right: 485px;
   border-radius: 10px 10px 0px 0px;
-  top: calc(100vh - 180px);
+  top: calc(100vh - 165px);
   border: 5px solid #191a1c;
   color: white;
-  font-size: 20px;
-  font-weight: 100;
+  font-size: 23px;
+  font-weight: 300;
   text-orientation: sideways;
   text-align: center;
   transform: rotate(270deg);
   transform-origin: left top 0;
   padding: 0px 0px 0px 5px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  cursor: pointer; 
 }
-div.cnwindowopen {
+div.candlenote-window {
   background-color: #dea86e;
-  width: 600px;
+  /* width: 600px; */
   min-height: 300px;
   max-height: 300px;
   top: calc(100vh - 350px);
@@ -30,8 +32,8 @@ div.cnwindowopen {
   border-radius: 10px 0px 0px 10px;
   border: 1px solid #191a1c;
   border-right: none;
-    /* transform: translateX(100%); */
-  /* -webkit-transform: translateX(100%); */
+  transform: translateX(0%);
+  -webkit-transform: translateX(0%);
 };
 .cntabopen {
   background-color: #191a1c;
@@ -96,19 +98,40 @@ body {
   overflow: hidden;
   background: #107b10;
   z-index: 999;
-  transform: translateX(100%);
-  -webkit-transform: translateX(100%);
+  /* transform: translateX(100%);
+  -webkit-transform: translateX(100%); */
 }
 
-/* .cn-open {
+
+ div.cn-open {
+   width: 600px;
+   transition-timing-function: ease-in;
+} 
+
+div.cn-dismiss {
+  width: 0px;
+  transition-timing-function: ease-in;
+}
+
+div.candlenote-tab.cn-dismiss{
+  right: 0px;
+   transition-timing-function: ease-in;
+}
+
+div.candlenote-tab.cn-open{
+  right: 485px;
+  transition-timing-function: ease-in;
+}
+
+/* div.cn-open {
   animation: slide-in 0.5s forwards;
   -webkit-animation: slide-in 0.5s forwards;
-}
+} 
 
-.cn-dismiss {
-  animation: slide-out 0.5s forwards;
-  -webkit-animation: slide-out 0.5s forwards;
-} */
+div.cn-dismiss {
+  animation: 1.4s slide-out 0.5s forwards;
+  -webkit-animation: 1.4s slide-out 0.5s forwards;
+}
 
 @keyframes slide-in {
   0 {
@@ -144,4 +167,4 @@ body {
   100% {
     -webkit-transform: translateX(100%);
   }
-}
+} */
