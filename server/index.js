@@ -412,8 +412,8 @@ app.post('/api/getEditorPacket', (req, res) => {
     });
 });
 
-app.post('api/userDecks/:userId', (req, res) => {
-  const { userId } = req.params;
+app.post('/api/userDecks', (req, res) => {
+  const { userId } = req.body;
   queries.getDecksForUser(userId)
     .then(response => res.send(response))
     .catch(err => res.send(err));
