@@ -13,7 +13,7 @@ export default class UserProfile extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.user.userId === '') {
+    if (this.props.currentUser.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
           const profileImage = this.resizeProfileImage(res.data.profileImage);
@@ -25,16 +25,16 @@ export default class UserProfile extends React.Component {
         })
         .catch(err => console.log(err));
     } else {
-      const profileImage = this.resizeProfileImage(this.props.user.profileImage);
+      const profileImage = this.resizeProfileImage(this.props.currentUser.profileImage);
       this.setState({
-        username: this.props.user.username,
+        username: this.props.currentUser.username,
         profileImage,
       });
     }
   }
 
   getDecks(userId) {
-    axios.post('api/userDecks')
+    axios.get('api/userDecks')
   }
 
   resizeProfileImage(imageUrl) {

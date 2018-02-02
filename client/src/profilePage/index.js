@@ -3,8 +3,8 @@ import UserProfile from './UserProfile';
 import { removeCurrentUser, setCurrentUser } from '../actions/usersActions';
 
 const mapStateToProps = state => ({
-  user: state.user,
-  id: state.user.userId,
+  currentUser: state.user.currentUser,
+  id: state.user.currentUser.userId,
 });
 
 const mapDispatchToProps = dispatch => ({

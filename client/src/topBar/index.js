@@ -24,12 +24,13 @@ class TopBar extends Component {
         <Menu.Item name='CandleNote' position='right'>
         </Menu.Item>
 
-        {this.props.user.userId !== '' ?
+        {this.props.currentUser.userId !== '' ?
           <Menu.Item as={Link} to='/profile' name='user' position='right' onClick={() => { }}>
+            {console.log('USER IN TOPBAR:', this.props.currentUser)}
             <div style={{ marginRight: '5px' }}>
-              <Image src={this.resizeProfileImage(this.props.user.profileImage)} circular centered spaced="right" />
+              <Image src={this.resizeProfileImage(this.props.currentUser.profileImage)} circular centered spaced="right" />
             </div>
-            {this.props.user.username}
+            {this.props.currentUser.username}
           </Menu.Item>
           :
           <Menu.Item as={Link} to='/' name='user' position='right' onClick={() => { }}>
@@ -47,7 +48,7 @@ class TopBar extends Component {
   );
 }
 
-const mapStateToProps = state => ({ user: state.user });
+const mapStateToProps = state => ({ currentUser: state.user.currentUser });
 
 const mapDispatchToProps = dispatch => ({ removeCurrentUser: () => dispatch(removeCurrentUser()) });
 
