@@ -1,4 +1,4 @@
-const { ExpressPeerServer } = require('peerjs');
+// const { ExpressPeerServer } = require('peerjs');
 // const http = require('http');
 
 const express = require('express');
@@ -36,7 +36,7 @@ const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
 
-const peerServer = ExpressPeerServer(server, { debug: true });
+// const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
@@ -92,7 +92,7 @@ app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
-app.use('/peerjs', peerServer);
+// app.use('/peerjs', peerServer);
 
 
 // TODO: Investigate
@@ -428,7 +428,7 @@ server.listen(PORT, () => {
   console.info(`🌎  Server now running on port ${PORT}.  🌎`);
 });
 
-peerServer.on('connection', (id) => {
-  console.log(id);
-  console.log(server._clients);
-});
+// peerServer.on('connection', (id) => {
+//   console.log(id);
+//   console.log(server._clients);
+// });

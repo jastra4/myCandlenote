@@ -18,6 +18,8 @@ import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
 import activeSocket from './actions/activeSocket'; // auth stuff
 
+
+
 const socketUrl = 'http://localhost:3000';
 class App extends React.Component {
   constructor(props) {
