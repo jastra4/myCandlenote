@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, Icon, Image, Segment, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import '../../dist/assets/profilePage.css';
+import UserData from './UserData';
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -9,6 +10,8 @@ export default class UserProfile extends React.Component {
     this.state = {
       username: '',
       profileImage: '',
+      deckCount: 0,
+      flashcardCount: 0,
     };
   }
 
@@ -38,9 +41,13 @@ export default class UserProfile extends React.Component {
     axios.post('/api/userDecks', { userId })
       .then((res) => {
         this.props.setDecks(res.data);
+        this.setState({ deckCount: res.data.length });
         return axios.post('/api/userFlashcards', { userId });
       })
-      .then(res => this.props.setFlashcards(res.data))
+      .then((res) => {
+        this.props.setFlashcards(res.data);
+        this.setState({ flashcardCount: res.data.length });
+      })
       .catch(err => console.log(err));
   }
 
@@ -55,23 +62,28 @@ export default class UserProfile extends React.Component {
     console.log('USER STATE:', this.state);
     return (
       <Grid columns="equal">
-        <Grid.Column>
-        </Grid.Column>
-        <Grid.Column width={12}>
-         <div style={{ height: '30px' }}></div>
-          <div className="user-info-container">
-            <Segment raised>
-              <div className="user-info">
-                <Image src={this.state.profileImage} circular centered />
-                <Header as="h1" textAlign="center">{this.state.username}</Header>
-                <Header textAlign="center">A subheader</Header>
-                <Icon name="user" />
-              </div>
-            </Segment>
-          </div>
-        </Grid.Column>
-        <Grid.Column>
-        </Grid.Column>
+        <Grid.Row>
+          <Grid.Column>
+          </Grid.Column>
+          <Grid.Column width={12}>
+          <div style={{ height: '30px' }}></div>
+            <div className="user-info-container">
+              <Segment raised>
+                <div className="user-info">
+                  <Image src={this.state.profileImage} circular centered />
+                  <Header as="h1" textAlign="center">{this.state.username}</Header>
+                  <Header textAlign="center">A subheader</Header>
+                  <Icon name="user" />
+                </div>
+              </Segment>
+            </div>
+          </Grid.Column>
+          <Grid.Column>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <UserData />
+        </Grid.Row>
       </Grid>
     );
   }

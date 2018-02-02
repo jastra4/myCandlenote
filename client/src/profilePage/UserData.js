@@ -9,7 +9,7 @@ export default props => (
           Personal Stats:
         </Card.Header>
         <Card.Meta>
-          {props.dateJoined}
+          {props.dateJoined || '<date joined>'}
         </Card.Meta>
       </Card.Content>
       <Card.Content>
@@ -17,13 +17,13 @@ export default props => (
           Flashcard Count:
         </Card.Header>
         <Card.Meta>
-          {props.flashcardCount}
+          {props.flashcardCount || '<flashcard count>'}
         </Card.Meta>
         <Card.Header as="h4">
           Deck Count:
         </Card.Header>
         <Card.Meta>
-          {props.deckCount}
+          {props.deckCount || '<deck count>'}
         </Card.Meta>
       </Card.Content>
     </Card>
