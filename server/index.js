@@ -415,7 +415,18 @@ app.post('/api/getEditorPacket', (req, res) => {
 app.post('/api/userDecks', (req, res) => {
   const { userId } = req.body;
   queries.getDecksForUser(userId)
-    .then(response => res.send(response))
+    .then((response) => {
+      const decks = response.map((deck) => {
+        const { _id: id, subject, title, userId: uid } = deck;
+        return {
+          id,
+          subject,
+          title,
+          userId: uid,
+        };
+      });
+      res.send(decks);
+    })
     .catch(err => res.send(err));
 });
 
