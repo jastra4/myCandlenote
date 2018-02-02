@@ -35,12 +35,20 @@
   border-radius: 10px 0px 0px 10px;
   border: 1px solid #191a1c;
   border-right: none;
-  /* transform: translateX(100%);
-  -webkit-transform: translateX(100%); */
-    /* animation: 1.4s slide-in 0s forwards;
+  /* transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+  animation: 1.4s slide-in 0s forwards;
   -webkit-animation: 1.4s slide-in 0s forwards; */
+  transform: translateX(100%);
+  -webkit-transform: translateX(100%);
+
   
 };
+
+.cn-intermediate {
+  animation: 1.4s slide-in 0s forwards;
+  -webkit-animation: 1.4s slide-in 0s forwards;
+}
 
 /* background-color: #191a1c;
 min-height: 200px;
