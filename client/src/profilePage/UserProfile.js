@@ -22,7 +22,7 @@ export default class UserProfile extends React.Component {
             profileImage,
           }, () => console.log('STATE', this.state));
           this.props.setCurrentUser(res.data);
-          this.getDecks(res.data.userId);
+          this.getDecksAndFlashcards(res.data.userId);
         })
         .catch(err => console.log(err));
     } else {
@@ -34,9 +34,13 @@ export default class UserProfile extends React.Component {
     }
   }
 
-  getDecks(userId) {
-    axios.post('/api/userDecks', {userId})
-      .then(res => console.log('Decks for user:', res))
+  getDecksAndFlashcards(userId) {
+    axios.post('/api/userDecks', { userId })
+      .then((res) => {
+        this.props.setDecks(res.data);
+        return axios.post('/api/userFlashcards', res.data);
+      })
+      .then(res => console.log('FLAHSCARDS!!!:', res.data))
       .catch(err => console.log(err));
   }
 

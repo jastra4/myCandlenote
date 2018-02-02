@@ -430,6 +430,13 @@ app.post('/api/userDecks', (req, res) => {
     .catch(err => res.send(err));
 });
 
+app.post('/api/userFlashcards', (req, res) => {
+  const { decks } = req.body;
+  queries.getFlashcardsForDecks(decks)
+    .then(result => res.send(result))
+    .catch(err => res.send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
