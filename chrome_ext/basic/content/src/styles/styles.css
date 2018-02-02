@@ -1,5 +1,25 @@
-.cn-window-open {
-  background-color: #ffcb99;
+.tabopen {
+  background-color: #191a1c;
+  min-height: 50px;
+  max-height: 50px;
+  width: 150px;
+  position: fixed;
+  z-index: 1000000000;
+  right: 485px;
+  border-radius: 10px 10px 0px 0px;
+  top: calc(100vh - 180px);
+  border: 5px solid #191a1c;
+  color: white;
+  font-size: 20px;
+  font-weight: 100;
+  text-orientation: sideways;
+  text-align: center;
+  transform: rotate(270deg);
+  transform-origin: left top 0;
+  padding-top: 5px;
+}
+.cnwindowopen {
+  background-color: #dea86e;
   width: 600px;
   min-height: 300px;
   max-height: 300px;
@@ -13,42 +33,41 @@
     /* transform: translateX(100%); */
   /* -webkit-transform: translateX(100%); */
 };
-
-.cn-tab-open {
-    background-color: #191a1c;
-    min-height: 30px;
-    max-height: 30px;
-    width: 150px;
-    position: fixed;
-    z-index: 99999999999999999999;
-    right: 485px;
-    border-radius: 10px 10px 0px 0px;
-    top: calc(100vh - 180px);
-    border: 5px solid #191a1c;
-    color: white;
-    font-size: 20px;
-    font-weight: 100;
-    text-orientation: sideways;
-    text-align: center;
-    transform: rotate(270deg);
-    transform-origin: left top 0;
-    padding-top: 5px;
-    /* background-color: #191a1c;
-    min-height: 200px;
-    max-height: 300px;
-    width: 30px;
-    position: fixed;
-    z-index: 99999999999999999999;
-    right: 600px;
-    border-radius: 10px 0px 0px 10px;
-    top: calc(100vh - 300px);
-    border: 1px solid #191a1c;
-    color: white;
-    font-size: 25px;
-    text-orientation: sideways;
-    transform: rotate(270deg);
-    transform-origin: left top 0; */
+.cntabopen {
+  background-color: #191a1c;
+  min-height: 30px;
+  max-height: 30px;
+  width: 150px;
+  position: fixed;
+  z-index: 99999999999999999999;
+  right: 485px;
+  border-radius: 10px 10px 0px 0px;
+  top: calc(100vh - 180px);
+  border: 5px solid #191a1c;
+  color: white;
+  font-size: 20px;
+  font-weight: 100;
+  text-orientation: sideways;
+  text-align: center;
+  transform: rotate(270deg);
+  transform-origin: left top 0;
+  padding-top: 5px;
 };
+/* background-color: #191a1c;
+min-height: 200px;
+max-height: 300px;
+width: 30px;
+position: fixed;
+z-index: 99999999999999999999;
+right: 600px;
+border-radius: 10px 0px 0px 10px;
+top: calc(100vh - 300px);
+border: 1px solid #191a1c;
+color: white;
+font-size: 25px;
+text-orientation: sideways;
+transform: rotate(270deg);
+transform-origin: left top 0; */
 .CN-Window-Close {
   background-color: red;
   width: 100px;

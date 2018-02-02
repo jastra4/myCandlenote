@@ -20,9 +20,9 @@ class App extends Component {
     console.log('lolooll')
     return (
       <div>
-        <div className={`cn-window-open`} >
+        <div className={`cnwindowopen`} >
         </div>
-        <div className={`cn-tab-open` }  onClick={ this.toggleWindowState }>
+        <div className={`tabopen` } >
           CandleNote
         </div>
       </div>
