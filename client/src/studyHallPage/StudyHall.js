@@ -11,6 +11,7 @@ class StudyHall extends React.Component {
   constructor(props) {
     super(props);
     this.state = { chat: 'New Messages' };
+    // first name of friends list || 'No open chats'
   }
 
   changeChat(username) {

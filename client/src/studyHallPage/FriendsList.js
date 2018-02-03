@@ -18,7 +18,7 @@ class FriendsList extends React.Component {
     this.props.socket.removeAllListeners();
     this.props.socket.on('update friends', (data) => {
       this.updateFriends(data);
-      console.log('Added ', data);
+      console.log(data);
     });
   }
 

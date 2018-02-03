@@ -171,6 +171,13 @@ app.post('/handleFriendRequest', (req, res) => {
   });
 });
 
+app.post('/removeFriend', (req, res) => {
+  const { user, friend } = req.body;
+  deletes.removeFriend(user, friend, (bool) => {
+    res.send(bool);
+  });
+});
+
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());

@@ -12,8 +12,10 @@ class ChatBox extends React.Component {
 
     if (props.socket !== undefined) {
       props.socket.on('receive message', (data) => {
-        this.setState({ messages: this.state.messages.concat([data]) });
-        this.updateScroll();
+        if (data.sentBy === this.props.chat) {
+          this.setState({ messages: this.state.messages.concat([data]) });
+          this.updateScroll();
+        }
       });
     }
   }
@@ -26,8 +28,10 @@ class ChatBox extends React.Component {
       sentBy: this.props.username,
     };
     this.props.socket.emit('send message', msg);
+    this.setState({ messages: this.state.messages.concat([msg]) });
     $('#message').val('');
-    this.updateScroll();
+    setTimeout(this.updateScroll, 200);
+    // this.updateScroll();
   }
 
   updateScroll() {

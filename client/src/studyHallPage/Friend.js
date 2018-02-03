@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class Friend extends React.Component {
   constructor(props) {
@@ -42,6 +43,16 @@ class Friend extends React.Component {
     this.props.changeChat(this.props.friend.username);
   }
 
+  removeFriend() {
+    axios.post('/removeFriend', {
+      user: this.props.username,
+      friend: this.props.friend.username,
+    })
+      .then((res) => {
+        console.log('removed: ', res.data);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -49,6 +60,7 @@ class Friend extends React.Component {
           className={this.state.status}
           onClick={this.handleClick.bind(this)}>{this.props.friend.username}
         </div>
+        <div onClick={this.removeFriend.bind(this)}>x</div>
       </div>
     );
   }
