@@ -13,17 +13,26 @@ class FriendsList extends React.Component {
 
   componentWillMount() {
     this.props.socket.removeAllListeners();
-    this.props.socket.on('update friends', (data) => {
-      this.updateFriends(data);
-      console.log(data);
-    });
+
+    // this.props.socket.on('update friends', (data) => {
+    //   this.updateFriends(data);
+    // });
+
+    // this.props.socket.on('removed friend', (data) => {
+    //   console.log('data: ', data);
+    //   this.state.friends.forEach((friend, i) => {
+    //     console.log(friend);
+    //     if (friend.username === data) {
+    //       console.log('found match');
+    //       this.state.friends.splice(i, 1);
+    //       this.setState({ friends: this.state.friends });
+    //     }
+    //   });
+    // });
   }
 
   updateFriends(data) {
-    console.log('updateFriends: ', this.state.friends);
-    console.log('newFriend: ', [data]);
     this.setState({ friends: this.state.friends.concat([data]) });
-    // this.state.friends = this.state.friends.concat([data]);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -34,6 +43,23 @@ class FriendsList extends React.Component {
   }
 
   componentDidMount() {
+
+    this.props.socket.on('update friends', (data) => {
+      this.updateFriends(data);
+    });
+
+    this.props.socket.on('removed friend', (data) => {
+      console.log('data: ', data);
+      this.state.friends.forEach((friend, i) => {
+        console.log(friend);
+        if (friend.username === data) {
+          console.log('found match');
+          this.state.friends.splice(i, 1);
+          this.setState({ friends: this.state.friends });
+        }
+      });
+    });
+    
     this.props.socket.emit('available');
     this.getUsers();
   }
