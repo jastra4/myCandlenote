@@ -10,6 +10,7 @@ class VideoConference extends React.Component {
       peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
     };
     this.call = this.call.bind(this);
+    setTimeout(() => console.log('Peer in constructor: ', this.state.peer.connections.id), 3000);
   }
 
   componentDidMount() {
@@ -18,33 +19,22 @@ class VideoConference extends React.Component {
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
 
-    // const dataConnection = this.state.peer.connect(id);
+    const dataConnection = this.state.peer.connect('6oajpo20ma5dbo6r');
+
 
     this.state.peer.on('connection', (id) => {
+      console.log('Data Connection: ', dataConnection);
       console.log('ID on connection: ', id);
+      this.state.peer.call(id);
     });
 
-    this.state.peer.on('open', (id) => console.log('Peer ID: ' + id)); // eslint-disable-line 
+    this.state.peer.on('open', (id) => {
+      console.log('Peer id: ', id);
+      this.setState({ remoteId: id }, () => {
+        this.call(this.state.remoteId);
+      });
+    }); // eslint-disable-line 
     this.state.peer.on('call', this.onReceiveCall.bind(this));
-
-
-    // this.state.peer.on('open', (id) => {
-    //   console.log('My Peer id is: ', id);
-    //   this.setState({
-    //     my_id: id,
-    //     initialized: true,
-    //   });
-    // });
-
-    // this.state.peer.on('connection', (connection) => {
-    //   console.log('Someone connected!');
-    //   console.log(connection);
-    //   this.setState({ conn: connection }, () => {
-    //     this.state.conn.on('open', () => {
-    //       this.setState({ connected: true });
-    //     });
-    //   });
-    // });
 
     this.prepareSelfVideo();
 
@@ -72,7 +62,7 @@ class VideoConference extends React.Component {
       call.answer(stream);
     }, (err) => { console.log('Error in on receive call: ', err); });
     call.on('stream', (stream) => {
-      const video = document.querySelector('video');
+      const video = document.querySelector('.video');
       video.src = window.URL.createObjectURL(stream);
     });
   }
@@ -93,8 +83,8 @@ class VideoConference extends React.Component {
     }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
-  call() {
-    const id = document.querySelector('.peer-id');
+  call(id) {
+    // const id = document.querySelector('.peer-id');
     this.getMedia({
       audio: true,
       video: true,
