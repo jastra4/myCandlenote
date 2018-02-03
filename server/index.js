@@ -305,7 +305,7 @@ app.post('/api/suggestedResources', (req, res) => {
     key: process.env.GOOGLE_SEARCH_API_KEY,
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
-    .then(result => res.send(result.data))
+    .then(results => res.send(results.data))
     .catch(err => res.send(err));
 });
 
@@ -427,7 +427,6 @@ app.post('/api/userDecks', (req, res) => {
   const { userId } = req.body;
   queries.getDecksForUser(userId)
     .then((response) => {
-      console.log('DECKS IN SERVER:', response);
       const decks = response.map((deck) => {
         const { _id: id, subject, title, userId: uid } = deck;
         return {
@@ -444,10 +443,8 @@ app.post('/api/userDecks', (req, res) => {
 
 app.post('/api/userFlashcards', (req, res) => {
   const { userId } = req.body;
-  console.log('USER IN SERVER:', userId);
   queries.getFlashcardsForUser(userId)
     .then((response) => {
-      console.log('FLASHCARDS IN SERVER:', response);
       const flashcards = response.map((card) => {
         const { _id: id, front, back, deckId, userId: uid } = card;
         return {
