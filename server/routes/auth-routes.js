@@ -15,9 +15,13 @@ router.get('/logout', (req, res) => {
   res.redirect('/auth/login');
 });
 
-router.get('/google', passport.authenticate('google', { scope: [
-  'profile',
-  'https://www.googleapis.com/auth/calendar.readonly'] }));
+router.get('/google', passport.authenticate('google', {
+  scope: [
+    'profile',
+    'https://www.googleapis.com/auth/calendar.readonly'],
+  accessType: 'offline',
+  approvalPrompt: 'force',
+}));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
   console.log('Logged in user: ', req.user.username);

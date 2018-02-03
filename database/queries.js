@@ -1,5 +1,4 @@
-const User = require('../server/models/user-model');
-const { Decks, Flashcards } = require('./index');
+const { Decks, Flashcards, User } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {

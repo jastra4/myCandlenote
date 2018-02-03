@@ -2,7 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // const FacebookStrategy = require('passport-facebook');
 const keys = require('./keys');
-const User = require('../models/user-model');
+const { User } = require('../../database');
 
 passport.serializeUser((user, done) => {
   console.log('Serializing user by user: ', user);
@@ -33,6 +33,8 @@ passport.use(new GoogleStrategy({
         username: profile.displayName,
         googleId: profile.id,
         profileImage: profile.photos[0].value,
+        googleAccessToken: accessToken,
+        googleRefreshToken: refreshToken,
       }).save().then((newUser) => {
         console.log('New user created: ', newUser);
         done(null, newUser);
