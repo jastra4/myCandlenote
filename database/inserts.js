@@ -1,4 +1,4 @@
-const { Flashcards, Decks, Messages } = require('./index');
+const { Flashcards, Decks, Messages, User } = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
@@ -27,8 +27,12 @@ const insertMessage = ({ to, sentBy, text, timeStamp }) => {
   }).save();
 };
 
+const saveAccessToken = ({ userId, token }) =>
+  User.update({ _id: userId }, { $set: { googleAccessToken: token } });
+
 module.exports = {
   insertDeck,
   insertFlashcard,
   insertMessage,
+  saveAccessToken,
 };

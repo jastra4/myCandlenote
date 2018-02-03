@@ -190,7 +190,10 @@ app.post('/refreshToken', (req, res) => {
         grant_type: 'refresh_token',
       })
         .then((response) => {
-          inserts.saveAccessToken(response.access_token);
+          inserts.saveAccessToken({
+            userId,
+            token: response.access_token,
+          });
           res.send(response.access_token);
         });
     });

@@ -37,6 +37,8 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
+const getRefreshToken = userId => User.findOne({ _id: userId });
+
 module.exports = {
   getUserName,
   getMessages,
@@ -44,4 +46,5 @@ module.exports = {
   getCurrentUser,
   getDecksForUser,
   getFlashcardsForUser,
+  getRefreshToken,
 };
