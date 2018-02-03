@@ -11,7 +11,7 @@ class StudyHall extends React.Component {
   constructor(props) {
     super(props);
     this.state = { chat: 'New Messages' };
-    // first name of friends list || 'No open chats'
+    // should default to first name in fiends list
   }
 
   changeChat(username) {
@@ -22,10 +22,10 @@ class StudyHall extends React.Component {
     if (this.props.updatedSocket !== undefined) {
       return (
         <div className="studyContainer">
-          <div className="Groups studyBackground">
+          <div className="groupsList studyBackground">
             <GroupsList changeChat={this.changeChat.bind(this)}/>
           </div>
-          <div className="Friends studyBackground">
+          <div className="friendsList studyBackground">
             <FriendsListConnected changeChat={this.changeChat.bind(this)}/>
           </div>
           <div className="Search studyBackground">

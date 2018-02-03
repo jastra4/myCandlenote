@@ -244,10 +244,19 @@ io.sockets.on('connection', (socket) => {
   socket.on('new friend', (friendName, user) => {
     if (friendName in activeUserSockets) {
       const { username, status } = activeUserSockets[friendName];
-      activeUserSockets[user].emit('update friends', { username, status });
-      activeUserSockets[friendName].emit('update friends', { username: user, status: 'available' });
+      activeUserSockets[user].emit('update friends', {
+        username,
+        status,
+      });
+      activeUserSockets[friendName].emit('update friends', {
+        username: user,
+        status: 'available',
+      });
     } else {
-      activeUserSockets[user].emit('update friends', { username: friendName, status: 'offline' });
+      activeUserSockets[user].emit('update friends', {
+        username: friendName,
+        status: 'offline',
+      });
     }
   });
 

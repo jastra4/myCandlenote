@@ -13,22 +13,6 @@ class FriendsList extends React.Component {
 
   componentWillMount() {
     this.props.socket.removeAllListeners();
-
-    // this.props.socket.on('update friends', (data) => {
-    //   this.updateFriends(data);
-    // });
-
-    // this.props.socket.on('removed friend', (data) => {
-    //   console.log('data: ', data);
-    //   this.state.friends.forEach((friend, i) => {
-    //     console.log(friend);
-    //     if (friend.username === data) {
-    //       console.log('found match');
-    //       this.state.friends.splice(i, 1);
-    //       this.setState({ friends: this.state.friends });
-    //     }
-    //   });
-    // });
   }
 
   updateFriends(data) {
@@ -43,7 +27,6 @@ class FriendsList extends React.Component {
   }
 
   componentDidMount() {
-
     this.props.socket.on('update friends', (data) => {
       this.updateFriends(data);
     });
@@ -59,7 +42,7 @@ class FriendsList extends React.Component {
         }
       });
     });
-    
+
     this.props.socket.emit('available');
     this.getUsers();
   }
@@ -82,7 +65,7 @@ class FriendsList extends React.Component {
   render() {
     return (
       <div>
-        <h4>Friends</h4>
+        <h3 className='friendsListHeader'>Friends</h3>
         <div> {this.state.friends.map((friend, i) => (
           <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>

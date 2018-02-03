@@ -31,10 +31,9 @@ class ChatBox extends React.Component {
     this.setState({ messages: this.state.messages.concat([msg]) });
     $('#message').val('');
     setTimeout(this.updateScroll, 200);
-    // this.updateScroll();
   }
 
-  updateScroll() {
+  updateScroll = () => {
     const chatbox = document.getElementById('chatBox');
     const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
     if (!isScrolledToBottom) {

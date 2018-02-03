@@ -7,27 +7,97 @@ body {
   background-color: #EDEAD0;
 }
 
+/* StudyHall Styles */
 .studyBackground{
 	background: white;
-	border: 1px #000 solid;
 }
 .studyContainer{
 	height: 44em;
+	border: 1px #000 solid;
 }
-.Groups{
+
+/* Groups Styles */
+.groupsList{
 	height: 22em;
 	width: 25%;
 	position: relative;
 	top: 0em;
 	right: 0em;
+	background: #e6e6ff;
+	padding-top: 1em;
+	border: 1px #000 solid;
+	border-style: none solid solid none;
 }
-.Friends{
+.groupsListHeader{
+	padding-left: 1em;
+	color: #2d2d86;
+	bottom-border: 1px #2d2d86 solid;
+}
+.group{
+
+}
+.groupName{
+  padding-left: 1em;
+  color: #4d4d4d;
+}
+.groupName:hover {
+	font-size: 1.25em;
+}
+.groupRemove{
+  float: right;
+  margin-right: 1em;
+  color: gray;
+}
+
+/* Friends Styles */
+.friendsList{
 	height: 22em;
 	width: 25%;
 	position: relative;
 	top: 0em;
 	right: 0em;
+	background: #e6e6ff;
+	padding-top: 1em;
+	border: 1px #000 solid;
+	border-style: none solid solid none;
 }
+.friendsListHeader{
+	padding-left: 1em;
+	color: #2d2d86;
+	bottom-border: 1px #2d2d86 solid;
+}
+.friend{
+
+}
+.friendName{
+  float: left;
+  padding-left: 1em;
+}
+.friendName:hover {
+	font-size: 1.25em;
+}
+.friendRemove{
+  float: right;
+  margin-right: 1em;
+  color: gray;
+}
+.friendRemove:hover {
+  color: red;
+	font-size: 1.25em;
+}
+.offline{
+	color: #4d4d4d; /* Red */
+}
+.away{
+	color: #ff9900; /* Red */
+	font-weight: bold;
+}
+.available{
+	color: green; /* Red */
+	font-weight: bold;
+}
+
+/* Search Styles */
 .Search{
 	height: 3em;
 	width: 75%;
@@ -35,6 +105,8 @@ body {
 	bottom: 44em;
 	left: 25%;
 }
+
+/* Chat Styles */
 .Chat{
 	height: 41em;
 	width: 75%;
@@ -53,20 +125,6 @@ body {
 }
 .chatInput{
 	height: 2em;
-}
-.offline{
-	color: grey; /* Red */
-	padding-left: 1em;
-}
-.away{
-	color: yellow; /* Red */
-	font-weight: bold;
-	padding-left: 1em;
-}
-.available{
-	color: green; /* Red */
-	font-weight: bold;
-	padding-left: 1em;
 }
 .message{
 	padding-left: 1em;

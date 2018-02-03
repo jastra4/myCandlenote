@@ -57,10 +57,11 @@ class Friend extends React.Component {
     return (
       <div>
         <div
-          className={this.state.status}
-          onClick={this.handleClick.bind(this)}>{this.props.friend.username}
+          className={`friendName ${this.state.status}`}
+          onClick={this.handleClick.bind(this)} 
+          >{this.props.friend.username}
         </div>
-        <div onClick={this.removeFriend.bind(this)}>x</div>
+        <div onClick={this.removeFriend.bind(this)} className='friendRemove'>x</div>
       </div>
     );
   }

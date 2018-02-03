@@ -10,7 +10,7 @@ class GroupsList extends React.Component {
   render() {
     return (
       <div>
-        <h4>Groups:</h4>
+        <h3 className='groupsListHeader'>Groups:</h3>
         <div>{this.state.groups.map((group, i) => (
           <Group key={i} group={group} changeChat={this.props.changeChat}/>
         ))}
