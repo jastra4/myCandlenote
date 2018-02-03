@@ -9,9 +9,6 @@ class FriendsList extends React.Component {
     super(props);
     this.state = { friends: [] };
     this.updateFriends = this.updateFriends.bind(this);
-    // this.props.socket.on('update friends', (data) => {
-    //   console.log('Added ', data);
-    // });
   }
 
   componentWillMount() {
@@ -23,8 +20,10 @@ class FriendsList extends React.Component {
   }
 
   updateFriends(data) {
-    console.log('updateFriends ran');
-    this.state.friends = this.state.friends.concat([data]);
+    console.log('updateFriends: ', this.state.friends);
+    console.log('newFriend: ', [data]);
+    this.setState({ friends: this.state.friends.concat([data]) });
+    // this.state.friends = this.state.friends.concat([data]);
   }
 
   componentWillReceiveProps(nextProps) {

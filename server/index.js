@@ -248,14 +248,13 @@ io.sockets.on('connection', (socket) => {
     activeUserSockets[data.sentBy].emit('receive message', data);
   });
 
-  socket.on('new friend', (friendName, username) => {
-    if (username in activeUserSockets) {
-      console.log('added by: ', username);
-      activeUserSockets[username].emit('update friends', friendName);
-    }
+  socket.on('new friend', (friendName, user) => {
     if (friendName in activeUserSockets) {
-      console.log('new friend: ', friendName);
-      activeUserSockets[friendName].emit('update friends', username);
+      const { username, status } = activeUserSockets[friendName];
+      activeUserSockets[user].emit('update friends', { username, status });
+      activeUserSockets[friendName].emit('update friends', { username: user, status: 'available' });
+    } else {
+      activeUserSockets[user].emit('update friends', { username: friendName, status: 'offline' });
     }
   });
 
