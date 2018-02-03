@@ -5,7 +5,7 @@ import { addDeck, createDeck, setCurrentDeck, deleteDeck } from '../actions/deck
 
 const mapStateToProps = state => ({
   decksById: state.decks.byId,
-  userId: state.user.userId,
+  userId: state.user.currentUser.userId,
 });
 
 const mapDispatchToProps = dispatch => ({

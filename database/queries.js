@@ -1,4 +1,5 @@
 const User = require('../server/models/user-model');
+const { Decks, Flashcards } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -33,9 +34,15 @@ const getAllUsers = (callback) => {
 
 const getCurrentUser = currentId => User.findOne({ _id: currentId });
 
+const getDecksForUser = userId => Decks.find({ userId });
+
+const getFlashcardsForUser = userId => Flashcards.find({ userId });
+
 module.exports = {
   getUserName,
   getMessages,
   getAllUsers,
   getCurrentUser,
+  getDecksForUser,
+  getFlashcardsForUser,
 };

@@ -14,7 +14,7 @@ const defaultState = {
       title: 'Derivatives',
     },
   },
-  currentDeck: -1,
+  currentDeck: { id: -1 },
   allIds: [],
 };
 
@@ -39,7 +39,10 @@ const decksReducer = (state = defaultState, action) => {
         ...decks,
         [deck.id]: deck,
       }), {});
-      return { byId: decksById };
+      return {
+        ...state,
+        byId: decksById,
+      };
     }
     case 'SET_CURRENT_DECK': {
       const selectedDeck = { ...state.byId[action.payload.id] };

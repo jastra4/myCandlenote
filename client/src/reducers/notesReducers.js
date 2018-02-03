@@ -21,7 +21,10 @@ const notesReducer = (state = defaultState, action) => {
         ...notes,
         [note.id]: note,
       }), {});
-      return { byId: notesById };
+      return {
+        ...state,
+        byId: notesById,
+      };
     }
     case 'SET_CURRENT_NOTE':
       return {

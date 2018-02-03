@@ -1,8 +1,11 @@
 const defaultState = {
-  username: '',
-  userId: '',
-  googleId: '',
-  profileImage: '',
+  byId: {},
+  currentUser: {
+    username: '',
+    userId: '',
+    googleId: '',
+    profileImage: '',
+  },
 };
 
 const usersReducer = (state = defaultState, action) => {
@@ -11,21 +14,30 @@ const usersReducer = (state = defaultState, action) => {
       console.log('ACTION:', action);
       return {
         ...state,
-        ...action.payload,
+        currentUser: {
+          ...state.currentUser,
+          ...action.payload,
+        },
       };
     case 'REMOVE_CURRENT_USER':
       return {
-        username: '',
-        userId: '',
-        googleId: '',
-        profileImage: '',
+        ...state,
+        currentUser: {
+          username: '',
+          userId: '',
+          googleId: '',
+          profileImage: '',
+        },
       };
     case 'SET_USERS': {
       const usersById = action.payload.reduce((users, user) => ({
         ...users,
         [user._id]: user,
       }), {});
-      return { byId: usersById };
+      return {
+        ...state,
+        byId: usersById,
+      };
     }
     default:
       return state;

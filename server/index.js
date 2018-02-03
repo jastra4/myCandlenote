@@ -146,16 +146,16 @@ app.post('/friendrequest', (req, res) => {
 });
 
 app.get('/userProfile', (req, res) => {
-  console.log('PROFILE ROUTE PINGED');
-  console.log('USER:', req.user);
   queries.getCurrentUser(req.user)
     .then((response) => {
       const { _id: userId, username, googleId, profileImage } = response;
+      const dateJoined = response._id.getTimestamp();
       res.send({
         userId,
         username,
         googleId,
         profileImage,
+        dateJoined,
       });
     })
     .catch((err) => {
@@ -266,12 +266,13 @@ app.post('/api/deleteDeck', (req, res) => {
 app.post('/api/flashcards', (req, res) => {
   inserts.insertFlashcard(req.body)
     .then((result) => {
-      const { _id: id, front, back, deckId } = result._doc;
+      const { _id: id, front, back, deckId, userId } = result._doc;
       res.send({
         id,
         front,
         back,
         deckId,
+        userId,
       });
     })
     .catch(err => console.log(err));
@@ -304,7 +305,7 @@ app.post('/api/suggestedResources', (req, res) => {
     key: process.env.GOOGLE_SEARCH_API_KEY,
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
-    .then(result => res.send(result.data))
+    .then(results => res.send(results.data))
     .catch(err => res.send(err));
 });
 
@@ -420,6 +421,43 @@ app.post('/api/getEditorPacket', (req, res) => {
       console.error(e);
       res.sendStatus(500);
     });
+});
+
+app.post('/api/userDecks', (req, res) => {
+  const { userId } = req.body;
+  queries.getDecksForUser(userId)
+    .then((response) => {
+      const decks = response.map((deck) => {
+        const { _id: id, subject, title, userId: uid } = deck;
+        return {
+          id,
+          subject,
+          title,
+          userId: uid,
+        };
+      });
+      res.send(decks);
+    })
+    .catch(err => res.send(err));
+});
+
+app.post('/api/userFlashcards', (req, res) => {
+  const { userId } = req.body;
+  queries.getFlashcardsForUser(userId)
+    .then((response) => {
+      const flashcards = response.map((card) => {
+        const { _id: id, front, back, deckId, userId: uid } = card;
+        return {
+          id,
+          front,
+          back,
+          deckId,
+          userId: uid,
+        };
+      });
+      res.send(flashcards);
+    })
+    .catch(err => res.send(err));
 });
 
 /* -------- Initialize Server -------- */
