@@ -24728,9 +24728,9 @@ var App = function (_Component) {
   }, {
     key: 'toggleWindowState',
     value: function toggleWindowState() {
-      // if (!this.state.windowState) {
-      // this.setState({ intermediateAnimation: 'cn-intermediate'})
-      // }
+      if (!this.state.windowState) {
+        this.setState({ intermediateAnimation: 'cn-intermediate' });
+      }
       if (this.state.windowState === 'cn-dismiss' || !this.state.windowState) {
         this.setState({
           windowState: 'cn-open',

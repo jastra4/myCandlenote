@@ -30,9 +30,9 @@ class App extends Component {
   }
 
   toggleWindowState () {
-    // if (!this.state.windowState) {
-      // this.setState({ intermediateAnimation: 'cn-intermediate'})
-    // }
+    if (!this.state.windowState) {
+      this.setState({ intermediateAnimation: 'cn-intermediate'})
+    }
     if (this.state.windowState === 'cn-dismiss' || !this.state.windowState) {
       this.setState({ 
         windowState: 'cn-open',
@@ -47,7 +47,8 @@ class App extends Component {
     }
   }
 
-  render() {
+
+  render(){
     return (
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
