@@ -1,8 +1,9 @@
 import React from 'react';
-import { Grid, Icon, Image, Segment, Header, Label } from 'semantic-ui-react';
+import { Grid, Icon, Image, Segment, Header, Label, Card } from 'semantic-ui-react';
 import axios from 'axios';
 import '../../dist/assets/profilePage.css';
 import UserData from './UserData';
+import UserFriendsList from './UserFriendsList';
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -83,10 +84,22 @@ export default class UserProfile extends React.Component {
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">
               <Segment>
-                <Label attached="bottom right">Joined on {this.state.dateJoined}</Label>
+                <Label attached="top left">Joined on {this.state.dateJoined}</Label>
                 <div className="user-info">
                   <Image src={this.state.profileImage} circular centered />
                   <Header as="h1" textAlign="center">{this.state.username}</Header>
+                </div>
+                <div className="user-data-fbox">
+                  <div>
+                    <UserFriendsList />
+                  </div>
+                  <div>
+                    <UserData
+                      deckCount={this.state.deckCount}
+                      flashcardCount={this.state.flashcardCount}
+                      dateJoined={this.state.dateJoined}
+                    />
+                  </div>
                 </div>
               </Segment>
             </div>
@@ -95,11 +108,6 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <UserData
-            deckCount={this.state.deckCount}
-            flashcardCount={this.state.flashcardCount}
-            dateJoined={this.state.dateJoined}
-          />
         </Grid.Row>
       </Grid>
     );
