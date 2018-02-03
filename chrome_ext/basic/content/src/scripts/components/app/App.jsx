@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Editor from '../editor';
 import '../../../styles/styles.css'
 
 class App extends Component {
@@ -50,6 +51,7 @@ class App extends Component {
     return (
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
+          <Editor />
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote

@@ -1,3 +1,5 @@
+@import url('quill.snow.css');
+
 .candlenote-tab {
   background-color: #191a1c;
   min-height: 50px;
@@ -38,6 +40,7 @@
   -webkit-animation: 1.4s slide-in 0s forwards; */
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
+  overflow: hidden;
 };
 
 .cn-intermediate {
