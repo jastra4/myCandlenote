@@ -23,6 +23,7 @@ export default class MainEditor extends React.Component {
   componentDidMount() {
     const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
+    this.quillEditor.focus();
   }
 
   handleEditorChange (value, d, source, editor) {
@@ -64,6 +65,11 @@ export default class MainEditor extends React.Component {
     return (
       <div>
         <ReactQuill
+          ref={ (quillEditor) => { 
+            console.log('quillEditor: ', quillEditor) 
+            this.quillEditor = quillEditor;
+          }} 
+          className='cn-quill'
           theme='snow'
           value={this.state.value}
           onChange={this.handleEditorChange}

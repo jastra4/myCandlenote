@@ -1,5 +1,13 @@
 @import url('quill.snow.css');
 
+.ql-editor{
+  min-height: 180px !important;
+  max-height: 300px !important;
+  overflow: hidden;
+  overflow-y: scroll;
+  /* overflow-x: scroll; */
+}
+
 .candlenote-tab {
   background-color: #191a1c;
   min-height: 50px;

@@ -24728,9 +24728,9 @@ var App = function (_Component) {
   }, {
     key: 'toggleWindowState',
     value: function toggleWindowState() {
-      if (!this.state.windowState) {
-        this.setState({ intermediateAnimation: 'cn-intermediate' });
-      }
+      // if (!this.state.windowState) {
+      // this.setState({ intermediateAnimation: 'cn-intermediate'})
+      // }
       if (this.state.windowState === 'cn-dismiss' || !this.state.windowState) {
         this.setState({
           windowState: 'cn-open',
@@ -24829,6 +24829,7 @@ var MainEditor = function (_React$Component) {
     value: function componentDidMount() {
       var value = JSON.parse(window.localStorage.getItem('noteContent'));
       this.setState({ value: value });
+      this.quillEditor.focus();
     }
   }, {
     key: 'handleEditorChange',
@@ -24871,10 +24872,17 @@ var MainEditor = function (_React$Component) {
 
 
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(_reactQuill2.default, {
+          ref: function ref(quillEditor) {
+            console.log('quillEditor: ', quillEditor);
+            _this2.quillEditor = quillEditor;
+          },
+          className: 'cn-quill',
           theme: 'snow',
           value: this.state.value,
           onChange: this.handleEditorChange,
@@ -26850,7 +26858,7 @@ exports = module.exports = __webpack_require__(77)(false);
 exports.i(__webpack_require__(143), "");
 
 // module
-exports.push([module.i, ".candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n  transform: rotate(270deg) translateY(600px);\n  -webkit-transform: rotate(270deg) translateY(600px);\n}\n\n.candlenote-window {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards; */\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n  overflow: hidden;\n};\n\n.cn-intermediate {\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards;\n}\n\ndiv.cn-dismiss {\n  -webkit-transform: translateX(100%); */\n  animation: 1.4s slide-window-in 0s forwards;\n  -webkit-animation: 1.4s slide-window-in 0s forwards;\n} \n\n.cn-open {\n  -webkit-animation: 1.4s slide-window-out 0s forwards;\n}\n\n@keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n.cn-tab-open {\n  animation: 1.4s slide-tab-out 0s forwards;\n  -webkit-animation: 1.4s slide-tab-out 0s forwards;\n}\n\n.cn-tab-dismiss {\n  animation: 1.4s slide-tab-in 0s forwards;\n  -webkit-animation: 1.4s slide-tab-in 0s forwards;\n}\n\n@keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}@-webkit-keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}\n\n@keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n\n@-webkit-keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n", ""]);
+exports.push([module.i, ".ql-editor{\n  min-height: 180px !important;\n  max-height: 300px !important;\n  overflow: hidden;\n  overflow-y: scroll;\n  /* overflow-x: scroll; */\n}\n\n.candlenote-tab {\n  background-color: #191a1c;\n  min-height: 50px;\n  max-height: 50px;\n  width: 150px;\n  position: fixed;\n  z-index: 1000000000;\n  right: 485px;\n  border-radius: 10px 10px 0px 0px;\n  top: calc(100vh - 165px);\n  border: 5px solid #191a1c;\n  color: white;\n  font-size: 23px;\n  font-weight: 300;\n  text-orientation: sideways;\n  text-align: center;\n  transform-origin: left top 0;\n  padding: 0px 0px 0px 5px;\n  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;\n  cursor: pointer; \n  transform: rotate(270deg) translateY(600px);\n  -webkit-transform: rotate(270deg) translateY(600px);\n}\n\n.candlenote-window {\n  background-color: #dea86e;\n  width: 600px;\n  min-height: 300px;\n  max-height: 300px;\n  top: calc(100vh - 350px);\n  right: 0px;\n  position: fixed;\n  z-index: 99999999999999999999;\n  border-radius: 10px 0px 0px 10px;\n  border: 1px solid #191a1c;\n  border-right: none;\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards; */\n  transform: translateX(100%);\n  -webkit-transform: translateX(100%);\n  overflow: hidden;\n};\n\n.cn-intermediate {\n  animation: 1.4s slide-in 0s forwards;\n  -webkit-animation: 1.4s slide-in 0s forwards;\n}\n\ndiv.cn-dismiss {\n  -webkit-transform: translateX(100%); */\n  animation: 1.4s slide-window-in 0s forwards;\n  -webkit-animation: 1.4s slide-window-in 0s forwards;\n} \n\n.cn-open {\n  -webkit-animation: 1.4s slide-window-out 0s forwards;\n}\n\n@keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@-webkit-keyframes slide-window-in {\n  from {\n    transform: translateX(0%);\n  }\n  to {\n    transform: translateX(100%);\n  }\n}\n\n@keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n@-webkit-keyframes slide-window-out {\n  from {\n    transform: translateX(100%);\n  }\n  to {\n    transform: translateX(0%);\n  }\n}\n\n.cn-tab-open {\n  animation: 1.4s slide-tab-out 0s forwards;\n  -webkit-animation: 1.4s slide-tab-out 0s forwards;\n}\n\n.cn-tab-dismiss {\n  animation: 1.4s slide-tab-in 0s forwards;\n  -webkit-animation: 1.4s slide-tab-in 0s forwards;\n}\n\n@keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}@-webkit-keyframes slide-tab-in {\n  from {\n    transform: rotate(270deg) translateY(0%);\n  }\n  to {\n    transform: rotate(270deg) translateY(600px);\n  }\n}\n\n@keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n\n@-webkit-keyframes slide-tab-out {\n  from {\n    transform: rotate(270deg) translateY(600px);\n  }\n  to {\n    transform: rotate(270deg) translateY(0%);\n  }\n}\n", ""]);
 
 // exports
 
