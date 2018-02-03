@@ -10,7 +10,7 @@ import activeSocket from '../actions/activeSocket';
 class StudyHall extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { chat: '' };
+    this.state = { chat: 'New Messages' };
   }
 
   changeChat(username) {

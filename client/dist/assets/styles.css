@@ -58,7 +58,12 @@ body {
 	color: grey; /* Red */
 	padding-left: 1em;
 }
-.online{
+.away{
+	color: yellow; /* Red */
+	font-weight: bold;
+	padding-left: 1em;
+}
+.available{
 	color: green; /* Red */
 	font-weight: bold;
 	padding-left: 1em;

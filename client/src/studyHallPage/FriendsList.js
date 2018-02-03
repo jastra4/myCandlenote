@@ -22,6 +22,11 @@ class FriendsList extends React.Component {
     this.getUsers();
   }
 
+  componentWillUnmount() {
+    this.props.socket.emit('away', this.props.username);
+    // this.props.socket.removeAllListeners();
+  }
+
   getUsers() {
     return axios.get(`/loadFriendsList?currentUser=${this.props.username}`)
       .then((friends) => {
