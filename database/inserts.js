@@ -1,10 +1,11 @@
 const { Flashcards, Decks, Messages } = require('./index');
 
-const insertFlashcard = ({ front, back, deckId }) => (
+const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
     front,
     back,
     deckId,
+    userId,
   }).save()
 );
 

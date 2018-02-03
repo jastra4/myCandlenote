@@ -31,19 +31,14 @@ const styles = {
 
 const FlashcardPage = props => (
   <div style={{ marginLeft: '20px' }}>
-    {/* <Segment size="massive"> */}
     <Grid>
       <Grid.Column width={13}>
-        {/* <div style={styles.mainSegment}> */}
           <div style={styles.headerContainer}>
             <Header as='h2' icon>
               <Icon name='clone' />
-              <h3>Deck:</h3>
-              {/* <Header.Subheader textAlign="center"> */}
               <p style={{ width: '100%' }}>
                 {props.currentDeck.title || 'No Deck Selected'}
               </p>
-              {/* </Header.Subheader> */}
             </Header>
           </div>
           <FlashcardView
@@ -57,8 +52,8 @@ const FlashcardPage = props => (
             addFlashcard={props.addFlashcard}
             createFlashcard={props.createFlashcard}
             decksById={props.decksById}
+            currentUser={props.currentUser}
           />
-        {/* </div> */}
       </Grid.Column>
       <Grid.Column width={3}>
         <div style={styles.sideBar}>

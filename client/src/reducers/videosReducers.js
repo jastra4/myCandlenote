@@ -21,7 +21,10 @@ const videosReducer = (state = defaultState, action) => {
         ...videos,
         [video.id]: video,
       }), {});
-      return { byId: videosById };
+      return {
+        ...state,
+        byId: videosById,
+      };
     }
     case 'SET_CURRENT_VIDEO':
       return {
