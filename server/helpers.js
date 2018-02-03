@@ -8,7 +8,7 @@ const parseMeaningWithGoogleAPI = content => (
     { document: {
       type: 'PLAIN_TEXT',
       content,
-    } },
+    } } // eslint-disable-line
   )
     .then(({ data: { entities } }) => (
       entities.slice(0, 5).reduce((tv, cv) => tv.concat(' ', cv.name), '')
@@ -29,10 +29,12 @@ const defaultOptions = {
 };
 
 const makePDF = (url, fileName, callback, options = {}) => {
-  const finalOptions = {
-    ...defaultOptions,
-    ...options,
-  };
+  // const finalOptions = {
+  //   // ...defaultOptions,
+  //   // ...options,
+  // };
+
+  const finalOptions = Object.assign(defaultOptions, options);
   const filePath = `PDFs/${fileName}.pdf`;
   webshot(url, filePath, finalOptions, (err) => {
     if (err) {
