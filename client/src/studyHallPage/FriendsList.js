@@ -10,6 +10,10 @@ class FriendsList extends React.Component {
     this.state = { friends: [] };
   }
 
+  componentWillMount() {
+    this.props.socket.removeAllListeners();
+  }
+  
   componentWillReceiveProps(nextProps) {
     if (nextProps.friends !== undefined && nextProps.friends !== null) {
       const users = Object.keys(nextProps.friends).map(key => nextProps.friends[key]);
@@ -18,13 +22,12 @@ class FriendsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.emit('available', this.props.username);
+    this.props.socket.emit('available');
     this.getUsers();
   }
 
   componentWillUnmount() {
-    this.props.socket.emit('away', this.props.username);
-    // this.props.socket.removeAllListeners();
+    this.props.socket.emit('away');
   }
 
   getUsers() {

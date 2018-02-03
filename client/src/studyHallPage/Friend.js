@@ -7,17 +7,17 @@ class Friend extends React.Component {
     this.state = { status: 'offline' };
 
     if (props.socket !== undefined) {
-      this.props.socket.on('notify offline', (data) => {
-        if (data === this.props.friend.username) {
-          console.log(`${data} signed off`);
-          this.setState({ status: 'offline' });
+      this.props.socket.on('notify offline', (username, status) => {
+        if (username === this.props.friend.username) {
+          console.log(`${username} signed off`);
+          this.setState({ status: status });
         }
       });
 
-      this.props.socket.on('notify available', (data) => {
-        if (data === this.props.friend.username) {
-          console.log(`${data} is available`);
-          this.setState({ status: 'available' });
+      this.props.socket.on('notify available', (username, status) => {
+        if (username === this.props.friend.username) {
+          console.log(`${username} is available`);
+          this.setState({ status: status });
           setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 1000);
         }
       });
@@ -29,19 +29,19 @@ class Friend extends React.Component {
         }
       });
 
-      this.props.socket.on('notify away', (data) => {
-        if (data === this.props.friend.username) {
-          this.setState({ status: 'away' });
-          console.log(data, ' is away');
+      this.props.socket.on('notify away', (username, status) => {
+        if (username === this.props.friend.username) {
+          this.setState({ status: status });
+          console.log(username, ' is away');
         }
       });
     }
   }
+  
 
-  componentWillUnmount() {
-    // this.props.socket.emit('away', this.props.username);
-    this.props.socket.removeAllListeners();
-  }
+  // componentWillUnmount() {
+  //   this.props.socket.removeAllListeners();
+  // }
 
   handleClick() {
     this.props.changeChat(this.props.friend.username);
@@ -50,7 +50,10 @@ class Friend extends React.Component {
   render() {
     return (
       <div>
-        <div className={this.state.status} onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>
+        <div 
+          className={this.state.status} 
+          onClick={this.handleClick.bind(this)}>{this.props.friend.username}
+        </div>
       </div>
     );
   }

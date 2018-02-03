@@ -207,22 +207,23 @@ io.sockets.on('connection', (socket) => {
   console.log(`socket connected: ${socket.id}`);
 
   socket.on('away', (data) => {
-    socket.username = data; // eslint-disable-line
-    socket.status = 'away'; // eslint-disable-line
-    activeUserSockets[socket.username] = socket;
+    console.log('away ran');
+    if (data !== undefined) {
+      socket.username = data; // eslint-disable-line
+      activeUserSockets[socket.username] = socket;
+    }
+  socket.status = 'away'; // eslint-disable-line
     io.sockets.emit('notify away', socket.username, socket.status);
   });
 
   // listening to app.js and emitting to Friend.js
-  socket.on('available', (data) => {
-    // socket.username = data; // eslint-disable-line
-    // activeUserSockets[socket.username] = socket;
+  socket.on('available', () => {
+    console.log('available ran');
     socket.status = 'available'; // eslint-disable-line
     io.sockets.emit('notify available', socket.username, socket.status);
   });
 
-  socket.on('acknowledged', (data) => {
-    console.log('ACKNOWLEDGED RAN: ', socket.username, socket.status);
+  socket.on('acknowledged', () => {
     io.sockets.emit('notify acknowledged', socket.username, socket.status);
   });
 
@@ -246,7 +247,7 @@ io.sockets.on('connection', (socket) => {
 
   // trigged by closing browser and emtting to Friend.js
   socket.on('disconnect', () => {
-    io.sockets.emit('notify offline', socket.username);
+    io.sockets.emit('notify offline', socket.username, 'offline');
     delete activeUserSockets[socket.username];
     console.log(`${socket.username} disconnected!`);
   });
