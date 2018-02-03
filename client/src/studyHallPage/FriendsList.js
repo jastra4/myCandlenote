@@ -11,8 +11,10 @@ class FriendsList extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const users = Object.keys(nextProps.friends).map(key => nextProps.friends[key]);
-    this.setState({ friends: users });
+    if (nextProps.friends !== undefined && nextProps.friends !== null) {
+      const users = Object.keys(nextProps.friends).map(key => nextProps.friends[key]);
+      this.setState({ friends: users });
+    }
   }
 
   componentDidMount() {

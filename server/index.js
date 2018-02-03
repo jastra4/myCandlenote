@@ -185,6 +185,7 @@ app.post('/makePDF', (req, res) => {
 });
 
 /* ----------- Sockets ------------ */
+const activeUserSockets = {};
 
 // called by ChatBox.js
 app.get('/loadChatHistory', (req, res) => {
@@ -208,11 +209,11 @@ io.sockets.on('connection', (socket) => {
   // listening to app.js and emitting to Friend.js
   socket.on('available', (data) => {
     socket.username = data; // eslint-disable-line
+    activeUserSockets[socket.username] = socket;
     io.sockets.emit('notify available', socket.username);
   });
 
   socket.on('acknowledged', (data) => {
-    console.log('acknowledged: ', data);
     io.sockets.emit('notify acknowledged', data);
   });
 
@@ -227,12 +228,17 @@ io.sockets.on('connection', (socket) => {
       timeStamp: now,
     });
     data.timeStamp = now; // eslint-disable-line
-    io.sockets.emit('receive message', data);
+    if (data.to in activeUserSockets) {
+      activeUserSockets[data.to].emit('receive message', data);
+    }
+    activeUserSockets[data.sentBy].emit('receive message', data);
+    // io.sockets.emit('receive message', data);
   });
 
   // trigged by closing browser and emtting to Friend.js
   socket.on('disconnect', () => {
     io.sockets.emit('notify offline', socket.username);
+    delete activeUserSockets[socket.username];
     console.log(`${socket.username} disconnected!`);
   });
 });
