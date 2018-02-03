@@ -43,7 +43,7 @@ class StudyHall extends React.Component {
   nameSocket = (socket, userid) => {
     axios.get(`/identifySocket?id=${userid}`)
       .then((res) => {
-        socket.emit('available', res.data);
+        // socket.emit('available', res.data);
         this.props.activeSocket(socket, res.data);
         console.log(`${res.data} connected!`);
       });

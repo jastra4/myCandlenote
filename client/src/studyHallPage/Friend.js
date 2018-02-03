@@ -7,6 +7,8 @@ class Friend extends React.Component {
     this.state = { active: false };
 
     if (props.socket !== undefined) {
+      this.props.socket.emit('available', this.props.username);
+
       this.props.socket.on('notify offline', (data) => {
         if (data === this.props.friend.username) {
           console.log(`${data} signed off`);
@@ -18,7 +20,8 @@ class Friend extends React.Component {
         if (data === this.props.friend.username) {
           console.log(`${data} is available`);
           this.setState({ active: true });
-          setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 10000);
+          this.props.socket.emit('acknowledged', this.props.username);
+          // setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 3000);
         }
       });
 
