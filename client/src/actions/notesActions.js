@@ -5,15 +5,19 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
-export const createNote = noteInfo => (
-  dispatch => (
-    axios.post('/api/notes', noteInfo)
-      .then(
-        res => dispatch(addNote(res.data)),
-        err => console.log(err),
-      )
-  )
-);
+export const createOrEditNote = (noteInfo) => {
+  console.log('noteInfo for dispatch: ', noteInfo);
+  console.log('Yay');
+  return (
+    dispatch => (
+      axios.post('/api/notes', { noteInfo })
+        .then((res) => { 
+          // dispatch(addNote(res.data)); 
+          console.log(res);
+        })
+        .catch((err) => { console.error(err); })
+    )
+)};
 
 export const setNotes = notes => ({
   type: 'SET_NOTES',

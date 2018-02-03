@@ -1,10 +1,8 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
-import { connect } from 'react-redux';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
-import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
 import IntelliSearch from './intelliSearch';
 
 class NotePage extends React.Component {
@@ -38,27 +36,14 @@ class NotePage extends React.Component {
         <Grid.Column width={12}>
           <FileMenu />
           <NoteTitle />
-          <MainEditor { ...this.props } handleTextChange={this.handleTextChange} />
+          <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } />
         </Grid.Column>
         <Grid.Column width={4}>
-          <IntelliSearch meaning={this.state.meaning} limit={this.state.limit} />
+          {/* <IntelliSearch meaning={ this.state.meaning } limit={ this.state.limit } /> */}
         </Grid.Column>
       </Grid >
     </div>
   );
 }
 
-const mapStateToProps = state => ({
-  meaning: state.intelliSearch.meaning,
-  limit: state.intelliSearch.limit,
-});
-
-const mapDispatchToProps = dispatch => ({
-  setCurrentMeaning: meaning => dispatch(setCurrentMeaning(meaning)),
-  setMaxResults: limit => dispatch(setMaxResults(limit)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NotePage);
+export default NotePage;

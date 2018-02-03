@@ -45,14 +45,18 @@ export default createStore(
       byId: {
         3: {
           id: 3,
-          subject: 'English',
-          heading: 'Predicate Nominatives',
+          title: 'Predicate Nominatives',
+          authorID: 9,
+          createdAt: 11232234234534534,
+          sharedWith: [2,4,6]
           body: 'Lorem Ipsum...',
         },
         5: {
-          id: 5,
-          subject: 'Comp Sci',
-          heading: 'Higher order functions',
+          id: 3,
+          title: 'Predicate Nominatives',
+          authorID: 9,
+          createdAt: 11232234234534534,
+          sharedWith: [2,4,6]
           body: 'Lorem Ipsum...',
         }
       },

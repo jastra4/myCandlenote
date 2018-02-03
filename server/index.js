@@ -97,13 +97,12 @@ app.use('/user', userRoutes);
 // });
 
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+  res.sendFile(path.join(DIST_DIR, '/index.html'));
 });
 
 
 app.get('*', (req, res, next) => {
-  const isAuth = req.isAuthenticated();
-  if (!isAuth) {
+  if (!req.isAuthenticated()) {
     res.redirect('/login');
   } else {
     next();
@@ -120,6 +119,12 @@ app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+});
+
+app.post('/api/notes', (req, res) => {
+  const { noteInfo } = req.body;
+  console.log('noteInfo: ', noteInfo);
+  res.send('success!'); 
 });
 
 app.get('/users', (req, res) => {
@@ -413,7 +418,7 @@ app.post('/api/getEditorPacket', (req, res) => {
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
-  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
+  console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
 
 // peerServer.on('connection', (id) => {

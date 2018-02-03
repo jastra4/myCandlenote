@@ -9,7 +9,7 @@ export default class MainEditor extends React.Component {
     super(props);
     this.state = { value: '' };
 
-    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    // this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
   }
 
   componentWillMount() {
@@ -19,17 +19,25 @@ export default class MainEditor extends React.Component {
   componentDidMount() {
     const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
+    console.log('mounted');
+    console.log('lol', this);
+    this.props.createOrEditNote({
+      title: 'Kendrick\'s First Note',
+      body: 'hahahahahahahahha',
+      authorID: '5a760d8f6aaf42e6043af6c1',
+      createdAt: Date.now(),
+    });
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    const delta = editor.getContents();
-    const packet = JSON.stringify(delta);
-    this.setState({
-      value, packet,
-    });
-    window.localStorage.setItem('noteContent', packet);
-    const content = this.getContentFromDelta(delta);
-    this.debouncedParseContentMeaning(content);
+    // const delta = editor.getContents();
+    // const packet = JSON.stringify(delta);
+    // this.setState({
+    //   value, packet,
+    // });
+    // window.localStorage.setItem('noteContent', packet);
+    // const content = this.getContentFromDelta(delta);
+    // this.debouncedParseContentMeaning(content);
   }
 
 
@@ -40,14 +48,14 @@ export default class MainEditor extends React.Component {
   );
 
   // TODO: Use return value from this function to build IntelliSearch
-  parseContentMeaning = content => (
-    axios.post('api/parseContentMeaning', { content })
-      .then(({ data: { meaning } }) => {
-        console.log('Per Google, the meaning of your text is: ', meaning);
-        this.props.setCurrentMeaning(meaning);
-        return meaning;
-      })
-  );
+  // parseContentMeaning = content => (
+    // axios.post('api/parseContentMeaning', { content })
+    //   .then(({ data: { meaning } }) => {
+    //     console.log('Per Google, the meaning of your text is: ', meaning);
+    //     this.props.setCurrentMeaning(meaning);
+    //     return meaning;
+    //   })
+  // );
 
 
   handlePrint = () => {
@@ -69,7 +77,6 @@ export default class MainEditor extends React.Component {
     </div>
   );
 }
-
 
 MainEditor.formats = [
   'header', 'font', 'size',
