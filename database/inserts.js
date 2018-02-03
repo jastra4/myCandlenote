@@ -36,7 +36,7 @@ const addFriend = (currentUser, newFriend, callback) => {
       User.findOne({ username: currentUser }, (error, user) => {
         user.friends.push(newFriend);
         user.save();
-        callback('Added friend!');
+        callback(newFriend);
       });
     }
   });

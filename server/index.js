@@ -207,7 +207,6 @@ io.sockets.on('connection', (socket) => {
   console.log(`socket connected: ${socket.id}`);
 
   socket.on('away', (data) => {
-    console.log('away ran');
     if (data !== undefined) {
       socket.username = data; // eslint-disable-line
       activeUserSockets[socket.username] = socket;
@@ -218,7 +217,6 @@ io.sockets.on('connection', (socket) => {
 
   // listening to app.js and emitting to Friend.js
   socket.on('available', () => {
-    console.log('available ran');
     socket.status = 'available'; // eslint-disable-line
     io.sockets.emit('notify available', socket.username, socket.status);
   });
@@ -229,7 +227,6 @@ io.sockets.on('connection', (socket) => {
 
   // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
-    // const now = new Date();
     const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
     inserts.saveMessage({
       to: data.to,
@@ -242,7 +239,17 @@ io.sockets.on('connection', (socket) => {
       activeUserSockets[data.to].emit('receive message', data);
     }
     activeUserSockets[data.sentBy].emit('receive message', data);
-    // io.sockets.emit('receive message', data);
+  });
+
+  socket.on('new friend', (friendName, username) => {
+    if (username in activeUserSockets) {
+      console.log('added by: ', username);
+      activeUserSockets[username].emit('update friends', friendName);
+    }
+    if (friendName in activeUserSockets) {
+      console.log('new friend: ', friendName);
+      activeUserSockets[friendName].emit('update friends', username);
+    }
   });
 
   // trigged by closing browser and emtting to Friend.js

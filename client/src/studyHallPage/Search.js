@@ -16,7 +16,9 @@ class Search extends React.Component {
       newFriend: $('#search').val(),
     })
       .then((res) => {
-        console.log(res.data);
+        // add to friends list via socket
+        this.props.socket.emit('new friend', res.data, this.props.username);
+        console.log('request sent to ', res.data);
       });
     $('#search').val('');
   }
