@@ -6,10 +6,21 @@
   margin-top: 3em;
 }
 
-.user-info-deck-count {
+/* .user-info-deck-count {
   margin-bottom: 0.5em;
-}
+} */
 
 .user-data-container {
-  width: max-content;
+  display: inline-block;
+  margin: 0 !important;
+}
+
+.user-friends-container {
+  display: inline-block;
+  margin: 0 !important;
+}
+
+.user-data-fbox {
+   display: flex;
+   justify-content: space-between;
 }
