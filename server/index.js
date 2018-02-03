@@ -7,7 +7,6 @@ const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
 const puppeteer = require('puppeteer');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const { promisify } = require('util');
@@ -16,7 +15,7 @@ const uuid = require('uuid');
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
-const keys = require('./config/keys');
+
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
 
@@ -91,12 +90,6 @@ app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 // app.use('/peerjs', peerServer);
 
-
-// TODO: Investigate
-mongoose.connect(keys.mongodb.dbURI)
-  .then(() => { console.log('✅  Successfully connected to Mongodb'); })
-  .catch((e) => { console.error('⚠️ Error connected to MongoDB: ', e); });
-
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
 //   console.log('You are logged in this is your user profile: ', req.user);
@@ -134,7 +127,6 @@ app.get('/users', (req, res) => {
     res.send(users);
   });
 });
-
 
 app.post('/friendrequest', (req, res) => {
   console.log('friendrequest: ', req.body.username);

@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
+const keys = require('../server/config/keys');
 
 // const URI = process.env.MONGOLAB_RED_URI || 'mongodb://localhost/candle';
-
 // mongoose.connect(URI);
+
+mongoose.connect(keys.mongodb.dbURI)
+  .then(() => { console.log('✅  Successfully connected to Mongodb'); })
+  .catch((e) => { console.error('⚠️ Error connected to MongoDB: ', e); });
+
 const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 const decksSchema = mongoose.Schema({
   subject: String,
