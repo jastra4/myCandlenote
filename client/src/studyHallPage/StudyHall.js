@@ -1,52 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import io from 'socket.io-client';
 import ChatBox from './ChatBox';
 import FriendsListConnected from './FriendsList';
 import GroupsList from './GroupsList';
 import SearchConnected from './Search';
 import VideoConference from './VideoConference';
-import activeSocket from '../actions/activeSocket'; // auth stuff
+import activeSocket from '../actions/activeSocket';
 
-const socketUrl = 'http://localhost:3000';
 class StudyHall extends React.Component {
   constructor(props) {
     super(props);
     this.state = { chat: '' };
-  }
-
-  componentDidMount() {
-    if (this.props.updatedSocket === undefined) {
-      this.identifyUser();
-    }
-  }
-
-  identifyUser() {
-    axios.get('/api/userid')
-      .then((res) => {
-        if (res.data.userid !== undefined) {
-          this.initSocket(res.data.userid);
-        } else {
-          console.log('Not logged in');
-        }
-      });
-  }
-
-  initSocket(userid) {
-    const socket = io(socketUrl);
-    socket.on('connect', () => {
-      this.nameSocket(socket, userid);
-    });
-  }
-
-  nameSocket = (socket, userid) => {
-    axios.get(`/identifySocket?id=${userid}`)
-      .then((res) => {
-        // socket.emit('available', res.data);
-        this.props.activeSocket(socket, res.data);
-        console.log(`${res.data} connected!`);
-      });
   }
 
   changeChat(username) {
@@ -71,9 +35,8 @@ class StudyHall extends React.Component {
           </div>
         </div>
       );
-    } else {
-      return (<div>Loading...</div>);
     }
+    return (<div>Loading...</div>);
   }
 }
 

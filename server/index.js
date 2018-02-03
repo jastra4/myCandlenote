@@ -206,14 +206,22 @@ app.get('/identifySocket', (req, res) => {
 io.sockets.on('connection', (socket) => {
   console.log(`socket connected: ${socket.id}`);
 
+  // socket.on('away', (data) => {
+  //   socket.username = data; // eslint-disable-line
+  //   socket.status = 'away'; // eslint-disable-line
+  //   activeUserSockets[socket.username] = socket;
+  // });
+
   // listening to app.js and emitting to Friend.js
   socket.on('available', (data) => {
     socket.username = data; // eslint-disable-line
+    // socket.available = true;
     activeUserSockets[socket.username] = socket;
     io.sockets.emit('notify available', socket.username);
   });
 
   socket.on('acknowledged', (data) => {
+    console.log('ACKNOWLEDGED RAN');
     io.sockets.emit('notify acknowledged', data);
   });
 

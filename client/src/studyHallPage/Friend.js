@@ -7,8 +7,6 @@ class Friend extends React.Component {
     this.state = { active: false };
 
     if (props.socket !== undefined) {
-      this.props.socket.emit('available', this.props.username);
-
       this.props.socket.on('notify offline', (data) => {
         if (data === this.props.friend.username) {
           console.log(`${data} signed off`);
@@ -20,8 +18,7 @@ class Friend extends React.Component {
         if (data === this.props.friend.username) {
           console.log(`${data} is available`);
           this.setState({ active: true });
-          this.props.socket.emit('acknowledged', this.props.username);
-          // setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 3000);
+          setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 1000);
         }
       });
 
@@ -34,13 +31,21 @@ class Friend extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.socket.removeAllListeners();
+  }
+
   handleClick() {
     this.props.changeChat(this.props.friend.username);
   }
 
   render() {
     if (this.state.active) {
-      return (<div className="online" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
+      return (
+        <div>
+          <div className="online" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>
+        </div>
+      );
     }
     return (<div className="offline" onClick={this.handleClick.bind(this)}>{this.props.friend.username}</div>);
   }

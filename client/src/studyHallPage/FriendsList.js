@@ -18,6 +18,7 @@ class FriendsList extends React.Component {
   }
 
   componentDidMount() {
+    this.props.socket.emit('available', this.props.username);
     this.getUsers();
   }
 
@@ -53,6 +54,7 @@ const mapStateToProps = (state) => {
   return {
     friends: usersById,
     username: state.activeSocket.username,
+    socket: state.activeSocket.socket, // new
   };
 };
 
