@@ -1,23 +1,30 @@
 .user-info {
-  padding-top: 2em;
+  padding: 2em 0;
 }
 
 .user-info-container {
   margin-top: 3em;
 }
 
-/* .user-info-deck-count {
-  margin-bottom: 0.5em;
-} */
-
 .user-data-container {
   display: inline-block;
   margin: 0 !important;
 }
 
+.friends-list-container {
+  margin-top: 5.2em;
+  display: flex;
+  align-items: flex-end;
+}
+
 .user-friends-container {
   display: inline-block;
   margin: 0 !important;
+}
+
+.user-friend-card-count {
+  max-height: 20em;
+  overflow: auto;
 }
 
 .user-data-fbox {

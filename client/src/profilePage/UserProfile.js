@@ -78,8 +78,6 @@ export default class UserProfile extends React.Component {
     return (
       <Grid columns="equal">
         <Grid.Row>
-          <Grid.Column>
-          </Grid.Column>
           <Grid.Column width={12}>
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">
@@ -90,9 +88,6 @@ export default class UserProfile extends React.Component {
                   <Header as="h1" textAlign="center">{this.state.username}</Header>
                 </div>
                 <div className="user-data-fbox">
-                  <div>
-                    <UserFriendsList />
-                  </div>
                   <div>
                     <UserData
                       deckCount={this.state.deckCount}
@@ -105,6 +100,9 @@ export default class UserProfile extends React.Component {
             </div>
           </Grid.Column>
           <Grid.Column>
+            <div className="friends-list-container">
+              <UserFriendsList />
+            </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
