@@ -63,7 +63,10 @@ const emailNoteOptions = (email, filePath) => ({
 });
 
 app.use(bodyParser.json({ limit: '5mb' }));
-app.use(bodyParser.urlencoded({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({ 
+  extended: true,
+  limit: '5mb', 
+}));
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
