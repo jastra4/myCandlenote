@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
-const URI = process.env.MONGOLAB_RED_URI || 'mongodb://localhost/candle';
+// const URI = process.env.MONGOLAB_RED_URI || 'mongodb://localhost/candle';
 
-mongoose.connect(URI);
+// mongoose.connect(URI);
 const db = mongoose.connection;
 
 const decksSchema = mongoose.Schema({
@@ -22,9 +22,11 @@ const flashcardsSchema = mongoose.Schema({
 const Flashcards = mongoose.model('flashcards', flashcardsSchema);
 
 const notesSchema = mongoose.Schema({
-  subject: String,
-  heading: String,
+  title: String,
   body: String,
+  authorID: 'ObjectId',
+  sharedWith: Array,
+  createdAt: Date,
 });
 
 const Notes = mongoose.model('notes', notesSchema);

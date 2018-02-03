@@ -1,15 +1,12 @@
 // const { ExpressPeerServer } = require('peerjs');
 // const http = require('http');
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
-
 const puppeteer = require('puppeteer');
-
 const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
@@ -96,10 +93,9 @@ app.use('/user', userRoutes);
 
 
 // TODO: Investigate
-mongoose.connect(keys.mongodb.dbURI, () => {
-  console.log('connecting to mongodb');
-});
-
+mongoose.connect(keys.mongodb.dbURI)
+  .then(() => { console.log('✅  Successfully connected to Mongodb'); })
+  .catch((e) => { console.error('⚠️ Error connected to MongoDB: ', e); });
 
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
@@ -197,7 +193,7 @@ app.get('/username', (req, res) => {
 });
 
 io.sockets.on('connection', (socket) => {
-  console.log('socket connected: ', socket.id);
+  console.log('✅  Successfully connected new Socket: ', socket.id);
 
   // log on event
   socket.on('new user', (data) => {
