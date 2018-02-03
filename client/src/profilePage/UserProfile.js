@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Icon, Image, Segment, Header, Label, Card } from 'semantic-ui-react';
+import { Grid, Image, Segment, Header, Label } from 'semantic-ui-react';
 import axios from 'axios';
 import '../../dist/assets/profilePage.css';
 import UserData from './UserData';
