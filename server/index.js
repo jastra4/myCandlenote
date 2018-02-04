@@ -126,7 +126,10 @@ app.get('/api/pdf/:id', (req, res) => {
 
 app.post('/api/notes', (req, res) => {
   const { noteInfo } = req.body;
-  console.log('noteInfo: ', noteInfo);
+  console.log('authorID: ', noteInfo.authorID);
+  inserts.insertNote(noteInfo)
+    .then(() => { console.log('Successfully saved new note to DB'); })
+    .catch((e) => { console.error(e); });
   res.send('success!'); 
 });
 

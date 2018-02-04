@@ -20,23 +20,27 @@ export default class MainEditor extends React.Component {
     const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
     console.log('mounted');
-    console.log('lol', this);
+  }
+   
+  componentDidUpdate() {
+    console.log('updated', this);
     this.props.createOrEditNote({
       title: 'Kendrick\'s First Note',
-      body: 'hahahahahahahahha',
-      authorID: '5a760d8f6aaf42e6043af6c1',
+      body: this.state.packet,
+      authorID: this.props.user.userId,
       createdAt: Date.now(),
     });
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    // const delta = editor.getContents();
-    // const packet = JSON.stringify(delta);
-    // this.setState({
-    //   value, packet,
-    // });
-    // window.localStorage.setItem('noteContent', packet);
-    // const content = this.getContentFromDelta(delta);
+    console.log('run')
+    const delta = editor.getContents();
+    const packet = JSON.stringify(delta);
+    this.setState({
+      value, packet,
+    });
+    window.localStorage.setItem('noteContent', packet);
+    const content = this.getContentFromDelta(delta);
     // this.debouncedParseContentMeaning(content);
   }
 
