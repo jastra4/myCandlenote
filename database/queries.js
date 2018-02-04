@@ -25,7 +25,13 @@ const loadChatHistory = (sentBy, to, callback) => {
 const loadFriendsList = (currentUser, callback) => {
   User.findOne({ username: currentUser }, (err, person) => {
     const myFriends = person.friends;
-    const query = User.find({ username: { $in: myFriends } });
+    const testList = [];
+    myFriends.forEach((friend) => {
+      testList.push(friend.username);
+    });
+    // returns all users found in my friends
+    // const query = User.find({ username: { $in: myFriends } });
+    const query = User.find({ username: { $in: testList } });
     query.exec((error, docs) => {
       if (error) {
         callback(err);

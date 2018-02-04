@@ -11,17 +11,17 @@ class Search extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const curFriends = Object.keys(this.props.friends).map(key => this.props.friends[key]);
-    console.log(curFriends);
-    let alreadyFriends = false;
-    curFriends.forEach((friend) => {
-      if (friend.username === $('#search').val()) {
-        alreadyFriends = true;
-      }
-    });
-    if (alreadyFriends) {
-      console.log('You are already friends');
-    } else {
+    // const curFriends = Object.keys(this.props.friends).map(key => this.props.friends[key]);
+    // console.log(curFriends);
+    // let alreadyFriends = false;
+    // curFriends.forEach((friend) => {
+    //   if (friend.username === $('#search').val()) {
+    //     alreadyFriends = true;
+    //   }
+    // });
+    // if (alreadyFriends) {
+    //   console.log('You are already friends');
+    // } else {
       axios.post('/handleFriendRequest', {
         currentUser: this.props.username,
         newFriend: $('#search').val(),
@@ -32,7 +32,7 @@ class Search extends React.Component {
           console.log('request sent to ', res.data);
         });
       $('#search').val('');
-    }
+    // }
   }
 
   render() {

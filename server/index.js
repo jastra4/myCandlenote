@@ -113,6 +113,14 @@ app.get('/login', (req, res) => {
 
 
 app.get('*', (req, res, next) => {
+  // mongoose.connection.db.dropCollection('messages', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped Messages');
+  //   }
+  // });
+
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -262,12 +270,12 @@ io.sockets.on('connection', (socket) => {
 
   app.post('/removeFriend', (req, res) => {
     const { user, friend } = req.body;
-    deletes.removeFriend(user, friend, (bool) => {
-      res.send(bool);
-      if (bool) {
-        console.log('emitted removed friend');
-        socket.emit('removed friend', friend);
+    deletes.removeFriend(user, friend, (response) => {
+      if (response !== false) {
+        console.log('emitted remove friend to ', activeUserSockets[user].username);
+        activeUserSockets[user].emit('removed friend', response);
       }
+      res.send(200);
     });
   });
 

@@ -12,9 +12,9 @@ const removeFriend = (username, friend, callback) => {
       console.log(err);
       callback(false);
     } else {
-      user.friends.pull(friend);
+      user.friends.pull({ username: friend });
       user.save();
-      callback(true);
+      callback(friend);
     }
   });
 };

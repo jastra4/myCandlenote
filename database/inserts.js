@@ -29,12 +29,14 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
 const addFriend = (currentUser, newFriend, callback) => {
   User.findOne({ username: newFriend }, (err, friend) => {
     if (err || friend === null) {
-      callback('error finding user');
+      callback('No users found by that name');
     } else {
-      friend.friends.push(currentUser);
+      // friend.friends.push(currentUser);
+      friend.friends.addToSet({username: currentUser});
       friend.save();
       User.findOne({ username: currentUser }, (error, user) => {
-        user.friends.push(newFriend);
+        // user.friends.push(newFriend);
+        user.friends.addToSet({username: newFriend});
         user.save();
         callback(newFriend);
       });
