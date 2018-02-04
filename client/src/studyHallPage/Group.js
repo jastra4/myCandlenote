@@ -25,8 +25,8 @@ class Group extends React.Component {
       <div>
         <div className='groupName' onClick={this.handleClick.bind(this)}>
           {this.props.group}
+          <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
         </div>
-        <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
       </div>
     );
   }

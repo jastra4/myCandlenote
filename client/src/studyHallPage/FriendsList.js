@@ -65,7 +65,7 @@ class FriendsList extends React.Component {
   render() {
     return (
       <div>
-        <h3 className='friendsListHeader'>Friends</h3>
+        <div className='friendsListHeader'>Privat Chats</div>
         <div> {this.state.friends.map((friend, i) => (
           <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat}/>
         ))} </div>

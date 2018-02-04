@@ -66,7 +66,7 @@ class ChatBox extends React.Component {
     return (
       <div>
         <div className="chatHeader">
-          <h4>{this.props.chat}</h4>
+          <div>{this.props.chat}</div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
@@ -75,7 +75,7 @@ class ChatBox extends React.Component {
         </div>
         <div className="chatInput">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
+            <textarea rows='5' id="message" className="input" placeholder="type a message" autoComplete="off"></textarea>
           </form>
         </div>
       </div>

@@ -13,7 +13,8 @@ body {
 }
 .studyContainer{
 	height: 44em;
-	border: 1px #000 solid;
+	border: 1px #d9d9d9 solid;
+	border-style: none solid none none;
 }
 
 /* Groups Styles */
@@ -24,14 +25,15 @@ body {
 	top: 0em;
 	right: 0em;
 	background: #e6e6ff;
-	padding-top: 1em;
-	border: 1px #000 solid;
-	border-style: none solid solid none;
+	border: 1px #d9d9d9 solid;
+	border-style: none solid none none;
 }
 .groupsListHeader{
+	padding-top: .5em;
+	padding-bottom: .5em;
 	padding-left: 1em;
 	color: #2d2d86;
-	bottom-border: 1px #2d2d86 solid;
+	background: #d9d9d9;
 }
 .group{
 
@@ -45,8 +47,11 @@ body {
 }
 .groupRemove{
   float: right;
-  margin-right: 1em;
   color: gray;
+  padding-right: 1em;
+}
+.groupRemove:hover {
+  color: red;
 }
 
 /* Friends Styles */
@@ -57,20 +62,20 @@ body {
 	top: 0em;
 	right: 0em;
 	background: #e6e6ff;
-	padding-top: 1em;
-	border: 1px #000 solid;
+	border: 1px #d9d9d9 solid;
 	border-style: none solid solid none;
 }
 .friendsListHeader{
+	padding-top: .5em;
+	padding-bottom: .5em;
 	padding-left: 1em;
 	color: #2d2d86;
-	bottom-border: 1px #2d2d86 solid;
+	background: #d9d9d9;
 }
 .friend{
 
 }
 .friendName{
-  float: left;
   padding-left: 1em;
 }
 .friendName:hover {
@@ -83,7 +88,6 @@ body {
 }
 .friendRemove:hover {
   color: red;
-	font-size: 1.25em;
 }
 .offline{
 	color: #4d4d4d; /* Red */
@@ -99,7 +103,6 @@ body {
 
 /* Search Styles */
 .Search{
-	height: 3em;
 	width: 75%;
 	position: relative;
 	bottom: 44em;
@@ -118,17 +121,26 @@ body {
 	width:100%;
 }
 .chatHeader{
-	height: 2em;
+	text-align: center;
+	padding-top: .5em;
+	padding-bottom: .5em;
+	padding-left: 1em;
+	color: #2d2d86;
+	background: #d9d9d9;
+	border: 1px #d9d9d9 solid;
+	border-style: none none solid none;
 }
 .chatMessages{
-	height: 37em;
+	height: 34em;
 }
 .chatInput{
 	height: 2em;
 }
 .message{
-	padding-left: 1em;
-	padding-top: .5em;
+	border-bottom: 1px #d9d9d9 solid;
+	margin-left: 1em;
+	margin-right: 1em;
+	padding-bottom: .5em;
 }
 .messageUserName{
 	font-weight: bold;
@@ -143,4 +155,11 @@ body {
 }
 .scroll{
 	overflow: auto;
+}
+.selectedChat{
+	font-weight: bold;
+	background-color: white;
+}
+.notSelectedChat{
+
 }
