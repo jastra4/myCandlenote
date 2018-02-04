@@ -235,6 +235,17 @@ io.sockets.on('connection', (socket) => {
 
   // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
+    if (data.to in activeUserSockets) {
+      const { username, status } = activeUserSockets[data.to];
+      // activeUserSockets[user].emit('update friends', {
+      //   username,
+      //   status,
+      // });
+      activeUserSockets[data.to].emit('update friends', {
+        username: socket.username,
+        status: 'available',
+      });
+    }
     const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
     inserts.saveMessage({
       to: data.to,
@@ -253,12 +264,8 @@ io.sockets.on('connection', (socket) => {
     if (friendName in activeUserSockets) {
       const { username, status } = activeUserSockets[friendName];
       activeUserSockets[user].emit('update friends', {
-        username,
-        status,
-      });
-      activeUserSockets[friendName].emit('update friends', {
-        username: user,
-        status: 'available',
+        username: friendName,
+        status: status,
       });
     } else {
       activeUserSockets[user].emit('update friends', {

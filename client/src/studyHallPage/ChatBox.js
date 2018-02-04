@@ -75,7 +75,7 @@ class ChatBox extends React.Component {
         </div>
         <div className="chatInput">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <textarea rows='5' id="message" className="input" placeholder="type a message" autoComplete="off"></textarea>
+            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>
@@ -100,3 +100,5 @@ const mapStateToProps = (state) => {
 const ChatBoxConnected = connect(mapStateToProps, mapDispatchToProps)(ChatBox);
 
 export default ChatBoxConnected;
+
+   //         <textarea rows='5' id="message" className="input" placeholder="type a message" autoComplete="off"></textarea>

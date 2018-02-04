@@ -18,6 +18,15 @@ const insertDeck = ({ subject, title, userId }) => (
 );
 
 const saveMessage = ({ to, sentBy, text, timeStamp }) => {
+  User.findOne({ username: to }, (err, friend) => {
+    if (err || friend === null) {
+      console.log('No users found by that name');
+    } else {
+      // friend.friends.push(currentUser);
+      friend.friends.addToSet({username: sentBy});
+      friend.save();
+    }
+  });
   new Messages({
     to,
     sentBy,
@@ -27,20 +36,11 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
 };
 
 const addFriend = (currentUser, newFriend, callback) => {
-  User.findOne({ username: newFriend }, (err, friend) => {
-    if (err || friend === null) {
-      callback('No users found by that name');
-    } else {
-      // friend.friends.push(currentUser);
-      friend.friends.addToSet({username: currentUser});
-      friend.save();
-      User.findOne({ username: currentUser }, (error, user) => {
-        // user.friends.push(newFriend);
-        user.friends.addToSet({username: newFriend});
-        user.save();
-        callback(newFriend);
-      });
-    }
+  User.findOne({ username: currentUser }, (error, user) => {
+    // user.friends.push(newFriend);
+    user.friends.addToSet({username: newFriend});
+    user.save();
+    callback(newFriend);
   });
 };
 

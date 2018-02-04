@@ -15,7 +15,19 @@ class FriendsList extends React.Component {
 
   componentDidMount() {
     this.props.socket.on('update friends', (data) => {
-      this.setState({ friends: this.state.friends.concat([data]) });
+      // let testData = JSON.stringify(data);
+      let testData = data.username;
+      let testFriends = [];
+      this.state.friends.forEach((friend) => {
+        // let testFriend = JSON.stringify(friend);
+        let testFriend = friend.username;
+        testFriends.push(testFriend);
+      });
+      if (!testFriends.includes(testData)) {
+        console.log('friends: ', this.state.friends);
+        console.log('CONCAT RAN: ', [data]);
+        this.setState({ friends: this.state.friends.concat([data]) });
+      }
     });
     this.props.socket.on('removed friend', (data) => {
       let updatedfriends = [];
