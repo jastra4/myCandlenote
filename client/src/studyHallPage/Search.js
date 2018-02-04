@@ -38,8 +38,8 @@ class Search extends React.Component {
   render() {
     return (
       <div>
-        <form>
-          <input id="search" className="input" placeholder="enter a username to start a chat" onSubmit={() => {this.handleSubmit.bind(this, e)}}></input>
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <input id="search" className="input" placeholder="find a user or group"></input>
         </form>
       </div>
     );
