@@ -180,14 +180,19 @@ app.post('/makePDF', (req, res) => {
 });
 
 app.post('/refreshToken', (req, res) => {
-  const userId = req.body;
+  const { userId } = req.body;
   queries.getRefreshToken(userId)
-    .then((refreshToken) => {
-      axios.post('https://www.googleapis.com/oauth2/v4/token', {
-        client_id: keys.google.clientID,
-        client_secret: keys.google.clientSecret,
-        refresh_token: refreshToken,
-        grant_type: 'refresh_token',
+    .then((data) => {
+      const { googleRefreshToken } = data;
+      return axios({
+        url: 'https://www.googleapis.com/oauth2/v4/token',
+        method: 'post',
+        params: {
+          client_id: keys.google.clientID,
+          client_secret: keys.google.clientSecret,
+          refresh_token: googleRefreshToken,
+          grant_type: 'refresh_token',
+        },
       })
         .then((response) => {
           inserts.saveAccessToken({
@@ -196,7 +201,8 @@ app.post('/refreshToken', (req, res) => {
           });
           res.send(response.access_token);
         });
-    });
+    })
+    .catch(err => console.log(err));
 });
 
 /* ----------- Sockets ------------ */
