@@ -33,6 +33,7 @@ class GroupsList extends React.Component {
     });
 
     this.props.socket.on('closed group chat', (data) => {
+      console.log('data: ', data);
       let updatedGroups = [];
       this.state.groups.forEach((group, i) => {
         if (group.groupname === data) {
@@ -40,6 +41,7 @@ class GroupsList extends React.Component {
           updatedGroups = this.state.groups;
         }
       });
+      console.log('updatedGroups: ', updatedGroups);
       this.setState({ groups: updatedGroups });
     });
 

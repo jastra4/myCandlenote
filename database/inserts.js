@@ -46,13 +46,16 @@ const addFriend = (currentUser, newChatPartner, callback) => {
 };
 
 const addGroupMember = (groupname, username, callback) => {
+  console.log('addGroupMember: ', username);
+  console.log('to group: ', groupname);
   Groups.findOne({ groupname }, (err, group) => {
     if (err) {
-      console.log(err);
+      console.log('group does not exist!');
       callback(false);
     } else {
       group.members.addToSet({ username });
       group.save();
+      console.log('added ', username, ' to ', group);
     }
   });
   User.findOne({ username }, (err, user) => {
@@ -63,31 +66,25 @@ const addGroupMember = (groupname, username, callback) => {
       user.groupChats.addToSet({ groupname });
       user.save();
       callback(true);
+      console.log('added ', groupname, ' to ', user);
     }
   });
 };
 
 const createGroup = (groupname, username, callback) => {
-  // confirm groups are saving
-  // Groups.find({}, (err, docs) => {
-  //   if (err) {
-  //     console.log('err: ', err);
-  //   } else {
-  //     console.log('groups: ', docs);
-  //   }
-  // });
-  new Groups({
-    groupname,
-    members: [{ username }],
-  }).save();
-  User.findOne({ username }, (err, user) => {
+  // make sure group does not exist
+  Groups.findOne({ groupname }, (err) => {
     if (err) {
-      console.log(err);
-      callback(false);
+      // make new group
+      new Groups({
+        groupname,
+        members: [{ username }],
+      }).save();
+      // add user to group
+      addGroupMember(groupname, username, callback);
     } else {
-      user.groupChats.addToSet({ groupname });
-      user.save();
-      callback(true);
+      console.log('group already exists');
+      callback(false);
     }
   });
 };

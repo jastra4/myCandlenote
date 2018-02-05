@@ -222,8 +222,9 @@ io.sockets.on('connection', (socket) => {
 
     if (newChat.substring(0, 3) === '/j ') {
       const groupname = newChat.substring(3, newChat.length);
+      console.log('groupname: ', groupname);
       inserts.addGroupMember(groupname, currentUser, (response) => {
-        socket.emit('opened group chat', groupname);
+        socket.emit('opened group chat', { groupname });
         res.send(response);
       });
     } else if (newChat.substring(0, 3) === '/c ') {
@@ -309,7 +310,7 @@ io.sockets.on('connection', (socket) => {
     console.log('closeGroupChat: ', groupname, ' for ', username);
     deletes.removeGroupMember(groupname, username, (response) => {
       if (response !== false) {
-        activeUserSockets[username].emit('closed group chat', response);
+        activeUserSockets[username].emit('closed group chat', groupname);
       }
       res.send(200);
     });
