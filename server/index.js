@@ -39,7 +39,7 @@ const io = require('socket.io').listen(server); // socket stuff
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
-const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
+const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, getCalendarList } = require('./helpers');
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -264,26 +264,19 @@ app.post('/api/freeBusy', (req, res) => {
   queries.getAccessToken(req.body.userId)
     .then((doc) => {
       console.log('DOC in server:', doc);
-      axios({
-        url: 'https://www.googleapis.com/calendar/v3/freeBusy',
-        method: 'post',
-        params: {
-          timeMin: nowString,
-          timeMax: nextWeekString,
-          access_token: doc.googleAccessToken,
-          client_id: keys.google.clientID,
-          client_secret: keys.google.clientSecret,
-        },
-        data: {
-          timeMin: nowString,
-          timeMax: nextWeekString,
-        },
-      })
+      const { googleAccessToken: accessToken } = doc;
+      getCalendarList(accessToken)
         .then((response) => {
-          console.log(response.data);
-          res.send(response.data);
+          console.log('Cal list:', response.data);
+          return response.data;
         })
-        .catch(err => console.log('FreeBusy err:', err.response.data.error.errors));
+        .catch(err => console.log('Cal list err:', err.response.data.error));
+      // getCalendarFreeBusy(nowString, nextWeekString, accessToken)
+      //   .then((response) => {
+      //     console.log(response.data);
+      //     res.send(response.data);
+      //   })
+      //   .catch(err => console.log('FreeBusy err:', err.response.data.error.errors));
     })
     .catch(err => console.log(err));
 });

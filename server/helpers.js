@@ -45,7 +45,34 @@ const makePDF = (url, fileName, callback, options = {}) => {
   });
 };
 
+const getCalendarList = (accessToken) => {
+  console.log('access token:', accessToken);
+  return axios({
+    url: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+    method: 'post',
+    params: {
+      access_token: accessToken,
+      showHidden: true,
+    },
+    resource: {},
+  });
+};
+
+const getCalendarFreeBusy = (timeMin, timeMax, accessToken) => {
+  return axios({
+    url: 'https://www.googleapis.com/calendar/v3/freeBusy',
+    method: 'post',
+    params: { access_token: accessToken },
+    data: {
+      timeMin,
+      timeMax,
+    },
+  });
+};
+
 module.exports = {
   parseMeaningWithGoogleAPI,
   makePDF,
+  getCalendarList,
+  getCalendarFreeBusy,
 };
