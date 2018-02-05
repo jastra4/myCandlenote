@@ -56,16 +56,33 @@ const getCalendarList = accessToken => new Promise((resolve, reject) => {
   });
 });
 
-const getCalendarFreeBusy = (timeMin, timeMax, accessToken) => {
-  return axios({
-    url: 'https://www.googleapis.com/calendar/v3/freeBusy',
-    method: 'post',
-    params: { access_token: accessToken },
-    data: {
-      timeMin,
-      timeMax,
-    },
-  });
+// const getCalendarFreeBusy = (timeMin, timeMax, calList, accessToken) => {
+//   console.log('CallList:', calList);
+//   const googleCalendar = new gCal.GoogleCalendar(accessToken);
+//   googleCalendar.freebusy.query({
+//     timeMin,
+//     timeMax,
+//     items: calList,
+//   }, { resource: {
+//       items: calList,
+//       timeZone: 'Asia/Colombo',
+//     }
+//     // groupExpansionMax: 4,
+//     // calendarExpansionMax: 4,
+//   }, (err, freeBusyList) => {
+//     if (err) console.log('FreeBusy Err:', err);
+//     else console.log('FreeBusyList:', freeBusyList);
+//   });
+
+  // return axios({
+  //   url: 'https://www.googleapis.com/calendar/v3/freeBusy',
+  //   method: 'post',
+  //   params: { access_token: accessToken },
+  //   data: {
+  //     timeMin,
+  //     timeMax,
+  //   },
+  // });
 };
 
 module.exports = {

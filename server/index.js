@@ -7,6 +7,7 @@ const path = require('path');
 const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
+const google = require('googleapis');
 
 const puppeteer = require('puppeteer');
 
@@ -224,7 +225,7 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-/* ----------- API Routes ------------ */
+/* ----------- Google Cal Routes ------------ */
 
 app.post('/api/refreshToken', (req, res) => {
   const { userId } = req.body;
@@ -259,27 +260,47 @@ app.post('/api/freeBusy', (req, res) => {
   const nowString = new Date(nowInt).toISOString();
   const nextWeekString = new Date(nextWeekInt).toISOString();
 
-  console.log('USER ID:', req.body.userId);
+  const gCal = google.calendar('v3');
+  const OAuth2 = google.auth.OAuth2;
+  const oauth2Client = new OAuth2(
+    key.client_id,
+    key.client_secret,
+  );
 
-  queries.getAccessToken(req.body.userId)
-    .then((doc) => {
-      console.log('DOC in server:', doc);
-      const { googleAccessToken: accessToken } = doc;
-      getCalendarList(accessToken)
-        .then((calList) => {
-          console.log('Cal list:', calList);
-          return calList;
-        })
-        .catch(err => console.log('Cal list err:', err.response.data.error));
-      // getCalendarFreeBusy(nowString, nextWeekString, accessToken)
-      //   .then((response) => {
-      //     console.log(response.data);
-      //     res.send(response.data);
-      //   })
-      //   .catch(err => console.log('FreeBusy err:', err.response.data.error.errors));
-    })
-    .catch(err => console.log(err));
+  oauth2Client.setCredentials({
+    access_token: 'ACCESS TOKEN HERE',
+    refresh_token: 'REFRESH TOKEN HERE'
+    // Optional, provide an expiry_date (milliseconds since the Unix Epoch)
+    // expiry_date: (new Date()).getTime() + (1000 * 60 * 60 * 24 * 7)
+  });
+
+  // console.log('USER ID:', req.body.userId);
+
+  // queries.getAccessToken(req.body.userId)
+  //   .then((doc) => {
+  //     console.log('DOC in server:', doc);
+  //     const { googleAccessToken: accessToken } = doc;
+  //     getCalendarList(accessToken)
+  //       .then((calList) => {
+  //         console.log('Cal list:', calList);
+  //         return calList.items.map(calendar => calendar.id);
+  //       })
+  //       .then(calIds => {
+  //         console.log('CalIds:', calIds);
+  //         getCalendarFreeBusy(nowString, nextWeekString, calIds, accessToken);
+  //       })
+  //       .catch(err => console.log('Cal list err:', err.response.data.error));
+  //     // getCalendarFreeBusy(nowString, nextWeekString, accessToken)
+  //     //   .then((response) => {
+  //     //     console.log(response.data);
+  //     //     res.send(response.data);
+  //     //   })
+  //     //   .catch(err => console.log('FreeBusy err:', err.response.data.error.errors));
+  //   })
+  //   .catch(err => console.log(err));
 });
+
+/* ----------- API Routes ------------ */
 
 app.post('/api/emailPDF', (req, res) => {
   const { email } = req.body;
