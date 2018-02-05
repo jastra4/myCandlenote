@@ -17,6 +17,7 @@ const flashcardsSchema = mongoose.Schema({
   deckId: String,
   front: String,
   back: String,
+  userId: String,
 });
 
 const Flashcards = mongoose.model('flashcards', flashcardsSchema);

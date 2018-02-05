@@ -1,11 +1,12 @@
 const { Flashcards, Decks, Messages } = require('./index');
 const User = require('../server/models/user-model');
 
-const insertFlashcard = ({ front, back, deckId }) => (
+const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
     front,
     back,
     deckId,
+    userId,
   }).save()
 );
 

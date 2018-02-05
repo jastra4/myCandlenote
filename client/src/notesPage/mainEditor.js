@@ -10,7 +10,6 @@ export default class MainEditor extends React.Component {
     this.state = { value: '' };
 
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
-    // this.debouncedParseContentMeaning = _.throttle(this.parseContentMeaning, 2000);
   }
 
   componentWillMount() {
@@ -30,7 +29,6 @@ export default class MainEditor extends React.Component {
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
-    // _.debounce(this.parseContentMeaning, 1000)(content);
     this.debouncedParseContentMeaning(content);
   }
 
@@ -57,7 +55,6 @@ export default class MainEditor extends React.Component {
     axios.post('/api/tempSavePacket', { packet })
       .catch((e) => { console.error(e); });
   }
-
 
   render = () => (
     <div>

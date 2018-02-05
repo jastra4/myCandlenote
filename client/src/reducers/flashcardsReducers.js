@@ -70,7 +70,10 @@ const flashcardsReducer = (state = defaultState, action) => {
         ...cards,
         [card.id]: card,
       }), {});
-      return { byId: cardsById };
+      return {
+        ...state,
+        byId: cardsById,
+      };
     }
     case 'SET_CURRENT_FLASHCARD':
       return {
