@@ -53,18 +53,43 @@ const addGroupMember = (groupname, username, callback) => {
     } else {
       group.members.addToSet({ username });
       group.save();
+    }
+  });
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      console.log(err);
+      callback(false);
+    } else {
+      user.groupChats.addToSet({ groupname });
+      user.save();
       callback(true);
     }
   });
 };
 
-const createGroup = (groupname, username) => {
-  console.log('create group: ', groupname);
-  console.log('add user: ', username);
+const createGroup = (groupname, username, callback) => {
+  // confirm groups are saving
+  // Groups.find({}, (err, docs) => {
+  //   if (err) {
+  //     console.log('err: ', err);
+  //   } else {
+  //     console.log('groups: ', docs);
+  //   }
+  // });
   new Groups({
     groupname,
     members: [{ username }],
   }).save();
+  User.findOne({ username }, (err, user) => {
+    if (err) {
+      console.log(err);
+      callback(false);
+    } else {
+      user.groupChats.addToSet({ groupname });
+      user.save();
+      callback(true);
+    }
+  });
 };
 
 module.exports = {

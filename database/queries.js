@@ -47,18 +47,23 @@ const loadPrivateChats = (username, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadGroupChats = (username, callback) => {
-  Groups.findOne({ username }, (err, user) => {
+  console.log('loadGroupChats: ', username);
+  User.findOne({ username }, (err, user) => {
+    console.log('user.groupchats: ', user.groupChats);
     const groupChatList = user.groupChats;
     const testList = [];
     groupChatList.forEach((group) => {
       testList.push(group.groupname);
     });
+    console.log('testList: ', testList);
     const query = Groups.find({ groupname: { $in: testList } });
-    query.exec((error, friends) => {
+    query.exec((error, groups) => {
       if (error) {
+        console.log(error);
         callback(err);
       } else {
-        callback(friends);
+        console.log('groups: ', groups);
+        callback(groups);
       }
     });
   });

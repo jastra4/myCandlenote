@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class Group extends React.Component {
   constructor(props) {
@@ -8,10 +9,11 @@ class Group extends React.Component {
   }
 
   handleClick() {
-    this.props.changeChat(this.props.group);
+    // this.props.changeChat(this.props.group);
   }
 
-  removeGroup = () => {
+  removeGroup() {
+    console.log('removeGroup: ', this.props.group.groupname, ' for ', this.props.username);
     axios.post('/closeGroupChat', {
       username: this.props.username,
       groupname: this.props.group.groupname,
@@ -22,6 +24,7 @@ class Group extends React.Component {
   }
 
   render() {
+    console.log(this.props.group.groupname);
     return (
       <div>
         <div className='groupName' onClick={this.handleClick.bind(this)}>
@@ -33,4 +36,15 @@ class Group extends React.Component {
   }
 }
 
-export default Group;
+const mapStateToProps = state => (
+  {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  }
+);
+
+const GroupConnected = connect(mapStateToProps)(Group);
+
+export default GroupConnected;
+
+// export default Group;

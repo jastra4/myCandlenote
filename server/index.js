@@ -145,6 +145,8 @@ app.get('/loadPrivateChats', (req, res) => {
 // called by GroupsList.js
 app.get('/loadGroupChats', (req, res) => {
   const { currentUser } = req.query;
+  console.log('load group chats: ', currentUser);
+
   queries.loadGroupChats(currentUser, (groups) => {
     res.send(groups);
   });
@@ -227,9 +229,9 @@ io.sockets.on('connection', (socket) => {
     } else if (newChat.substring(0, 3) === '/c ') {
       const groupname = newChat.substring(3, newChat.length);
       console.log('new group: ', groupname);
-      inserts.createGroup(groupname, currentUser, (response) => {
-        socket.emit('opened group chat', groupname);
-        res.send(response);
+      inserts.createGroup(groupname, currentUser, () => {
+        socket.emit('opened group chat', { groupname });
+        res.send(201);
       });
     } else {
       inserts.addFriend(currentUser, newChat, (response) => {
@@ -304,6 +306,7 @@ io.sockets.on('connection', (socket) => {
 
   app.post('/closeGroupChat', (req, res) => {
     const { groupname, username } = req.body;
+    console.log('closeGroupChat: ', groupname, ' for ', username);
     deletes.removeGroupMember(groupname, username, (response) => {
       if (response !== false) {
         activeUserSockets[username].emit('closed group chat', response);

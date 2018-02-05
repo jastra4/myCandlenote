@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import Group from './Group';
+import GroupConnnected from './Group';
 
 class GroupsList extends React.Component {
   constructor(props) {
@@ -20,6 +20,7 @@ class GroupsList extends React.Component {
   componentDidMount() {
     this.props.socket.on('opened group chat', (data) => {
       const testData = data.groupname;
+      console.log('new group: ', data.group);
       const testGroups = [];
       this.state.groups.forEach((group) => {
         const testGroup = group.groupname;
@@ -27,6 +28,7 @@ class GroupsList extends React.Component {
       });
       if (!testGroups.includes(testData)) {
         this.setState({ groups: this.state.groups.concat([data]) });
+        console.log('new list: ', this.state.groups);
       }
     });
 
@@ -40,6 +42,8 @@ class GroupsList extends React.Component {
       });
       this.setState({ groups: updatedGroups });
     });
+
+    this.loadGroups();
   }
 
   loadGroups() {
@@ -58,7 +62,7 @@ class GroupsList extends React.Component {
       <div>
         <div className='groupsListHeader'>Group Chats</div>
         <div>{this.state.groups.map((group, i) => (
-          <Group key={i} group={group} changeChat={this.props.changeChat} className='group'/>
+          <GroupConnnected key={i} group={group} changeChat={this.props.changeChat} className='group'/>
         ))}
         </div>
       </div>
@@ -67,7 +71,10 @@ class GroupsList extends React.Component {
 }
 
 const mapStateToProps = state => (
-  { socket: state.activeSocket.socket }
+  {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  }
 );
 
 const GroupsListConnected = connect(mapStateToProps)(GroupsList);

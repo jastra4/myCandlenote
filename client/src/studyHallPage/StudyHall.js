@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ChatBox from './ChatBox';
 import FriendsListConnected from './FriendsList';
-import GroupsList from './GroupsList';
+import GroupsListConnected from './GroupsList';
 import SearchConnected from './Search';
 import VideoConference from './VideoConference';
 import activeSocket from '../actions/activeSocket';
@@ -22,7 +22,7 @@ class StudyHall extends React.Component {
       return (
         <div className="studyContainer">
           <div className="groupsList studyBackground">
-            <GroupsList changeChat={this.changeChat.bind(this)}/>
+            <GroupsListConnected changeChat={this.changeChat.bind(this)}/>
           </div>
           <div className="friendsList studyBackground">
             <FriendsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
