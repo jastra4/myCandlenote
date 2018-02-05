@@ -27,7 +27,7 @@ export default class MainEditor extends React.Component {
     this.props.createOrEditNote({
       title: 'Kendrick\'s First Note',
       body: this.state.packet,
-      authorID: this.props.user.userId,
+      // authorID: this.props.user.userId,
       createdAt: Date.now(),
     });
   }

@@ -9,23 +9,19 @@ class ChatBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { messages: [] };
-
-    if (props.socket !== undefined) {
-      props.socket.on('new message', (data) => {
-        this.setState({ messages: this.state.messages.concat([data]) });
-      });
-    }
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const msg = {
-      text: $('#message').val(),
-      to: this.props.chat,
-      sentBy: this.props.username,
-    };
-    this.props.socket.emit('send message', msg);
-    $('#message').val('');
+  componentDidMount() {
+    this.props.socket.on('receive message', (data) => {
+      if (data.sentBy === this.props.chat) {
+        this.setState({ messages: this.state.messages.concat([data]) });
+      }
+    });
+  }
+
+  componentDidUpdate = () => {
+    const chatbox = document.getElementById('chatBox');
+    chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
   }
 
   componentWillReceiveProps(newProps) {
@@ -38,7 +34,7 @@ class ChatBox extends React.Component {
   }
 
   getMessages(to) {
-    return axios.get(`/messages?from=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
+    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
@@ -48,20 +44,32 @@ class ChatBox extends React.Component {
       });
   }
 
+  handleSubmit(e) {
+    e.preventDefault();
+    const msg = {
+      text: $('#message').val(),
+      to: this.props.chat,
+      sentBy: this.props.username,
+    };
+    this.props.socket.emit('send message', msg);
+    this.setState({ messages: this.state.messages.concat([msg]) });
+    $('#message').val('');
+  }
+
   render() {
     return (
       <div>
         <div className="chatHeader">
-          <h4>{this.props.chat}</h4>
+          <div>{this.props.chat}</div>
         </div>
-        <div className="chatMessages">
+        <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
             <Message key={i} message={message}/>
           ))}
         </div>
         <div className="chatInput">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message"></input>
+            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>

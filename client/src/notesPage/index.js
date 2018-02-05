@@ -39,7 +39,7 @@ class NotePage extends React.Component {
           <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } />
         </Grid.Column>
         <Grid.Column width={4}>
-          {/* <IntelliSearch meaning={ this.state.meaning } limit={ this.state.limit } /> */}
+          <IntelliSearch meaning={ this.state.meaning } limit={ this.state.limit } />
         </Grid.Column>
       </Grid >
     </div>

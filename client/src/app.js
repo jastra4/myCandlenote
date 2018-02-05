@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Provider, connect } from 'react-redux'; // auth stuff
+import { Provider, connect } from 'react-redux';
 import axios from 'axios';
 import io from 'socket.io-client';
 // import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -20,7 +20,7 @@ import Notebox from './noteBox';
 import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
 import store from '../src/store';
-import activeSocket from './actions/activeSocket'; // auth stuff
+import activeSocket from './actions/activeSocket';
 
 const socketUrl = 'http://localhost:3000';
 
@@ -52,10 +52,10 @@ class App extends React.Component {
     });
   }
 
-  nameSocket = (socket, userid) => {
-    axios.get(`/username?id=${userid}`)
+  nameSocket(socket, userid) {
+    axios.get(`/identifySocket?id=${userid}`)
       .then((res) => {
-        socket.emit('new user', res.data);
+        socket.emit('away', res.data);
         this.props.activeSocket(socket, res.data);
         console.log(`${res.data} connected!`);
       });

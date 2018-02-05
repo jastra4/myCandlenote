@@ -113,6 +113,7 @@ app.get('*', (req, res, next) => {
   // res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
+// called by app.js
 app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
   res.status(200).send({ userid });
@@ -144,17 +145,25 @@ app.post('/friendrequest', (req, res) => {
   res.send(201);
 });
 
+// called by FriendsList.js
+app.get('/loadFriendsList', (req, res) => {
+  const { currentUser } = req.query;
+  queries.loadFriendsList(currentUser, (friends) => {
+    res.send(friends);
+  });
+});
+
 app.get('/userProfile', (req, res) => {
-  console.log('PROFILE ROUTE PINGED');
-  console.log('USER:', req.user);
   queries.getCurrentUser(req.user)
     .then((response) => {
       const { _id: userId, username, googleId, profileImage } = response;
+      const dateJoined = response._id.getTimestamp();
       res.send({
         userId,
         username,
         googleId,
         profileImage,
+        dateJoined,
       });
     })
     .catch((err) => {
@@ -164,6 +173,14 @@ app.get('/userProfile', (req, res) => {
 });
 
 /* --------- POST Handlers ----------- */
+
+// called by Search.js
+app.post('/handleFriendRequest', (req, res) => {
+  const { newFriend, currentUser } = req.body;
+  inserts.addFriend(currentUser, newFriend, (response) => {
+    res.send(response);
+  });
+});
 
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
@@ -179,16 +196,18 @@ app.post('/makePDF', (req, res) => {
 });
 
 /* ----------- Sockets ------------ */
+const activeUserSockets = {};
 
-app.get('/messages', (req, res) => {
-  const { to } = req.query;
-  const sentBy = req.query.from;
-  queries.getMessages(sentBy, to, (messages) => {
+// called by ChatBox.js
+app.get('/loadChatHistory', (req, res) => {
+  const { sentBy, to } = req.query;
+  queries.loadChatHistory(sentBy, to, (messages) => {
     res.send(messages);
   });
 });
 
-app.get('/username', (req, res) => {
+// called by app.js
+app.get('/identifySocket', (req, res) => {
   const userid = req.query.id;
   queries.getUserName(userid, (username) => {
     res.send(username);
@@ -198,27 +217,73 @@ app.get('/username', (req, res) => {
 io.sockets.on('connection', (socket) => {
   console.log('✅  Successfully connected new Socket: ', socket.id);
 
-  // log on event
-  socket.on('new user', (data) => {
-    socket.username = data; // eslint-disable-line
-    io.sockets.emit('logged on', socket.username);
+  socket.on('away', (data) => {
+    if (data !== undefined) {
+      socket.username = data; // eslint-disable-line
+      activeUserSockets[socket.username] = socket;
+    }
+  socket.status = 'away'; // eslint-disable-line
+    io.sockets.emit('notify away', socket.username, socket.status);
   });
 
+  // listening to app.js and emitting to Friend.js
+  socket.on('available', () => {
+    socket.status = 'available'; // eslint-disable-line
+    io.sockets.emit('notify available', socket.username, socket.status);
+  });
+
+  socket.on('acknowledged', () => {
+    io.sockets.emit('notify acknowledged', socket.username, socket.status);
+  });
+
+  // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
-    const now = new Date();
-    inserts.insertMessage({
+    if (data.to in activeUserSockets) {
+      // const { username, status } = activeUserSockets[data.to];
+      activeUserSockets[data.to].emit('update friends', {
+        username: socket.username,
+        status: 'available',
+      });
+    }
+    const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
+    inserts.saveMessage({
       to: data.to,
-      sentBy: socket.username.data,
+      sentBy: socket.username,
       text: data.text,
-      timeStamp: dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'),
+      timeStamp: now,
     });
-    data.timeStamp = dateFormat(now, 'dddd, mmmm dS, yyyy, h:MM:ss TT'); // eslint-disable-line
-    io.sockets.emit('new message', data);
+    data.timeStamp = now; // eslint-disable-line
+    if (data.to in activeUserSockets) {
+      activeUserSockets[data.to].emit('receive message', data);
+    }
+    activeUserSockets[data.sentBy].emit('receive message', data);
   });
 
-  // log off event
+  socket.on('new friend', (friendName, user) => {
+    const newFriend = {
+      username: friendName,
+      status: 'offline',
+    };
+    if (friendName in activeUserSockets) {
+      newFriend.status = activeUserSockets[friendName].status;
+    }
+    activeUserSockets[user].emit('update friends', newFriend);
+  });
+
+  app.post('/removeFriend', (req, res) => {
+    const { user, friend } = req.body;
+    deletes.removeFriend(user, friend, (response) => {
+      if (response !== false) {
+        activeUserSockets[user].emit('removed friend', response);
+      }
+      res.send(200);
+    });
+  });
+
+  // trigged by closing browser and emtting to Friend.js
   socket.on('disconnect', () => {
-    io.sockets.emit('logged off', socket.username);
+    io.sockets.emit('notify offline', socket.username, 'offline');
+    delete activeUserSockets[socket.username];
     console.log(`${socket.username} disconnected!`);
   });
 });
@@ -265,12 +330,13 @@ app.post('/api/deleteDeck', (req, res) => {
 app.post('/api/flashcards', (req, res) => {
   inserts.insertFlashcard(req.body)
     .then((result) => {
-      const { _id: id, front, back, deckId } = result._doc;
+      const { _id: id, front, back, deckId, userId } = result._doc;
       res.send({
         id,
         front,
         back,
         deckId,
+        userId,
       });
     })
     .catch(err => console.log(err));
@@ -303,7 +369,7 @@ app.post('/api/suggestedResources', (req, res) => {
     key: process.env.GOOGLE_SEARCH_API_KEY,
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
-    .then(result => res.send(result.data))
+    .then(results => res.send(results.data))
     .catch(err => res.send(err));
 });
 
@@ -419,6 +485,43 @@ app.post('/api/getEditorPacket', (req, res) => {
       console.error(e);
       res.sendStatus(500);
     });
+});
+
+app.post('/api/userDecks', (req, res) => {
+  const { userId } = req.body;
+  queries.getDecksForUser(userId)
+    .then((response) => {
+      const decks = response.map((deck) => {
+        const { _id: id, subject, title, userId: uid } = deck;
+        return {
+          id,
+          subject,
+          title,
+          userId: uid,
+        };
+      });
+      res.send(decks);
+    })
+    .catch(err => res.send(err));
+});
+
+app.post('/api/userFlashcards', (req, res) => {
+  const { userId } = req.body;
+  queries.getFlashcardsForUser(userId)
+    .then((response) => {
+      const flashcards = response.map((card) => {
+        const { _id: id, front, back, deckId, userId: uid } = card;
+        return {
+          id,
+          front,
+          back,
+          deckId,
+          userId: uid,
+        };
+      });
+      res.send(flashcards);
+    })
+    .catch(err => res.send(err));
 });
 
 /* -------- Initialize Server -------- */

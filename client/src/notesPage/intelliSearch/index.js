@@ -29,13 +29,13 @@ export default class IntelliSearch extends React.Component {
 
   grabGoogleSearch(searchTerms) {
     axios.post('/api/suggestedResources', { searchTerms })
-      .then(res => this.setState({ searchResults: res.data.items }))
+      .then(res => this.setState({ searchResults: res.data.items || [] }))
       .catch(err => console.log('ERR:', err));
   }
 
   grabYoutubeSearch(searchTerms) {
     axios.post('/api/suggestedVideos', { searchTerms })
-      .then(res => this.setState({ videos: res.data.items }))
+      .then(res => this.setState({ videos: res.data.items || [] }))
       .catch(err => console.log('ERR:', err));
   }
 
@@ -44,7 +44,7 @@ export default class IntelliSearch extends React.Component {
       .then((res) => {
         if (res.data.isFromGoogle) {
           this.setState({
-            wikiResults: res.data.items,
+            wikiResults: res.data.items || [],
             fromGoogle: true,
           });
         } else {

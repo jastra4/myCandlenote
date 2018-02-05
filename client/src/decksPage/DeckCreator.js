@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button, Segment, Divider, Grid } from 'semantic-ui-react';
+import { Form, Input, Button, Segment, Divider, Grid, Message } from 'semantic-ui-react';
 
 class DeckCreator extends React.Component {
   constructor(props) {
@@ -8,6 +8,7 @@ class DeckCreator extends React.Component {
     this.state = {
       subject: '',
       title: '',
+      improperSubmit: false,
     };
   }
 
@@ -21,18 +22,20 @@ class DeckCreator extends React.Component {
 
   onFormSubmit(e) {
     e.preventDefault();
-    const deckInfo = {
-      ...this.state,
-      userId: this.props.userId,
-    };
-
-    // this.props.addDeck(deckInfo);
-    this.props.createDeck(deckInfo);
-
-    this.setState({
-      subject: '',
-      title: '',
-    });
+    if (!this.state.subject || !this.state.title) {
+      this.setState({ improperSubmit: true });
+    } else {
+      const deckInfo = {
+        ...this.state,
+        userId: this.props.userId,
+      };
+      this.props.createDeck(deckInfo);
+      this.setState({
+        subject: '',
+        title: '',
+        improperSubmit: false,
+      });
+    }
   }
 
   render() {
@@ -45,6 +48,11 @@ class DeckCreator extends React.Component {
             <Form onSubmit={e => this.onFormSubmit(e)}>
               <Grid>
                 <Grid.Column width={6}>
+                  {this.state.improperSubmit ?
+                    <Message negative onDismiss={() => this.setState({ improperSubmit: false })}>
+                      <Message.Header>Missing Field(s)</Message.Header>
+                      <p>You must provide a subject and title to create a deck.</p>
+                    </Message> : ''}
                   <Form.Field control={Input} value={this.state.subject} label='Subject' placeholder='Subject' onChange={e => this.onSubjectChange(e)} />
                   <Divider />
                   <Form.Field control={Input} value={this.state.title} label='Title' placeholder='Title' onChange={e => this.onTitleChange(e)} />
