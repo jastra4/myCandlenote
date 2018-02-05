@@ -262,10 +262,11 @@ io.sockets.on('connection', (socket) => {
 
   socket.on('new friend', (friendName, user) => {
     if (friendName in activeUserSockets) {
+      console.log()
       const { username, status } = activeUserSockets[friendName];
       activeUserSockets[user].emit('update friends', {
         username: friendName,
-        status: status,
+        status: activeUserSockets[friendName].status,
       });
     } else {
       activeUserSockets[user].emit('update friends', {

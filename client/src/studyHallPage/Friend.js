@@ -5,7 +5,7 @@ import axios from 'axios';
 class Friend extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { status: 'offline' };
+    this.state = { status: this.props.friend.status || 'offline' };
 
     if (props.socket !== undefined) {
       this.props.socket.on('notify available', (username, status) => {
@@ -39,6 +39,12 @@ class Friend extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.props.chat === this.props.friend.username) {
+      this.props.changeChat('No chat selected');
+    }
+  }
+
   handleClick() {
     this.props.changeChat(this.props.friend.username);
   }
@@ -56,12 +62,12 @@ class Friend extends React.Component {
   render() {
     return (
       <div>
-        <div
+        <span
           className={`friendName ${this.state.status} ${this.state.activeChat}`}
           onClick={this.handleClick.bind(this)}
           >{this.props.friend.username}
-          <div onClick={this.removeFriend.bind(this)} className='friendRemove'>x</div>
-        </div>
+        </span>
+        <span onClick={this.removeFriend.bind(this)} className='friendRemove'>x</span>
       </div>
     );
   }

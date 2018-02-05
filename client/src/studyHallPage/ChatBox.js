@@ -30,25 +30,34 @@ class ChatBox extends React.Component {
     this.props.socket.emit('send message', msg);
     this.setState({ messages: this.state.messages.concat([msg]) });
     $('#message').val('');
-    setTimeout(this.updateScroll, 200);
+    // setTimeout(this.updateScroll, 200);
   }
 
   updateScroll = () => {
     const chatbox = document.getElementById('chatBox');
-    const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
-    if (!isScrolledToBottom) {
+    // console.log('chatbox.scrollHeight ', chatbox.scrollHeight);
+    // console.log('chatbox.clientHeight ', chatbox.clientHeight);
+    // const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
+    // if (!isScrolledToBottom) {
+    //   console.log('updateScroll ran: ', chatbox.scrollHeight, ' ', chatbox.clientHeight);
       chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
-    }
+    // }
+  }
+
+  componentDidUpdate() {
+    console.log('ran');
+    const chatbox = document.getElementById('chatBox');
+    chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.messages.length !== this.state.messages.length) {
       this.setState({ messages: newProps.messages });
-      this.updateScroll();
     }
     if (newProps.chat !== this.props.chat) {
       this.getMessages(newProps.chat);
     }
+    // this.updateScroll();
   }
 
   getMessages(to) {

@@ -26,7 +26,7 @@ class StudyHall extends React.Component {
             <GroupsList changeChat={this.changeChat.bind(this)}/>
           </div>
           <div className="friendsList studyBackground">
-            <FriendsListConnected changeChat={this.changeChat.bind(this)}/>
+            <FriendsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
           </div>
           <div className="Search studyBackground">
             <SearchConnected />

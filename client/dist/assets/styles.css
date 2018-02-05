@@ -76,6 +76,7 @@ body {
 
 }
 .friendName{
+	float: left;
   padding-left: 1em;
 }
 .friendName:hover {
@@ -123,18 +124,16 @@ body {
 .chatHeader{
 	text-align: center;
 	padding-top: .5em;
-	padding-bottom: .5em;
+	padding-bottom: 0em;
 	padding-left: 1em;
 	color: #2d2d86;
-	background: #d9d9d9;
 	border: 1px #d9d9d9 solid;
-	border-style: none none solid none;
+	border-style: none solid solid none;
 }
 .chatMessages{
-	height: 34em;
+	height: 39em;
 }
 .chatInput{
-	height: 2em;
 }
 .message{
 	border-bottom: 1px #d9d9d9 solid;
