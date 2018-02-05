@@ -73,9 +73,24 @@ const getCalendarFreeBusy = (timeMin, timeMax, calList, accessToken) =>
     });
   });
 
+const reduceFreeBusyToTimeSpans = (freeBusyData) => {
+  const busyTimes = Object.keys(freeBusyData.calendars).reduce((times, calendarId) => {
+    let { busy } = freeBusyData.calendars[calendarId];
+    if (busy.length) {
+      busy = busy.map(info => ({
+        ...info,
+        title: calendarId,
+      }));
+    }
+    return times.concat(busy);
+  }, []);
+  return busyTimes;
+};
+
 module.exports = {
   parseMeaningWithGoogleAPI,
   makePDF,
   getCalendarList,
   getCalendarFreeBusy,
+  reduceFreeBusyToTimeSpans,
 };

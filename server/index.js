@@ -40,7 +40,7 @@ const io = require('socket.io').listen(server); // socket stuff
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
-const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, getCalendarList } = require('./helpers');
+const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, getCalendarList, reduceFreeBusyToTimeSpans } = require('./helpers');
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -259,8 +259,8 @@ app.post('/api/freeBusy', (req, res) => {
   const nextWeekInt = nowInt + 604800000;
   const nowString = new Date(nowInt).toISOString();
   const nextWeekString = new Date(nextWeekInt).toISOString();
-  const gCal = google.calendar('v3');
-  const OAuth2 = google.auth.OAuth2;
+  // const gCal = google.calendar('v3');
+  // const OAuth2 = google.auth.OAuth2;
 
   console.log('USER ID:', req.body.userId);
 
@@ -277,16 +277,7 @@ app.post('/api/freeBusy', (req, res) => {
     })
     .then((freeBusyData) => {
       console.log('FreeBusy:', freeBusyData);
-      const busyTimes = Object.keys(freeBusyData.calendars).reduce((times, calendarId) => {
-        let { busy } = freeBusyData.calendars[calendarId];
-        if (busy.length) {
-          busy = busy.map(info => ({
-            ...info,
-            title: calendarId,
-          }));
-        }
-        return times.concat(busy);
-      }, []);
+      const busyTimes = reduceFreeBusyToTimeSpans(freeBusyData);
       console.log('BUSY TIMES:', busyTimes);
       res.send(busyTimes);
     })
