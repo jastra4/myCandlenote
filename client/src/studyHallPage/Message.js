@@ -1,11 +1,11 @@
 import React from 'react';
 
 const Message = props => (
-  <div>
-    <div>
+  <div className="message">
+    <div className="messageDate">
       {props.message.timeStamp}
     </div>
-    <div>
+    <div className="messageUserName">
       {props.message.sentBy}:
     </div>
     <div>
