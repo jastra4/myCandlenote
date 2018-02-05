@@ -11,7 +11,6 @@ class StudyHall extends React.Component {
   constructor(props) {
     super(props);
     this.state = { chat: 'No chat selected' };
-    // should default to first name in fiends list
   }
 
   changeChat(username) {
@@ -34,6 +33,7 @@ class StudyHall extends React.Component {
           <div className="Chat studyBackground">
             <ChatBox chat={this.state.chat}/>
           </div>
+          <VideoConference />
         </div>
       );
     }
@@ -52,5 +52,3 @@ const mapDispatchToProps = dispatch => (
 const StudyHallConnected = connect(mapStateToProps, mapDispatchToProps)(StudyHall);
 
 export default StudyHallConnected;
-
-// <VideoConference />

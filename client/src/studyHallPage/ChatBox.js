@@ -9,15 +9,39 @@ class ChatBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = { messages: [] };
+  }
 
-    if (props.socket !== undefined) {
-      props.socket.on('receive message', (data) => {
-        if (data.sentBy === this.props.chat) {
-          this.setState({ messages: this.state.messages.concat([data]) });
-          this.updateScroll();
-        }
-      });
+  componentDidMount() {
+    this.props.socket.on('receive message', (data) => {
+      if (data.sentBy === this.props.chat) {
+        this.setState({ messages: this.state.messages.concat([data]) });
+      }
+    });
+  }
+
+  componentDidUpdate = () => {
+    const chatbox = document.getElementById('chatBox');
+    chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.messages.length !== this.state.messages.length) {
+      this.setState({ messages: newProps.messages });
     }
+    if (newProps.chat !== this.props.chat) {
+      this.getMessages(newProps.chat);
+    }
+  }
+
+  getMessages(to) {
+    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
+      .then((messages) => {
+        const messageInfo = messages.data;
+        this.props.loadMessages(messageInfo);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   handleSubmit(e) {
@@ -30,45 +54,6 @@ class ChatBox extends React.Component {
     this.props.socket.emit('send message', msg);
     this.setState({ messages: this.state.messages.concat([msg]) });
     $('#message').val('');
-    // setTimeout(this.updateScroll, 200);
-  }
-
-  updateScroll = () => {
-    const chatbox = document.getElementById('chatBox');
-    // console.log('chatbox.scrollHeight ', chatbox.scrollHeight);
-    // console.log('chatbox.clientHeight ', chatbox.clientHeight);
-    // const isScrolledToBottom = chatbox.scrollHeight - chatbox.clientHeight <= chatbox.scrollTop + 1;
-    // if (!isScrolledToBottom) {
-    //   console.log('updateScroll ran: ', chatbox.scrollHeight, ' ', chatbox.clientHeight);
-      chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
-    // }
-  }
-
-  componentDidUpdate() {
-    console.log('ran');
-    const chatbox = document.getElementById('chatBox');
-    chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (newProps.messages.length !== this.state.messages.length) {
-      this.setState({ messages: newProps.messages });
-    }
-    if (newProps.chat !== this.props.chat) {
-      this.getMessages(newProps.chat);
-    }
-    // this.updateScroll();
-  }
-
-  getMessages(to) {
-    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
-      .then((messages) => {
-        const messageInfo = messages.data;
-        this.props.loadMessages(messageInfo);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   render() {
@@ -109,5 +94,3 @@ const mapStateToProps = (state) => {
 const ChatBoxConnected = connect(mapStateToProps, mapDispatchToProps)(ChatBox);
 
 export default ChatBoxConnected;
-
-   //         <textarea rows='5' id="message" className="input" placeholder="type a message" autoComplete="off"></textarea>

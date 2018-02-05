@@ -22,21 +22,21 @@ const loadChatHistory = (sentBy, to, callback) => {
   });
 };
 
-const loadFriendsList = (currentUser, callback) => {
-  User.findOne({ username: currentUser }, (err, person) => {
-    const myFriends = person.friends;
+// returns all users where their username is in a list a list of friend names
+// created testList because the $in operator won't work on an array of objects
+const loadFriendsList = (username, callback) => {
+  User.findOne({ username }, (err, user) => {
+    const friendsList = user.friends;
     const testList = [];
-    myFriends.forEach((friend) => {
+    friendsList.forEach((friend) => {
       testList.push(friend.username);
     });
-    // returns all users found in my friends
-    // const query = User.find({ username: { $in: myFriends } });
     const query = User.find({ username: { $in: testList } });
-    query.exec((error, docs) => {
+    query.exec((error, friends) => {
       if (error) {
         callback(err);
       } else {
-        callback(docs);
+        callback(friends);
       }
     });
   });

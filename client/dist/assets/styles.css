@@ -61,16 +61,16 @@ body {
 	position: relative;
 	top: 0em;
 	right: 0em;
-	background: #e6e6ff;
-	border: 1px #d9d9d9 solid;
+	background: #e6e6ff; /* purple */
+	border: 1px #d9d9d9 solid; /* grey */
 	border-style: none solid solid none;
 }
 .friendsListHeader{
 	padding-top: .5em;
 	padding-bottom: .5em;
 	padding-left: 1em;
-	color: #2d2d86;
-	background: #d9d9d9;
+	color: #2d2d86; /* purple */
+	background: #d9d9d9; /* grey */
 }
 .friend{
 

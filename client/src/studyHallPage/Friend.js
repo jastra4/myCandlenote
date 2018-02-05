@@ -6,43 +6,43 @@ class Friend extends React.Component {
   constructor(props) {
     super(props);
     this.state = { status: this.props.friend.status || 'offline' };
-
-    if (props.socket !== undefined) {
-      this.props.socket.on('notify available', (username, status) => {
-        if (username === this.props.friend.username) {
-          this.setState({ status });
-          setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 750);
-          console.log(`${username} is available`);
-        }
-      });
-
-      this.props.socket.on('notify acknowledged', (username, status) => {
-        if (username === this.props.friend.username) {
-          this.setState({ status });
-          console.log(username, ' sees youre available and is ', status);
-        }
-      });
-
-      this.props.socket.on('notify away', (username, status) => {
-        if (username === this.props.friend.username) {
-          this.setState({ status });
-          console.log(username, ' is away');
-        }
-      });
-
-      this.props.socket.on('notify offline', (username, status) => {
-        if (username === this.props.friend.username) {
-          this.setState({ status });
-          console.log(`${username} signed off`);
-        }
-      });
-    }
   }
 
   componentWillUnmount() {
     if (this.props.chat === this.props.friend.username) {
       this.props.changeChat('No chat selected');
     }
+  }
+
+  componentDidMount() {
+    this.props.socket.on('notify available', (username, status) => {
+      if (username === this.props.friend.username) {
+        this.setState({ status });
+        setTimeout(() => { this.props.socket.emit('acknowledged', this.props.username); }, 750);
+        console.log(`${username} is available`);
+      }
+    });
+
+    this.props.socket.on('notify acknowledged', (username, status) => {
+      if (username === this.props.friend.username) {
+        this.setState({ status });
+        console.log(username, ' sees youre available and is ', status);
+      }
+    });
+
+    this.props.socket.on('notify away', (username, status) => {
+      if (username === this.props.friend.username) {
+        this.setState({ status });
+        console.log(username, ' is away');
+      }
+    });
+
+    this.props.socket.on('notify offline', (username, status) => {
+      if (username === this.props.friend.username) {
+        this.setState({ status });
+        console.log(`${username} signed off`);
+      }
+    });
   }
 
   handleClick() {

@@ -15,17 +15,13 @@ class FriendsList extends React.Component {
 
   componentDidMount() {
     this.props.socket.on('update friends', (data) => {
-      // let testData = JSON.stringify(data);
-      let testData = data.username;
-      let testFriends = [];
+      const testData = data.username;
+      const testFriends = [];
       this.state.friends.forEach((friend) => {
-        // let testFriend = JSON.stringify(friend);
-        let testFriend = friend.username;
+        const testFriend = friend.username;
         testFriends.push(testFriend);
       });
       if (!testFriends.includes(testData)) {
-        console.log('friends: ', this.state.friends);
-        console.log('CONCAT RAN: ', [data]);
         this.setState({ friends: this.state.friends.concat([data]) });
       }
     });
@@ -47,7 +43,6 @@ class FriendsList extends React.Component {
   loadFriends() {
     return axios.get(`/loadFriendsList?currentUser=${this.props.username}`)
       .then((friends) => {
-        console.log('axios friends: ', friends);
         const friendsList = friends.data;
         this.setState({ friends: friendsList });
       })
@@ -61,24 +56,28 @@ class FriendsList extends React.Component {
   }
 
   render() {
-    console.log('friends: ', this.state.friends);
     return (
       <div>
         <div className='friendsListHeader'>Privat Chats</div>
         <div> {this.state.friends.map((friend, i) => (
-          <FriendConnected key={i} friend={friend} changeChat={this.props.changeChat} chat={this.props.chat}/>
+          <FriendConnected
+            key={i}
+            friend={friend}
+            changeChat={this.props.changeChat}
+            chat={this.props.chat}
+          />
         ))} </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
+const mapStateToProps = state => (
+  {
     username: state.activeSocket.username,
     socket: state.activeSocket.socket,
-  };
-};
+  }
+);
 
 const FriendsListConnected = connect(mapStateToProps)(FriendsList);
 

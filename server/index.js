@@ -113,14 +113,6 @@ app.get('/login', (req, res) => {
 
 
 app.get('*', (req, res, next) => {
-  // mongoose.connection.db.dropCollection('messages', function(err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('dropped Messages');
-  //   }
-  // });
-
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -236,11 +228,7 @@ io.sockets.on('connection', (socket) => {
   // listening to ChatBox.js and emitting to Chatbox.js
   socket.on('send message', (data) => {
     if (data.to in activeUserSockets) {
-      const { username, status } = activeUserSockets[data.to];
-      // activeUserSockets[user].emit('update friends', {
-      //   username,
-      //   status,
-      // });
+      // const { username, status } = activeUserSockets[data.to];
       activeUserSockets[data.to].emit('update friends', {
         username: socket.username,
         status: 'available',
@@ -261,26 +249,20 @@ io.sockets.on('connection', (socket) => {
   });
 
   socket.on('new friend', (friendName, user) => {
+    const newFriend = {
+      username: friendName,
+      status: 'offline',
+    };
     if (friendName in activeUserSockets) {
-      console.log()
-      const { username, status } = activeUserSockets[friendName];
-      activeUserSockets[user].emit('update friends', {
-        username: friendName,
-        status: activeUserSockets[friendName].status,
-      });
-    } else {
-      activeUserSockets[user].emit('update friends', {
-        username: friendName,
-        status: 'offline',
-      });
+      newFriend.status = activeUserSockets[friendName].status;
     }
+    activeUserSockets[user].emit('update friends', newFriend);
   });
 
   app.post('/removeFriend', (req, res) => {
     const { user, friend } = req.body;
     deletes.removeFriend(user, friend, (response) => {
       if (response !== false) {
-        console.log('emitted remove friend to ', activeUserSockets[user].username);
         activeUserSockets[user].emit('removed friend', response);
       }
       res.send(200);

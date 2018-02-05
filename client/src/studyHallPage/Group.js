@@ -6,18 +6,12 @@ class Group extends React.Component {
     this.state = { };
   }
 
-  handleClick = () => {
+  handleClick() {
     this.props.changeChat(this.props.group);
   }
 
-  removeGroup() {
-    // axios.post('/removeFriend', {
-    //   user: this.props.username,
-    //   friend: this.props.friend.username,
-    // })
-    //   .then((res) => {
-    //     console.log('removed: ', res.data);
-    //   });
+  removeGroup = () => {
+    console.log('removed group');
   }
 
   render() {
