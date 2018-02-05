@@ -277,7 +277,18 @@ app.post('/api/freeBusy', (req, res) => {
     })
     .then((freeBusyData) => {
       console.log('FreeBusy:', freeBusyData);
-      res.send(freeBusyData);
+      const busyTimes = Object.keys(freeBusyData.calendars).reduce((times, calendarId) => {
+        let { busy } = freeBusyData.calendars[calendarId];
+        if (busy.length) {
+          busy = busy.map(info => ({
+            ...info,
+            title: calendarId,
+          }));
+        }
+        return times.concat(busy);
+      }, []);
+      console.log('BUSY TIMES:', busyTimes);
+      res.send(busyTimes);
     })
     .catch(err => res.send(err));
 });
