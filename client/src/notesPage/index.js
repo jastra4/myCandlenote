@@ -3,13 +3,13 @@ import { Grid } from 'semantic-ui-react';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
+import CreateNewNote from './createNewNote';
 import IntelliSearch from './intelliSearch';
 
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      meaning: '',
       limit: 10,
     };
   }
@@ -35,8 +35,17 @@ class NotePage extends React.Component {
       <Grid >
         <Grid.Column width={12}>
           <FileMenu />
-          <NoteTitle />
-          <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } />
+          {
+            !this.state.currentNote &&
+            <CreateNewNote { ...this.props } />
+          }
+          {
+            this.state.currentNote &&
+            <div>
+              <NoteTitle />
+              <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } />
+            </div>
+          }
         </Grid.Column>
         <Grid.Column width={4}>
           <IntelliSearch meaning={ this.state.meaning } limit={ this.state.limit } />

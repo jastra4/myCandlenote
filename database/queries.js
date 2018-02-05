@@ -1,5 +1,6 @@
 const User = require('../server/models/user-model');
-const { Decks, Flashcards } = require('./index');
+
+const { Decks, Flashcards, Note } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -49,7 +50,18 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
+// const updateNote = noteInfo => Note.update({ id: noteInfo.noteid }, noteInfo, (err) => {
+//   if (err) {
+//     callback(err)
+//   }
+// } )
+
+// const createNote = noteInfo => Note. });
+
+
 module.exports = {
+  // updateNote, 
+  // createNote,
   getUserName,
   loadChatHistory,
   loadFriendsList,

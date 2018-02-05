@@ -10,9 +10,12 @@ export default class CreateNewNote extends Component {
   handleNewNote = () => {
     this.props.createNote({
       title: 'My First Note',
-      authorID: this.props.user.userId,
+      authorID: this.props.currentUser.userId,
       createdAt: Date.now(),
     })
+      .then((res) => {
+        console.log('res from createNote: ', res);
+      });
   }
 
   render = () => (

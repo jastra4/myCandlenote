@@ -37,7 +37,7 @@ const notesSchema = mongoose.Schema({
   createdAt: Date,
 });
 
-const Notes = mongoose.model('notes', notesSchema);
+const Note = mongoose.model('notes', notesSchema);
 
 const videosSchema = mongoose.Schema({
   title: String,
@@ -64,7 +64,7 @@ module.exports = {
   db,
   Decks,
   Flashcards,
-  Notes,
+  Note,
   Videos,
   Messages,
 };

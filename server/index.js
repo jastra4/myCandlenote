@@ -125,11 +125,28 @@ app.get('/api/pdf/:id', (req, res) => {
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
-app.post('/api/notes', (req, res) => {
+app.post('/api/createNote', (req, res) => {
   const { noteInfo } = req.body;
-  console.log('authorID: ', noteInfo.authorID);
+  // console.log('noteID: ', noteInfo.authorID);
   inserts.insertNote(noteInfo)
-    .then(() => { console.log('Successfully saved new note to DB'); })
+    .then((response) => { 
+      console.log('Successfully saved new note to DB'); 
+      const noteId = response._id;
+      const stringifiedNoteId = JSON.stringify({ noteId });
+      res.send(stringifiedNoteId);
+    })
+    .catch((e) => { 
+      console.error(e); 
+      res.sendStatus(500).end();
+    });
+});
+
+
+app.post('/api/editNote', (req, res) => {
+  const { noteInfo } = req.body;
+  // console.log('not/eID: ', noteInfo.authorID);
+  queries.updateNote(noteInfo)
+    .then(() => { console.log('Successfully edited note in DB'); })
     .catch((e) => { console.error(e); });
   res.send('success!'); 
 });

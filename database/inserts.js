@@ -1,4 +1,4 @@
-const { Flashcards, Decks, Messages, Notes } = require('./index');
+const { Flashcards, Decks, Messages, Note } = require('./index');
 const User = require('../server/models/user-model');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
@@ -36,7 +36,7 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
   }).save();
 };
 
-const insertNote = noteInfo => new Notes(noteInfo).save();
+const insertNote = noteInfo => new Note(noteInfo).save();
 
 const addFriend = (currentUser, newFriend, callback) => {
   // add user to friends list (private chat) after searching their name
