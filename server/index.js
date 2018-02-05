@@ -266,9 +266,9 @@ app.post('/api/freeBusy', (req, res) => {
       console.log('DOC in server:', doc);
       const { googleAccessToken: accessToken } = doc;
       getCalendarList(accessToken)
-        .then((response) => {
-          console.log('Cal list:', response.data);
-          return response.data;
+        .then((calList) => {
+          console.log('Cal list:', calList);
+          return calList;
         })
         .catch(err => console.log('Cal list err:', err.response.data.error));
       // getCalendarFreeBusy(nowString, nextWeekString, accessToken)

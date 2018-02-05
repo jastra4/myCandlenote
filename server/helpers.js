@@ -1,6 +1,8 @@
 const axios = require('axios');
+const Promise = require('promise');
 const { GOOGLE_NL_API_KEY } = require('./config');
 const webshot = require('webshot');
+const gCal = require('google-calendar');
 
 const parseMeaningWithGoogleAPI = content => (
   axios.post(
@@ -45,18 +47,14 @@ const makePDF = (url, fileName, callback, options = {}) => {
   });
 };
 
-const getCalendarList = (accessToken) => {
+const getCalendarList = accessToken => new Promise((resolve, reject) => {
   console.log('access token:', accessToken);
-  return axios({
-    url: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
-    method: 'post',
-    params: {
-      access_token: accessToken,
-      showHidden: true,
-    },
-    resource: {},
+  const googleCalendar = new gCal.GoogleCalendar(accessToken);
+  googleCalendar.calendarList.list((err, calendarList) => {
+    if (err) reject(err);
+    else resolve(calendarList);
   });
-};
+});
 
 const getCalendarFreeBusy = (timeMin, timeMax, accessToken) => {
   return axios({
