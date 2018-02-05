@@ -87,6 +87,11 @@ body {
   margin-right: 1em;
   color: gray;
 }
+.friendUnreadMessages{
+	float: right;
+	color: #4d4d4d;
+	padding-right: 1em;
+}
 .friendRemove:hover {
   color: red;
 }

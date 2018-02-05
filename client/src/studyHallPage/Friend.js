@@ -5,7 +5,16 @@ import axios from 'axios';
 class Friend extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { status: this.props.friend.status || 'offline' };
+    this.state = {
+      status: this.props.friend.status || 'offline',
+      unread: 0,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.chat === this.props.friend.username) {
+      this.setState({ unread: 0 });
+    }
   }
 
   componentWillUnmount() {
@@ -43,6 +52,14 @@ class Friend extends React.Component {
         console.log(`${username} signed off`);
       }
     });
+
+    this.props.socket.on('receive message', (data) => {
+      const { username } = this.props.friend;
+      if (this.props.chat !== username && username === data.sentBy) {
+        console.log(`received message from ${data.sentBy} to ${data.to}`);
+        this.setState({ unread: this.state.unread + 1 });
+      }
+    });
   }
 
   handleClick() {
@@ -68,6 +85,7 @@ class Friend extends React.Component {
           >{this.props.friend.username}
         </span>
         <span onClick={this.removeFriend.bind(this)} className='friendRemove'>x</span>
+        <span className='friendUnreadMessages'>{this.state.unread}</span>
       </div>
     );
   }
