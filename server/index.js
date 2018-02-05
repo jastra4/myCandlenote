@@ -179,33 +179,6 @@ app.post('/makePDF', (req, res) => {
   });
 });
 
-app.post('/refreshToken', (req, res) => {
-  const { userId } = req.body;
-  queries.getRefreshToken(userId)
-    .then((data) => {
-      const { googleRefreshToken } = data;
-      return axios({
-        url: 'https://www.googleapis.com/oauth2/v4/token',
-        method: 'post',
-        params: {
-          client_id: keys.google.clientID,
-          client_secret: keys.google.clientSecret,
-          refresh_token: googleRefreshToken,
-          grant_type: 'refresh_token',
-        },
-      })
-        .then((response) => {
-          console.log('Res:', response.data);
-          inserts.saveAccessToken({
-            userId,
-            token: response.data.access_token,
-          });
-          res.send(response.data.access_token);
-        });
-    })
-    .catch(err => console.log(err));
-});
-
 /* ----------- Sockets ------------ */
 
 app.get('/messages', (req, res) => {
@@ -252,6 +225,68 @@ io.sockets.on('connection', (socket) => {
 });
 
 /* ----------- API Routes ------------ */
+
+app.post('/api/refreshToken', (req, res) => {
+  const { userId } = req.body;
+  queries.getRefreshToken(userId)
+    .then((data) => {
+      const { googleRefreshToken } = data;
+      return axios({
+        url: 'https://www.googleapis.com/oauth2/v4/token',
+        method: 'post',
+        params: {
+          client_id: keys.google.clientID,
+          client_secret: keys.google.clientSecret,
+          refresh_token: googleRefreshToken,
+          grant_type: 'refresh_token',
+        },
+      })
+        .then((response) => {
+          console.log('Res:', response.data);
+          inserts.saveAccessToken({
+            userId,
+            token: response.data.access_token,
+          });
+          res.send(response.data.access_token);
+        });
+    })
+    .catch(err => console.log(err));
+});
+
+app.post('/api/freeBusy', (req, res) => {
+  const nowInt = Date.now();
+  const nextWeekInt = nowInt + 604800000;
+  const nowString = new Date(nowInt).toISOString();
+  const nextWeekString = new Date(nextWeekInt).toISOString();
+
+  console.log('USER ID:', req.body.userId);
+
+  queries.getAccessToken(req.body.userId)
+    .then((doc) => {
+      console.log('DOC in server:', doc);
+      axios({
+        url: 'https://www.googleapis.com/calendar/v3/freeBusy',
+        method: 'post',
+        params: {
+          timeMin: nowString,
+          timeMax: nextWeekString,
+          access_token: doc.googleAccessToken,
+          client_id: keys.google.clientID,
+          client_secret: keys.google.clientSecret,
+        },
+        data: {
+          timeMin: nowString,
+          timeMax: nextWeekString,
+        },
+      })
+        .then((response) => {
+          console.log(response.data);
+          res.send(response.data);
+        })
+        .catch(err => console.log('FreeBusy err:', err.response.data.error.errors));
+    })
+    .catch(err => console.log(err));
+});
 
 app.post('/api/emailPDF', (req, res) => {
   const { email } = req.body;

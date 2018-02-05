@@ -40,7 +40,3 @@ module.exports = {
   insertMessage,
   saveAccessToken,
 };
-
-
-
-// saveAccessToken()

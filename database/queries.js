@@ -39,6 +39,8 @@ const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
 const getRefreshToken = userId => User.findOne({ _id: userId });
 
+const getAccessToken = userId => User.findOne({ _id: userId }, 'googleAccessToken');
+
 module.exports = {
   getUserName,
   getMessages,
@@ -47,4 +49,5 @@ module.exports = {
   getDecksForUser,
   getFlashcardsForUser,
   getRefreshToken,
+  getAccessToken,
 };
