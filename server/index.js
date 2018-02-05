@@ -195,11 +195,12 @@ app.post('/refreshToken', (req, res) => {
         },
       })
         .then((response) => {
+          console.log('Res:', response.data);
           inserts.saveAccessToken({
             userId,
-            token: response.access_token,
+            token: response.data.access_token,
           });
-          res.send(response.access_token);
+          res.send(response.data.access_token);
         });
     })
     .catch(err => console.log(err));

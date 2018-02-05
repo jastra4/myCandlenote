@@ -28,7 +28,11 @@ const insertMessage = ({ to, sentBy, text, timeStamp }) => {
 };
 
 const saveAccessToken = ({ userId, token }) =>
-  User.update({ _id: userId }, { $set: { googleAccessToken: token } });
+  User.findOne({ _id: userId })
+    .then((doc) => {
+      doc.set({ googleAccessToken: token });
+      return doc.save();
+    });
 
 module.exports = {
   insertDeck,
@@ -36,3 +40,7 @@ module.exports = {
   insertMessage,
   saveAccessToken,
 };
+
+
+
+// saveAccessToken()
