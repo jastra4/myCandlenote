@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class Group extends React.Component {
   constructor(props) {
@@ -11,14 +12,20 @@ class Group extends React.Component {
   }
 
   removeGroup = () => {
-    console.log('removed group');
+    axios.post('/closeGroupChat', {
+      username: this.props.username,
+      groupname: this.props.group.groupname,
+    })
+      .then((res) => {
+        console.log('closed group chat');
+      });
   }
 
   render() {
     return (
       <div>
         <div className='groupName' onClick={this.handleClick.bind(this)}>
-          {this.props.group}
+          {this.props.group.groupname}
           <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
         </div>
       </div>

@@ -11,13 +11,12 @@ class Search extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    axios.post('/handleFriendRequest', {
+    axios.post('/openChat', {
       currentUser: this.props.username,
-      newFriend: $('#search').val(),
+      newChat: $('#search').val(),
     })
       .then((res) => {
         this.props.socket.emit('new friend', res.data, this.props.username);
-        console.log('request sent to ', res.data);
       });
     $('#search').val('');
   }

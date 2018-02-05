@@ -135,10 +135,18 @@ app.get('/api/pdf/:id', (req, res) => {
 });
 
 // called by FriendsList.js
-app.get('/loadFriendsList', (req, res) => {
+app.get('/loadPrivateChats', (req, res) => {
   const { currentUser } = req.query;
-  queries.loadFriendsList(currentUser, (friends) => {
+  queries.loadPrivateChats(currentUser, (friends) => {
     res.send(friends);
+  });
+});
+
+// called by GroupsList.js
+app.get('/loadGroupChats', (req, res) => {
+  const { currentUser } = req.query;
+  queries.loadGroupChats(currentUser, (groups) => {
+    res.send(groups);
   });
 });
 
@@ -163,12 +171,10 @@ app.get('/userProfile', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
-// called by Search.js
-app.post('/handleFriendRequest', (req, res) => {
-  const { newFriend, currentUser } = req.body;
-  inserts.addFriend(currentUser, newFriend, (response) => {
-    res.send(response);
-  });
+app.post('/deleteUser', (req, res) => {
+  const { username } = req.body;
+  deletes.deleteUser(username);
+  res.send(201);
 });
 
 app.post('/makePDF', (req, res) => {
@@ -205,6 +211,33 @@ app.get('/identifySocket', (req, res) => {
 
 io.sockets.on('connection', (socket) => {
   console.log(`socket connected: ${socket.id}`);
+
+  // called by Search.js
+  app.post('/openChat', (req, res) => {
+    const { newChat, currentUser } = req.body;
+    console.log('openChat: ', newChat);
+    console.log('openChat: ', currentUser);
+
+    if (newChat.substring(0, 3) === '/j ') {
+      const groupname = newChat.substring(3, newChat.length);
+      inserts.addGroupMember(groupname, currentUser, (response) => {
+        socket.emit('opened group chat', groupname);
+        res.send(response);
+      });
+    } else if (newChat.substring(0, 3) === '/c ') {
+      const groupname = newChat.substring(3, newChat.length);
+      console.log('new group: ', groupname);
+      inserts.createGroup(groupname, currentUser, (response) => {
+        socket.emit('opened group chat', groupname);
+        res.send(response);
+      });
+    } else {
+      inserts.addFriend(currentUser, newChat, (response) => {
+        res.send(response);
+      });
+    }
+  });
+
 
   socket.on('away', (data) => {
     if (data !== undefined) {
@@ -259,11 +292,21 @@ io.sockets.on('connection', (socket) => {
     activeUserSockets[user].emit('update friends', newFriend);
   });
 
-  app.post('/removeFriend', (req, res) => {
+  app.post('/closePrivateChat', (req, res) => {
     const { user, friend } = req.body;
-    deletes.removeFriend(user, friend, (response) => {
+    deletes.closePrivateChat(user, friend, (response) => {
       if (response !== false) {
         activeUserSockets[user].emit('removed friend', response);
+      }
+      res.send(200);
+    });
+  });
+
+  app.post('/closeGroupChat', (req, res) => {
+    const { groupname, username } = req.body;
+    deletes.removeGroupMember(groupname, username, (response) => {
+      if (response !== false) {
+        activeUserSockets[username].emit('closed group chat', response);
       }
       res.send(200);
     });

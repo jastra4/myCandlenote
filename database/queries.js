@@ -1,5 +1,5 @@
 const User = require('../server/models/user-model');
-const { Decks, Flashcards } = require('./index');
+const { Decks, Flashcards, Groups } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -12,6 +12,7 @@ const getUserName = (id, callback) => {
   });
 };
 
+// only difference for groups is that "to" will be a group name
 const loadChatHistory = (sentBy, to, callback) => {
   const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created'); // .limit(8);
   query.exec((err, docs) => {
@@ -25,14 +26,34 @@ const loadChatHistory = (sentBy, to, callback) => {
 
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
-const loadFriendsList = (username, callback) => {
+const loadPrivateChats = (username, callback) => {
   User.findOne({ username }, (err, user) => {
-    const friendsList = user.friends;
+    const { privateChats } = user;
     const testList = [];
-    friendsList.forEach((friend) => {
-      testList.push(friend.username);
+    privateChats.forEach((chatWith) => {
+      testList.push(chatWith.username);
     });
     const query = User.find({ username: { $in: testList } });
+    query.exec((error, listOfUsersInPrivateChatList) => {
+      if (error) {
+        callback(err);
+      } else {
+        callback(listOfUsersInPrivateChatList);
+      }
+    });
+  });
+};
+
+// returns all users where their username is in a list a list of friend names
+// created testList because the $in operator won't work on an array of objects
+const loadGroupChats = (username, callback) => {
+  Groups.findOne({ username }, (err, user) => {
+    const groupChatList = user.groupChats;
+    const testList = [];
+    groupChatList.forEach((group) => {
+      testList.push(group.groupname);
+    });
+    const query = Groups.find({ groupname: { $in: testList } });
     query.exec((error, friends) => {
       if (error) {
         callback(err);
@@ -52,7 +73,8 @@ const getFlashcardsForUser = userId => Flashcards.find({ userId });
 module.exports = {
   getUserName,
   loadChatHistory,
-  loadFriendsList,
+  loadPrivateChats,
+  loadGroupChats,
   getCurrentUser,
   getDecksForUser,
   getFlashcardsForUser,

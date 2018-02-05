@@ -51,6 +51,13 @@ const messagesSchema = mongoose.Schema({
 
 const Messages = mongoose.model('messages', messagesSchema);
 
+const groupsSchema = mongoose.Schema({
+  groupname: String,
+  members: [],
+});
+
+const Groups = mongoose.model('groups', groupsSchema);
+
 module.exports = {
   db,
   Decks,
@@ -58,4 +65,5 @@ module.exports = {
   Notes,
   Videos,
   Messages,
+  Groups,
 };

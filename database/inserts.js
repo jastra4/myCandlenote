@@ -1,4 +1,4 @@
-const { Flashcards, Decks, Messages } = require('./index');
+const { Flashcards, Decks, Messages, Groups } = require('./index');
 const User = require('../server/models/user-model');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
@@ -20,12 +20,12 @@ const insertDeck = ({ subject, title, userId }) => (
 
 const saveMessage = ({ to, sentBy, text, timeStamp }) => {
   // add user to friends list (private chat) after receiving a message from them
-  User.findOne({ username: to }, (err, friend) => {
-    if (err || friend === null) {
+  User.findOne({ username: to }, (err, user) => {
+    if (err || user === null) {
       console.log('No users found by that name');
     } else {
-      friend.friends.addToSet({ username: sentBy });
-      friend.save();
+      user.privateChats.addToSet({ username: sentBy });
+      user.save();
     }
   });
   new Messages({
@@ -36,13 +36,35 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
   }).save();
 };
 
-const addFriend = (currentUser, newFriend, callback) => {
+const addFriend = (currentUser, newChatPartner, callback) => {
   // add user to friends list (private chat) after searching their name
   User.findOne({ username: currentUser }, (error, user) => {
-    user.friends.addToSet({ username: newFriend });
+    user.privateChats.addToSet({ username: newChatPartner });
     user.save();
-    callback(newFriend);
+    callback(newChatPartner);
   });
+};
+
+const addGroupMember = (groupname, username, callback) => {
+  Groups.findOne({ groupname }, (err, group) => {
+    if (err) {
+      console.log(err);
+      callback(false);
+    } else {
+      group.members.addToSet({ username });
+      group.save();
+      callback(true);
+    }
+  });
+};
+
+const createGroup = (groupname, username) => {
+  console.log('create group: ', groupname);
+  console.log('add user: ', username);
+  new Groups({
+    groupname,
+    members: [{ username }],
+  }).save();
 };
 
 module.exports = {
@@ -50,4 +72,6 @@ module.exports = {
   insertFlashcard,
   saveMessage,
   addFriend,
+  addGroupMember,
+  createGroup,
 };

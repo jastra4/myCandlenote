@@ -33,7 +33,7 @@ class StudyHall extends React.Component {
           <div className="Chat studyBackground">
             <ChatBox chat={this.state.chat}/>
           </div>
-          <VideoConference />
+          
         </div>
       );
     }
@@ -52,3 +52,5 @@ const mapDispatchToProps = dispatch => (
 const StudyHallConnected = connect(mapStateToProps, mapDispatchToProps)(StudyHall);
 
 export default StudyHallConnected;
+
+// <VideoConference />

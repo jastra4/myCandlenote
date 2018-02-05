@@ -25,6 +25,7 @@ class FriendsList extends React.Component {
         this.setState({ friends: this.state.friends.concat([data]) });
       }
     });
+
     this.props.socket.on('removed friend', (data) => {
       let updatedfriends = [];
       this.state.friends.forEach((friend, i) => {
@@ -41,7 +42,7 @@ class FriendsList extends React.Component {
   }
 
   loadFriends() {
-    return axios.get(`/loadFriendsList?currentUser=${this.props.username}`)
+    return axios.get(`/loadPrivateChats?currentUser=${this.props.username}`)
       .then((friends) => {
         const friendsList = friends.data;
         this.setState({ friends: friendsList });

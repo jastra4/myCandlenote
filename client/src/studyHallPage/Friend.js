@@ -66,13 +66,20 @@ class Friend extends React.Component {
     this.props.changeChat(this.props.friend.username);
   }
 
-  removeFriend() {
-    axios.post('/removeFriend', {
+  closeChat() {
+    axios.post('/closePrivateChat', {
       user: this.props.username,
       friend: this.props.friend.username,
     })
       .then((res) => {
         console.log('removed: ', res.data);
+      });
+  }
+
+  deleteUser() {
+    axios.post('/deleteUser', { username: this.props.friend.username })
+      .then((res) => {
+        console.log(res);
       });
   }
 
@@ -84,8 +91,9 @@ class Friend extends React.Component {
           onClick={this.handleClick.bind(this)}
           >{this.props.friend.username}
         </span>
-        <span onClick={this.removeFriend.bind(this)} className='friendRemove'>x</span>
+        <span onClick={this.closeChat.bind(this)} className='friendRemove'>x</span>
         <span className='friendUnreadMessages'>{this.state.unread}</span>
+        <button onClick={this.deleteUser.bind(this)}>delete user</button>
       </div>
     );
   }
