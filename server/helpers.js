@@ -47,6 +47,8 @@ const makePDF = (url, fileName, callback, options = {}) => {
   });
 };
 
+// Google Calendar Helpers
+
 const getCalendarList = accessToken => new Promise((resolve, reject) => {
   console.log('access token:', accessToken);
   const googleCalendar = new gCal.GoogleCalendar(accessToken);
@@ -87,10 +89,26 @@ const reduceFreeBusyToTimeSpans = (freeBusyData) => {
   return busyTimes;
 };
 
+const buildGoogleCalEvent = (eventInfo, timeZone) => ({
+  description: eventInfo.title,
+  start: {
+    dateTime: new Date(eventInfo.start).toISOString(),
+    timeZone,
+  },
+  end: {
+    dateTime: new Date(eventInfo.end).toISOString(),
+    timeZone,
+  },
+  reminders: {},
+  attendees: [],
+  attachments: [],
+});
+
 module.exports = {
   parseMeaningWithGoogleAPI,
   makePDF,
   getCalendarList,
   getCalendarFreeBusy,
   reduceFreeBusyToTimeSpans,
+  buildGoogleCalEvent,
 };

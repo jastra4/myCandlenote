@@ -1,6 +1,7 @@
 import React from 'react';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
+import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -12,7 +13,7 @@ export default class SchedulePage extends React.Component {
     this.state = {
       events: [],
       title: '',
-      newEvents: [],
+      newEvent: {},
     };
   }
 
@@ -43,7 +44,7 @@ export default class SchedulePage extends React.Component {
         title: this.state.title,
       };
       this.setState({
-        newEvents: this.state.newEvents.concat(slot),
+        newEvent: slot,
         events: this.state.events.concat(slot),
       });
     }
@@ -55,7 +56,9 @@ export default class SchedulePage extends React.Component {
 
   handleSubmit(e) {
     //TODO: send new busy slots to server
-    
+    const { newEvent, title } = this.state;
+    const timeZone = momentTz.tz.guess();
+    // axios.post
   }
 
   render() {
