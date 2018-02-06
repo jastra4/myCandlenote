@@ -14,6 +14,7 @@ export default class UserProfile extends React.Component {
       deckCount: 0,
       flashcardCount: 0,
       dateJoined: '',
+      friends: [],
     };
 
     this.dateOptions = {
@@ -29,13 +30,15 @@ export default class UserProfile extends React.Component {
       axios.get('/userProfile')
         .then((res) => {
           console.log('USER PROFILE:', res.data);
-          const { username } = res.data;
+          const { username, friends, userId } = res.data;
+          this.props.getFriends(userId);
           const profileImage = this.resizeProfileImage(res.data.profileImage);
           const dateJoined = new Date(res.data.dateJoined).toLocaleDateString('en-US', this.dateOptions);
           this.setState({
             username,
             profileImage,
             dateJoined,
+            friends,
           });
           this.props.setCurrentUser(res.data);
           this.getDecksAndFlashcards(res.data.userId);
@@ -101,7 +104,7 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <div className="friends-list-container">
-              <UserFriendsList />
+              <UserFriendsList friends={this.state.friends}/>
             </div>
           </Grid.Column>
         </Grid.Row>

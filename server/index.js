@@ -148,7 +148,7 @@ app.get('/loadFriendsList', (req, res) => {
 app.get('/userProfile', (req, res) => {
   queries.getCurrentUser(req.user)
     .then((response) => {
-      const { _id: userId, username, googleId, profileImage } = response;
+      const { _id: userId, username, googleId, profileImage, friends } = response;
       const dateJoined = response._id.getTimestamp();
       res.send({
         userId,
@@ -156,6 +156,7 @@ app.get('/userProfile', (req, res) => {
         googleId,
         profileImage,
         dateJoined,
+        friends,
       });
     })
     .catch((err) => {

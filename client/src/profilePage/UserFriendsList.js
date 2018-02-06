@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Icon } from 'semantic-ui-react';
 
-const UserFriendsList = () => (
+const UserFriendsList = props => (
   <Card raised className="user-friends-container">
     <Card.Content className="user-friends-content">
       <Card.Header as="h4" className="user-friends-header">
@@ -11,9 +11,9 @@ const UserFriendsList = () => (
     <Card.Content className="user-friend-card-count">
       {'<list of friends>'}
       <ul>
-        <li>Friend 1</li>
-        <li>Friend 2</li>
-        <li>Friend 3</li>
+        {props.friends.map(friend => (
+          <li>{friend.username}</li>
+        ))}
       </ul>
     </Card.Content>
   </Card>
