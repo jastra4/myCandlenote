@@ -14,6 +14,7 @@ export default class SchedulePage extends React.Component {
       events: [],
       title: '',
       newEvent: {},
+      group: [],
     };
   }
 
@@ -29,7 +30,10 @@ export default class SchedulePage extends React.Component {
             title: event.title,
           }));
           console.log('Cal Response:', events);
-          this.setState({ events });
+          this.setState({
+            events,
+            group: this.state.group.concat(this.props.userId),
+          });
         })
         .catch(err => console.log('Cal err:', err));
     }
@@ -47,6 +51,13 @@ export default class SchedulePage extends React.Component {
         newEvent: slot,
         events: this.state.events.concat(slot),
       });
+      axios.post('/api/setCalendarEvents', {
+        newEvent: slot,
+        userIds: this.state.group,
+        timeZone: momentTz.tz.guess(),
+      })
+        .then(response => console.log(response))
+        .catch(err => console.log(err));
     }
   }
 
@@ -54,16 +65,10 @@ export default class SchedulePage extends React.Component {
     this.setState({ title: e.target.value });
   }
 
-  handleSubmit(e) {
-    //TODO: send new busy slots to server
-    const { newEvent, title } = this.state;
-    const timeZone = momentTz.tz.guess();
-    // axios.post
-  }
-
   render() {
     return (
       <div className="calendar-container">
+        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleInputChange.bind(this)}/>
         <BigCalendar
           selectable
           events={this.state.events}
@@ -73,8 +78,6 @@ export default class SchedulePage extends React.Component {
           onSelectEvent={event => alert(event.title)}
           onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
         />
-        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleInputChange.bind(this)}/>
-        <button type="button" onClick={this.handleSubmit.bind(this)}>Confirm Events</button>
       </div>
     );
   }
