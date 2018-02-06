@@ -12,12 +12,12 @@ class VideoConference extends React.Component {
       myId: '',
       initialized: false,
     };
-    this.call = this.call.bind(this);
+    // this.call = this.call.bind(this);
     this.handlePeerIdSumbmission = this.handlePeerIdSumbmission.bind(this);
     this.handlePeerIdChange = this.handlePeerIdChange.bind(this);
-    this.testSendData = this.testSendData.bind(this);
+    this.call = this.call.bind(this);
     this.onReceiveData = this.onReceiveData.bind(this);
-    this.onReceiveStream = this.onReceiveStream.bind(this);
+    this.onReceiveCall = this.onReceiveCall.bind(this);
   }
 
   componentWillMount() {
@@ -48,9 +48,7 @@ class VideoConference extends React.Component {
 
     this.state.peer.on('call', (call) => {
       console.log('call data set to state: ', call);
-      this.setState({ call: call }, () => {
-        this.state.call.on('stream', this.onReceiveStream);
-      });
+      this.onReceiveCall(call);
     });
   }
 
@@ -84,12 +82,21 @@ class VideoConference extends React.Component {
     this.state.conn.send('Hello hello I sent a thing!');
   }
 
-  callPeer() {
-    const call = this.state.peer.call(this.state.remoteId);
-    this.setState({ call: call }, () => {
-      
-    });
-  }
+  // callPeer() {
+  //   const call = this.state.peer.call(this.state.remoteId, this.getMedia({
+  //     audio: true,
+  //     video: true,
+  //   }), (stream) => {
+  //     const video = document.querySelector('.video-call');
+  //   });
+  //   console.log('remoteId at call peer: ', this.state.remoteId);
+  //   console.log('call data at call peer: ', call);
+  //   // this.setState({ newCall: call }, () => {
+  //   //   console.log('Call data: ', call);
+  //   //   console.log('Call data on the state: ', this.state.call);
+  //   //   this.state.newCall.on('stream', this.onReceiveCall);
+  //   // });
+  // }
 
   onReceiveData(data) {
     console.log('Received', data);
@@ -101,24 +108,25 @@ class VideoConference extends React.Component {
   }
 
   onReceiveCall(call) {
+    this.setState({ newCall: call });
     this.getMedia({
       audio: true,
       video: true,
     }, (stream) => {
       console.log('answering...');
-      call.answer(stream);
+      this.state.newCall.answer(stream);
     }, (err) => { console.log('Error in on receive call: ', err); });
-    call.on('stream', (stream) => {
-      const video = document.querySelector('.video');
+    this.state.newCall.on('stream', (stream) => {
+      const video = document.querySelector('.video-call');
       video.src = window.URL.createObjectURL(stream);
     });
   }
 
-  onReceiveStream(stream) {
-    this.state;
-    const video = document.querySelector('.video-call');
-    video.src = window.URL.createObjectURL(stream);
-  }
+  // onReceiveStream(stream) {
+  //   this.state;
+  //   const video = document.querySelector('.video-call');
+  //   video.src = window.URL.createObjectURL(stream);
+  // }
 
   prepareSelfVideo() {
     this.getMedia({
@@ -130,19 +138,17 @@ class VideoConference extends React.Component {
     }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
-  // call(id) {
-  //   // const id = document.querySelector('.peer-id');
-  //   this.getMedia({
-  //     audio: true,
-  //     video: true,
-  //   }, (stream) => {
-  //     const call = this.state.peer.call(id, stream);
-  //     console.log('calling...');
-  //     call.on('stream', this.onReceiveStream);
-  //   }, (err) => { console.log('Error in call: ', err); });
-  // }
-
-  
+  call() {
+    // const id = document.querySelector('.peer-id');
+    this.getMedia({
+      audio: true,
+      video: true,
+    }, (stream) => {
+      this.setState({ newCall: this.state.peer.call(this.state.remoteId, stream) });
+      console.log('calling...');
+      this.state.peer.on('call', this.onReceiveCall);
+    }, (err) => { console.log('Error in call: ', err); });
+  }
 
   // connect() {
   //   const peerId = this.state.peer_id;
@@ -168,7 +174,7 @@ class VideoConference extends React.Component {
           <div>
             <input type="text" className="peer-id" onChange={this.handlePeerIdChange}></input>
             <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
-            <button onClick={() => { this.testSendData(); }}>Call</button>
+            <button onClick={() => { this.call(); }}>Call</button>
           </div>
         </div>
       </div>
