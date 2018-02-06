@@ -58,6 +58,10 @@ const getGetAccessTokensForUsers = (userIds) => {
   return User.find({ _id: { $in: mongoIds } });
 };
 
+const getFriendsById = (friendIds) => {
+  const mongoIds = friendIds.map(id => mongoose.Types.ObjectId(id));
+  return User.find({ _id: { $in: mongoIds } });
+};
 
 module.exports = {
   getUserName,
@@ -69,4 +73,5 @@ module.exports = {
   getRefreshToken,
   getAccessToken,
   getGetAccessTokensForUsers,
+  getFriendsById,
 };

@@ -582,7 +582,19 @@ app.post('/api/userFlashcards', (req, res) => {
 app.post('/api/userFriends', (req, res) => {
   const { userId } = req.body;
   queries.getCurrentUser(userId)
-    .then(response => res.send(response.friends))
+    .then(response => response.friends.map(friend => friend.friendId))
+    .then(friendIds => queries.getFriendsById(friendIds))
+    .then((friendsInfo) => {
+      const friends = friendsInfo.map((friend) => {
+        const { _id: id, username, profileImage } = friend;
+        return {
+          id,
+          username,
+          profileImage,
+        };
+      });
+      res.send(friends);
+    })
     .catch(err => res.status(400).send(err));
 });
 

@@ -4,6 +4,7 @@ import moment from 'moment';
 import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Segment } from 'semantic-ui-react';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
@@ -75,17 +76,19 @@ export default class SchedulePage extends React.Component {
   render() {
     return (
       <div className="calendar-container">
-        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
-        <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
-        <BigCalendar
-          selectable
-          events={this.state.events}
-          defaultView="week"
-          scrollToTime={new Date(1970, 1, 1, 6)}
-          defaultDate={new Date(Date.now())}
-          onSelectEvent={event => alert(event.title)}
-          onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
-        />
+        <Segment>
+          <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+          <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
+          <BigCalendar
+            selectable
+            events={this.state.events}
+            defaultView="week"
+            scrollToTime={new Date(1970, 1, 1, 6)}
+            defaultDate={new Date(Date.now())}
+            onSelectEvent={event => alert(event.title)}
+            onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
+          />
+        </Segment>
       </div>
     );
   }
