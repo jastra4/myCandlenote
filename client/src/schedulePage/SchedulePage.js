@@ -33,6 +33,15 @@ export default class SchedulePage extends React.Component {
     }
   }
 
+  handleSelectSlot(slotInfo) {
+    const slot = {
+      start: slotInfo.start,
+      end: slotInfo.end,
+      title: 'Busy studying!',
+    };
+    this.setState({ events: this.state.events.concat(slot) });
+  }
+
   render() {
     return (
       <div className="calendar-container">
@@ -43,13 +52,7 @@ export default class SchedulePage extends React.Component {
           scrollToTime={new Date(1970, 1, 1, 6)}
           defaultDate={new Date(Date.now())}
           onSelectEvent={event => alert(event.title)}
-          onSelectSlot={slotInfo =>
-            alert(
-              `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
-              `\nend: ${slotInfo.end.toLocaleString()}` +
-              `\naction: ${slotInfo.action}`
-            )
-          }
+          onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
         />
       </div>
     );

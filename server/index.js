@@ -256,7 +256,7 @@ app.post('/api/refreshToken', (req, res) => {
 
 app.post('/api/freeBusy', (req, res) => {
   const nowInt = Date.now();
-  const nextWeekInt = nowInt + 604800000;
+  const nextWeekInt = nowInt + 2629746000;
   const nowString = new Date(nowInt).toISOString();
   const nextWeekString = new Date(nextWeekInt).toISOString();
   // const gCal = google.calendar('v3');
