@@ -40,7 +40,8 @@ const io = require('socket.io').listen(server); // socket stuff
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
-const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, getCalendarList, reduceFreeBusyToTimeSpans, buildGoogleCalEvent } = require('./helpers');
+const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, setCalendarEventPerUser,
+  getCalendarList, reduceFreeBusyToTimeSpans, buildGoogleCalEvent } = require('./helpers');
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -340,21 +341,15 @@ app.post('/api/freeBusy', (req, res) => {
     });
 });
 
-app.post('/api/setBusy', (req, res) => {
-  console.log('Body:', req.body);
-  const { userIds } = req.body;
-  queries.getGetAccessTokensForUsers(userIds)
-    .then(results => res.send(results))
-    .catch(err => res.status(400).send(err));
-});
-
 app.post('/api/setCalendarEvents', (req, res) => {
   const { newEvent, userIds, timeZone } = req.body;
   const event = buildGoogleCalEvent(newEvent, timeZone);
   queries.getGetAccessTokensForUsers(userIds)
     .then((results) => {
       const accessTokens = results.map(result => result.googleAccessToken);
-      res.send({results, event});
+      setCalendarEventPerUser(accessTokens, event)
+        .then(responses => res.send(responses))
+        .catch(err => res.status(400).send(err));
     })
     .catch(err => res.status(400).send(err));
 });

@@ -104,6 +104,17 @@ const buildGoogleCalEvent = (eventInfo, timeZone) => ({
   attachments: [],
 });
 
+const setCalendarEventPerUser = (accessTokens, event) => {
+  const eventPromises = accessTokens.map(token => new Promise((resolve, reject) => {
+    const googleCalendar = new gCal.GoogleCalendar(token);
+    googleCalendar.events.insert('primary', event, {}, (err, response) => {
+      if (err) return reject(err);
+      return resolve(response);
+    });
+  }));
+  return eventPromises;
+};
+
 module.exports = {
   parseMeaningWithGoogleAPI,
   makePDF,
@@ -111,4 +122,5 @@ module.exports = {
   getCalendarFreeBusy,
   reduceFreeBusyToTimeSpans,
   buildGoogleCalEvent,
+  setCalendarEventPerUser,
 };
