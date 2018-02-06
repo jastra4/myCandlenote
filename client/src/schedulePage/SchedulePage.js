@@ -11,13 +11,14 @@ export default class SchedulePage extends React.Component {
     super(props);
     this.state = {
       events: [],
+      title: '',
+      newEvents: [],
     };
   }
 
   componentDidMount() {
     console.log('UserID:', this.props.userId);
     if (this.props.userId) {
-      // TODO: get busy times
       axios.post('/api/refreshToken', { userId: this.props.userId })
         .then(() => axios.post('/api/freeBusy', { userId: this.props.userId }))
         .then((res) => {
@@ -37,9 +38,20 @@ export default class SchedulePage extends React.Component {
     const slot = {
       start: slotInfo.start,
       end: slotInfo.end,
-      title: 'Busy studying!',
+      title: this.state.title,
     };
-    this.setState({ events: this.state.events.concat(slot) });
+    this.setState({
+      newEvents: this.state.newEvents.concat(slot),
+      events: this.state.events.concat(slot),
+    });
+  }
+
+  handleInputChange(e) {
+    this.setState({ title: e.target.value });
+  }
+
+  handleSubmit(e) {
+    //TODO: send new busy slots to server
   }
 
   render() {
@@ -54,6 +66,8 @@ export default class SchedulePage extends React.Component {
           onSelectEvent={event => alert(event.title)}
           onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
         />
+        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleInputChange.bind(this)}/>
+        <button type="button" onPress={this.handleSubmit.bind(this)}>Confirm Event</button>
       </div>
     );
   }
