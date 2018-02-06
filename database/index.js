@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
   profileImage: String,
   googleAccessToken: String,
   googleRefreshToken: String,
+  friends: [{
+    friendId: String,
+    status: String,
+  }],
 });
 
 const User = mongoose.model('user', userSchema);
