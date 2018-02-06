@@ -54,6 +54,14 @@ export default class UserProfile extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    console.log('NEW PROPS!!:', newProps);
+    this.setState({
+      ...this.state,
+      friends: newProps.currentUser.friends,
+    });
+  }
+
   getDecksAndFlashcards(userId) {
     axios.post('/api/userDecks', { userId })
       .then((res) => {
