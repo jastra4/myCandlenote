@@ -7,7 +7,6 @@ const path = require('path');
 const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
-const google = require('googleapis');
 const Promise = require('promise');
 
 const puppeteer = require('puppeteer');
@@ -314,30 +313,19 @@ app.post('/api/freeBusy', (req, res) => {
   const nextWeekInt = nowInt + 2629746000;
   const nowString = new Date(nowInt).toISOString();
   const nextWeekString = new Date(nextWeekInt).toISOString();
-  // const gCal = google.calendar('v3');
-  // const OAuth2 = google.auth.OAuth2;
-
-  console.log('USER ID:', req.body.userId);
 
   queries.getAccessToken(req.body.userId)
     .then((doc) => {
-      console.log('DOC in server:', doc);
       const { googleAccessToken: accessToken } = doc;
       return getCalendarList(accessToken)
-        .then((calList) => {
-          console.log('Cal list:', calList);
-          return calList.items;
-        })
-        .then(calIds => getCalendarFreeBusy(nowString, nextWeekString, calIds, accessToken))
+        .then(calList => calList.items)
+        .then(calIds => getCalendarFreeBusy(nowString, nextWeekString, calIds, accessToken));
     })
     .then((freeBusyData) => {
-      console.log('FreeBusy:', freeBusyData);
       const busyTimes = reduceFreeBusyToTimeSpans(freeBusyData);
-      console.log('BUSY TIMES:', busyTimes);
       res.send(busyTimes);
     })
     .catch((err) => {
-      console.log('BTimes err:', err.data);
       res.status(400).send(err);
     });
 });

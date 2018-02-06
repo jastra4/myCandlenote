@@ -93,7 +93,8 @@ const reduceFreeBusyToTimeSpans = (freeBusyData) => {
 };
 
 const buildGoogleCalEvent = (eventInfo, timeZone) => ({
-  description: eventInfo.title,
+  summary: eventInfo.title,
+  description: eventInfo.description,
   start: {
     dateTime: new Date(eventInfo.start).toISOString(),
     timeZone,

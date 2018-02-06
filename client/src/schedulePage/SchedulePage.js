@@ -13,13 +13,13 @@ export default class SchedulePage extends React.Component {
     this.state = {
       events: [],
       title: '',
+      description: '',
       newEvent: {},
       group: [],
     };
   }
 
   componentDidMount() {
-    console.log('UserID:', this.props.userId);
     if (this.props.userId) {
       axios.post('/api/refreshToken', { userId: this.props.userId })
         .then(() => axios.post('/api/freeBusy', { userId: this.props.userId }))
@@ -29,7 +29,6 @@ export default class SchedulePage extends React.Component {
             end: new Date(event.end),
             title: event.title,
           }));
-          console.log('Cal Response:', events);
           this.setState({
             events,
             group: this.state.group.concat(this.props.userId),
@@ -40,16 +39,20 @@ export default class SchedulePage extends React.Component {
   }
 
   handleSelectSlot(slotInfo) {
-    if (!this.state.title) alert('Please give this event a title.');
+    if (!this.state.group.length) alert('Please sign in to use the calendar.');
+    else if (!this.state.title) alert('Please give this event a title.');
     else {
       const slot = {
         start: slotInfo.start,
         end: slotInfo.end,
         title: this.state.title,
+        description: this.state.description,
       };
       this.setState({
         newEvent: slot,
         events: this.state.events.concat(slot),
+        title: '',
+        description: '',
       });
       axios.post('/api/setCalendarEvents', {
         newEvent: slot,
@@ -61,14 +64,19 @@ export default class SchedulePage extends React.Component {
     }
   }
 
-  handleInputChange(e) {
+  handleTitleChange(e) {
     this.setState({ title: e.target.value });
+  }
+
+  handleDescriptionChange(e) {
+    this.setState({ description: e.target.value });
   }
 
   render() {
     return (
       <div className="calendar-container">
-        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleInputChange.bind(this)}/>
+        <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
+        <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
         <BigCalendar
           selectable
           events={this.state.events}
