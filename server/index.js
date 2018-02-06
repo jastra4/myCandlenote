@@ -281,10 +281,18 @@ app.post('/api/freeBusy', (req, res) => {
       console.log('BUSY TIMES:', busyTimes);
       res.send(busyTimes);
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('BTimes err:', err.data);
-      res.status(400).send(err)
+      res.status(400).send(err);
     });
+});
+
+app.post('/api/setBusy', (req, res) => {
+  console.log('Body:', req.body);
+  const { userIds } = req.body;
+  queries.getGetAccessTokensForUsers(userIds)
+    .then(results => res.send(results))
+    .catch(err => res.status(400).send(err));
 });
 
 /* ----------- API Routes ------------ */

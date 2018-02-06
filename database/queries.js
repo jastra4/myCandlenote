@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const { Decks, Flashcards, User } = require('./index');
 const db = require('./index');
 
@@ -41,6 +42,12 @@ const getRefreshToken = userId => User.findOne({ _id: userId });
 
 const getAccessToken = userId => User.findOne({ _id: userId }, 'googleAccessToken');
 
+const getGetAccessTokensForUsers = (userIds) => {
+  const mongoIds = userIds.map(id => mongoose.Types.ObjectId(id));
+  return User.find({ _id: { $in: mongoIds } });
+};
+
+
 module.exports = {
   getUserName,
   getMessages,
@@ -50,4 +57,5 @@ module.exports = {
   getFlashcardsForUser,
   getRefreshToken,
   getAccessToken,
+  getGetAccessTokensForUsers,
 };
