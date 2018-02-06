@@ -8,12 +8,17 @@ class Group extends React.Component {
     this.state = { };
   }
 
+  componentWillUnmount() {
+    if (this.props.chat === this.props.group.groupname) {
+      this.props.changeChat('No chat selected');
+    }
+  }
+
   handleClick() {
-    // this.props.changeChat(this.props.group);
+    this.props.changeChat(this.props.group.groupname);
   }
 
   removeGroup() {
-    console.log('removeGroup: ', this.props.group.groupname, ' for ', this.props.username);
     axios.post('/closeGroupChat', {
       username: this.props.username,
       groupname: this.props.group.groupname,
@@ -27,10 +32,10 @@ class Group extends React.Component {
     console.log(this.props.group.groupname);
     return (
       <div>
-        <div className='groupName' onClick={this.handleClick.bind(this)}>
+        <span className='groupName' onClick={this.handleClick.bind(this)}>
           {this.props.group.groupname}
-          <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
-        </div>
+        </span>
+        <span onClick={this.removeGroup.bind(this)} className='groupRemove'>x</span>
       </div>
     );
   }

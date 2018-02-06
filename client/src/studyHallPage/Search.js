@@ -16,7 +16,9 @@ class Search extends React.Component {
       newChat: $('#search').val(),
     })
       .then((res) => {
-        this.props.socket.emit('new friend', res.data, this.props.username);
+        if (res.data !== 'created group' && res.data !== 'did not create group' && res.data !== 'joined group' && res.data !== 'did not join group') {
+          this.props.socket.emit('new friend', res.data, this.props.username);
+        }
       });
     $('#search').val('');
   }

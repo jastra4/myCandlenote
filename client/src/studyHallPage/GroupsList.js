@@ -6,11 +6,7 @@ import GroupConnnected from './Group';
 class GroupsList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { groups: [
-      { groupname: 'all-students' },
-      { groupname: 'candlenote' },
-      { groupname: 'random' },
-    ] };
+    this.state = { groups: [] };
   }
 
   componentWillMount() {
@@ -20,7 +16,6 @@ class GroupsList extends React.Component {
   componentDidMount() {
     this.props.socket.on('opened group chat', (data) => {
       const testData = data.groupname;
-      console.log('new group: ', data.group);
       const testGroups = [];
       this.state.groups.forEach((group) => {
         const testGroup = group.groupname;
@@ -28,12 +23,10 @@ class GroupsList extends React.Component {
       });
       if (!testGroups.includes(testData)) {
         this.setState({ groups: this.state.groups.concat([data]) });
-        console.log('new list: ', this.state.groups);
       }
     });
 
     this.props.socket.on('closed group chat', (data) => {
-      console.log('data: ', data);
       let updatedGroups = [];
       this.state.groups.forEach((group, i) => {
         if (group.groupname === data) {
@@ -41,7 +34,6 @@ class GroupsList extends React.Component {
           updatedGroups = this.state.groups;
         }
       });
-      console.log('updatedGroups: ', updatedGroups);
       this.setState({ groups: updatedGroups });
     });
 
@@ -64,7 +56,7 @@ class GroupsList extends React.Component {
       <div>
         <div className='groupsListHeader'>Group Chats</div>
         <div>{this.state.groups.map((group, i) => (
-          <GroupConnnected key={i} group={group} changeChat={this.props.changeChat} className='group'/>
+          <GroupConnnected key={i} group={group} changeChat={this.props.changeChat} className='group' chat={this.props.chat}/>
         ))}
         </div>
       </div>

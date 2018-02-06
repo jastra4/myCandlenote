@@ -113,6 +113,13 @@ app.get('/login', (req, res) => {
 
 
 app.get('*', (req, res, next) => {
+  // mongoose.connection.db.dropCollection('groups', function(err, result) {
+  //   if (err) {
+  //     console.log(err);
+  //   } else {
+  //     console.log('dropped Groups');
+  //   }
+  // });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -174,9 +181,13 @@ app.get('/userProfile', (req, res) => {
 /* --------- POST Handlers ----------- */
 
 app.post('/deleteUser', (req, res) => {
-  const { username } = req.body;
-  deletes.deleteUser(username);
-  res.send(201);
+  for (var key in activeUserSockets) {
+    console.log(activeUserSockets[key].username);
+  }
+  res.send(200);
+  // const { username } = req.body;
+  // deletes.deleteUser(username);
+  // res.send(201);
 });
 
 app.post('/makePDF', (req, res) => {
@@ -217,22 +228,27 @@ io.sockets.on('connection', (socket) => {
   // called by Search.js
   app.post('/openChat', (req, res) => {
     const { newChat, currentUser } = req.body;
-    console.log('openChat: ', newChat);
-    console.log('openChat: ', currentUser);
-
     if (newChat.substring(0, 3) === '/j ') {
       const groupname = newChat.substring(3, newChat.length);
-      console.log('groupname: ', groupname);
       inserts.addGroupMember(groupname, currentUser, (response) => {
-        socket.emit('opened group chat', { groupname });
-        res.send(response);
+        if (response === true) {
+          // socket.username is off
+          activeUserSockets[currentUser].emit('opened group chat', { groupname });
+          console.log('emitter fired: ', activeUserSockets[currentUser].username);
+          res.send('joined group');
+        } else {
+          res.send('did not join group');
+        }
       });
     } else if (newChat.substring(0, 3) === '/c ') {
       const groupname = newChat.substring(3, newChat.length);
-      console.log('new group: ', groupname);
-      inserts.createGroup(groupname, currentUser, () => {
-        socket.emit('opened group chat', { groupname });
-        res.send(201);
+      inserts.createGroup(groupname, currentUser, (response) => {
+        if (response === true) {
+          activeUserSockets[currentUser].emit('opened group chat', { groupname });
+          res.send('created group');
+        } else {
+          res.send('did not create group');
+        }
       });
     } else {
       inserts.addFriend(currentUser, newChat, (response) => {
@@ -247,7 +263,7 @@ io.sockets.on('connection', (socket) => {
       socket.username = data; // eslint-disable-line
       activeUserSockets[socket.username] = socket;
     }
-  socket.status = 'away'; // eslint-disable-line
+    socket.status = 'away'; // eslint-disable-line
     io.sockets.emit('notify away', socket.username, socket.status);
   });
 

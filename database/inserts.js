@@ -46,42 +46,52 @@ const addFriend = (currentUser, newChatPartner, callback) => {
 };
 
 const addGroupMember = (groupname, username, callback) => {
-  console.log('addGroupMember: ', username);
-  console.log('to group: ', groupname);
   Groups.findOne({ groupname }, (err, group) => {
     if (err) {
-      console.log('group does not exist!');
+      callback(false);
+    } else if (group === null) {
       callback(false);
     } else {
       group.members.addToSet({ username });
       group.save();
-      console.log('added ', username, ' to ', group);
-    }
-  });
-  User.findOne({ username }, (err, user) => {
-    if (err) {
-      console.log(err);
-      callback(false);
-    } else {
-      user.groupChats.addToSet({ groupname });
-      user.save();
-      callback(true);
-      console.log('added ', groupname, ' to ', user);
+      User.findOne({ username }, (error, user) => {
+        if (error) {
+          console.log(err);
+          callback(false);
+        } else {
+          user.groupChats.addToSet({ groupname });
+          user.save();
+          callback(true);
+        }
+      });
     }
   });
 };
 
 const createGroup = (groupname, username, callback) => {
-  // make sure group does not exist
-  Groups.findOne({ groupname }, (err) => {
+  Groups.findOne({ groupname }, (err, group) => {
     if (err) {
+      console.log(err);
+      callback(false);
+    // if group does not exist
+    } else if (group === null) {
       // make new group
       new Groups({
         groupname,
         members: [{ username }],
       }).save();
-      // add user to group
-      addGroupMember(groupname, username, callback);
+      // add group to user groups
+      User.findOne({ username }, (error, user) => {
+        if (err) {
+          console.log(error);
+          callback(false);
+        } else {
+          user.groupChats.addToSet({ groupname });
+          user.save();
+          callback(true);
+        }
+      });
+
     } else {
       console.log('group already exists');
       callback(false);

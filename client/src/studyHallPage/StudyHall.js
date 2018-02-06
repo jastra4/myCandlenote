@@ -22,7 +22,7 @@ class StudyHall extends React.Component {
       return (
         <div className="studyContainer">
           <div className="groupsList studyBackground">
-            <GroupsListConnected changeChat={this.changeChat.bind(this)}/>
+            <GroupsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
           </div>
           <div className="friendsList studyBackground">
             <FriendsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
