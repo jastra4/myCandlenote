@@ -606,6 +606,13 @@ app.post('/api/addFriend', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/userByUsername', (req, res) => {
+  const { username } = req.body;
+  queries.getUserByUsername(username)
+    .then(user => res.send(user))
+    .catch(err => res.status(400).send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {

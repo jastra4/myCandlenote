@@ -63,6 +63,8 @@ const getFriendsById = (friendIds) => {
   return User.find({ _id: { $in: mongoIds } });
 };
 
+const getUserByUsername = username => User.findOne({ username });
+
 module.exports = {
   getUserName,
   loadChatHistory,
@@ -74,4 +76,5 @@ module.exports = {
   getAccessToken,
   getGetAccessTokensForUsers,
   getFriendsById,
+  getUserByUsername,
 };
