@@ -130,10 +130,9 @@ app.post('/api/createNote', (req, res) => {
   // console.log('noteID: ', noteInfo.authorID);
   inserts.insertNote(noteInfo)
     .then((response) => { 
-      console.log('Successfully saved new note to DB'); 
+      console.log('Successfully saved new note to DB');
       const noteId = response._id;
-      const stringifiedNoteId = JSON.stringify({ noteId });
-      res.send(stringifiedNoteId);
+      res.send({ noteId });
     })
     .catch((e) => { 
       console.error(e); 
@@ -144,7 +143,6 @@ app.post('/api/createNote', (req, res) => {
 
 app.post('/api/editNote', (req, res) => {
   const { noteInfo } = req.body;
-  // console.log('not/eID: ', noteInfo.authorID);
   queries.updateNote(noteInfo)
     .then(() => { console.log('Successfully edited note in DB'); })
     .catch((e) => { console.error(e); });

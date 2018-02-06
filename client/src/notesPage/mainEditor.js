@@ -9,7 +9,8 @@ export default class MainEditor extends React.Component {
     super(props);
     this.state = { value: '' };
 
-    // this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    this.debouncedEditContent = _.debounce(this.editNote, 2000);
   }
 
   componentWillMount() {
@@ -19,30 +20,34 @@ export default class MainEditor extends React.Component {
   componentDidMount() {
     const value = JSON.parse(window.localStorage.getItem('noteContent'));
     this.setState({ value });
-    console.log('mounted');
   }
-   
+
   componentDidUpdate() {
-    console.log('updated', this);
-    this.props.createOrEditNote({
-      title: 'Kendrick\'s First Note',
-      body: this.state.packet,
-      // authorID: this.props.user.userId,
-      createdAt: Date.now(),
-    });
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    console.log('run')
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
+    
     this.setState({
       value, packet,
     });
     window.localStorage.setItem('noteContent', packet);
-    const content = this.getContentFromDelta(delta);
-    // this.debouncedParseContentMeaning(content);
+    c
+    onst content = this.getContentFromDelta(delta);
+    this.debouncedParseContentMeaning(content);
+
+    const noteInfo = {
+      title: 'Kendrick\'s First Note',
+      body: this.state.packet,
+      authorID: this.props.currentUser.userId,
+      noteId: this.state.currentNote,
+    };
+
+    this.debouncedEditContent(noteInfo);
   }
+
+  editNote = noteInfo => this.props.editNote(noteInfo);
 
 
   getContentFromDelta = delta => (
@@ -51,15 +56,14 @@ export default class MainEditor extends React.Component {
     ), '')
   );
 
-  // TODO: Use return value from this function to build IntelliSearch
-  // parseContentMeaning = content => (
-    // axios.post('api/parseContentMeaning', { content })
-    //   .then(({ data: { meaning } }) => {
-    //     console.log('Per Google, the meaning of your text is: ', meaning);
-    //     this.props.setCurrentMeaning(meaning);
-    //     return meaning;
-    //   })
-  // );
+  parseContentMeaning = content => (
+    axios.post('api/parseContentMeaning', { content })
+      .then(({ data: { meaning } }) => {
+        console.log('Per Google, the meaning of your text is: ', meaning);
+        this.props.setCurrentMeaning(meaning);
+        return meaning;
+      })
+  );
 
 
   handlePrint = () => {

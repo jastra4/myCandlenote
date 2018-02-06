@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Icon } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import { updateCurrentNote } from '../actions/notesActions';
 
-export default class CreateNewNote extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
+class CreateNewNote extends Component {
   handleNewNote = () => {
     this.props.createNote({
       title: 'My First Note',
       authorID: this.props.currentUser.userId,
       createdAt: Date.now(),
     })
-      .then((res) => {
-        console.log('res from createNote: ', res);
-      });
   }
 
   render = () => (
@@ -24,3 +19,14 @@ export default class CreateNewNote extends Component {
     </div>
   );
 }
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = dispatch => (
+  { updateCurrentNote: nodeId => dispatch(updateCurrentNote(nodeId)) }
+);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreateNewNote);

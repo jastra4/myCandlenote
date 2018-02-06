@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
     decksById: state.decks.byId,
     meaning: state.intelliSearch.meaning,
     limit: state.intelliSearch.limit,
+    currentNote: state.notes.currentNote,
   };
 };
 

@@ -29,10 +29,11 @@ const notesReducer = (state = defaultState, action) => {
     case 'SET_CURRENT_NOTE':
       return {
         ...state,
-        currentNote: state.byId[action.payload.id],
+        currentNote: action.payload.id,
       };
     case 'DELETE_NOTE':
       return dotProp.delete(state, `byId.${action.payload.id}`);
+
     default:
       return state;
   }

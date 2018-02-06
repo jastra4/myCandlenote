@@ -50,18 +50,17 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
-// const updateNote = noteInfo => Note.update({ id: noteInfo.noteid }, noteInfo, (err) => {
-//   if (err) {
-//     callback(err)
-//   }
-// } )
-
-// const createNote = noteInfo => Note. });
+const updateNote = noteInfo => Note.update({ id: noteInfo.noteId }, noteInfo, (err, res) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('note updated!: ', res);
+  }
+});
 
 
 module.exports = {
-  // updateNote, 
-  // createNote,
+  updateNote,
   getUserName,
   loadChatHistory,
   loadFriendsList,

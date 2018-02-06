@@ -15,10 +15,12 @@ class NotePage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const { meaning, limit } = newProps;
+    console.log('newPrp')
+    const { meaning, limit, currentNote } = newProps;
     this.setState({
       meaning,
       limit,
+      currentNote,
     });
   }
 

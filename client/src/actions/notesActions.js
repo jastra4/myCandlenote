@@ -5,18 +5,6 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
-export const createNote = (noteInfo) => {
-  console.log('new noteInfo for dispatch: ', noteInfo);
-  return (
-    dispatch => (
-      axios.post('/api/createNote', { noteInfo })
-        .then((res) => {
-          // dispatch(addNote(res.data)); 
-          console.log('res from note creation: ', res);
-        })
-        .catch((err) => { console.error(err); })
-    )
-)};
 
 export const editNote = (noteInfo) => {
   console.log('update noteInfo for dispatch: ', noteInfo);
@@ -24,15 +12,13 @@ export const editNote = (noteInfo) => {
     dispatch => (
       axios.post('/api/editNote', { noteInfo })
         .then((res) => {
-          // dispatch(addNote(res.data)); 
+          // dispatch(addNote(res.data));
           console.log(res);
         })
         .catch((err) => { console.error(err); })
     )
-  )
+  );
 };
-
-
 
 export const setNotes = notes => ({
   type: 'SET_NOTES',
@@ -50,9 +36,20 @@ export const getNotes = userId => (
 );
 
 export const setCurrentNote = noteId => ({
-  type: 'SET_CURRENT_NOTES',
+  type: 'SET_CURRENT_NOTE',
   payload: { id: noteId },
 });
+
+export const createNote = noteInfo => (
+  dispatch => (
+    axios.post('/api/createNote', { noteInfo })
+      .then(({ data: { noteId } }) => {
+        console.log('dispatching new note: ', noteId);
+        dispatch(setCurrentNote(noteId));
+      })
+      .catch((err) => { console.error(err); })
+  )
+);
 
 export const deleteNote = noteId => (
   dispatch => (
