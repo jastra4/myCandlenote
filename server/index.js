@@ -295,6 +295,16 @@ app.post('/api/setBusy', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/setCalendarEvents', (req, res) => {
+  const { events, userIds } = req.body;
+  queries.getGetAccessTokensForUsers(userIds)
+    .then((results) => {
+      const accessTokens = results.map(result => result.googleAccessToken);
+      res.send(results);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
 /* ----------- API Routes ------------ */
 
 app.post('/api/emailPDF', (req, res) => {
