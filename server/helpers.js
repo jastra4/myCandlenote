@@ -4,6 +4,7 @@ const { GOOGLE_NL_API_KEY } = require('./config');
 const webshot = require('webshot');
 const gCal = require('google-calendar');
 const queries = require('../database/queries');
+const inserts = require('../database/inserts');
 const keys = require('./config/keys');
 
 const parseMeaningWithGoogleAPI = content => (
@@ -122,11 +123,7 @@ const refreshMultipleTokens = (userIds) => {
   const refreshPromises = userIds.map(userId =>
     queries.getRefreshToken(userId)
       .then((data) => {
-        console.log('Refresh Tokens:', data);
         const { googleRefreshToken } = data;
-        console.log('TOKEN:', googleRefreshToken);
-        console.log('CLIENTID:', keys.google.clientID);
-        console.log('CLIENTSECRET', keys.google.clientSecret);
         return axios({
           url: 'https://www.googleapis.com/oauth2/v4/token',
           method: 'post',
@@ -138,7 +135,14 @@ const refreshMultipleTokens = (userIds) => {
           },
         });
       })
-      .then(tokenInfo => tokenInfo.data.access_token));
+      .then((tokenInfo) => {
+        inserts.saveAccessToken({
+          userId,
+          token: tokenInfo.data.access_token,
+        });
+        return tokenInfo.data.access_token;
+      }));
+
 
   return refreshPromises;
 };

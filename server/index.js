@@ -299,7 +299,6 @@ app.post('/api/refreshToken', (req, res) => {
         },
       })
         .then((response) => {
-          console.log('Res:', response.data);
           inserts.saveAccessToken({
             userId,
             token: response.data.access_token,
@@ -347,14 +346,11 @@ app.post('/api/setCalendarEvents', (req, res) => {
   const { newEvent, userIds, timeZone } = req.body;
   const event = buildGoogleCalEvent(newEvent, timeZone);
   Promise.all(refreshMultipleTokens(userIds))
-    .then((tokens) => {
-      console.log('TOKENS:', tokens);
-      return queries.getGetAccessTokensForUsers(userIds)
-        .then((results) => {
-          const accessTokens = results.map(result => result.googleAccessToken);
-          return Promise.all(setCalendarEventPerUser(accessTokens, event))
-            .then(responses => res.send(responses));
-        });
+    .then(() => queries.getGetAccessTokensForUsers(userIds))
+    .then((results) => {
+      const accessTokens = results.map(result => result.googleAccessToken);
+      return Promise.all(setCalendarEventPerUser(accessTokens, event))
+        .then(responses => res.send(responses));
     })
     .catch(err => res.status(400).send(err));
 });
