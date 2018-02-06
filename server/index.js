@@ -94,10 +94,10 @@ app.use('/user', userRoutes);
 // app.use('/peerjs', peerServer);
 
 /* ----------- GET Handlers --------- */
-// app.get('/user', (req, res) => {
-//   console.log('You are logged in this is your user profile: ', req.user);
-//   console.log('authenticated at /user? : ', req.isAuthenticated())
-// });
+app.get('/user', (req, res) => {
+  console.log('You are logged in this is your user profile: ', req.user);
+  console.log('authenticated at /user? : ', req.isAuthenticated())
+});
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, '/index.html'));
@@ -110,10 +110,9 @@ app.get('*', (req, res, next) => {
   } else {
     next();
   }
-  // res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-// called by app.js
+// // called by app.js
 app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
   res.status(200).send({ userid });
@@ -188,7 +187,7 @@ app.get('/userProfile', (req, res) => {
     });
 });
 
-/* --------- POST Handlers ----------- */
+// /* --------- POST Handlers ----------- */
 
 // called by Search.js
 app.post('/handleFriendRequest', (req, res) => {
@@ -229,6 +228,8 @@ app.get('/identifySocket', (req, res) => {
     res.send(username);
   });
 });
+
+io.sockets.on('error', (e) => { console.error(e); });
 
 io.sockets.on('connection', (socket) => {
   console.log('✅  Successfully connected new Socket: ', socket.id);
@@ -304,7 +305,7 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-/* ----------- API Routes ------------ */
+// /* ----------- API Routes ------------ */
 
 app.post('/api/emailPDF', (req, res) => {
   const { email } = req.body;
@@ -331,7 +332,7 @@ app.post('/api/decks', (req, res) => {
         userId,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/deleteDeck', (req, res) => {
@@ -340,7 +341,7 @@ app.post('/api/deleteDeck', (req, res) => {
       const { _id: id } = req.body;
       res.send(id);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/flashcards', (req, res) => {
@@ -355,13 +356,13 @@ app.post('/api/flashcards', (req, res) => {
         userId,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/deleteCard', (req, res) => {
   deletes.deleteFlashcard(req.body)
     .then(() => res.send('Deleted'))
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
@@ -385,8 +386,11 @@ app.post('/api/suggestedResources', (req, res) => {
     key: process.env.GOOGLE_SEARCH_API_KEY,
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
-    .then(results => res.send(results.data))
-    .catch(err => res.send(err));
+    .then((results) => { res.send(results.data); })
+    .catch((err) => {
+      console.error('⚠️  Error searching Google');
+      res.sendStatus(500).end();
+    });
 });
 
 app.post('/api/suggestedVideos', (req, res) => {
@@ -399,10 +403,11 @@ app.post('/api/suggestedVideos', (req, res) => {
     videoEmbeddable: 'true',
   } })
     .then(result => res.send(result.data))
-    .catch(err => res.send(err));
+    .catch((err) => {
+      console.error('⚠️  Error searching YouTube');
+      res.sendStatus(500).end();
+    });
 });
-
-// https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
 
 app.post('/api/suggestedWiki', (req, res) => {
   const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join('+');
@@ -426,12 +431,18 @@ app.post('/api/suggestedWiki', (req, res) => {
             data.isFromGoogle = true;
             res.send(data);
           })
-          .catch(err => res.send(err));
+          .catch((err) => {
+            console.error('⚠️  Error searching Google');
+            res.sendStatus(500).end();
+          });
       } else {
         res.send(result.data);
       }
     })
-    .catch(err => res.send(err));
+    .catch((err) => {
+      console.error('⚠️  Error searching Wikipedia');
+      res.sendStatus(500).end();
+    });
 });
 
 app.post('/api/tempSavePacket', (req, res) => {

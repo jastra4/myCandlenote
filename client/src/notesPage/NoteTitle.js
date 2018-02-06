@@ -1,14 +1,22 @@
 import React from 'react';
 import './NoteTitle.css';
+import _ from 'lodash';
 
 export default class NoteTitle extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
+  
+    this.handleTitleChange = _.debounce(this.handleTitleChange, 2000);
   }
 
   handleInputChange = ({ target: { value } }) => {
     this.setState({ value });
+    
+    this.handleTitleChange(value);
+  }
+
+  handleTitleChange = (value) => {
     this.props.handleTitleChange(value);
   }
 

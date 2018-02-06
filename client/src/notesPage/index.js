@@ -13,7 +13,7 @@ class NotePage extends React.Component {
     this.state = {
       limit: 10,
     };
-    this.editNote = _.debounce(this.editNote, 1000);
+    this.editNote = _.debounce(this.editNote, 2000);
   }
 
   componentWillReceiveProps(newProps) {
@@ -58,7 +58,7 @@ class NotePage extends React.Component {
           {
             this.state.currentNote &&
             <div>
-              <NoteTitle handleTitleChange={this.handleTitleChange} />
+              <NoteTitle handleTitleChange={ this.handleTitleChange } />
               <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } title={ this.state.title } />
             </div>
           }
