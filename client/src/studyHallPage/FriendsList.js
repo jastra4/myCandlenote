@@ -37,7 +37,7 @@ class FriendsList extends React.Component {
       this.setState({ friends: updatedfriends });
     });
 
-    this.props.socket.emit('available');
+    this.props.socket.emit('available', this.props.username);
     this.loadFriends();
   }
 
@@ -53,7 +53,7 @@ class FriendsList extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.socket.emit('away');
+    this.props.socket.emit('away', this.props.username);
   }
 
   render() {
