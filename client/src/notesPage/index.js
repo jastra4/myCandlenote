@@ -5,6 +5,7 @@ import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
 import CreateNewNote from './createNewNote';
 import IntelliSearch from './intelliSearch';
+import _ from 'lodash';
 
 class NotePage extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ class NotePage extends React.Component {
     this.state = {
       limit: 10,
     };
+    this.editNote = _.debounce(this.editNote, 1000);
   }
 
   componentWillReceiveProps(newProps) {
@@ -32,6 +34,18 @@ class NotePage extends React.Component {
     this.setState({ content });
   }
 
+  handleTitleChange = (title) => {
+    this.setState({ title });
+    this.editNote({
+      noteId: this.props.currentNote,
+      title,
+    });
+  }
+
+  editNote = (noteInfo) => {
+    this.props.editNote(noteInfo);
+  }
+
   render = () => (
     <div>
       <Grid >
@@ -44,8 +58,8 @@ class NotePage extends React.Component {
           {
             this.state.currentNote &&
             <div>
-              <NoteTitle />
-              <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } />
+              <NoteTitle handleTitleChange={this.handleTitleChange} />
+              <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } title={ this.state.title } />
             </div>
           }
         </Grid.Column>

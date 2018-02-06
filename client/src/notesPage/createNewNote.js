@@ -7,10 +7,9 @@ import { updateCurrentNote } from '../actions/notesActions';
 class CreateNewNote extends Component {
   handleNewNote = () => {
     this.props.createNote({
-      title: 'My First Note',
       authorID: this.props.currentUser.userId,
       createdAt: Date.now(),
-    })
+    });
   }
 
   render = () => (

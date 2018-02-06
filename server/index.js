@@ -143,6 +143,7 @@ app.post('/api/createNote', (req, res) => {
 
 app.post('/api/editNote', (req, res) => {
   const { noteInfo } = req.body;
+  console.log('updated note: ', noteInfo);
   queries.updateNote(noteInfo)
     .then(() => { console.log('Successfully edited note in DB'); })
     .catch((e) => { console.error(e); });

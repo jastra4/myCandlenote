@@ -167,3 +167,19 @@ body {
 .notSelectedChat{
 
 }
+
+
+.titleInput {
+	font-weight: 600;
+	font-size: 25px;
+	background-color: transparent;
+	border: none;
+	width: 600px;
+	margin: 20px 0px;
+
+}
+
+.titleInput::placeholder {
+	font-weight: normal;
+	font-style: italic;
+}

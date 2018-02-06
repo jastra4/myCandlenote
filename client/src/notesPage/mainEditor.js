@@ -10,7 +10,7 @@ export default class MainEditor extends React.Component {
     this.state = { value: '' };
 
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
-    this.debouncedEditContent = _.debounce(this.editNote, 2000);
+    this.debouncedEditNote = _.debounce(this.editNote, 2000);
   }
 
   componentWillMount() {
@@ -18,33 +18,34 @@ export default class MainEditor extends React.Component {
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('noteContent'));
-    this.setState({ value });
+    // const value = JSON.parse(window.localStorage.getItem('noteContent'));
+    // this.setState({ value });
+    console.log('currentNote: ', this.state.currentNote);
   }
 
-  componentDidUpdate() {
+  componentWillReceiveProps(nextProps) {
+    this.setState({ title: nextProps.title });
   }
 
   handleEditorChange = (value, d, source, editor) => {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
-    
+
     this.setState({
       value, packet,
     });
     window.localStorage.setItem('noteContent', packet);
-    c
-    onst content = this.getContentFromDelta(delta);
+
+    const content = this.getContentFromDelta(delta); 
     this.debouncedParseContentMeaning(content);
 
     const noteInfo = {
-      title: 'Kendrick\'s First Note',
+      title: this.state.title,
       body: this.state.packet,
       authorID: this.props.currentUser.userId,
-      noteId: this.state.currentNote,
+      noteId: this.props.currentNote,
     };
-
-    this.debouncedEditContent(noteInfo);
+    this.debouncedEditNote(noteInfo);
   }
 
   editNote = noteInfo => this.props.editNote(noteInfo);

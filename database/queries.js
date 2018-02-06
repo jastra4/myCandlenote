@@ -3,6 +3,8 @@ const User = require('../server/models/user-model');
 const { Decks, Flashcards, Note } = require('./index');
 const db = require('./index');
 
+const { ObjectId } = db;
+
 const getUserName = (id, callback) => {
   User.findOne({ _id: id }, (err, person) => {
     if (err) {
@@ -50,15 +52,19 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
-const updateNote = noteInfo => Note.update({ id: noteInfo.noteId }, noteInfo, (err, res) => {
-  if (err) {
-    console.error(err);
-  } else {
-    console.log('note updated!: ', res);
-  }
-});
+const updateNote = (noteInfo) => {
+  console.log('note info for update: ', noteInfo);
 
+  return (
 
+    Note.update({ _id: noteInfo.noteId }, { $set: noteInfo }, (err, updatedNote) => {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('note updated!: ', updatedNote);
+      }
+    }));
+};
 module.exports = {
   updateNote,
   getUserName,
