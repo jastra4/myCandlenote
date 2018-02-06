@@ -12,23 +12,34 @@ const getUserName = (id, callback) => {
   });
 };
 
-const getMessages = (sentBy, to, callback) => {
-  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created').limit(6);
+const loadChatHistory = (sentBy, to, callback) => {
+  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created'); // .limit(8);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
+    } else {
+      callback(docs);
     }
-    callback(docs);
   });
 };
 
-const getAllUsers = (callback) => {
-  const query = User.find({});
-  query.exec((err, docs) => {
-    if (err) {
-      callback(err);
-    }
-    callback(docs);
+// returns all users where their username is in a list a list of friend names
+// created testList because the $in operator won't work on an array of objects
+const loadFriendsList = (username, callback) => {
+  User.findOne({ username }, (err, user) => {
+    const friendsList = user.friends;
+    const testList = [];
+    friendsList.forEach((friend) => {
+      testList.push(friend.username);
+    });
+    const query = User.find({ username: { $in: testList } });
+    query.exec((error, friends) => {
+      if (error) {
+        callback(err);
+      } else {
+        callback(friends);
+      }
+    });
   });
 };
 
@@ -50,8 +61,8 @@ const getGetAccessTokensForUsers = (userIds) => {
 
 module.exports = {
   getUserName,
-  getMessages,
-  getAllUsers,
+  loadChatHistory,
+  loadFriendsList,
   getCurrentUser,
   getDecksForUser,
   getFlashcardsForUser,
