@@ -129,11 +129,7 @@ app.get('*', (req, res, next) => {
   // res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-// called by app.js
-app.get('/api/userid', (req, res) => {
-  const userid = req.session.passport.user;
-  res.status(200).send({ userid });
-});
+
 
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
@@ -224,6 +220,18 @@ app.get('/identifySocket', (req, res) => {
 
 io.sockets.on('connection', (socket) => {
   console.log(`socket connected: ${socket.id}`);
+
+  // called by app.js
+  app.get('/api/userid', (req, res) => {
+    const userid = req.session.passport.user; // get user id
+    const userSocket = req.query.socket; // get socket
+    queries.getUserName(userid, (username) => { // get username
+      userSocket.username = username; // assign username to socket
+      userSocket.status = 'away'; // assign status to socket
+      activeUserSockets[userSocket.username] = userSocket; // assign socket to activeSockets
+      res.status(200).send(userSocket); // send client updated socket
+    });
+  });
 
   // called by Search.js
   app.post('/openChat', (req, res) => {

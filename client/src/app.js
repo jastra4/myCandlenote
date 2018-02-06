@@ -30,8 +30,8 @@ class App extends React.Component {
     this.identifyUser();
   }
 
-  identifyUser() {
-    axios.get('/api/userid')
+  identifyUser(socket) {
+    axios.get(`/api/userid?socket=${socket}`)
       .then((res) => {
         if (res.data.userid !== undefined) {
           this.initSocket(res.data.userid);
@@ -42,9 +42,10 @@ class App extends React.Component {
   }
 
   initSocket(userid) {
-    const socket = io(socketUrl);
-    socket.on('connect', () => {
-      this.nameSocket(socket, userid);
+    const socket = io(socketUrl); // open connection
+    socket.on('connect', () => { // received immediately
+      // this.nameSocket(socket, userid); 
+      this.identifyUser(socket); // identify user
     });
   }
 
