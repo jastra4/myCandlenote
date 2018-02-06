@@ -55,6 +55,7 @@
     "promisify-node": "^0.4.0",
     "puppeteer": "^1.0.0",
     "react": "^16.2.0",
+    "react-big-calendar": "^0.17.0",
     "react-bootstrap": "^0.31.5",
     "react-card-flip": "^0.1.1",
     "react-dom": "^16.2.0",
