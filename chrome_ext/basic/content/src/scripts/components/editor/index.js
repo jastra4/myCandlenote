@@ -66,7 +66,6 @@ export default class MainEditor extends React.Component {
       <div>
         <ReactQuill
           ref={ (quillEditor) => { 
-            console.log('quillEditor: ', quillEditor) 
             this.quillEditor = quillEditor;
           }} 
           className='cn-quill'

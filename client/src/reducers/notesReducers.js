@@ -21,7 +21,7 @@ const notesReducer = (state = defaultState, action) => {
 
       const notesById = notesFromDB.reduce((notes, note) => ({
         ...notes,
-        [note.id]: note,
+        [note._id]: note,
       }), {});
 
       const allIds = Object.keys(notesById);

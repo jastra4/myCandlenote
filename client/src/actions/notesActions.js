@@ -26,14 +26,13 @@ export const setNotes = notes => ({
 });
 
 export const getNotes = (userId) => {
-  console.log('getNotes from notesActions run1!');
   return ((dispatch) => {
-    console.log('getNotes from notesActions run2!');
     axios.get(`/api/getNotes/${userId}`)
       .then((res) => {
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
-      }, err => console.log(err));
+      })
+      .catch = (e) => { console.error(e); };
   });
 };
 

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 
 const noteStyle = {
   position: 'relative',
@@ -7,6 +8,7 @@ const noteStyle = {
   height: '193px',
   float: 'left',
   marginLeft: '30px',
+  cursor: 'pointer',
 };
 
 const imageStyle = {
@@ -20,10 +22,27 @@ const textStyle = {
   left: '13%',
 };
 
-export default props => (
-    <div style={ noteStyle }>
-        <img src='/assets/notepad.png' style={ imageStyle } />
-        <h2 style={ textStyle }>{ props.title }</h2>
-    </div>
-);
+
+export default class NotePreview extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { redirect: false };
+  }
+
+  handleNoteChange = () => {
+    const newCurrentNote = this.props.key;
+    this.props.setCurrentNote(newCurrentNote);
+  };
+
+  render = () => (
+    this.state.redirect
+      ? <Redirect to='/notepad' />
+      : (
+        <div style={ noteStyle } onClick={ this.handleNoteChange }>
+            <img src='/assets/notepad.png' style={ imageStyle } />
+            <h2 style={ textStyle }>{ this.props.title }</h2>
+        </div>
+      )
+  )
+}
 

@@ -367,14 +367,13 @@ app.post('/api/deleteCard', (req, res) => {
 
 
 app.get(`/api/getNotes/:id`, (req, res) => {
-  console.log('url form /api/notes: ', req.url);
-  console.log('params form /api/notes: ', req.params);
-  
-  // queries.getNotes(userId)
-  //   .then((notes) => {
-  //     console.log('notes for user: ', notes);
-  //   })
-  //   .catch((e) => { console.error(e) });
+  const { id: userId } = req.params;
+  queries.getNotes(userId)
+    .then((notes) => { res.send(notes); })
+    .catch((e) => { 
+      console.error(e); 
+      res.sendStatus(500).end();
+    });
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
