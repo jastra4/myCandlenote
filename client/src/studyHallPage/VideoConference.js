@@ -17,6 +17,7 @@ class VideoConference extends React.Component {
     this.handlePeerIdChange = this.handlePeerIdChange.bind(this);
     this.testSendData = this.testSendData.bind(this);
     this.onReceiveData = this.onReceiveData.bind(this);
+    this.onReceiveStream = this.onReceiveStream.bind(this);
   }
 
   componentWillMount() {
@@ -44,6 +45,13 @@ class VideoConference extends React.Component {
       });
     });
     this.prepareSelfVideo();
+
+    this.state.peer.on('call', (call) => {
+      console.log('call data set to state: ', call);
+      this.setState({ call: call }, () => {
+        this.state.call.on('stream', this.onReceiveStream);
+      });
+    });
   }
 
   componentWillUnmount() {
@@ -74,6 +82,13 @@ class VideoConference extends React.Component {
   testSendData() {
     console.log('Current connection on the state: ', this.state.conn);
     this.state.conn.send('Hello hello I sent a thing!');
+  }
+
+  callPeer() {
+    const call = this.state.peer.call(this.state.remoteId);
+    this.setState({ call: call }, () => {
+      
+    });
   }
 
   onReceiveData(data) {
@@ -115,17 +130,17 @@ class VideoConference extends React.Component {
     }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
-  call(id) {
-    // const id = document.querySelector('.peer-id');
-    this.getMedia({
-      audio: true,
-      video: true,
-    }, (stream) => {
-      const call = this.state.peer.call(id, stream);
-      console.log('calling...');
-      call.on('stream', this.onReceiveStream);
-    }, (err) => { console.log('Error in call: ', err); });
-  }
+  // call(id) {
+  //   // const id = document.querySelector('.peer-id');
+  //   this.getMedia({
+  //     audio: true,
+  //     video: true,
+  //   }, (stream) => {
+  //     const call = this.state.peer.call(id, stream);
+  //     console.log('calling...');
+  //     call.on('stream', this.onReceiveStream);
+  //   }, (err) => { console.log('Error in call: ', err); });
+  // }
 
   
 
@@ -148,12 +163,12 @@ class VideoConference extends React.Component {
           <video className="video-call" autoPlay></video>
           <video className="video-self" autoPlay></video>
           <div className="share">
-            <a>Share - {`http://localhost:3000/studyhall/${this.state.hash}`}</a>
+            <a>Share - {this.state.myId}</a>
           </div>
           <div>
             <input type="text" className="peer-id" onChange={this.handlePeerIdChange}></input>
-            <button onClick={() => { this.handlePeerIdSumbmission(); }}>Call</button>
-            <button onClick={() => { this.testSendData(); }}>Test</button>
+            <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
+            <button onClick={() => { this.testSendData(); }}>Call</button>
           </div>
         </div>
       </div>
