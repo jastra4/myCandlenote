@@ -3,8 +3,6 @@ const User = require('../server/models/user-model');
 const { Decks, Flashcards, Note } = require('./index');
 const db = require('./index');
 
-const { ObjectId } = db;
-
 const getUserName = (id, callback) => {
   User.findOne({ _id: id }, (err, person) => {
     if (err) {

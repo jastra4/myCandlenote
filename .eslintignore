@@ -1,4 +1,4 @@
 /client/dist/bundle.js
-webpack.config.js
+webpack.config.jsr
 /node_modules
 /chrome_ext

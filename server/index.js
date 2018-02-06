@@ -63,9 +63,9 @@ const emailNoteOptions = (email, filePath) => ({
 });
 
 app.use(bodyParser.json({ limit: '5mb' }));
-app.use(bodyParser.urlencoded({ 
+app.use(bodyParser.urlencoded({
   extended: true,
-  limit: '5mb', 
+  limit: '5mb',
 }));
 
 app.use(express.static(DIST_DIR));
@@ -94,10 +94,10 @@ app.use('/user', userRoutes);
 // app.use('/peerjs', peerServer);
 
 /* ----------- GET Handlers --------- */
-app.get('/user', (req, res) => {
-  console.log('You are logged in this is your user profile: ', req.user);
-  console.log('authenticated at /user? : ', req.isAuthenticated())
-});
+// app.get('/user', (req, res) => {
+//   console.log('You are logged in this is your user profile: ', req.user);
+//   console.log('authenticated at /user? : ', req.isAuthenticated());
+// });
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, '/index.html'));
@@ -128,13 +128,13 @@ app.post('/api/createNote', (req, res) => {
   const { noteInfo } = req.body;
   // console.log('noteID: ', noteInfo.authorID);
   inserts.insertNote(noteInfo)
-    .then((response) => { 
+    .then((response) => {
       console.log('Successfully saved new note to DB');
       const noteId = response._id;
       res.send({ noteId });
     })
-    .catch((e) => { 
-      console.error(e); 
+    .catch((e) => {
+      console.error(e);
       res.sendStatus(500).end();
     });
 });
@@ -146,7 +146,7 @@ app.post('/api/editNote', (req, res) => {
   queries.updateNote(noteInfo)
     .then(() => { console.log('Successfully edited note in DB'); })
     .catch((e) => { console.error(e); });
-  res.send('success!'); 
+  res.send('success!');
 });
 
 app.get('/users', (req, res) => {
@@ -387,7 +387,7 @@ app.post('/api/suggestedResources', (req, res) => {
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
     .then((results) => { res.send(results.data); })
-    .catch((err) => {
+    .catch((err) => { // eslint-disable-line
       console.error('⚠️  Error searching Google');
       res.sendStatus(500).end();
     });
@@ -403,7 +403,7 @@ app.post('/api/suggestedVideos', (req, res) => {
     videoEmbeddable: 'true',
   } })
     .then(result => res.send(result.data))
-    .catch((err) => {
+    .catch((err) => { // eslint-disable-line
       console.error('⚠️  Error searching YouTube');
       res.sendStatus(500).end();
     });
@@ -431,7 +431,7 @@ app.post('/api/suggestedWiki', (req, res) => {
             data.isFromGoogle = true;
             res.send(data);
           })
-          .catch((err) => {
+          .catch((err) => { // eslint-disable-line
             console.error('⚠️  Error searching Google');
             res.sendStatus(500).end();
           });
@@ -439,7 +439,7 @@ app.post('/api/suggestedWiki', (req, res) => {
         res.send(result.data);
       }
     })
-    .catch((err) => {
+    .catch((err) => { // eslint-disable-line
       console.error('⚠️  Error searching Wikipedia');
       res.sendStatus(500).end();
     });

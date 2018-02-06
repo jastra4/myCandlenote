@@ -12,7 +12,7 @@ export const editNote = (noteInfo) => {
     dispatch => (
       axios.post('/api/editNote', { noteInfo })
         .then((res) => {
-          // dispatch(addNote(res.data));
+          dispatch();
           console.log(res);
         })
         .catch((err) => { console.error(err); })

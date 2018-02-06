@@ -36,7 +36,7 @@ export default class MainEditor extends React.Component {
     });
     window.localStorage.setItem('noteContent', packet);
 
-    const content = this.getContentFromDelta(delta); 
+    const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
 
     const noteInfo = {

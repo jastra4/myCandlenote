@@ -1,23 +1,21 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
+import _ from 'lodash';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
 import CreateNewNote from './createNewNote';
 import IntelliSearch from './intelliSearch';
-import _ from 'lodash';
 
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      limit: 10,
-    };
+    this.state = { limit: 10 };
     this.editNote = _.debounce(this.editNote, 2000);
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newPrp')
+    console.log('newPrp');
     const { meaning, limit, currentNote } = newProps;
     this.setState({
       meaning,
@@ -59,7 +57,11 @@ class NotePage extends React.Component {
             this.state.currentNote &&
             <div>
               <NoteTitle handleTitleChange={ this.handleTitleChange } />
-              <MainEditor { ...this.props } handleTextChange={ this.handleTextChange } title={ this.state.title } />
+              <MainEditor
+                { ...this.props }
+                handleTextChange={ this.handleTextChange }
+                title={ this.state.title }
+              />
             </div>
           }
         </Grid.Column>
