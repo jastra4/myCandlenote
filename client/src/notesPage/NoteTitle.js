@@ -6,7 +6,7 @@ export default class NoteTitle extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
-    
+
     this.handleTitleChange = _.debounce(this.handleTitleChange, 2000);
   }
 
