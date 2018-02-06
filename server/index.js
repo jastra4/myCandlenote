@@ -579,6 +579,20 @@ app.post('/api/userFlashcards', (req, res) => {
     .catch(err => res.send(err));
 });
 
+app.post('/api/userFriends', (req, res) => {
+  const { userId } = req.body;
+  queries.getCurrentUser(userId)
+    .then(response => res.send(response.friends))
+    .catch(err => res.status(400).send(err));
+});
+
+app.post('/api/addFriend', (req, res) => {
+  const { userId, friendId } = req.body;
+  inserts.addFriend(userId, friendId)
+    .then(response => res.send(response))
+    .catch(err => res.status(400).send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
