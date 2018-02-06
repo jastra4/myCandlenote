@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
 const google = require('googleapis');
+const Promise = require('promise');
 
 const puppeteer = require('puppeteer');
 
@@ -40,7 +41,8 @@ const io = require('socket.io').listen(server); // socket stuff
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
-const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy, setCalendarEventPerUser,
+const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
+  setCalendarEventPerUser, refreshMultipleTokens,
   getCalendarList, reduceFreeBusyToTimeSpans, buildGoogleCalEvent } = require('./helpers');
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
@@ -344,12 +346,15 @@ app.post('/api/freeBusy', (req, res) => {
 app.post('/api/setCalendarEvents', (req, res) => {
   const { newEvent, userIds, timeZone } = req.body;
   const event = buildGoogleCalEvent(newEvent, timeZone);
-  queries.getGetAccessTokensForUsers(userIds)
-    .then((results) => {
-      const accessTokens = results.map(result => result.googleAccessToken);
-      setCalendarEventPerUser(accessTokens, event)
-        .then(responses => res.send(responses))
-        .catch(err => res.status(400).send(err));
+  Promise.all(refreshMultipleTokens(userIds))
+    .then((tokens) => {
+      console.log('TOKENS:', tokens);
+      return queries.getGetAccessTokensForUsers(userIds)
+        .then((results) => {
+          const accessTokens = results.map(result => result.googleAccessToken);
+          return Promise.all(setCalendarEventPerUser(accessTokens, event))
+            .then(responses => res.send(responses));
+        });
     })
     .catch(err => res.status(400).send(err));
 });

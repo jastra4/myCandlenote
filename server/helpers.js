@@ -3,6 +3,8 @@ const Promise = require('promise');
 const { GOOGLE_NL_API_KEY } = require('./config');
 const webshot = require('webshot');
 const gCal = require('google-calendar');
+const queries = require('../database/queries');
+const keys = require('./config/keys');
 
 const parseMeaningWithGoogleAPI = content => (
   axios.post(
@@ -115,6 +117,32 @@ const setCalendarEventPerUser = (accessTokens, event) => {
   return eventPromises;
 };
 
+const refreshMultipleTokens = (userIds) => {
+  console.log('UserIds:', userIds);
+  const refreshPromises = userIds.map(userId =>
+    queries.getRefreshToken(userId)
+      .then((data) => {
+        console.log('Refresh Tokens:', data);
+        const { googleRefreshToken } = data;
+        console.log('TOKEN:', googleRefreshToken);
+        console.log('CLIENTID:', keys.google.clientID);
+        console.log('CLIENTSECRET', keys.google.clientSecret);
+        return axios({
+          url: 'https://www.googleapis.com/oauth2/v4/token',
+          method: 'post',
+          params: {
+            client_id: keys.google.clientID,
+            client_secret: keys.google.clientSecret,
+            refresh_token: googleRefreshToken,
+            grant_type: 'refresh_token',
+          },
+        });
+      })
+      .then(tokenInfo => tokenInfo.data.access_token));
+
+  return refreshPromises;
+};
+
 module.exports = {
   parseMeaningWithGoogleAPI,
   makePDF,
@@ -123,4 +151,5 @@ module.exports = {
   reduceFreeBusyToTimeSpans,
   buildGoogleCalEvent,
   setCalendarEventPerUser,
+  refreshMultipleTokens,
 };
