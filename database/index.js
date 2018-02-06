@@ -35,6 +35,10 @@ const notesSchema = mongoose.Schema({
   authorID: 'ObjectId',
   sharedWith: Array,
   createdAt: Date,
+  modifiedAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Note = mongoose.model('notes', notesSchema);

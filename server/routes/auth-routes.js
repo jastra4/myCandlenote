@@ -1,16 +1,14 @@
 const router = require('express').Router();
 const passport = require('passport');
-// const passportSetup = require('../config/passport-setup');
+const passportSetup = require('../config/passport-setup');
 
 router.get('/login', (req, res) => {
-  // something something something;
   res.send('login page!');
 });
 
 // console.log(passportSetup);
 
 router.get('/logout', (req, res) => {
-  // handle with passport
   req.logout();
   res.redirect('/auth/login');
 });

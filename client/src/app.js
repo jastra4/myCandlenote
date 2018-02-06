@@ -11,12 +11,12 @@ import NotePageConnected from './notesPage/notesContainer'; // eslint-disable-li
 import DeckPageConnected from './decksPage/DeckContainer';
 import FlashcardPageConnected from './flashcardsPage/FlashcardContainer';
 import StudyHallConnected from './studyHallPage/StudyHall';
+import NoteboxConnected from './noteBox/noteBoxContainer';
 
 // Components
 import TopBar from './topBar';
 import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
-import Notebox from './noteBox';
 import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
 import store from '../src/store';
@@ -68,7 +68,7 @@ class App extends React.Component {
           <Switch>
             <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
             <Route path='/notepad' render={() => <TopBar ContentPage={ NotePageConnected }/>} />
-            <Route path='/notebox' render={() => <TopBar ContentPage={ Notebox }/>} />
+            <Route path='/notebox' render={() => <TopBar ContentPage={ NoteboxConnected }/>} />
             <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPageConnected} />} />
             <Route path='/createFlashcard' exact={true} render={() => <TopBar ContentPage={FlashcardPageConnected} />} />
             <Route path='/decks' exact={true} render={() => <TopBar ContentPage={DeckPageConnected} />} />

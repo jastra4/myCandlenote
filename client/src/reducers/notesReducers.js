@@ -17,13 +17,24 @@ const notesReducer = (state = defaultState, action) => {
         },
       };
     case 'SET_NOTES': {
-      const notesById = action.payload.reduce((notes, note) => ({
+      const notesFromDB = action.payload;
+
+      const notesById = notesFromDB.reduce((notes, note) => ({
         ...notes,
         [note.id]: note,
       }), {});
+
+      const allIds = Object.keys(notesById);
+
+      const currentNote = notesFromDB
+        .slice()
+        .sort((a, b) => (a.modifiedAt <= b.modifiedAt ? -1 : 1))[0]._id;
+
       return {
         ...state,
         byId: notesById,
+        currentNote,
+        allIds,
       };
     }
     case 'SET_CURRENT_NOTE':

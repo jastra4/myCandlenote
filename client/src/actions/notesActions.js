@@ -25,15 +25,17 @@ export const setNotes = notes => ({
   payload: notes,
 });
 
-export const getNotes = userId => (
-  dispatch => (
-    axios.get(`/api/notes/${userId}`)
+export const getNotes = (userId) => {
+  console.log('getNotes from notesActions run1!');
+  return ((dispatch) => {
+    console.log('getNotes from notesActions run2!');
+    axios.get(`/api/getNotes/${userId}`)
       .then((res) => {
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
-      }, err => console.log(err))
-  )
-);
+      }, err => console.log(err));
+  });
+};
 
 export const setCurrentNote = noteId => ({
   type: 'SET_CURRENT_NOTE',

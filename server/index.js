@@ -365,6 +365,18 @@ app.post('/api/deleteCard', (req, res) => {
     .catch(err => console.error(err));
 });
 
+
+app.get(`/api/getNotes/:id`, (req, res) => {
+  console.log('url form /api/notes: ', req.url);
+  console.log('params form /api/notes: ', req.params);
+  
+  // queries.getNotes(userId)
+  //   .then((notes) => {
+  //     console.log('notes for user: ', notes);
+  //   })
+  //   .catch((e) => { console.error(e) });
+});
+
 app.post('/api/parseContentMeaning', (req, res) => {
   parseMeaningWithGoogleAPI(req.body.content)
     .then((meaning) => {

@@ -51,11 +51,14 @@ const getDecksForUser = userId => Decks.find({ userId });
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
 const updateNote = (noteInfo) => {
-  console.log('note info for update: ', noteInfo);
+  const updatedNoteInfo = {
+    ...noteInfo,
+    modifiedAt: Date.now(),
+  };
 
   return (
 
-    Note.update({ _id: noteInfo.noteId }, { $set: noteInfo }, (err, updatedNote) => {
+    Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err, updatedNote) => {
       if (err) {
         console.error(err);
       } else {
@@ -63,7 +66,11 @@ const updateNote = (noteInfo) => {
       }
     }));
 };
+
+const getNotes = authorID => Note.find({ authorID }).sort('-modifiedAt');
+
 module.exports = {
+  getNotes,
   updateNote,
   getUserName,
   loadChatHistory,
