@@ -35,15 +35,18 @@ export default class SchedulePage extends React.Component {
   }
 
   handleSelectSlot(slotInfo) {
-    const slot = {
-      start: slotInfo.start,
-      end: slotInfo.end,
-      title: this.state.title,
-    };
-    this.setState({
-      newEvents: this.state.newEvents.concat(slot),
-      events: this.state.events.concat(slot),
-    });
+    if (!this.state.title) alert('Please give this event a title.');
+    else {
+      const slot = {
+        start: slotInfo.start,
+        end: slotInfo.end,
+        title: this.state.title,
+      };
+      this.setState({
+        newEvents: this.state.newEvents.concat(slot),
+        events: this.state.events.concat(slot),
+      });
+    }
   }
 
   handleInputChange(e) {
@@ -52,6 +55,7 @@ export default class SchedulePage extends React.Component {
 
   handleSubmit(e) {
     //TODO: send new busy slots to server
+    
   }
 
   render() {
@@ -67,7 +71,7 @@ export default class SchedulePage extends React.Component {
           onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
         />
         <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleInputChange.bind(this)}/>
-        <button type="button" onPress={this.handleSubmit.bind(this)}>Confirm Event</button>
+        <button type="button" onClick={this.handleSubmit.bind(this)}>Confirm Events</button>
       </div>
     );
   }
