@@ -281,7 +281,10 @@ app.post('/api/freeBusy', (req, res) => {
       console.log('BUSY TIMES:', busyTimes);
       res.send(busyTimes);
     })
-    .catch(err => res.send(err));
+    .catch(err => {
+      console.log('BTimes err:', err.data);
+      res.status(400).send(err)
+    });
 });
 
 /* ----------- API Routes ------------ */
