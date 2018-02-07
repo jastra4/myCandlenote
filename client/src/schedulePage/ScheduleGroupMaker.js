@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Icon } from 'semantic-ui-react';
+import './schedulePage.css';
 
 const ScheduleGroupMaker = props => (
   <Card raised className="user-friends-container">
@@ -10,9 +11,12 @@ const ScheduleGroupMaker = props => (
     </Card.Content>
     <Card.Content className="user-friend-card-count">
       {'<list of friends>'}
+      {console.log('Group props:', props)}
       <ul>
         {props.friends.map(friend => (
-          <li>{friend.username}</li>
+          props.group.includes(friend.id) ?
+            <li className="friend-selected" onClick={() => props.removeFriendFromGroup(friend.id)}>{friend.username}</li> :
+            <li onClick={() => props.addFriendToGroup(friend.id)}>{friend.username}</li>
         ))}
       </ul>
     </Card.Content>

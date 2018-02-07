@@ -20,6 +20,9 @@ export default class SchedulePage extends React.Component {
       group: [],
       friends: [],
     };
+
+    this.addFriendToGroup = this.addFriendToGroup.bind(this);
+    this.removeFriendFromGroup = this.removeFriendFromGroup.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +87,19 @@ export default class SchedulePage extends React.Component {
     });
   }
 
+  addFriendToGroup(friendId) {
+    console.log('Adding Friend:', friendId);
+    if (!this.state.group.includes(friendId)) {
+      this.setState({ group: this.state.group.concat(friendId) });
+    }
+  }
+
+  removeFriendFromGroup(friendId) {
+    console.log('Removing Friend:', friendId);
+    const newGroup = this.state.group.filter(id => id !== friendId);
+    this.setState({ group: newGroup });
+  }
+
   render() {
     return (
       <div className="calendar-container">
@@ -99,7 +115,12 @@ export default class SchedulePage extends React.Component {
             onSelectEvent={event => alert(event.title)}
             onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
           />
-          <ScheduleGroupMaker friends={this.state.friends} />
+          <ScheduleGroupMaker
+            friends={this.state.friends}
+            group={this.state.group}
+            addFriendToGroup={this.addFriendToGroup}
+            removeFriendFromGroup={this.removeFriendFromGroup}
+          />
         </Segment>
       </div>
     );
