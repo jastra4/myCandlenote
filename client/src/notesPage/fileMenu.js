@@ -1,7 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 import { Button, Icon } from 'semantic-ui-react';
 import EmailModal from './emailModal';
-import axios from 'axios';
 
 export default class FileMenu extends React.Component {
   state = { };
@@ -11,8 +11,8 @@ export default class FileMenu extends React.Component {
   }
 
   handleNew = () => {
-    axios.post('https://hooks.slack.com/services/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', {'text': 'lol' })
-    .catch((e) => { console.error(e) });
+    axios.post('https://hooks.slack.com/services/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', { text: 'lol' })
+      .catch((e) => { console.error(e); });
   }
 
   render = () => (

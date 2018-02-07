@@ -5,9 +5,9 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
-export const savedNote = () => ({type: 'SAVED_NOTE',});
+export const savedNote = () => ({ type: 'SAVED_NOTE' });
 
-export const savingNote = () => ({type: 'SAVING_NOTE',});
+export const savingNote = () => ({ type: 'SAVING_NOTE' });
 
 export const editNote = (noteInfo) => {
   console.log('update noteInfo for dispatch: ', noteInfo);
@@ -40,7 +40,7 @@ export const getNotes = userId => (
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
       })
-      .catch = (e) => { console.error(e); }
+      .catch((e) => { console.error(e); })
   )
 );
 

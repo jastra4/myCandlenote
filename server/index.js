@@ -366,12 +366,12 @@ app.post('/api/deleteCard', (req, res) => {
 });
 
 
-app.get(`/api/getNotes/:id`, (req, res) => {
+app.get('/api/getNotes/:id', (req, res) => {
   const { id: userId } = req.params;
   queries.getNotes(userId)
     .then((notes) => { res.send(notes); })
-    .catch((e) => { 
-      console.error(e); 
+    .catch((e) => {
+      console.error(e);
       res.sendStatus(500).end();
     });
 });

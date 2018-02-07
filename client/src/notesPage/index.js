@@ -1,6 +1,5 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
-import _ from 'lodash';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
@@ -46,7 +45,6 @@ class NotePage extends React.Component {
   }
 
   handleTextChange = (content) => {
-    console.log('htc called!!!')
     this.setState({ content });
     this.props.editNote({
       noteId: this.props.currentNote,

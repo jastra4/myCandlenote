@@ -8,9 +8,6 @@ const defaultState = {
 };
 
 const notesReducer = (state = defaultState, action) => {
-  if (action === undefined) {
-    debugger;
-  }
   switch (action.type) {
     case 'ADD_NOTE':
       return {
