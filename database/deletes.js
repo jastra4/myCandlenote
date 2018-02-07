@@ -1,5 +1,4 @@
-const { Flashcards, Decks, Groups } = require('./index');
-const User = require('../server/models/user-model');
+const { Flashcards, Decks, User, Groups } = require('./index');
 
 const deleteFlashcard = id => Flashcards.remove({ _id: id });
 

@@ -1,5 +1,5 @@
-const User = require('../server/models/user-model');
-const { Decks, Flashcards, Groups } = require('./index');
+const mongoose = require('mongoose');
+const { Decks, Flashcards, User, Groups } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -82,6 +82,22 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
+const getRefreshToken = userId => User.findOne({ _id: userId });
+
+const getAccessToken = userId => User.findOne({ _id: userId }, 'googleAccessToken');
+
+const getGetAccessTokensForUsers = (userIds) => {
+  const mongoIds = userIds.map(id => mongoose.Types.ObjectId(id));
+  return User.find({ _id: { $in: mongoIds } });
+};
+
+const getFriendsById = (friendIds) => {
+  const mongoIds = friendIds.map(id => mongoose.Types.ObjectId(id));
+  return User.find({ _id: { $in: mongoIds } });
+};
+
+const getUserByUsername = username => User.findOne({ username });
+
 module.exports = {
   getUserName,
   loadChatHistory,
@@ -91,4 +107,9 @@ module.exports = {
   getDecksForUser,
   getFlashcardsForUser,
   loadGroupChatHistory,
+  getRefreshToken,
+  getAccessToken,
+  getGetAccessTokensForUsers,
+  getFriendsById,
+  getUserByUsername,
 };

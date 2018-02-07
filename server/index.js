@@ -7,6 +7,7 @@ const path = require('path');
 const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
+const Promise = require('promise');
 
 const puppeteer = require('puppeteer');
 
@@ -39,7 +40,9 @@ const io = require('socket.io').listen(server); // socket stuff
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
-const { parseMeaningWithGoogleAPI, makePDF } = require('./helpers');
+const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
+  setCalendarEventPerUser, refreshMultipleTokens,
+  getCalendarList, reduceFreeBusyToTimeSpans, buildGoogleCalEvent } = require('./helpers');
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
@@ -130,7 +133,7 @@ app.get('/api/pdf/:id', (req, res) => {
 app.get('/userProfile', (req, res) => {
   queries.getCurrentUser(req.user)
     .then((response) => {
-      const { _id: userId, username, googleId, profileImage } = response;
+      const { _id: userId, username, googleId, profileImage, friends } = response;
       const dateJoined = response._id.getTimestamp();
       res.send({
         userId,
@@ -138,6 +141,7 @@ app.get('/userProfile', (req, res) => {
         googleId,
         profileImage,
         dateJoined,
+        friends,
       });
     })
     .catch((err) => {
@@ -366,6 +370,71 @@ app.get('/loadChatHistory', (req, res) => {
       res.send(docs);
     });
   }
+});
+
+/* ----------- Google Cal Routes ------------ */
+
+app.post('/api/refreshToken', (req, res) => {
+  console.log('USER ID REFRESHTOKEN:', req.body.userId);
+  const { userId } = req.body;
+  queries.getRefreshToken(userId)
+    .then((data) => {
+      const { googleRefreshToken } = data;
+      return axios({
+        url: 'https://www.googleapis.com/oauth2/v4/token',
+        method: 'post',
+        params: {
+          client_id: keys.google.clientID,
+          client_secret: keys.google.clientSecret,
+          refresh_token: googleRefreshToken,
+          grant_type: 'refresh_token',
+        },
+      })
+        .then((response) => {
+          inserts.saveAccessToken({
+            userId,
+            token: response.data.access_token,
+          });
+          res.send(response.data.access_token);
+        });
+    })
+    .catch(err => console.log(err));
+});
+
+app.post('/api/freeBusy', (req, res) => {
+  const nowInt = Date.now();
+  const nextWeekInt = nowInt + 2629746000;
+  const nowString = new Date(nowInt).toISOString();
+  const nextWeekString = new Date(nextWeekInt).toISOString();
+
+  queries.getAccessToken(req.body.userId)
+    .then((doc) => {
+      const { googleAccessToken: accessToken } = doc;
+      return getCalendarList(accessToken)
+        .then(calList => calList.items)
+        .then(calIds => getCalendarFreeBusy(nowString, nextWeekString, calIds, accessToken));
+    })
+    .then((freeBusyData) => {
+      const busyTimes = reduceFreeBusyToTimeSpans(freeBusyData);
+      res.send(busyTimes);
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+});
+
+app.post('/api/setCalendarEvents', (req, res) => {
+  const { newEvent, userIds, timeZone } = req.body;
+  const event = buildGoogleCalEvent(newEvent, timeZone);
+  Promise.all(refreshMultipleTokens(userIds))
+    .then(() => queries.getGetAccessTokensForUsers(userIds))
+    .then((results) => {
+      const accessTokens = results.map(result => result.googleAccessToken);
+      return Promise.all(setCalendarEventPerUser(accessTokens, event))
+        .then(responses => res.send(responses));
+    })
+    .catch(err => res.status(400).send(err));
+>>>>>>> 275b7dfc04f81d70eb0f3569b0ca6f2105075ca3
 });
 
 /* ----------- API Routes ------------ */
@@ -602,6 +671,39 @@ app.post('/api/userFlashcards', (req, res) => {
       res.send(flashcards);
     })
     .catch(err => res.send(err));
+});
+
+app.post('/api/userFriends', (req, res) => {
+  const { userId } = req.body;
+  queries.getCurrentUser(userId)
+    .then(response => response.friends.map(friend => friend.friendId))
+    .then(friendIds => queries.getFriendsById(friendIds))
+    .then((friendsInfo) => {
+      const friends = friendsInfo.map((friend) => {
+        const { _id: id, username, profileImage } = friend;
+        return {
+          id,
+          username,
+          profileImage,
+        };
+      });
+      res.send(friends);
+    })
+    .catch(err => res.status(400).send(err));
+});
+
+app.post('/api/addFriend', (req, res) => {
+  const { userId, friendId } = req.body;
+  inserts.addFriend(userId, friendId)
+    .then(response => res.send(response))
+    .catch(err => res.status(400).send(err));
+});
+
+app.post('/api/userByUsername', (req, res) => {
+  const { username } = req.body;
+  queries.getUserByUsername(username)
+    .then(user => res.send(user))
+    .catch(err => res.status(400).send(err));
 });
 
 /* -------- Initialize Server -------- */

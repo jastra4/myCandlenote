@@ -1,5 +1,4 @@
-const { Flashcards, Decks, Messages, Groups } = require('./index');
-const User = require('../server/models/user-model');
+const { Flashcards, Decks, Messages, User, Groups } = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
@@ -104,11 +103,27 @@ const createGroup = (groupname, username, callback) => {
       callback(false);
     }
   });
-};
+}
+
+const saveAccessToken = ({ userId, token }) => User.findOne({ _id: userId })
+  .then((doc) => {
+    doc.set({ googleAccessToken: token });
+    return doc.save();
+  });
+
+const addFriend = (userId, friendId) => User.findOne({ _id: userId })
+  .then((user) => {
+    user.friends.addToSet({
+      friendId,
+      status: 'accepted',
+    });
+    return user.save();
+  });
 
 module.exports = {
   insertDeck,
   insertFlashcard,
+  saveAccessToken,
   saveMessage,
   openPrivateChat,
   addGroupMember,
