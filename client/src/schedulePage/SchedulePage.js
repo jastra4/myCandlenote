@@ -4,7 +4,7 @@ import moment from 'moment';
 import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Segment, Modal } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import ScheduleGroupMaker from './ScheduleGroupMaker';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
@@ -130,11 +130,12 @@ export default class SchedulePage extends React.Component {
       holder.concat(this.state.events[userId]), []);
     return (
       <div className="calendar-container">
-        <Modal basic size='small' open={this.state.showWarning}>
+        {/* <Modal closeOnDimmerClick={true}
+        closeOnDocumentClick={true} size='small' open={this.state.showWarning}>
           <Modal.Content>
             <p>{this.state.warningMessage}</p>
           </Modal.Content>
-        </Modal>
+        </Modal> */}
         <Segment>
           <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
           <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
