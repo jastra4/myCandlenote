@@ -5,18 +5,19 @@ const defaultState = {
     userId: '',
     googleId: '',
     profileImage: '',
+    friends: [],
   },
 };
 
 const usersReducer = (state = defaultState, action) => {
   switch (action.type) {
     case 'SET_CURRENT_USER':
-      console.log('ACTION:', action);
       return {
         ...state,
         currentUser: {
           ...state.currentUser,
           ...action.payload,
+          friends: [],
         },
       };
     case 'REMOVE_CURRENT_USER':
@@ -27,6 +28,7 @@ const usersReducer = (state = defaultState, action) => {
           userId: '',
           googleId: '',
           profileImage: '',
+          friends: [],
         },
       };
     case 'SET_USERS': {
@@ -39,6 +41,14 @@ const usersReducer = (state = defaultState, action) => {
         byId: usersById,
       };
     }
+    case 'SET_CURRENT_FRIENDS':
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          friends: action.payload,
+        },
+      };
     default:
       return state;
   }
