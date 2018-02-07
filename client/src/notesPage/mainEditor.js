@@ -13,8 +13,7 @@ export default class MainEditor extends React.Component {
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
     this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 2000);
   }
-
-  componentWillMount() {
+  componentDidMount() {
     this.props.changeBackgroundColor('#1F1F1F');
     const { title, content: value = '' } = this.props;
     this.setState({
@@ -28,12 +27,9 @@ export default class MainEditor extends React.Component {
   }
 
   handleEditorChange = (value, d, source, editor) => {
-    console.log('hec: ', value, d, source, editor );
-    console.log('hec called!!!');
-
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
-    _.defer(this.setState.bind(this), {
+    this.setState({
       value, packet,
     });
     const content = this.getContentFromDelta(delta);
