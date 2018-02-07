@@ -15,21 +15,46 @@ class NotePage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newPrp');
-    const { meaning, limit, currentNote } = newProps;
+    const { meaning, limit, currentNote, notes } = newProps;
     this.setState({
       meaning,
       limit,
       currentNote,
+      notes,
     });
   }
 
   componentWillMount() {
     this.props.changeBackgroundColor('#1F1F1F');
+
+    const { currentNote } = this.props;
+    const currentNoteObj = this.props.notes[currentNote];
+    let content = '';
+    let title = '';
+
+    if (currentNoteObj && currentNoteObj.body) {
+      content = JSON.parse(currentNoteObj.body);
+    }
+
+    if (currentNoteObj) {
+      title = currentNoteObj.title; // eslint-disable-line
+    }
+
+    currentNote && this.setState({
+      currentNote,
+      title,
+      content,
+    });
   }
 
   handleTextChange = (content) => {
+    console.log('htc run!');
+
     this.setState({ content });
+    this.editNote({
+      noteId: this.props.currentNote,
+      body: content,
+    });
   }
 
   handleTitleChange = (title) => {
@@ -56,11 +81,15 @@ class NotePage extends React.Component {
           {
             this.state.currentNote &&
             <div>
-              <NoteTitle handleTitleChange={ this.handleTitleChange } />
+              <NoteTitle
+                handleTitleChange={ this.handleTitleChange }
+                title={ this.state.title }
+              />
               <MainEditor
                 { ...this.props }
                 handleTextChange={ this.handleTextChange }
                 title={ this.state.title }
+                content={ this.state.content }
               />
             </div>
           }

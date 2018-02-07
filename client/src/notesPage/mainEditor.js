@@ -10,45 +10,31 @@ export default class MainEditor extends React.Component {
     this.state = { value: '' };
 
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
-    this.debouncedEditNote = _.debounce(this.editNote, 2000);
+    this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 2000);
+
   }
 
   componentWillMount() {
     this.props.changeBackgroundColor('#1F1F1F');
-  }
-
-  componentDidMount() {
-    // const value = JSON.parse(window.localStorage.getItem('noteContent'));
-    // this.setState({ value });
-    console.log('currentNote: ', this.state.currentNote);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({ title: nextProps.title });
+    const { title, content: value = '' } = this.props;
+    this.setState({
+      title,
+      value,
+    });
   }
 
   handleEditorChange = (value, d, source, editor) => {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
-
     this.setState({
       value, packet,
     });
-    window.localStorage.setItem('noteContent', packet);
-
     const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
-
-    const noteInfo = {
-      title: this.state.title,
-      body: this.state.packet,
-      authorID: this.props.currentUser.userId,
-      noteId: this.props.currentNote,
-    };
-    this.debouncedEditNote(noteInfo);
+    this.handleTextChange(packet);
   }
 
-  editNote = noteInfo => this.props.editNote(noteInfo);
+  handleTextChange = noteInfo => this.props.handleTextChange(noteInfo);
 
 
   getContentFromDelta = delta => (
@@ -78,7 +64,7 @@ export default class MainEditor extends React.Component {
       <ReactQuill
         theme='snow'
         value={ this.state.value }
-        onChange={ this.handleEditorChange }
+        onChange={ () => { this.handleEditorChange; }}
         placeholder="Let's take some notes!"
         formats={ MainEditor.formats }
         modules={ MainEditor.modules }

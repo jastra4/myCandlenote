@@ -18,9 +18,10 @@ export default class Notebox extends Component {
       {
         this.props.notes.map(note =>
           <NotePreview
-            { ...this.props }
             title={ note.title }
             key={ note._id }
+            noteId={ note._id }
+            setCurrentNote={ this.props.setCurrentNote }
           />)
       }
     </div>

@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 import NotesPage from './index';
-import { createNote, editNote, setCurrentMeaning, setMaxResults } from '../actions/notesActions';
+import { createNote, editNote } from '../actions/notesActions';
+import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
+
 
 const mapStateToProps = (state) => {
   console.log('state: ', state);
@@ -15,6 +17,7 @@ const mapStateToProps = (state) => {
     meaning: state.intelliSearch.meaning,
     limit: state.intelliSearch.limit,
     currentNote: state.notes.currentNote,
+    notes: state.notes.byId,
   };
 };
 

@@ -9,6 +9,8 @@ const noteStyle = {
   float: 'left',
   marginLeft: '30px',
   cursor: 'pointer',
+  maxWidth: '130px',
+  overflow: 'hidden',
 };
 
 const imageStyle = {
@@ -29,9 +31,14 @@ export default class NotePreview extends Component {
     this.state = { redirect: false };
   }
 
+  componentWillMount() {
+    this.setState({ redirect: false });
+  }
+
   handleNoteChange = () => {
-    const newCurrentNote = this.props.key;
+    const newCurrentNote = this.props.noteId;
     this.props.setCurrentNote(newCurrentNote);
+    this.setState({ redirect: true });
   };
 
   render = () => (

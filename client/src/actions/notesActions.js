@@ -15,7 +15,9 @@ export const editNote = (noteInfo) => {
           dispatch();
           console.log(res);
         })
-        .catch((err) => { console.error(err); })
+        .catch((err) => { 
+          console.error(err);
+        })
     )
   );
 };

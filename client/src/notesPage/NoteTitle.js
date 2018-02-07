@@ -10,6 +10,11 @@ export default class NoteTitle extends React.Component {
     this.handleTitleChange = _.debounce(this.handleTitleChange, 2000);
   }
 
+  componentWillMount() {
+    const value = this.props.title || '';
+    this.setState({ value });
+  }
+
   handleInputChange = ({ target: { value } }) => {
     this.setState({ value });
 
@@ -26,7 +31,7 @@ export default class NoteTitle extends React.Component {
         className='titleInput'
         value={ this.state.value }
         onChange={ this.handleInputChange }
-        maxlength='42'
+        maxLength='42'
         placeholder='Untitled'
       />
     </div>
