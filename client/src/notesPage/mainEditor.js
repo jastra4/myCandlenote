@@ -8,10 +8,10 @@ export default class MainEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
+    console.log('props: ', props);
 
     this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
     this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 2000);
-
   }
 
   componentWillMount() {
@@ -23,15 +23,23 @@ export default class MainEditor extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    this.handleTextChange(this.state.packet);
+  }
+
   handleEditorChange = (value, d, source, editor) => {
+    console.log('hec: ', value, d, source, editor );
+    console.log('hec called!!!');
+
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
-    this.setState({
+    _.defer(this.setState.bind(this), {
       value, packet,
     });
     const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
-    this.handleTextChange(packet);
+    // this.props.handleTextChange(packet);
+    this.debouncedHandleTextChange(packet);
   }
 
   handleTextChange = noteInfo => this.props.handleTextChange(noteInfo);
@@ -46,7 +54,6 @@ export default class MainEditor extends React.Component {
   parseContentMeaning = content => (
     axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
-        console.log('Per Google, the meaning of your text is: ', meaning);
         this.props.setCurrentMeaning(meaning);
         return meaning;
       })
@@ -64,7 +71,7 @@ export default class MainEditor extends React.Component {
       <ReactQuill
         theme='snow'
         value={ this.state.value }
-        onChange={ () => { this.handleEditorChange; }}
+        onChange={ this.handleEditorChange }
         placeholder="Let's take some notes!"
         formats={ MainEditor.formats }
         modules={ MainEditor.modules }

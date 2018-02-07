@@ -5,20 +5,26 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
+export const savedNote = () => ({type: 'SAVED_NOTE',});
+
+export const savingNote = () => ({type: 'SAVING_NOTE',});
 
 export const editNote = (noteInfo) => {
   console.log('update noteInfo for dispatch: ', noteInfo);
   return (
-    dispatch => (
-      axios.post('/api/editNote', { noteInfo })
-        .then((res) => {
-          dispatch();
-          console.log(res);
-        })
-        .catch((err) => { 
-          console.error(err);
-        })
-    )
+    (dispatch) => {
+      dispatch(savingNote());
+      return (
+        axios.post('/api/editNote', { noteInfo })
+          .then(() => {
+            console.log('successfully updated note');
+            dispatch(savedNote());
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      );
+    }
   );
 };
 
@@ -27,21 +33,24 @@ export const setNotes = notes => ({
   payload: notes,
 });
 
-export const getNotes = (userId) => {
-  return ((dispatch) => {
+export const getNotes = userId => (
+  dispatch => (
     axios.get(`/api/getNotes/${userId}`)
       .then((res) => {
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
       })
-      .catch = (e) => { console.error(e); };
+      .catch = (e) => { console.error(e); }
+  )
+);
+
+export const setCurrentNote = (noteId) => {
+  console.log('setCurrentNote called!');
+  return ({
+    type: 'SET_CURRENT_NOTE',
+    payload: { id: noteId },
   });
 };
-
-export const setCurrentNote = noteId => ({
-  type: 'SET_CURRENT_NOTE',
-  payload: { id: noteId },
-});
 
 export const createNote = noteInfo => (
   dispatch => (

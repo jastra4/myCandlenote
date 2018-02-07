@@ -61,6 +61,7 @@ export default createStore(
         }
       },
       currentNote: 5,
+      currentNoteIsSaved: true,
       allIds: [3, 5],
     },
     decks: {

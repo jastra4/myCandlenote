@@ -3,10 +3,14 @@ const dotProp = require('dot-prop-immutable');
 const defaultState = {
   byId: {},
   currentNote: -1,
+  currentNoteIsSaved: true,
   allIds: [],
 };
 
 const notesReducer = (state = defaultState, action) => {
+  if (action === undefined) {
+    debugger;
+  }
   switch (action.type) {
     case 'ADD_NOTE':
       return {
@@ -44,6 +48,18 @@ const notesReducer = (state = defaultState, action) => {
       };
     case 'DELETE_NOTE':
       return dotProp.delete(state, `byId.${action.payload.id}`);
+
+    case 'SAVING NOTE':
+      return {
+        ...state,
+        currentNoteIsSaved: false,
+      };
+
+    case 'SAVED_NOTE':
+      return {
+        ...state,
+        currentNoteIsSaved: true,
+      };
 
     default:
       return state;

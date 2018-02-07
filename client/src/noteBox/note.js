@@ -37,6 +37,8 @@ export default class NotePreview extends Component {
 
   handleNoteChange = () => {
     const newCurrentNote = this.props.noteId;
+    console.log('newCurrentNote: ', newCurrentNote);
+    console.log('props hns: ', this.props);
     this.props.setCurrentNote(newCurrentNote);
     this.setState({ redirect: true });
   };
