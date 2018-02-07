@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import NotePreview from './note';
+import NotePreview from './notePreview';
 
 
 export default class Notebox extends Component {
@@ -18,7 +18,7 @@ export default class Notebox extends Component {
       {
         this.props.notes.map(note =>
           <NotePreview
-            title={ note.title }
+            title={ note.title || 'Untitled' }
             key={ note._id }
             noteId={ note._id }
             setCurrentNote={ this.props.setCurrentNote }

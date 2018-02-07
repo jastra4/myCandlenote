@@ -4,21 +4,19 @@ import { Button, Icon } from 'semantic-ui-react';
 import EmailModal from './emailModal';
 
 export default class FileMenu extends React.Component {
-  state = { };
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   renderPDF = () => {
     window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
   }
 
-  handleNew = () => {
-    axios.post('https://hooks.slack.com/services/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', { text: 'lol' })
-      .catch((e) => { console.error(e); });
-  }
-
   render = () => (
     <div>
-      <Button animated='fade'>
-        <Button.Content hidden onClick={ this.handleNew }>New</Button.Content>
+      <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
+        <Button.Content hidden >New</Button.Content>
         <Button.Content visible>
           <Icon name='file' />
         </Button.Content>

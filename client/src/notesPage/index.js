@@ -9,7 +9,10 @@ import IntelliSearch from './intelliSearch';
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { limit: 10 };
+    this.state = { 
+      limit: 10,
+      clearNote: false,
+    };
   }
 
   componentWillReceiveProps(newProps) {
@@ -22,7 +25,7 @@ class NotePage extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { currentNote } = this.props;
     const currentNoteObj = this.props.notes[currentNote];
     let content = '';
@@ -49,6 +52,7 @@ class NotePage extends React.Component {
     this.props.editNote({
       noteId: this.props.currentNote,
       body: content,
+      authorID: this.props.currentUser.userId,
     });
   }
 
@@ -57,14 +61,44 @@ class NotePage extends React.Component {
     this.props.editNote({
       noteId: this.props.currentNote,
       title,
+      authorID: this.props.currentUser.userId,
     });
+  }
+  
+  handleCreateNewNote = () => {
+    console.log('handleNew!');
+    this.props.createNote({
+      authorID: this.props.currentUserId,
+      createdAt: Date.now(),
+    });
+    this.setState({ clearNote: true })
+  }
+
+  resetClear = () => {
+    this.state.clearNote = false;
+  }
+
+  componentWillUnmount() {
+    console.log('title, body: ', this.state.title, this.state.body);
+    if (this.state.body || this.state.content) {
+      this.props.editNote({
+        noteId: this.props.currentNote,
+        title: this.state.title,
+        body: this.state.content,
+        authorID: this.props.currentUser.userId,
+      });
+    }
   }
 
   render = () => (
     <div>
       <Grid >
         <Grid.Column width={12}>
-          <FileMenu />
+          <FileMenu 
+            currentUserId={ this.props.currentUser.userId } 
+            createNote={ this.props.createNote }
+            handleCreateNewNote={ this.handleCreateNewNote }
+          />
           {
             !this.state.currentNote &&
             <CreateNewNote { ...this.props } />
@@ -75,12 +109,17 @@ class NotePage extends React.Component {
               <NoteTitle
                 handleTitleChange={ this.handleTitleChange }
                 title={ this.state.title }
+                createNote={ this.props.createNote }
+                clearNote={ this.state.clearNote }
+                resetClear={ this.resetClear }
               />
               <MainEditor
                 { ...this.props }
                 handleTextChange={ this.handleTextChange }
                 title={ this.state.title }
                 content={ this.state.content }
+                clearNote={ this.state.clearNote }
+                resetClear={ this.resetClear }
               />
             </div>
           }

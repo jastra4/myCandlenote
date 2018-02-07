@@ -44,20 +44,24 @@ export const getNotes = userId => (
   )
 );
 
-export const setCurrentNote = (noteId) => {
-  console.log('setCurrentNote called!');
-  return ({
-    type: 'SET_CURRENT_NOTE',
-    payload: { id: noteId },
-  });
-};
+export const setCurrentNote = noteId => ({
+  type: 'SET_CURRENT_NOTE',
+  payload: { id: noteId },
+});
+
+export const clearCurrentNote = () => ({ type: 'CLEAR_CURRENT_NOTE' });
+
+
+export const resetClearCurrentNote = () => ({ type: 'RESET_CLEAR_CURRENT_NOTE' });
 
 export const createNote = noteInfo => (
   dispatch => (
     axios.post('/api/createNote', { noteInfo })
-      .then(({ data: { noteId } }) => {
+      .then(({ data: { noteId, authorID } }) => {
         console.log('dispatching new note: ', noteId);
         dispatch(setCurrentNote(noteId));
+        dispatch(clearCurrentNote());
+        dispatch(getNotes(authorID));
       })
       .catch((err) => { console.error(err); })
   )

@@ -15,6 +15,12 @@ export default class NoteTitle extends React.Component {
     this.setState({ value });
   }
 
+
+  componentWillReceiveProps(nextProps) {
+    nextProps.clearNote && this.setState({ value: '' });
+    this.props.resetClear();
+  }
+
   handleInputChange = ({ target: { value } }) => {
     this.setState({ value });
 

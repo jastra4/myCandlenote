@@ -5,6 +5,7 @@ const defaultState = {
   currentNote: -1,
   currentNoteIsSaved: true,
   allIds: [],
+  clearCurrentNote: false,
 };
 
 const notesReducer = (state = defaultState, action) => {
@@ -57,7 +58,19 @@ const notesReducer = (state = defaultState, action) => {
         ...state,
         currentNoteIsSaved: true,
       };
+    case 'CLEAR_CURRENT_NOTE':
+      return {
+        ...state,
+        clearCurrentNote: true,
+      };
+    
+    case 'RESET_CLEAR_CURRENT_NOTE':
+      return {
+        ...state,
+        clearCurrentNote: false,
+      };
 
+    
     default:
       return state;
   }

@@ -22,6 +22,11 @@ export default class MainEditor extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    nextProps.clearNote && this.setState({ value: '' });
+    this.props.resetClear();
+  }
+
   componentWillUnmount() {
     this.handleTextChange(this.state.packet);
   }
