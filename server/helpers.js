@@ -80,10 +80,7 @@ const reduceFreeBusyToTimeSpans = (freeBusyData) => {
   const busyTimes = Object.keys(freeBusyData.calendars).reduce((times, calendarId) => {
     let { busy } = freeBusyData.calendars[calendarId];
     if (busy.length) {
-      busy = busy.map(info => ({
-        ...info,
-        title: calendarId,
-      }));
+      busy = busy.map(info => Object.assign({ title: calendarId }, info));
     }
     return times.concat(busy);
   }, []);
