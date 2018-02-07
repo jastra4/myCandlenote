@@ -37,3 +37,11 @@
   padding-top: 10px;
   height: 15em;
 }
+
+.user-search-image {
+  margin-right: 5px;
+}
+
+.user-search-username {
+  font-weight: bold;
+}

@@ -87,6 +87,7 @@ export default class UserProfile extends React.Component {
   }
 
   render() {
+    console.log('Current user:', this.props.currentUser);
     return (
       <Grid columns="equal">
         <Grid.Row>
@@ -113,9 +114,9 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <div className="friends-list-container">
-              <UserFriendsList friends={this.state.friends}/>
+              <UserFriendsList friends={this.state.friends} />
             </div>
-            <UserSearchBox />
+            <UserSearchBox currentUser={this.props.currentUser} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
