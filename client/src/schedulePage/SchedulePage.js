@@ -4,7 +4,7 @@ import moment from 'moment';
 import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Segment, Modal } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import ScheduleGroupMaker from './ScheduleGroupMaker';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
