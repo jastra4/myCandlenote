@@ -13,7 +13,7 @@ export default class SchedulePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: [],
+      events: { group: [] },
       title: '',
       description: '',
       newEvent: {},
@@ -36,12 +36,16 @@ export default class SchedulePage extends React.Component {
     axios.post('/api/refreshToken', { userId })
       .then(() => axios.post('/api/freeBusy', { userId }))
       .then((res) => {
-        const events = res.data.map(event => ({
+        const usersEvents = res.data.map(event => ({
           start: new Date(event.start),
           end: new Date(event.end),
           title: event.title,
         }));
-        this.setState({ events: this.state.events.concat(events) });
+        const newEvents = {
+          ...this.state.events,
+          [userId]: usersEvents,
+        };
+        this.setState({ events: newEvents });
       })
       .catch(err => console.log('Cal err:', err));
   }
@@ -56,9 +60,13 @@ export default class SchedulePage extends React.Component {
         title: this.state.title,
         description: this.state.description,
       };
+      const newEvents = {
+        ...this.state.events,
+        group: this.state.events.group.concat(slot),
+      };
       this.setState({
         newEvent: slot,
-        events: this.state.events.concat(slot),
+        events: newEvents,
         title: '',
         description: '',
       });
@@ -81,7 +89,6 @@ export default class SchedulePage extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('NEW PROPS!!:', newProps);
     this.setState({
       ...this.state,
       friends: newProps.currentUser.friends,
@@ -89,7 +96,6 @@ export default class SchedulePage extends React.Component {
   }
 
   addFriendToGroup(friendId) {
-    console.log('Adding Friend:', friendId);
     if (!this.state.group.includes(friendId)) {
       this.setState({ group: this.state.group.concat(friendId) });
       this.getFreeBusyForUsers(friendId);
@@ -97,14 +103,20 @@ export default class SchedulePage extends React.Component {
   }
 
   removeFriendFromGroup(friendId) {
-    console.log('Removing Friend:', friendId);
     const newGroup = this.state.group.filter(id => id !== friendId);
-    this.setState({ group: newGroup });
+    const newEvents = {
+      ...this.state.events,
+      [friendId]: [],
+    };
+    this.setState({
+      group: newGroup,
+      events: newEvents,
+    });
   }
 
-
-
   render() {
+    const allEvents = Object.keys(this.state.events).reduce((holder, userId) =>
+      holder.concat(this.state.events[userId]), []);
     return (
       <div className="calendar-container">
         <Segment>
@@ -112,7 +124,7 @@ export default class SchedulePage extends React.Component {
           <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
           <BigCalendar
             selectable
-            events={this.state.events}
+            events={allEvents}
             defaultView="week"
             scrollToTime={new Date(1970, 1, 1, 6)}
             defaultDate={new Date(Date.now())}
