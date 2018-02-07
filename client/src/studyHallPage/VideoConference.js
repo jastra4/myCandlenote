@@ -50,6 +50,11 @@ class VideoConference extends React.Component {
       console.log('call data set to state: ', call);
       this.onReceiveCall(call);
     });
+
+    // this.state.newCall.on('stream', (stream) => {
+    //   const video = document.querySelector('.video-call');
+    //   video.src = stream;
+    // });
   }
 
   componentWillUnmount() {
