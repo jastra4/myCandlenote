@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PrivateChatConnected from './PrivateChat';
 
 class PrivateChatList extends React.Component {
@@ -27,13 +26,4 @@ class PrivateChatList extends React.Component {
   }
 }
 
-const mapStateToProps = state => (
-  {
-    username: state.activeSocket.username,
-    socket: state.activeSocket.socket,
-  }
-);
-
-const PrivateChatListConnected = connect(mapStateToProps)(PrivateChatList);
-
-export default PrivateChatListConnected;
+export default PrivateChatList;

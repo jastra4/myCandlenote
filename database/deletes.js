@@ -12,8 +12,6 @@ const closePrivateChat = (username, otheruser, callback) => {
       console.log(err);
       callback(false);
     } else {
-      console.log('pulled ', otheruser, ' from ', username);
-      console.log('privateChats: ', user.privateChats);
       user.privateChats.pull({ username: otheruser });
       user.save();
       callback(true);

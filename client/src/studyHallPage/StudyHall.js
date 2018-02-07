@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import ChatBox from './ChatBox';
-import PrivateChatListConnected from './PrivateChatList';
-import GroupsListConnected from './GroupsList';
+import PrivateChatList from './PrivateChatList';
+import GroupsList from './GroupsList';
 import SearchConnected from './Search';
 import VideoConference from './VideoConference';
 import activeSocket from '../actions/activeSocket';
@@ -114,7 +114,7 @@ class StudyHall extends React.Component {
     return (
       <div className="studyContainer">
         <div className="groupsList studyBackground">
-          <GroupsListConnected
+          <GroupsList
             changeChat={this.changeChat.bind(this)}
             currentChat={this.state.chat}
             groupChats={this.state.groupChats}
@@ -122,7 +122,7 @@ class StudyHall extends React.Component {
           />
         </div>
         <div className="friendsList studyBackground">
-          <PrivateChatListConnected
+          <PrivateChatList
             changeChat={this.changeChat.bind(this)}
             currentChat={this.state.chat}
             privateChats={this.state.privateChats}

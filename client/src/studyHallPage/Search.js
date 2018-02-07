@@ -32,7 +32,9 @@ class Search extends React.Component {
     })
       .then((res) => {
         console.log('data: ', res.data);
-        if (res.data.members === undefined) {
+        if (res.data.error !== undefined) {
+          console.log(res.data.error);
+        } else if (res.data.members === undefined) {
           this.props.updatePrivateChats(res.data);
         } else {
           this.props.updateGroupChats(res.data);

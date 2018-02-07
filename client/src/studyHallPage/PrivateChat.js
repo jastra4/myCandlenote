@@ -20,7 +20,8 @@ class PrivateChat extends React.Component {
         to: this.props.privateChat.username,
       });
     });
-    this.props.socket.emit('wftiswrongwithping', {
+
+    this.props.socket.emit('friend ping', {
       username: this.props.username,
       to: this.props.privateChat.username,
     });

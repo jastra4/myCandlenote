@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { members: 1 };
+    this.state = {};
   }
 
   handleClick() {
@@ -17,7 +17,7 @@ class Group extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className='group'>
         <span className='groupName' onClick={this.handleClick.bind(this)}>
           {this.props.groupChat.groupname}
         </span>

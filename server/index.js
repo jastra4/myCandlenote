@@ -111,15 +111,7 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-
 app.get('*', (req, res, next) => {
-  // mongoose.connection.db.dropCollection('groups', function(err, result) {
-  //   if (err) {
-  //     console.log(err);
-  //   } else {
-  //     console.log('dropped Groups');
-  //   }
-  // });
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
     res.redirect('/login');
@@ -155,12 +147,6 @@ app.get('/userProfile', (req, res) => {
 });
 
 /* --------- POST Handlers ----------- */
-
-// app.post('/deleteUser', (req, res) => {
-//   const { username } = req.body;
-//   deletes.deleteUser(username);
-//   res.send(201);
-// });
 
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
@@ -206,8 +192,8 @@ io.sockets.on('connection', (socket) => {
   });
 
   // ChatBox > PrivateChat
-  socket.on('wftiswrongwithping', (data) => {
-    console.log(`wftiswrongwithping ${data.username}`);
+  socket.on('friend ping', (data) => {
+    console.log(`ping ${data.username} to ${data.to}`);
     if (data.to in allSockets) {
       allSockets[data.username].emit(`sent ping ${data.to}`, allSockets[data.to].status);
     }
@@ -229,10 +215,10 @@ io.sockets.on('connection', (socket) => {
           console.log('group: ', group);
           res.send({
             groupname: chatname,
-            members: [{ username: username }],
+            members: [{ username }],
           });
         } else {
-          res.send('group already exists');
+          res.send({ error: 'Group already exists' });
         }
       });
     } else if (type === '/j ') {
@@ -245,7 +231,7 @@ io.sockets.on('connection', (socket) => {
             members: group.members,
           });
         } else {
-          res.send('could not find group');
+          res.send({ error: 'Group does not exist' });
         }
       });
     } else {
@@ -261,33 +247,17 @@ io.sockets.on('connection', (socket) => {
             status,
           });
         } else {
-          res.send('could not find user');
+          res.send({ error: 'User does not exist' });
         }
       });
     }
   });
 
-  // Search > PrivateChatList
-  // socket.on('open private chat', (data) => {
-  //   console.log(`open private chat ${data.username} with ${data.otheruser}`);
-  //   inserts.openPrivateChat(data.username, data.otheruser, (bool) => {
-  //     if (bool) {
-  //       let status = 'offline';
-  //       if (data.otheruser in allSockets) {
-  //         status = allSockets[data.otheruser].status;
-  //       }
-  //       allSockets[data.username].emit('opened private chat', {
-  //         username: data.otheruser,
-  //         status,
-  //       });
-  //     }
-  //   });
-  // });
-
   // PrivateChat > PrivateChatList
   socket.on('close private chat', (data) => {
     console.log(`close private chat ${data.username} with ${data.otheruser}`);
     deletes.closePrivateChat(data.username, data.otheruser, (bool) => {
+      console.log(`closePrivateChat ${bool}`);
     });
   });
 
@@ -295,10 +265,7 @@ io.sockets.on('connection', (socket) => {
   socket.on('create group chat', (data) => {
     console.log(`create group ${data.username} created ${data.groupname}`);
     inserts.createGroup(data.groupname, data.username, (bool) => {
-      if (bool) {
-        console.log('createGroup: ', bool);
-        // allSockets[data.username].emit('created group', { groupname: data.groupname });
-      }
+      console.log(`createGroup ${bool}`);
     });
   });
 
@@ -352,7 +319,7 @@ io.sockets.on('connection', (socket) => {
   });
 });
 
-/* ----------- Sockets Controllers------------ */
+/* ----------- Sockets Relateted ------------ */
 
 // called by app.js
 app.get('/identifyUser', (req, res) => {
