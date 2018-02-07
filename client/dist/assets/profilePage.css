@@ -32,3 +32,8 @@
    display: flex;
    justify-content: space-between;
 }
+
+.user-search-box {
+  padding-top: 10px;
+  height: 15em;
+}

@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../dist/assets/profilePage.css';
 import UserData from './UserData';
 import UserFriendsList from './UserFriendsList';
+import UserSearchBox from './UserSearchBox';
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -114,6 +115,7 @@ export default class UserProfile extends React.Component {
             <div className="friends-list-container">
               <UserFriendsList friends={this.state.friends}/>
             </div>
+            <UserSearchBox />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
