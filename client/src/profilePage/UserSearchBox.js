@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 import { Form, Card, Input, Image } from 'semantic-ui-react';
-import _ from 'lodash';
 
 export default class UserSearchBox extends React.Component {
   constructor(props) {
@@ -32,7 +31,7 @@ export default class UserSearchBox extends React.Component {
 
   addFriend(friendId) {
     console.log('Friend ID:', this.state.foundUser);
-    if (_.isEmpty(this.props.currentUser)) {
+    if (!this.props.currentUser.userId) {
       alert('You must be signed in to add a friend');
     } else {
       axios.post('/api/addFriend', {

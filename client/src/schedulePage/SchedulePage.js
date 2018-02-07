@@ -5,6 +5,7 @@ import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Segment } from 'semantic-ui-react';
+import ScheduleGroupMaker from './ScheduleGroupMaker';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
@@ -17,11 +18,13 @@ export default class SchedulePage extends React.Component {
       description: '',
       newEvent: {},
       group: [],
+      friends: [],
     };
   }
 
   componentDidMount() {
     if (this.props.userId) {
+      this.props.getFriends(this.props.userId);
       axios.post('/api/refreshToken', { userId: this.props.userId })
         .then(() => axios.post('/api/freeBusy', { userId: this.props.userId }))
         .then((res) => {
@@ -73,6 +76,14 @@ export default class SchedulePage extends React.Component {
     this.setState({ description: e.target.value });
   }
 
+  componentWillReceiveProps(newProps) {
+    console.log('NEW PROPS!!:', newProps);
+    this.setState({
+      ...this.state,
+      friends: newProps.currentUser.friends,
+    });
+  }
+
   render() {
     return (
       <div className="calendar-container">
@@ -88,6 +99,7 @@ export default class SchedulePage extends React.Component {
             onSelectEvent={event => alert(event.title)}
             onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
           />
+          <ScheduleGroupMaker friends={this.state.friends} />
         </Segment>
       </div>
     );

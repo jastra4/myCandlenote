@@ -1,6 +1,15 @@
 import { connect } from 'react-redux';
 import SchedulePage from './SchedulePage';
+import { getFriends } from '../actions/usersActions';
 
-const mapStateToProps = state => ({ userId: state.user.currentUser.userId });
+const mapStateToProps = state => ({
+  currentUser: state.user.currentUser,
+  userId: state.user.currentUser.userId,
+});
 
-export default connect(mapStateToProps)(SchedulePage);
+const mapDisptachToProps = dispatch => ({ getFriends: userId => dispatch(getFriends(userId)) });
+
+export default connect(
+  mapStateToProps,
+  mapDisptachToProps,
+)(SchedulePage);
