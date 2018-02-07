@@ -4,7 +4,7 @@ import moment from 'moment';
 import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Label, Modal } from 'semantic-ui-react';
 import ScheduleGroupMaker from './ScheduleGroupMaker';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
@@ -19,6 +19,8 @@ export default class SchedulePage extends React.Component {
       newEvent: {},
       group: [],
       friends: [],
+      showWarning: false,
+      warningMessage: '',
     };
 
     this.addFriendToGroup = this.addFriendToGroup.bind(this);
@@ -27,6 +29,7 @@ export default class SchedulePage extends React.Component {
 
   componentDidMount() {
     if (this.props.userId) {
+      this.setState({ group: [...this.state.group, this.props.userId] });
       this.props.getFriends(this.props.userId);
       this.getFreeBusyForUsers(this.props.userId);
     }
@@ -51,9 +54,17 @@ export default class SchedulePage extends React.Component {
   }
 
   handleSelectSlot(slotInfo) {
-    if (!this.state.group.length) alert('Please sign in to use the calendar.');
-    else if (!this.state.title) alert('Please give this event a title.');
-    else {
+    if (!this.state.group.length) {
+      this.setState({
+        showWarning: true,
+        warningMessage: 'Please sign in to use the calendar.',
+      });
+    } else if (!this.state.title) {
+      this.setState({
+        showWarning: true,
+        warningMessage: 'Please sign in to use the calendar.',
+      });
+    } else {
       const slot = {
         start: slotInfo.start,
         end: slotInfo.end,
@@ -119,6 +130,11 @@ export default class SchedulePage extends React.Component {
       holder.concat(this.state.events[userId]), []);
     return (
       <div className="calendar-container">
+        <Modal basic size='small' open={this.state.showWarning}>
+          <Modal.Content>
+            <p>{this.state.warningMessage}</p>
+          </Modal.Content>
+        </Modal>
         <Segment>
           <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
           <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
@@ -128,7 +144,6 @@ export default class SchedulePage extends React.Component {
             defaultView="week"
             scrollToTime={new Date(1970, 1, 1, 6)}
             defaultDate={new Date(Date.now())}
-            onSelectEvent={event => alert(event.title)}
             onSelectSlot={slotInfo => this.handleSelectSlot(slotInfo)}
           />
           <ScheduleGroupMaker

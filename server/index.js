@@ -311,7 +311,6 @@ app.post('/api/refreshToken', (req, res) => {
 });
 
 app.post('/api/freeBusy', (req, res) => {
-  console.log('USER ID FREEBUSY:', req.body.userId);
   const nowInt = Date.now();
   const nextWeekInt = nowInt + 2629746000;
   const nowString = new Date(nowInt).toISOString();

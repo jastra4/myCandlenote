@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Form, Card, Input, Image } from 'semantic-ui-react';
+import { Form, Card, Input, Image, Label } from 'semantic-ui-react';
 
 export default class UserSearchBox extends React.Component {
   constructor(props) {
@@ -9,6 +9,7 @@ export default class UserSearchBox extends React.Component {
       username: '',
       foundUser: {},
       isUserFound: false,
+      showWarning: false,
     };
   }
 
@@ -18,7 +19,6 @@ export default class UserSearchBox extends React.Component {
 
     axios.post('/api/userByUsername', { username })
       .then((user) => {
-        console.log('SearchResult:', user);
         if (user.data) {
           this.setState({
             foundUser: user.data,
@@ -30,26 +30,22 @@ export default class UserSearchBox extends React.Component {
   }
 
   addFriend(friendId) {
-    console.log('Friend ID:', this.state.foundUser);
-    if (!this.props.currentUser.userId) {
-      alert('You must be signed in to add a friend');
-    } else {
-      axios.post('/api/addFriend', {
-        friendId,
-        userId: this.props.currentUser.userId,
-      })
-        .then(() => this.setState({
-          username: '',
-          foundUser: {},
-        }))
-        .catch(err => console.log(err));
-    }
+    axios.post('/api/addFriend', {
+      friendId,
+      userId: this.props.currentUser.userId,
+    })
+      .then(() => this.setState({
+        username: '',
+        foundUser: {},
+      }))
+      .catch(err => console.log(err));
   }
 
   render() {
     return (
       <Card className="user-search-box">
         <Card.Content>
+          {this.state.showWarning ? <Label pointing color='red'>You must be signed in to add a friend</Label> : ''}
           <Form>
             <Form.Field>
               <label>Search usernames</label>

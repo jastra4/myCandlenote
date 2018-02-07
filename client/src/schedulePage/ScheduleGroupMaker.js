@@ -10,8 +10,7 @@ const ScheduleGroupMaker = props => (
       </Card.Header>
     </Card.Content>
     <Card.Content className="user-friend-card-count">
-      {'<list of friends>'}
-      {console.log('Group props:', props)}
+      Friends:
       <ul>
         {props.friends.map(friend => (
           props.group.includes(friend.id) ?

@@ -30,7 +30,6 @@ export default class UserProfile extends React.Component {
     if (this.props.currentUser.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
-          console.log('USER PROFILE:', res.data);
           const { username, friends, userId } = res.data;
           this.props.getFriends(userId);
           const profileImage = this.resizeProfileImage(res.data.profileImage);
@@ -56,7 +55,6 @@ export default class UserProfile extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('NEW PROPS!!:', newProps);
     this.setState({
       ...this.state,
       friends: newProps.currentUser.friends,
@@ -66,13 +64,11 @@ export default class UserProfile extends React.Component {
   getDecksAndFlashcards(userId) {
     axios.post('/api/userDecks', { userId })
       .then((res) => {
-        console.log('Decks in front end:', res.data);
         this.props.setDecks(res.data);
         this.setState({ deckCount: res.data.length });
         return axios.post('/api/userFlashcards', { userId });
       })
       .then((res) => {
-        console.log('Flashcards in front end:', res.data);
         this.props.setFlashcards(res.data);
         this.setState({ flashcardCount: res.data.length });
       })
@@ -87,7 +83,6 @@ export default class UserProfile extends React.Component {
   }
 
   render() {
-    console.log('Current user:', this.props.currentUser);
     return (
       <Grid columns="equal">
         <Grid.Row>
