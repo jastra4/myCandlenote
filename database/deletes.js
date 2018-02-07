@@ -27,7 +27,7 @@ const removeGroupMember = (groupname, username, callback) => {
       console.log(err);
       callback(false);
     } else {
-      group.members.pull({ member: username });
+      group.members.pull(username);
       group.save();
     }
   });

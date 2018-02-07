@@ -58,12 +58,13 @@ const openPrivateChat = (username, otheruser, callback) => {
 const addGroupMember = (groupname, username, callback) => {
   console.log(`addGroupMember to ${groupname}, username: ${username}`);
   Groups.findOne({ groupname }, (err, group) => {
-    if (group.members.includes(username)) {
+    console.log('group: ', group);
+    if (group === null || group.members.includes(username)) {
       callback(false);
     } else if (group === null) {
       callback(false);
     } else {
-      group.members.addToSet({ username });
+      group.members.addToSet(username);
       group.save();
       User.findOne({ username }, (error, user) => {
         if (error) {
@@ -82,7 +83,6 @@ const addGroupMember = (groupname, username, callback) => {
 const createGroup = (groupname, username, callback) => {
   Groups.findOne({ groupname }, (err, group) => {
     if (err) {
-      console.log(err);
       callback(false);
     // if group does not exist
     } else if (group === null) {

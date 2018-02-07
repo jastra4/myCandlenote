@@ -14,7 +14,7 @@ class GroupsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.on('create group chat', (data) => {
+    this.props.socket.on('created group', (data) => {
       this.setState({ groups: this.state.groups.concat([data]) });
     });
 

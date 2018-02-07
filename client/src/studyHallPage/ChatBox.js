@@ -8,24 +8,46 @@ import { setMessages } from '../actions/messagesActions';
 class ChatBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { messages: [] };
+    this.state = {
+      messages: [],
+      chat: 'group1',
+    };
   }
 
-  componentWillMount() {
+  // componentWillMount() {
+  //   this.props.socket.removeAllListeners();
+  // }
+
+  // componentDidMount() {
+  //   this.props.socket.emit('available', { username: this.props.username });
+  //   // display mine
+  //   this.props.socket.on('submitted message', (data) => {
+  //     this.setState({ messages: this.state.messages.concat([data]) });
+  //   });
+  //   // display others
+  //   this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
+  //     this.setState({ messages: this.state.messages.concat([data]) });
+  //   });
+  // }
+
+  componentWillUpdate() {
     this.props.socket.removeAllListeners();
-  }
-
-  componentDidMount() {
-    this.props.socket.emit('available', { username: this.props.username });
-
-    this.props.socket.on(`submitted message ${this.props.chat}`, (data) => {
-      this.setState({ messages: this.state.messages.concat([data]) });
-    });
   }
 
   componentDidUpdate = () => {
     const chatbox = document.getElementById('chatBox');
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
+
+    this.props.socket.emit('available', { username: this.props.username });
+    // display mine
+    this.props.socket.on('submitted message', (data) => {
+      this.setState({ messages: this.state.messages.concat([data]) });
+    });
+    // display others
+    this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
+      this.setState({ messages: this.state.messages.concat([data]) });
+    });
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,6 +55,7 @@ class ChatBox extends React.Component {
       this.setState({ messages: nextProps.messages });
     }
     if (nextProps.chat !== this.props.chat) {
+      this.setState({ chat: nextProps.chat });
       this.getMessages(nextProps.chat);
     }
   }
@@ -51,15 +74,18 @@ class ChatBox extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    console.log('chat: ', this.state.chat);
     let input = $('#message').val();
-    if (input.substring(0, 3) === '/g ') {
-      input = input.substring(3, input.length);
-    }
     const msg = {
       text: input,
       to: this.props.chat,
       sentBy: this.props.username,
+      group: false,
     };
+    if (input.substring(0, 3) === '/g ') {
+      input = input.substring(3, input.length);
+      msg.group = true;
+    }
     this.props.socket.emit('submit message', msg);
     $('#message').val('');
   }

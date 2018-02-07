@@ -256,7 +256,8 @@ io.sockets.on('connection', (socket) => {
     console.log(`create group ${data.username} created ${data.groupname}`);
     inserts.createGroup(data.groupname, data.username, (bool) => {
       if (bool) {
-        allSockets[data.username].emit('created group', data.groupname);
+        console.log('createGroup: ', bool);
+        allSockets[data.username].emit('created group', { groupname: data.groupname });
       }
     });
   });
@@ -290,8 +291,15 @@ io.sockets.on('connection', (socket) => {
 
   // ChatBox > ChatBox
   socket.on('submit message', (data) => {
-    console.log(`submit message ${data.username} to ${data.to}`);
-    io.sockets.emit(`submitted message ${data.username}`, data.msg);
+    console.log(`submit message ${data.sentBy} to ${data.to}`);
+    if (data.group === false) {
+      allSockets[data.sentBy].emit('submitted message', data);
+      if (data.to in allSockets) {
+        allSockets[data.to].emit(`submitted message ${data.sentBy}`, data);
+      }
+    } else {
+      io.sockets.emit(`submitted message ${data.to}`, data);
+    }
   });
 
   // auto > PrivateChat
