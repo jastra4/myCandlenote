@@ -36,18 +36,29 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
   }).save();
 };
 
-const addFriend = (currentUser, newChatPartner, callback) => {
-  // add user to friends list (private chat) after searching their name
-  User.findOne({ username: currentUser }, (error, user) => {
-    user.privateChats.addToSet({ username: newChatPartner });
-    user.save();
-    callback(newChatPartner);
+const openPrivateChat = (username, otheruser, callback) => {
+  User.findOne({ username }, (err, user) => {
+    if (user.privateChats.includes(otheruser)) {
+      callback(false);
+    } else {
+      User.findOne({ username: otheruser }, (error, doc) => {
+        if (error || doc === null) {
+          callback(false);
+        } else {
+          console.log('saved chat with ', doc.username);
+          user.privateChats.addToSet({ username: doc.username });
+          user.save();
+          callback(true);
+        }
+      });
+    }
   });
 };
 
 const addGroupMember = (groupname, username, callback) => {
+  console.log(`addGroupMember to ${groupname}, username: ${username}`);
   Groups.findOne({ groupname }, (err, group) => {
-    if (err) {
+    if (group.members.includes(username)) {
       callback(false);
     } else if (group === null) {
       callback(false);
@@ -91,7 +102,6 @@ const createGroup = (groupname, username, callback) => {
           callback(true);
         }
       });
-
     } else {
       console.log('group already exists');
       callback(false);
@@ -103,7 +113,7 @@ module.exports = {
   insertDeck,
   insertFlashcard,
   saveMessage,
-  addFriend,
+  openPrivateChat,
   addGroupMember,
   createGroup,
 };

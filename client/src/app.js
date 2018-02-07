@@ -27,34 +27,27 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.identifyUser();
-  }
-
-  identifyUser() {
-    axios.get('/api/userid')
+    axios.get('/identifyUser')
       .then((res) => {
-        if (res.data.userid !== undefined) {
-          this.initSocket(res.data.userid);
-        } else {
-          console.log('Not logged in');
+        if (res.data.username !== undefined) {
+          this.initSocket(res.data.username);
         }
       });
   }
 
-  initSocket(userid) {
+  initSocket(username) {
     const socket = io(socketUrl);
     socket.on('connect', () => {
-      this.nameSocket(socket, userid);
+      axios.post('/assignUsername', {
+        username,
+        id: socket.id,
+      })
+        .then(() => {
+          console.log(`Connected ${username} / ${socket.id}!`);
+          socket.emit('sign on', { username });
+          this.props.activeSocket(socket, username);
+        });
     });
-  }
-
-  nameSocket(socket, userid) {
-    axios.get(`/identifySocket?id=${userid}`)
-      .then((res) => {
-        socket.emit('away', res.data);
-        this.props.activeSocket(socket, res.data);
-        console.log(`${res.data} connected!`);
-      });
   }
 
   render = () =>

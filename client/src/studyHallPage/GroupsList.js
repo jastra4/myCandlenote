@@ -14,22 +14,20 @@ class GroupsList extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.on('opened group chat', (data) => {
-      const testData = data.groupname;
-      const testGroups = [];
-      this.state.groups.forEach((group) => {
-        const testGroup = group.groupname;
-        testGroups.push(testGroup);
-      });
-      if (!testGroups.includes(testData)) {
-        this.setState({ groups: this.state.groups.concat([data]) });
-      }
+    this.props.socket.on('create group chat', (data) => {
+      this.setState({ groups: this.state.groups.concat([data]) });
     });
 
-    this.props.socket.on('closed group chat', (data) => {
+    console.log('componentDidMount ', this.state.groups);
+    this.props.socket.on('joined group', (data) => {
+      this.setState({ groups: this.state.groups.concat([data]) });
+    });
+
+    this.props.socket.on('closed group chat', (groupname) => {
+      console.log('received closed group chat event: ', groupname);
       let updatedGroups = [];
       this.state.groups.forEach((group, i) => {
-        if (group.groupname === data) {
+        if (group.groupname === groupname) {
           this.state.groups.splice(i, 1);
           updatedGroups = this.state.groups;
         }
@@ -39,6 +37,10 @@ class GroupsList extends React.Component {
 
     this.loadGroups();
   }
+
+  // componentDidMount() {
+  //   this.loadGroups();
+  // }
 
   loadGroups() {
     return axios.get(`/loadGroupChats?currentUser=${this.props.username}`)

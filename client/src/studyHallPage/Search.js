@@ -11,15 +11,23 @@ class Search extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    axios.post('/openChat', {
-      currentUser: this.props.username,
-      newChat: $('#search').val(),
-    })
-      .then((res) => {
-        if (res.data !== 'created group' && res.data !== 'did not create group' && res.data !== 'joined group' && res.data !== 'did not join group') {
-          this.props.socket.emit('new friend', res.data, this.props.username);
-        }
+    const input = $('#search').val();
+    if (input.substring(0, 3) === '/c ') {
+      this.props.socket.emit('create group chat', {
+        username: this.props.username,
+        groupname: input.substring(3, input.length),
       });
+    } else if (input.substring(0, 3) === '/j ') {
+      this.props.socket.emit('join group chat', {
+        username: this.props.username,
+        groupname: input.substring(3, input.length),
+      });
+    } else {
+      this.props.socket.emit('open private chat', {
+        username: this.props.username,
+        otheruser: input,
+      });
+    }
     $('#search').val('');
   }
 

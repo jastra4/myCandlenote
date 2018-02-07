@@ -19,13 +19,10 @@ class Group extends React.Component {
   }
 
   removeGroup() {
-    axios.post('/closeGroupChat', {
+    this.props.socket.emit('leave group chat', {
       username: this.props.username,
       groupname: this.props.group.groupname,
-    })
-      .then((res) => {
-        console.log('closed group chat');
-      });
+    });
   }
 
   render() {

@@ -11,11 +11,15 @@ class ChatBox extends React.Component {
     this.state = { messages: [] };
   }
 
+  componentWillMount() {
+    this.props.socket.removeAllListeners();
+  }
+
   componentDidMount() {
-    this.props.socket.on('receive message', (data) => {
-      if (data.sentBy === this.props.chat) {
-        this.setState({ messages: this.state.messages.concat([data]) });
-      }
+    this.props.socket.emit('available', { username: this.props.username });
+
+    this.props.socket.on(`submitted message ${this.props.chat}`, (data) => {
+      this.setState({ messages: this.state.messages.concat([data]) });
     });
   }
 
@@ -24,19 +28,20 @@ class ChatBox extends React.Component {
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.messages.length !== this.state.messages.length) {
-      this.setState({ messages: newProps.messages });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.messages.length !== this.state.messages.length) {
+      this.setState({ messages: nextProps.messages });
     }
-    if (newProps.chat !== this.props.chat) {
-      this.getMessages(newProps.chat);
+    if (nextProps.chat !== this.props.chat) {
+      this.getMessages(nextProps.chat);
     }
   }
 
-  getMessages(to) {
-    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
+  getMessages(sentTo) {
+    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
+        console.log('messages: ', messages);
         this.props.loadMessages(messageInfo);
       })
       .catch((error) => {
@@ -46,15 +51,31 @@ class ChatBox extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
+    let input = $('#message').val();
+    if (input.substring(0, 3) === '/g ') {
+      input = input.substring(3, input.length);
+    }
     const msg = {
-      text: $('#message').val(),
+      text: input,
       to: this.props.chat,
       sentBy: this.props.username,
     };
-    this.props.socket.emit('send message', msg);
-    this.setState({ messages: this.state.messages.concat([msg]) });
+    this.props.socket.emit('submit message', msg);
     $('#message').val('');
   }
+
+  componentWillUnmount() {
+    this.props.socket.emit('away', { username: this.props.username });
+  }
+
+  // deleteUser(e) {
+  //   e.preventDefault();
+  //   let input = $('#message').val();
+  //   axios.post('/deleteUser', { username: input })
+  //     .then((res) => {
+  //       console.log(res);
+  //     });
+  // }
 
   render() {
     return (

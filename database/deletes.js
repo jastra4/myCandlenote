@@ -6,23 +6,22 @@ const deleteFlashcard = id => Flashcards.remove({ _id: id });
 const deleteDeck = id => Decks.remove({ _id: id })
   .then(() => Flashcards.remove({ deckId: id }));
 
-const closePrivateChat = (username, charPartner, callback) => {
+const closePrivateChat = (username, otheruser, callback) => {
   User.findOne({ username }, (err, user) => {
     if (err) {
       console.log(err);
       callback(false);
     } else {
-      user.privateChat.pull({ username: charPartner });
+      console.log('pulled ', otheruser, ' from ', username);
+      console.log('privateChats: ', user.privateChats);
+      user.privateChats.pull({ username: otheruser });
       user.save();
-      callback(charPartner);
+      callback(true);
     }
   });
 };
 
 const removeGroupMember = (groupname, username, callback) => {
-  console.log('removeGroupMember: ', username);
-  console.log('from group: ', groupname);
-
   Groups.findOne({ groupname }, (err, group) => {
     if (err) {
       console.log(err);
@@ -30,12 +29,10 @@ const removeGroupMember = (groupname, username, callback) => {
     } else {
       group.members.pull({ member: username });
       group.save();
-      console.log('pulled: ', username);
     }
   });
   User.findOne({ username }, (err, user) => {
     if (err) {
-      console.log(err);
       callback(false);
     } else {
       user.groupChats.pull({ groupname });

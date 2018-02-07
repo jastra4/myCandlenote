@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ChatBox from './ChatBox';
-import FriendsListConnected from './FriendsList';
+import PrivateChatListConnected from './PrivateChatList';
 import GroupsListConnected from './GroupsList';
 import SearchConnected from './Search';
 import VideoConference from './VideoConference';
@@ -13,36 +13,36 @@ class StudyHall extends React.Component {
     this.state = { chat: 'No chat selected' };
   }
 
-  changeChat(username) {
-    this.setState({ chat: username });
+  changeChat(name) {
+    this.setState({ chat: name });
   }
 
   render() {
-    if (this.props.updatedSocket !== undefined) {
-      return (
-        <div className="studyContainer">
-          <div className="groupsList studyBackground">
-            <GroupsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
-          </div>
-          <div className="friendsList studyBackground">
-            <FriendsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
-          </div>
-          <div className="Search studyBackground">
-            <SearchConnected />
-          </div>
-          <div className="Chat studyBackground">
-            <ChatBox chat={this.state.chat}/>
-          </div>
-          
-        </div>
-      );
+    if (this.props.socket === undefined) {
+      return (<div>No socket connection</div>);
     }
-    return (<div>Loading...</div>);
+    return (
+      <div className="studyContainer">
+        <div className="groupsList studyBackground">
+          <GroupsListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
+        </div>
+        <div className="friendsList studyBackground">
+          <PrivateChatListConnected changeChat={this.changeChat.bind(this)} chat={this.state.chat}/>
+        </div>
+        <div className="Search studyBackground">
+          <SearchConnected />
+        </div>
+        <div className="Chat studyBackground">
+          <ChatBox chat={this.state.chat}/>
+        </div>
+        
+      </div>
+    );
   }
 }
 
 const mapStateToProps = state => (
-  { updatedSocket: state.activeSocket.socket }
+  { socket: state.activeSocket.socket }
 );
 
 const mapDispatchToProps = dispatch => (
