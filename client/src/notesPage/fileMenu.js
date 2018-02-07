@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { Button, Icon } from 'semantic-ui-react';
 import EmailModal from './emailModal';
 

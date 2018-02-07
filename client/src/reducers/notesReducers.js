@@ -63,14 +63,14 @@ const notesReducer = (state = defaultState, action) => {
         ...state,
         clearCurrentNote: true,
       };
-    
+
     case 'RESET_CLEAR_CURRENT_NOTE':
       return {
         ...state,
         clearCurrentNote: false,
       };
 
-    
+
     default:
       return state;
   }
