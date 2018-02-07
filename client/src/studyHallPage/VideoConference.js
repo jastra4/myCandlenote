@@ -8,54 +8,74 @@ class VideoConference extends React.Component {
     this.state = {
       hash: id,
       peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
+      remoteId: [],
+      myId: '',
+      initialized: false,
+      newCall: [],
     };
+    this.handlePeerIdSumbmission = this.handlePeerIdSumbmission.bind(this);
+    this.handlePeerIdChange = this.handlePeerIdChange.bind(this);
     this.call = this.call.bind(this);
+    this.onReceiveCall = this.onReceiveCall.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     navigator.getUserMedia = (
       navigator.getUserMedia || navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
 
-    // const dataConnection = this.state.peer.connect(id);
+    this.state.peer.on('open', (id) => {
+      console.log('Peer id: ', id);
+      this.setState({
+        myId: id,
+        initialized: true,
+      });
+    }); // eslint-disable-line 
 
-    this.state.peer.on('connection', (id) => {
-      console.log('ID on connection: ', id);
+    this.state.peer.on('connection', (connection) => {
+      console.log('connection to set on state: ', connection);
+      this.setState({ conn: connection }, () => {
+        this.state.conn.on('open', () => {
+          this.setState({ connected: true });
+          console.log('We have been connected!');
+          this.state.conn.on('data', this.onReceiveData);
+        });
+      });
     });
-
-    this.state.peer.on('open', (id) => console.log('Peer ID: ' + id)); // eslint-disable-line 
-    this.state.peer.on('call', this.onReceiveCall.bind(this));
-
-
-    // this.state.peer.on('open', (id) => {
-    //   console.log('My Peer id is: ', id);
-    //   this.setState({
-    //     my_id: id,
-    //     initialized: true,
-    //   });
-    // });
-
-    // this.state.peer.on('connection', (connection) => {
-    //   console.log('Someone connected!');
-    //   console.log(connection);
-    //   this.setState({ conn: connection }, () => {
-    //     this.state.conn.on('open', () => {
-    //       this.setState({ connected: true });
-    //     });
-    //   });
-    // });
-
     this.prepareSelfVideo();
 
-    const url = window.location.href + `/${this.state.hash}`; // eslint-disable-line
-    console.log('URL: ', url);
-    const match = url.match(/#(.+)/);
-    console.log('Match: ', match);
-    if (match != null) {
-      this.setState({ caller: true });
-      this.call(match[1]);
-    }
+    this.state.peer.on('call', (call) => {
+      console.log('call data set to state: ', call);
+      this.onReceiveCall(call);
+    });
+  }
+
+  componentWillUnmount() {
+    this.state.peer.disconnect();
+  }
+
+  handlePeerIdChange(event) {
+    console.log('remoteId: ', this.state.remoteId);
+    this.setState({ remoteId: [...this.state.remoteId, event.target.value] });
+  }
+
+  handlePeerIdSumbmission() {
+    console.log('remoteId at submission: ', this.state.remoteId);
+
+    const connection = this.state.peer.connect(this.state.remoteId);
+    console.log('New connection object: ', connection);
+
+    this.setState({ conn: connection }, () => {
+      this.state.conn.on('open', () => {
+        this.setState({ connected: true });
+        console.log('Calling from peer id submission');
+        this.call();
+      });
+      this.state.conn.on('data', this.onReceiveData);
+    });
+
+    console.log('Connection open after send?', connection.open);
   }
 
   getMedia(options, success, error) {
@@ -64,23 +84,40 @@ class VideoConference extends React.Component {
   }
 
   onReceiveCall(call) {
+    this.setState({ newCall: [...this.state.newCall, call] });
     this.getMedia({
       audio: true,
       video: true,
     }, (stream) => {
       console.log('answering...');
-      call.answer(stream);
+      if (this.state.newCall[0]) {
+        this.state.newCall[0].answer(stream);
+      }
+      if (this.state.newCall[1]) {
+        this.state.newCall[1].answer(stream);
+      }
+      if (this.state.newCall[2]) {
+        this.state.newCall[2].answer(stream);
+      }
     }, (err) => { console.log('Error in on receive call: ', err); });
-    call.on('stream', (stream) => {
-      const video = document.querySelector('video');
-      video.src = window.URL.createObjectURL(stream);
-    });
-  }
-
-  onReceiveStream(stream) {
-    this.state;
-    const video = document.querySelector('.video-call');
-    video.src = window.URL.createObjectURL(stream);
+    if (this.state.newCall[0]) {
+      this.state.newCall[0].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-one');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
+    if (this.state.newCall[1]) {
+      this.state.newCall[1].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-two');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
+    if (this.state.newCall[2]) {
+      this.state.newCall[2].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-three');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
   }
 
   prepareSelfVideo() {
@@ -94,45 +131,37 @@ class VideoConference extends React.Component {
   }
 
   call() {
-    const id = document.querySelector('.peer-id');
     this.getMedia({
       audio: true,
       video: true,
     }, (stream) => {
-      const call = this.state.peer.call(id, stream);
+      this.setState({ newCall: this.state.peer.call(this.state.remoteId[0], stream) });
+      if (this.state.remoteId[1]) {
+        this.setState({ newCall: this.state.peer.call(this.state.remoteId[1], stream) });
+      }
+      if (this.state.remoteId[2]) {
+        this.setState({ newCall: this.state.peer.call(this.state.remoteId[2], stream) });
+      }
       console.log('calling...');
-      call.on('stream', this.onReceiveStream);
+      this.state.peer.on('call', this.onReceiveCall);
     }, (err) => { console.log('Error in call: ', err); });
   }
-
-  componentWillUnmount() {
-    this.state.peer.disconnect();
-  }
-
-  // connect() {
-  //   const peerId = this.state.peer_id;
-  //   const connection = this.state.peer.connect(peerId);
-  //   this.setState({ conn: connection }, () => {
-  //     this.state.conn.on('open', () => {
-  //       this.setState({ connected: true });
-  //     });
-  //     this.state.conn.on('data');
-  //   });
-  // }
 
   render() {
     return (
       <div className="container">
         <nav>Video Chat</nav>
         <div className="video-container">
-          <video className="video-call" autoPlay></video>
+          <video className="video-call-one" autoPlay></video>
+          <video className="video-call-two" autoPlay></video>
+          <video className="video-call-three" autoPlay></video>
           <video className="video-self" autoPlay></video>
           <div className="share">
-            <a>Share - {`http://localhost:3000/studyhall/${this.state.hash}`}</a>
+            <a>Share - {this.state.myId}</a>
           </div>
           <div>
-            <input type="text" className="peer-id"></input>
-            <button onClick={this.call}>Call</button>
+            <input type="text" className="peer-id" onChange={this.handlePeerIdChange}></input>
+            <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
           </div>
         </div>
       </div>
