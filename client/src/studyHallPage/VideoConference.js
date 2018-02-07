@@ -8,15 +8,14 @@ class VideoConference extends React.Component {
     this.state = {
       hash: id,
       peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
-      remoteId: '',
+      remoteId: [],
       myId: '',
       initialized: false,
+      newCall: [],
     };
-    // this.call = this.call.bind(this);
     this.handlePeerIdSumbmission = this.handlePeerIdSumbmission.bind(this);
     this.handlePeerIdChange = this.handlePeerIdChange.bind(this);
     this.call = this.call.bind(this);
-    this.onReceiveData = this.onReceiveData.bind(this);
     this.onReceiveCall = this.onReceiveCall.bind(this);
   }
 
@@ -28,7 +27,7 @@ class VideoConference extends React.Component {
 
     this.state.peer.on('open', (id) => {
       console.log('Peer id: ', id);
-      this.setState({ 
+      this.setState({
         myId: id,
         initialized: true,
       });
@@ -50,11 +49,6 @@ class VideoConference extends React.Component {
       console.log('call data set to state: ', call);
       this.onReceiveCall(call);
     });
-
-    // this.state.newCall.on('stream', (stream) => {
-    //   const video = document.querySelector('.video-call');
-    //   video.src = stream;
-    // });
   }
 
   componentWillUnmount() {
@@ -63,7 +57,7 @@ class VideoConference extends React.Component {
 
   handlePeerIdChange(event) {
     console.log('remoteId: ', this.state.remoteId);
-    this.setState({ remoteId: event.target.value });
+    this.setState({ remoteId: [...this.state.remoteId, event.target.value] });
   }
 
   handlePeerIdSumbmission() {
@@ -75,36 +69,13 @@ class VideoConference extends React.Component {
     this.setState({ conn: connection }, () => {
       this.state.conn.on('open', () => {
         this.setState({ connected: true });
+        console.log('Calling from peer id submission');
+        this.call();
       });
       this.state.conn.on('data', this.onReceiveData);
     });
 
     console.log('Connection open after send?', connection.open);
-  }
-
-  testSendData() {
-    console.log('Current connection on the state: ', this.state.conn);
-    this.state.conn.send('Hello hello I sent a thing!');
-  }
-
-  // callPeer() {
-  //   const call = this.state.peer.call(this.state.remoteId, this.getMedia({
-  //     audio: true,
-  //     video: true,
-  //   }), (stream) => {
-  //     const video = document.querySelector('.video-call');
-  //   });
-  //   console.log('remoteId at call peer: ', this.state.remoteId);
-  //   console.log('call data at call peer: ', call);
-  //   // this.setState({ newCall: call }, () => {
-  //   //   console.log('Call data: ', call);
-  //   //   console.log('Call data on the state: ', this.state.call);
-  //   //   this.state.newCall.on('stream', this.onReceiveCall);
-  //   // });
-  // }
-
-  onReceiveData(data) {
-    console.log('Received', data);
   }
 
   getMedia(options, success, error) {
@@ -113,25 +84,41 @@ class VideoConference extends React.Component {
   }
 
   onReceiveCall(call) {
-    this.setState({ newCall: call });
+    this.setState({ newCall: [...this.state.newCall, call] });
     this.getMedia({
       audio: true,
       video: true,
     }, (stream) => {
       console.log('answering...');
-      this.state.newCall.answer(stream);
+      if (this.state.newCall[0]) {
+        this.state.newCall[0].answer(stream);
+      }
+      if (this.state.newCall[1]) {
+        this.state.newCall[1].answer(stream);
+      }
+      if (this.state.newCall[2]) {
+        this.state.newCall[2].answer(stream);
+      }
     }, (err) => { console.log('Error in on receive call: ', err); });
-    this.state.newCall.on('stream', (stream) => {
-      const video = document.querySelector('.video-call');
-      video.src = window.URL.createObjectURL(stream);
-    });
+    if (this.state.newCall[0]) {
+      this.state.newCall[0].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-one');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
+    if (this.state.newCall[1]) {
+      this.state.newCall[1].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-two');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
+    if (this.state.newCall[2]) {
+      this.state.newCall[2].on('stream', (stream) => {
+        const video = document.querySelector('.video-call-three');
+        video.src = window.URL.createObjectURL(stream);
+      });
+    }
   }
-
-  // onReceiveStream(stream) {
-  //   this.state;
-  //   const video = document.querySelector('.video-call');
-  //   video.src = window.URL.createObjectURL(stream);
-  // }
 
   prepareSelfVideo() {
     this.getMedia({
@@ -144,34 +131,30 @@ class VideoConference extends React.Component {
   }
 
   call() {
-    // const id = document.querySelector('.peer-id');
     this.getMedia({
       audio: true,
       video: true,
     }, (stream) => {
-      this.setState({ newCall: this.state.peer.call(this.state.remoteId, stream) });
+      this.setState({ newCall: this.state.peer.call(this.state.remoteId[0], stream) });
+      if (this.state.remoteId[1]) {
+        this.setState({ newCall: this.state.peer.call(this.state.remoteId[1], stream) });
+      }
+      if (this.state.remoteId[2]) {
+        this.setState({ newCall: this.state.peer.call(this.state.remoteId[2], stream) });
+      }
       console.log('calling...');
       this.state.peer.on('call', this.onReceiveCall);
     }, (err) => { console.log('Error in call: ', err); });
   }
-
-  // connect() {
-  //   const peerId = this.state.peer_id;
-  //   const connection = this.state.peer.connect(peerId);
-  //   this.setState({ conn: connection }, () => {
-  //     this.state.conn.on('open', () => {
-  //       this.setState({ connected: true });
-  //     });
-  //     this.state.conn.on('data');
-  //   });
-  // }
 
   render() {
     return (
       <div className="container">
         <nav>Video Chat</nav>
         <div className="video-container">
-          <video className="video-call" autoPlay></video>
+          <video className="video-call-one" autoPlay></video>
+          <video className="video-call-two" autoPlay></video>
+          <video className="video-call-three" autoPlay></video>
           <video className="video-self" autoPlay></video>
           <div className="share">
             <a>Share - {this.state.myId}</a>
@@ -179,7 +162,6 @@ class VideoConference extends React.Component {
           <div>
             <input type="text" className="peer-id" onChange={this.handlePeerIdChange}></input>
             <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
-            <button onClick={() => { this.call(); }}>Call</button>
           </div>
         </div>
       </div>
