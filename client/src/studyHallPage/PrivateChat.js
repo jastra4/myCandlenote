@@ -10,12 +10,6 @@ class PrivateChat extends React.Component {
     };
   }
 
-  componentWillUnmount() {
-    if (this.props.chat === this.props.privateChat.username) {
-      this.props.changeChat('No chat selected');
-    }
-  }
-
   componentDidMount() {
     this.props.socket.on(`${this.props.privateChat.username} signed on`, (username) => {
       if (username === this.props.privateChat.username) {
@@ -42,12 +36,14 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on('is available', (username) => {
+      console.log('is available: ', username, this.props.privateChat.username);
       if (username === this.props.privateChat.username) {
         this.setState({ status: 'available' });
       }
     });
 
     this.props.socket.on('is away', (username) => {
+      console.log('is away: ', username, this.props.privateChat.username);
       if (username === this.props.privateChat.username) {
         this.setState({ status: 'away' });
       }
@@ -59,7 +55,8 @@ class PrivateChat extends React.Component {
       }
     });
 
-    this.props.socket.on(`submitted message ${this.props.chat.username}`, () => {
+    this.props.socket.on(`submitted message ${this.props.privateChat.username}`, () => {
+      console.log('message received from: ', this.props.privateChat.username);
       if (this.props.privateChat.username !== this.props.chat) {
         this.setState({ unread: this.state.unread += 1 });
       }
@@ -76,19 +73,9 @@ class PrivateChat extends React.Component {
     this.props.changeChat(this.props.privateChat.username, 'private');
   }
 
-  closeChat() {
-    this.props.socket.emit('close private chat', {
-      username: this.props.username,
-      otheruser: this.props.privateChat.username,
-    });
+  closeSelf() {
+    this.props.closeChat(this.props.self, this.props.username, this.props.privateChat.username);
   }
-
-  // deleteUser() {
-  //   axios.post('/deleteUser', { username: this.props.friend.username })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // }
 
   render() {
     return (
@@ -98,7 +85,7 @@ class PrivateChat extends React.Component {
           onClick={this.handleClick.bind(this)}
           >{this.props.privateChat.username}
         </span>
-        <span onClick={this.closeChat.bind(this)} className='friendRemove'>x</span>
+        <span onClick={this.closeSelf.bind(this)} className='friendRemove'>x</span>
         <span className='friendUnreadMessages'>{this.state.unread}</span>
       </div>
     );

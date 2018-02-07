@@ -1,38 +1,28 @@
 import React from 'react';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { };
-  }
-
-  componentWillUnmount() {
-    if (this.props.chat === this.props.group.groupname) {
-      this.props.changeChat('No chat selected');
-    }
+    this.state = { members: 1 };
   }
 
   handleClick() {
-    this.props.changeChat(this.props.group.groupname, 'group');
+    this.props.changeChat(this.props.groupChat.groupname, 'group');
   }
 
-  removeGroup() {
-    this.props.socket.emit('leave group chat', {
-      username: this.props.username,
-      groupname: this.props.group.groupname,
-    });
+  closeSelf() {
+    this.props.closeChat(this.props.self, this.props.username, this.props.groupChat.groupname);
   }
 
   render() {
-    console.log(this.props.group.groupname);
     return (
       <div>
         <span className='groupName' onClick={this.handleClick.bind(this)}>
-          {this.props.group.groupname}
+          {this.props.groupChat.groupname}
         </span>
-        <span onClick={this.removeGroup.bind(this)} className='groupRemove'>x</span>
+        <span onClick={this.closeSelf.bind(this)} className='groupRemove'>x</span>
+        <span className='friendUnreadMessages'>{this.props.groupChat.members.length}</span>
       </div>
     );
   }
@@ -48,5 +38,3 @@ const mapStateToProps = state => (
 const GroupConnected = connect(mapStateToProps)(Group);
 
 export default GroupConnected;
-
-// export default Group;

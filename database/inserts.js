@@ -70,9 +70,9 @@ const addGroupMember = (groupname, username, callback) => {
           console.log(err);
           callback(false);
         } else {
-          user.groupChats.addToSet({ groupname });
+          user.groupChats.addToSet({ groupname }); /// null
           user.save();
-          callback(true);
+          callback(true, group);
         }
       });
     }
@@ -96,9 +96,9 @@ const createGroup = (groupname, username, callback) => {
           console.log(error);
           callback(false);
         } else {
-          user.groupChats.addToSet({ groupname });
+          user.groupChats.addToSet({ groupname }); // groupChats === null
           user.save();
-          callback(true);
+          callback(true, group);
         }
       });
     } else {

@@ -11,7 +11,7 @@ class ChatBox extends React.Component {
     this.state = {
       messages: [],
       chat: '',
-      // type: '',
+      type: '',
     };
   }
 
@@ -19,8 +19,11 @@ class ChatBox extends React.Component {
     this.props.socket.removeAllListeners();
   }
 
-  componentDidUpdate = (newProps) => {
-    console.log('newProps: ', newProps);
+  componentDidMount() {
+    this.props.socket.emit('available', { username: this.props.username });
+  }
+
+  componentDidUpdate = () => {
     const chatbox = document.getElementById('chatBox');
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
 
@@ -33,11 +36,6 @@ class ChatBox extends React.Component {
     this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
     });
-
-    // if (newProps.type !== this.state.type) {
-    //   console.log('would change type to ', newProps.type);
-    //   this.setState({ type: newProps.type });
-    // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,13 +43,12 @@ class ChatBox extends React.Component {
       this.setState({ messages: nextProps.messages });
     }
     if (nextProps.chat !== this.props.chat) {
-      this.setState({ chat: nextProps.chat });
+      this.setState({ chat: nextProps.chat, type: nextProps.type });
       this.getMessages(nextProps.chat, nextProps.type);
     }
   }
 
   getMessages(sentTo, type) {
-    console.log('type: ', type);
     return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}&&type=${type}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
@@ -65,19 +62,14 @@ class ChatBox extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('chat: ', this.state.chat);
     const input = $('#message').val();
     const msg = {
       text: input,
       to: this.props.chat,
       sentBy: this.props.username,
-      group: false,
+      type: this.state.type,
       timeStamp: null,
     };
-    if (input.substring(0, 3) === '/g ') {
-      msg.text = input.substring(3, input.length);
-      msg.group = true;
-    }
     this.props.socket.emit('submit message', msg);
     $('#message').val('');
   }
