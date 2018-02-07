@@ -240,7 +240,7 @@ io.sockets.on('connection', (socket) => {
         if (bool) {
           let status = 'offline';
           if (chatname in allSockets) {
-            status = allSockets[chatname].status;
+            status = allSockets[chatname].status; // eslint-disable-line
           }
           res.send({
             username: chatname,
@@ -299,7 +299,7 @@ io.sockets.on('connection', (socket) => {
   // ChatBox > ChatBox
   socket.on('submit message', (message) => {
     console.log(`submit message ${message.sentBy} to ${message.to}`);
-    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
     inserts.saveMessage(message);
     if (message.type === 'private') {
       allSockets[message.sentBy].emit('submitted message', message);

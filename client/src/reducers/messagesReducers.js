@@ -17,7 +17,7 @@ const messagesReducer = (state = defaultState, action) => {
         },
       };
     case 'SET_MESSAGES': {
-      console.log('SET_MESSAGES: ', action.payload)
+      console.log('SET_MESSAGES: ', action.payload);
       const messagesById = action.payload.reduce((messages, message) => ({
         ...messages,
         [message._id]: message,

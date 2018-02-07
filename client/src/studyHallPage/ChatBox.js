@@ -43,7 +43,10 @@ class ChatBox extends React.Component {
       this.setState({ messages: nextProps.messages });
     }
     if (nextProps.chat !== this.props.chat) {
-      this.setState({ chat: nextProps.chat, type: nextProps.type });
+      this.setState({
+        chat: nextProps.chat,
+        type: nextProps.type,
+      });
       this.getMessages(nextProps.chat, nextProps.type);
     }
   }

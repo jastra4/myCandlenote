@@ -130,7 +130,7 @@ class StudyHall extends React.Component {
           />
         </div>
         <div className="Search studyBackground">
-          <SearchConnected 
+          <SearchConnected
           updatePrivateChats={this.updatePrivateChats.bind(this)}
           updateGroupChats={this.updateGroupChats.bind(this)}
         />
@@ -138,7 +138,7 @@ class StudyHall extends React.Component {
         <div className="Chat studyBackground">
           <ChatBox chat={this.state.chat} type={this.state.type}/>
         </div>
-        
+        <VideoConference />
       </div>
     );
   }
@@ -158,5 +158,3 @@ const mapDispatchToProps = dispatch => (
 const StudyHallConnected = connect(mapStateToProps, mapDispatchToProps)(StudyHall);
 
 export default StudyHallConnected;
-
-// <VideoConference />
