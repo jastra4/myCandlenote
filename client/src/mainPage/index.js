@@ -1,6 +1,6 @@
 import React from 'react';
 import { Motion, spring } from 'react-motion';
-import { Image } from 'semantic-ui-react';
+import { Image, Header } from 'semantic-ui-react';
 
 const fadeAnimationStart = {
   x: 0,
@@ -20,7 +20,18 @@ const fadeAnimationEnd = {
 export default class MainPage extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      introDone: false,
+      promptDone: false,
+    };
+  }
+
+  introAnimationEnd() {
+    this.setState({ introDone: true });
+  }
+
+  promptAnimationEnd() {
+    this.setState({ promptDone: true });
   }
 
   render = () => (
@@ -30,17 +41,30 @@ export default class MainPage extends React.Component {
         <p>Hello World :)</p>
         <a href="/auth/google">Sign In with Google</a>
       </div>
-      <Motion defaultStyle={fadeAnimationStart} style={fadeAnimationEnd}>
-        {value => <Image
-          circular
-          src="/assets/CandleNote-Main-Logo-Square.png"
-          style={{
-            width: '30vw',
-            opacity: value.x,
+      <Motion
+        defaultStyle={fadeAnimationStart}
+        style={fadeAnimationEnd}
+        onRest={this.introAnimationEnd.bind(this)}
+      >
+        {(value) => {
+          const transitionStyle = {
             position: 'relative',
             top: `${value.height}px`,
-          }}
-        />}
+            opacity: value.x,
+          };
+
+          return (<div style={transitionStyle}>
+            <Header as="h1">Welcome to</Header>
+            <Image
+              circular
+              src="/assets/CandleNote-Main-Logo-Square.png"
+              style={{ width: '30vw' }}
+            />
+          </div>);
+        }}
+      </Motion>
+      <Motion defaultStyle={fadeAnimationStart} style={fadeAnimationEnd}>
+        
       </Motion>
     </div>
   );
