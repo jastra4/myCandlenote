@@ -28,21 +28,22 @@ export default class SchedulePage extends React.Component {
   componentDidMount() {
     if (this.props.userId) {
       this.props.getFriends(this.props.userId);
-      axios.post('/api/refreshToken', { userId: this.props.userId })
-        .then(() => axios.post('/api/freeBusy', { userId: this.props.userId }))
-        .then((res) => {
-          const events = res.data.map(event => ({
-            start: new Date(event.start),
-            end: new Date(event.end),
-            title: event.title,
-          }));
-          this.setState({
-            events,
-            group: this.state.group.concat(this.props.userId),
-          });
-        })
-        .catch(err => console.log('Cal err:', err));
+      this.getFreeBusyForUsers(this.props.userId);
     }
+  }
+
+  getFreeBusyForUsers(userId) {
+    axios.post('/api/refreshToken', { userId })
+      .then(() => axios.post('/api/freeBusy', { userId }))
+      .then((res) => {
+        const events = res.data.map(event => ({
+          start: new Date(event.start),
+          end: new Date(event.end),
+          title: event.title,
+        }));
+        this.setState({ events: this.state.events.concat(events) });
+      })
+      .catch(err => console.log('Cal err:', err));
   }
 
   handleSelectSlot(slotInfo) {
@@ -91,6 +92,7 @@ export default class SchedulePage extends React.Component {
     console.log('Adding Friend:', friendId);
     if (!this.state.group.includes(friendId)) {
       this.setState({ group: this.state.group.concat(friendId) });
+      this.getFreeBusyForUsers(friendId);
     }
   }
 
@@ -99,6 +101,8 @@ export default class SchedulePage extends React.Component {
     const newGroup = this.state.group.filter(id => id !== friendId);
     this.setState({ group: newGroup });
   }
+
+
 
   render() {
     return (

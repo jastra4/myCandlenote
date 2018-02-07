@@ -53,7 +53,6 @@ const makePDF = (url, fileName, callback, options = {}) => {
 // Google Calendar Helpers
 
 const getCalendarList = accessToken => new Promise((resolve, reject) => {
-  console.log('access token:', accessToken);
   const googleCalendar = new gCal.GoogleCalendar(accessToken);
   googleCalendar.calendarList.list((err, calendarList) => {
     if (err) reject(err);
@@ -63,7 +62,6 @@ const getCalendarList = accessToken => new Promise((resolve, reject) => {
 
 const getCalendarFreeBusy = (timeMin, timeMax, calList, accessToken) =>
   new Promise((resolve, reject) => {
-    console.log('CallList:', calList);
     const googleCalendar = new gCal.GoogleCalendar(accessToken);
     googleCalendar.freebusy.query({
       timeMin,
@@ -120,7 +118,6 @@ const setCalendarEventPerUser = (accessTokens, event) => {
 };
 
 const refreshMultipleTokens = (userIds) => {
-  console.log('UserIds:', userIds);
   const refreshPromises = userIds.map(userId =>
     queries.getRefreshToken(userId)
       .then((data) => {
