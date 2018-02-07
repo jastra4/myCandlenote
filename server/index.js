@@ -290,15 +290,17 @@ io.sockets.on('connection', (socket) => {
   });
 
   // ChatBox > ChatBox
-  socket.on('submit message', (data) => {
-    console.log(`submit message ${data.sentBy} to ${data.to}`);
-    if (data.group === false) {
-      allSockets[data.sentBy].emit('submitted message', data);
-      if (data.to in allSockets) {
-        allSockets[data.to].emit(`submitted message ${data.sentBy}`, data);
+  socket.on('submit message', (message) => {
+    console.log(`submit message ${message.sentBy} to ${message.to}`);
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
+    inserts.saveMessage(message);
+    if (message.group === false) {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
       }
     } else {
-      io.sockets.emit(`submitted message ${data.to}`, data);
+      io.sockets.emit(`submitted message ${message.to}`, message);
     }
   });
 
@@ -348,11 +350,19 @@ app.get('/loadGroupChats', (req, res) => {
 });
 
 app.get('/loadChatHistory', (req, res) => {
-  const { sentBy, sentTo } = req.query;
-  queries.loadChatHistory(sentBy, sentTo, (docs) => {
-    res.send(docs);
-  });
+  const { sentBy, sentTo, type } = req.query;
+  console.log('type: ', type);
+  if (type === 'group') {
+    queries.loadGroupChatHistory(sentTo, (docs) => {
+      res.send(docs);
+    });
+  } else {
+    queries.loadChatHistory(sentBy, sentTo, (docs) => {
+      res.send(docs);
+    });
+  }
 });
+
 /* ----------- API Routes ------------ */
 
 app.post('/api/emailPDF', (req, res) => {

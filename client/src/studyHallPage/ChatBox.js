@@ -10,31 +10,17 @@ class ChatBox extends React.Component {
     super(props);
     this.state = {
       messages: [],
-      chat: 'group1',
+      chat: '',
+      // type: '',
     };
   }
-
-  // componentWillMount() {
-  //   this.props.socket.removeAllListeners();
-  // }
-
-  // componentDidMount() {
-  //   this.props.socket.emit('available', { username: this.props.username });
-  //   // display mine
-  //   this.props.socket.on('submitted message', (data) => {
-  //     this.setState({ messages: this.state.messages.concat([data]) });
-  //   });
-  //   // display others
-  //   this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
-  //     this.setState({ messages: this.state.messages.concat([data]) });
-  //   });
-  // }
 
   componentWillUpdate() {
     this.props.socket.removeAllListeners();
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = (newProps) => {
+    console.log('newProps: ', newProps);
     const chatbox = document.getElementById('chatBox');
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
 
@@ -48,6 +34,10 @@ class ChatBox extends React.Component {
       this.setState({ messages: this.state.messages.concat([data]) });
     });
 
+    // if (newProps.type !== this.state.type) {
+    //   console.log('would change type to ', newProps.type);
+    //   this.setState({ type: newProps.type });
+    // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -56,12 +46,13 @@ class ChatBox extends React.Component {
     }
     if (nextProps.chat !== this.props.chat) {
       this.setState({ chat: nextProps.chat });
-      this.getMessages(nextProps.chat);
+      this.getMessages(nextProps.chat, nextProps.type);
     }
   }
 
-  getMessages(sentTo) {
-    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}`) // `/username?id=${this.props.username}`
+  getMessages(sentTo, type) {
+    console.log('type: ', type);
+    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}&&type=${type}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
         console.log('messages: ', messages);
@@ -75,15 +66,16 @@ class ChatBox extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     console.log('chat: ', this.state.chat);
-    let input = $('#message').val();
+    const input = $('#message').val();
     const msg = {
       text: input,
       to: this.props.chat,
       sentBy: this.props.username,
       group: false,
+      timeStamp: null,
     };
     if (input.substring(0, 3) === '/g ') {
-      input = input.substring(3, input.length);
+      msg.text = input.substring(3, input.length);
       msg.group = true;
     }
     this.props.socket.emit('submit message', msg);

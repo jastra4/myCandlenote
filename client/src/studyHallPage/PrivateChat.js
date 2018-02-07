@@ -73,7 +73,7 @@ class PrivateChat extends React.Component {
   }
 
   handleClick() {
-    this.props.changeChat(this.props.privateChat.username);
+    this.props.changeChat(this.props.privateChat.username, 'private');
   }
 
   closeChat() {

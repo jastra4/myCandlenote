@@ -10,11 +10,17 @@ import activeSocket from '../actions/activeSocket';
 class StudyHall extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { chat: 'No chat selected' };
+    this.state = {
+      chat: 'No chat selected',
+      type: 'none',
+    };
   }
 
-  changeChat(name) {
-    this.setState({ chat: name });
+  changeChat(name, type) {
+    this.setState({
+      chat: name,
+      type: type,
+    });
   }
 
   render() {
@@ -33,7 +39,7 @@ class StudyHall extends React.Component {
           <SearchConnected />
         </div>
         <div className="Chat studyBackground">
-          <ChatBox chat={this.state.chat}/>
+          <ChatBox chat={this.state.chat} type={this.state.type}/>
         </div>
         
       </div>

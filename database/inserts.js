@@ -45,7 +45,6 @@ const openPrivateChat = (username, otheruser, callback) => {
         if (error || doc === null) {
           callback(false);
         } else {
-          console.log('saved chat with ', doc.username);
           user.privateChats.addToSet({ username: doc.username });
           user.save();
           callback(true);

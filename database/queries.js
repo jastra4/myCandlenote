@@ -14,14 +14,22 @@ const getUserName = (id, callback) => {
 
 // only difference for groups is that "to" will be a group name
 const loadChatHistory = (sentBy, to, callback) => {
-  console.log('loadChatHistory: ', sentBy);
-  console.log(to);
   const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created'); // .limit(8);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
     } else {
-      console.log('docs: ', docs);
+      callback(docs);
+    }
+  });
+};
+
+const loadGroupChatHistory = (groupname, callback) => {
+  const query = db.Messages.find({ to: { $in: [groupname] } }).sort('created'); // .limit(8);
+  query.exec((err, docs) => {
+    if (err) {
+      callback(err);
+    } else {
       callback(docs);
     }
   });
@@ -35,17 +43,13 @@ const loadPrivateChats = (username, callback) => {
     const { privateChats } = user;
     const testList = [];
     privateChats.forEach((chatWith) => {
-      console.log('chatWith.username: ', chatWith.username);
-      console.log('chatWith: ', chatWith);
       testList.push(chatWith.username);
     });
-    console.log('testList: ', testList);
     const query = User.find({ username: { $in: testList } });
     query.exec((error, listOfUsersInPrivateChatList) => {
       if (error) {
         callback(err);
       } else {
-        console.log('loadPrivateChats: ', listOfUsersInPrivateChatList);
         callback(listOfUsersInPrivateChatList);
       }
     });
@@ -55,22 +59,18 @@ const loadPrivateChats = (username, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadGroupChats = (username, callback) => {
-  console.log('loadGroupChats: ', username);
   User.findOne({ username }, (err, user) => {
-    console.log('user.groupchats: ', user.groupChats);
     const groupChatList = user.groupChats;
     const testList = [];
     groupChatList.forEach((group) => {
       testList.push(group.groupname);
     });
-    console.log('testListGroups: ', testList);
     const query = Groups.find({ groupname: { $in: testList } });
     query.exec((error, groups) => {
       if (error) {
         console.log(error);
         callback(err);
       } else {
-        console.log('groups: ', groups);
         callback(groups);
       }
     });
@@ -91,4 +91,5 @@ module.exports = {
   getCurrentUser,
   getDecksForUser,
   getFlashcardsForUser,
+  loadGroupChatHistory,
 };

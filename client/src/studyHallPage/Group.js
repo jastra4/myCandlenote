@@ -15,7 +15,7 @@ class Group extends React.Component {
   }
 
   handleClick() {
-    this.props.changeChat(this.props.group.groupname);
+    this.props.changeChat(this.props.group.groupname, 'group');
   }
 
   removeGroup() {
