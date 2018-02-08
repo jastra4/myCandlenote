@@ -144,12 +144,12 @@ app.post('/api/editNote', (req, res) => {
   const { noteInfo } = req.body;
   console.log('updated note: ', noteInfo);
   queries.updateNote(noteInfo)
-    .then(() => { 
-      console.log('Successfully edited note in DB'); 
+    .then(() => {
+      console.log('Successfully edited note in DB');
       res.end();
     })
-    .catch((e) => { 
-      console.error(e); 
+    .catch((e) => {
+      console.error(e);
       res.sendStatus(500).end();
     });
 });
@@ -397,7 +397,6 @@ app.post('/api/parseContentMeaning', (req, res) => {
       res.status(500).end();
     }));
 });
-
 
 
 app.post('/api/suggestedResources', (req, res) => {

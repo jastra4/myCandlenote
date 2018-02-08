@@ -80,10 +80,10 @@ class NotePage extends React.Component {
 
   handleDelete = () => {
     this.props.deleteNote(this.props.currentNote);
-    this.setState({ 
+    this.setState({
       clearNote: true,
       currentNote: '',
-     });
+    });
   }
 
   componentWillUnmount() {
