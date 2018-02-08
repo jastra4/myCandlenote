@@ -8,6 +8,7 @@ class Group extends React.Component {
   }
 
   handleClick() {
+    console.log();
     this.props.changeChat(this.props.groupChat.groupname, 'group');
   }
 
