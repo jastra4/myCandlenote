@@ -17,8 +17,12 @@ export default class NoteTitle extends React.Component {
 
 
   componentWillReceiveProps(nextProps) {
-    nextProps.clearNote && this.setState({ value: '' });
+    nextProps.clearNote && this.setState({
+      value: '',
+      clearNote: true,
+    });
     this.props.resetClear();
+    _.defer(this.setState.bind(this), { clearNote: false });
   }
 
   handleInputChange = ({ target: { value } }) => {
@@ -36,7 +40,7 @@ export default class NoteTitle extends React.Component {
       <input
         className='titleInput'
         value={ this.state.value }
-        onChange={ this.handleInputChange }
+        onChange={ !this.state.clearNote && this.handleInputChange }
         maxLength='42'
         placeholder='Untitled'
       />

@@ -23,8 +23,13 @@ export default class MainEditor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    nextProps.clearNote && this.setState({ value: '' });
-    this.props.resetClear();
+    if (nextProps.clearNote) {
+      this.setState({
+        value: '', clearNote: true,
+      });
+      this.props.resetClear();
+      _.defer(this.setState.bind(this), { clearNote: false });
+    }
   }
 
   componentWillUnmount() {
@@ -72,7 +77,7 @@ export default class MainEditor extends React.Component {
       <ReactQuill
         theme='snow'
         value={ this.state.value }
-        onChange={ this.handleEditorChange }
+        onChange={ !this.clearNote && this.handleEditorChange }
         placeholder="Let's take some notes!"
         formats={ MainEditor.formats }
         modules={ MainEditor.modules }

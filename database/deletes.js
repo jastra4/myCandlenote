@@ -1,4 +1,4 @@
-const { Flashcards, Decks } = require('./index');
+const { Flashcards, Decks, Note } = require('./index');
 const User = require('../server/models/user-model');
 
 const deleteFlashcard = id => Flashcards.remove({ _id: id });
@@ -19,8 +19,15 @@ const removeFriend = (username, friend, callback) => {
   });
 };
 
+const deleteNote = noteId => (
+  Note.remove({ _id: noteId })
+    .then(() => { console.log('Successfully deleted note: ', noteId); })
+    .catch((e) => { console.error(e); })
+);
+
 module.exports = {
   deleteDeck,
   deleteFlashcard,
   removeFriend,
+  deleteNote,
 };

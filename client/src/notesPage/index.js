@@ -9,7 +9,7 @@ import IntelliSearch from './intelliSearch';
 class NotePage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       limit: 10,
       clearNote: false,
     };
@@ -64,22 +64,29 @@ class NotePage extends React.Component {
       authorID: this.props.currentUser.userId,
     });
   }
-  
+
   handleCreateNewNote = () => {
     console.log('handleNew!');
     this.props.createNote({
       authorID: this.props.currentUserId,
       createdAt: Date.now(),
     });
-    this.setState({ clearNote: true })
+    this.setState({ clearNote: true });
   }
 
   resetClear = () => {
     this.state.clearNote = false;
   }
 
+  handleDelete = () => {
+    this.props.deleteNote(this.props.currentNote);
+    this.setState({ 
+      clearNote: true,
+      currentNote: '',
+     });
+  }
+
   componentWillUnmount() {
-    console.log('title, body: ', this.state.title, this.state.body);
     if (this.state.body || this.state.content) {
       this.props.editNote({
         noteId: this.props.currentNote,
@@ -94,10 +101,11 @@ class NotePage extends React.Component {
     <div>
       <Grid >
         <Grid.Column width={12}>
-          <FileMenu 
-            currentUserId={ this.props.currentUser.userId } 
+          <FileMenu
+            currentUserId={ this.props.currentUser.userId }
             createNote={ this.props.createNote }
             handleCreateNewNote={ this.handleCreateNewNote }
+            handleDelete={ this.handleDelete }
           />
           {
             !this.state.currentNote &&

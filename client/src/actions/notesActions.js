@@ -69,7 +69,7 @@ export const createNote = noteInfo => (
 
 export const deleteNote = noteId => (
   dispatch => (
-    axios.post('/api/deleteNote/', noteId)
+    axios.post('/api/deleteNote/', { noteId })
       .then((res) => {
         console.log('Delete note res:', res.body);
         dispatch({

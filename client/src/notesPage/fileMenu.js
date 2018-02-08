@@ -45,7 +45,7 @@ export default class FileMenu extends React.Component {
           <Icon name='file pdf outline' />
         </Button.Content>
       </Button>
-      <Button animated='fade'>
+      <Button animated='fade' onClick={ this.props.handleDelete }>
         <Button.Content hidden>Delete</Button.Content>
         <Button.Content visible>
           <Icon name='trash' />

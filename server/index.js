@@ -144,9 +144,14 @@ app.post('/api/editNote', (req, res) => {
   const { noteInfo } = req.body;
   console.log('updated note: ', noteInfo);
   queries.updateNote(noteInfo)
-    .then(() => { console.log('Successfully edited note in DB'); })
-    .catch((e) => { console.error(e); });
-  res.send('success!');
+    .then(() => { 
+      console.log('Successfully edited note in DB'); 
+      res.end();
+    })
+    .catch((e) => { 
+      console.error(e); 
+      res.sendStatus(500).end();
+    });
 });
 
 app.get('/users', (req, res) => {
@@ -376,6 +381,12 @@ app.get('/api/getNotes/:id', (req, res) => {
     });
 });
 
+app.post('/api/deleteNote/', (req, res) => {
+  const { noteId } = req.body;
+  deletes.deleteNote(noteId);
+  res.end();
+});
+
 app.post('/api/parseContentMeaning', (req, res) => {
   parseMeaningWithGoogleAPI(req.body.content)
     .then((meaning) => {
@@ -387,9 +398,7 @@ app.post('/api/parseContentMeaning', (req, res) => {
     }));
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
-});
+
 
 app.post('/api/suggestedResources', (req, res) => {
   axios.get('https://www.googleapis.com/customsearch/v1', { params: {
@@ -560,6 +569,11 @@ app.post('/api/userFlashcards', (req, res) => {
       res.send(flashcards);
     })
     .catch(err => res.send(err));
+});
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
 /* -------- Initialize Server -------- */

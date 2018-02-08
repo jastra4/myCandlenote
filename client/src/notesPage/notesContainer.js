@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import NotesPage from './index';
-import { createNote, editNote } from '../actions/notesActions';
+import { createNote, editNote, deleteNote } from '../actions/notesActions';
 import { setCurrentMeaning, setMaxResults } from '../actions/intellisearchActions';
 
 
@@ -26,6 +26,7 @@ const mapDispatchToProps = dispatch => ({
   editNote: noteInfo => dispatch(editNote(noteInfo)),
   setCurrentMeaning: meaning => dispatch(setCurrentMeaning(meaning)),
   setMaxResults: limit => dispatch(setMaxResults(limit)),
+  deleteNote: noteId => dispatch(deleteNote(noteId)),
 });
 
 export default connect(

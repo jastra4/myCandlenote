@@ -19,7 +19,7 @@ const notesReducer = (state = defaultState, action) => {
         },
       };
     case 'SET_NOTES': {
-      const notesFromDB = action.payload;
+      const notesFromDB = action.payload; 
 
       const notesById = notesFromDB.reduce((notes, note) => ({
         ...notes,
