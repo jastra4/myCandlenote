@@ -32,8 +32,8 @@ body {
 }
 
 .splash-google-button:hover {
-  top: -2px;
-  left: -2px;
+  top: -1px;
+  left: -1px;
   filter: brightness(0.85);
-  filter: drop-shadow(2px 2px 1px black)
+  filter: drop-shadow(1px 1px 1px black)
 }

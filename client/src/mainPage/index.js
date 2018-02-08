@@ -1,5 +1,5 @@
 import React from 'react';
-import { StaggeredMotion, spring, presets } from 'react-motion';
+import { StaggeredMotion, spring } from 'react-motion';
 import { Image, Header, Container, Grid } from 'semantic-ui-react';
 import './style.css';
 
@@ -39,15 +39,41 @@ export default class MainPage extends React.Component {
           <StaggeredMotion
             defaultStyles={[fadeAnimationStart, fadeAnimationStart, fadeAnimationStart]}
             styles={prevInterpolatedStyles => prevInterpolatedStyles.map((_, i) => {
-              return i === 0
-                ? { height: spring(50, {...presets.gentle, damping: 26}), x: spring(1) }
-                : { height: spring(prevInterpolatedStyles[i - 1].height,
-                    { ...presets.gentle, damping: 26 }), x: spring(prevInterpolatedStyles[i - 1].x) };
+              if (i === 0) {
+                return {
+                  height: spring(
+                    50,
+                    {
+                      stiffness: 120,
+                      damping: 15,
+                    },
+                  ),
+                  x: spring(1),
+                };
+              }
+              return {
+                height: spring(
+                  prevInterpolatedStyles[i - 1].height,
+                  {
+                    stiffness: 120,
+                    damping: 15,
+                  },
+                ),
+                x: spring(prevInterpolatedStyles[i - 1].x),
+              };
             })}>
             {interpolatingStyles =>
               <div>
                 {interpolatingStyles.map((style, i) =>
-                  <div key={i} style={{ position: 'relative', top: `${style.height}px`, opacity: style.x, marginTop: '1.5em' }}>
+                  <div
+                    key={i}
+                    style={{
+                      position: 'relative',
+                      top: `${style.height}px`,
+                      opacity: style.x,
+                      marginTop: '1.5em',
+                    }}
+                  >
                     {staggeredComponents[i]}
                   </div>)
                 }
