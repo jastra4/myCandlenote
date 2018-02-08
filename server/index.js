@@ -610,7 +610,7 @@ app.post('/api/addFriend', (req, res) => {
 app.post('/api/removeFriend', (req, res) => {
   const { userId, friendId } = req.body;
   deletes.removeFriendById(userId, friendId)
-    .then(() => res.sendStatus(301))
+    .then(results => res.send(results))
     .catch((err) => {
       console.log('Error removing friend:', err);
       res.sendStatus(400);

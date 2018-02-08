@@ -18,9 +18,10 @@ const removeFriend = (username, friend, callback) => {
   });
 };
 
-const removeFriendById = (userId, friendId) => User.findOne({ userId })
+const removeFriendById = (userId, friendId) => User.findOne({ _id: userId })
   .then((user) => {
     user.friends.pull({ friendId });
+    return user.save();
   });
 
 module.exports = {

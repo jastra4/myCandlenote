@@ -89,7 +89,9 @@ export default class UserProfile extends React.Component {
     axios.post('/api/removeFriend', {
       friendId,
       userId: this.props.id,
-    });
+    })
+      .then(res => console.log('Removed response:', res))
+      .catch(err => console.log(err));
   }
 
   render() {
