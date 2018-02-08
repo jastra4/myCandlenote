@@ -19,6 +19,7 @@ import MainPage from './mainPage';
 import NotFoundPage from './notFoundPage';
 import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
+import SchedulePage from './schedulePage';
 import store from '../src/store';
 import activeSocket from './actions/activeSocket';
 
@@ -75,7 +76,8 @@ class App extends React.Component {
             <Route path='/library' render={() => <TopBar ContentPage={ NotFoundPage } />} />
             <Route path='/studyhall' render={() => <TopBar ContentPage={ StudyHallConnected } />} />
             <Route path='/quizzlet' render={() => <TopBar ContentPage={NotFoundPage} />} />
-            <Route path='/profile' render={() => <TopBar ContentPage={ UserProfile } />} />
+            <Route path='/profile' render={() => <TopBar ContentPage={UserProfile} />} />
+            <Route path='/schedule' render={() => <TopBar ContentPage={SchedulePage} />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
             <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />

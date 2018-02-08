@@ -67,7 +67,13 @@ export default class SideBar extends Component {
                 Study Hall
               </Menu.Item>
             </Link>
-              <Link to='/quizzlet'>
+            <Link to='/schedule'>
+              <Menu.Item name='calendar' onClick={this.handleItemClick}>
+                <Icon name='calendar' />
+                Schedule
+              </Menu.Item>
+            </Link>
+            <Link to='/quizzlet'>
               <Menu.Item name='winner' onClick={ this.handleItemClick }>
                 <Icon name='winner' />
                 Quizzlet

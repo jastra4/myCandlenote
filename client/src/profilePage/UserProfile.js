@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../dist/assets/profilePage.css';
 import UserData from './UserData';
 import UserFriendsList from './UserFriendsList';
+import UserSearchBox from './UserSearchBox';
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ export default class UserProfile extends React.Component {
       deckCount: 0,
       flashcardCount: 0,
       dateJoined: '',
+      friends: [],
     };
 
     this.dateOptions = {
@@ -28,14 +30,15 @@ export default class UserProfile extends React.Component {
     if (this.props.currentUser.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
-          console.log('USER PROFILE:', res.data);
-          const { username } = res.data;
+          const { username, friends, userId } = res.data;
+          this.props.getFriends(userId);
           const profileImage = this.resizeProfileImage(res.data.profileImage);
           const dateJoined = new Date(res.data.dateJoined).toLocaleDateString('en-US', this.dateOptions);
           this.setState({
             username,
             profileImage,
             dateJoined,
+            friends,
           });
           this.props.setCurrentUser(res.data);
           this.getDecksAndFlashcards(res.data.userId);
@@ -51,16 +54,21 @@ export default class UserProfile extends React.Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      ...this.state,
+      friends: newProps.currentUser.friends,
+    });
+  }
+
   getDecksAndFlashcards(userId) {
     axios.post('/api/userDecks', { userId })
       .then((res) => {
-        console.log('Decks in front end:', res.data);
         this.props.setDecks(res.data);
         this.setState({ deckCount: res.data.length });
         return axios.post('/api/userFlashcards', { userId });
       })
       .then((res) => {
-        console.log('Flashcards in front end:', res.data);
         this.props.setFlashcards(res.data);
         this.setState({ flashcardCount: res.data.length });
       })
@@ -101,8 +109,9 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <div className="friends-list-container">
-              <UserFriendsList />
+              <UserFriendsList friends={this.state.friends} />
             </div>
+            <UserSearchBox currentUser={this.props.currentUser} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>

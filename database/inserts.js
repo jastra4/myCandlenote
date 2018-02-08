@@ -1,5 +1,4 @@
-const { Flashcards, Decks, Messages, Note } = require('./index');
-const User = require('../server/models/user-model');
+const { Flashcards, Decks, Messages, User, Note } = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
@@ -44,13 +43,26 @@ const addFriend = (currentUser, newFriend, callback) => {
     user.friends.addToSet({ username: newFriend });
     user.save();
     callback(newFriend);
+const saveAccessToken = ({ userId, token }) => User.findOne({ _id: userId })
+  .then((doc) => {
+    doc.set({ googleAccessToken: token });
+    return doc.save();
   });
-};
+
+const addFriend = (userId, friendId) => User.findOne({ _id: userId })
+  .then((user) => {
+    user.friends.addToSet({
+      friendId,
+      status: 'accepted',
+    });
+    return user.save();
+  });
 
 module.exports = {
   insertDeck,
   insertFlashcard,
   insertNote,
+  saveAccessToken,
   saveMessage,
   addFriend,
 };

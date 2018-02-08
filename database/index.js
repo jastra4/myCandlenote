@@ -12,6 +12,20 @@ const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
+const userSchema = new mongoose.Schema({
+  username: String,
+  googleId: String,
+  profileImage: String,
+  googleAccessToken: String,
+  googleRefreshToken: String,
+  friends: [{
+    friendId: String,
+    status: String,
+  }],
+});
+
+const User = mongoose.model('user', userSchema);
+
 const decksSchema = mongoose.Schema({
   subject: String,
   title: String,
@@ -66,6 +80,7 @@ const Messages = mongoose.model('messages', messagesSchema);
 
 module.exports = {
   db,
+  User,
   Decks,
   Flashcards,
   Note,
