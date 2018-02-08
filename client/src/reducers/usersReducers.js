@@ -50,6 +50,9 @@ const usersReducer = (state = defaultState, action) => {
         },
       };
     case 'ADD_FRIEND':
+      if (state.currentUser.friends.find(friend => friend.id === action.payload.id)) {
+        return state;
+      }
       return {
         ...state,
         currentUser: {
