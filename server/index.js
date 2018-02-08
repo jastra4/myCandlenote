@@ -114,7 +114,6 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-
 app.get('*', (req, res, next) => {
   const isAuth = req.isAuthenticated();
   if (!isAuth) {
@@ -125,24 +124,10 @@ app.get('*', (req, res, next) => {
   // res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-// called by app.js
-app.get('/api/userid', (req, res) => {
-  const userid = req.session.passport.user;
-  res.status(200).send({ userid });
-});
-
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
-});
-
-// called by FriendsList.js
-app.get('/loadFriendsList', (req, res) => {
-  const { currentUser } = req.query;
-  queries.loadFriendsList(currentUser, (friends) => {
-    res.send(friends);
-  });
 });
 
 app.get('/userProfile', (req, res) => {
@@ -167,14 +152,6 @@ app.get('/userProfile', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
-// called by Search.js
-app.post('/handleFriendRequest', (req, res) => {
-  const { newFriend, currentUser } = req.body;
-  inserts.addFriend(currentUser, newFriend, (response) => {
-    res.send(response);
-  });
-});
-
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());
@@ -189,96 +166,212 @@ app.post('/makePDF', (req, res) => {
 });
 
 /* ----------- Sockets ------------ */
-const activeUserSockets = {};
 
-// called by ChatBox.js
-app.get('/loadChatHistory', (req, res) => {
-  const { sentBy, to } = req.query;
-  queries.loadChatHistory(sentBy, to, (messages) => {
-    res.send(messages);
+const allSockets = {};
+
+io.sockets.on('connection', (socket) => {
+  console.log(`socket connected: ${socket.id}`);
+  allSockets[socket.id] = socket;
+
+  // App > PrivateChat
+  socket.on('sign on', (data) => {
+    console.log(`sign on ${data.username}`);
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
+  });
+
+  // PrivateChat > PrivateChat
+  socket.on('acknowledge', (data) => {
+    console.log(`acknowledge ${data.to} by ${data.username}`);
+    if (data.to in allSockets) {
+      allSockets[data.to].emit('acknowledged', data.username, data.status);
+    }
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('available', (data) => {
+    console.log(`available ${data.username}`);
+    allSockets[data.username].status = 'available';
+    allSockets[data.username].broadcast.emit('is available', data.username);
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('friend ping', (data) => {
+    console.log(`ping ${data.username} to ${data.to}`);
+    if (data.to in allSockets) {
+      allSockets[data.username].emit(`sent ping ${data.to}`, allSockets[data.to].status);
+    }
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('away', (data) => {
+    console.log(`away ${data.username}`);
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit('is away', data.username);
+  });
+
+  app.post('/openChat', (req, res) => {
+    const { username, chatname, type } = req.body;
+    if (type === '/c ') {
+      console.log('/openChat create group ', username, ' ', chatname, ' ', type);
+      inserts.createGroup(chatname, username, (bool, group) => {
+        if (bool) {
+          console.log('group: ', group);
+          res.send({
+            groupname: chatname,
+            members: [{ username }],
+          });
+        } else {
+          res.send({ error: 'Group already exists' });
+        }
+      });
+    } else if (type === '/j ') {
+      console.log('/openChat join group ', username, ' ', chatname, ' ', type);
+      inserts.addGroupMember(chatname, username, (bool, group) => {
+        if (bool) {
+          console.log('group: ', group);
+          res.send({
+            groupname: chatname,
+            members: group.members,
+          });
+        } else {
+          res.send({ error: 'Group does not exist' });
+        }
+      });
+    } else {
+      console.log('/openChat private ', username, ' ', chatname, ' ', type);
+      inserts.openPrivateChat(username, chatname, (bool) => {
+        if (bool) {
+          let status = 'offline';
+          if (chatname in allSockets) {
+            status = allSockets[chatname].status; // eslint-disable-line
+          }
+          res.send({
+            username: chatname,
+            status,
+          });
+        } else {
+          res.send({ error: 'User does not exist' });
+        }
+      });
+    }
+  });
+
+  // PrivateChat > PrivateChatList
+  socket.on('close private chat', (data) => {
+    console.log(`close private chat ${data.username} with ${data.otheruser}`);
+    deletes.closePrivateChat(data.username, data.otheruser, (bool) => {
+      console.log(`closePrivateChat ${bool}`);
+    });
+  });
+
+  // Search > GroupChatList
+  socket.on('create group chat', (data) => {
+    console.log(`create group ${data.username} created ${data.groupname}`);
+    inserts.createGroup(data.groupname, data.username, (bool) => {
+      console.log(`createGroup ${bool}`);
+    });
+  });
+
+  // Search > GroupChatList
+  // socket.on('delete group chat', (data) => {
+  //   console.log(`delete group ${data.username} deleted ${data.groupname}`);
+  //   allSockets[data.username].emit('deleted group', data.groupname);
+  // });
+
+  // Search > GroupChatList
+  socket.on('join group chat', (data) => {
+    console.log(`join group ${data.groupname} by ${data.username}`);
+    inserts.addGroupMember(data.groupname, data.username, (bool) => {
+      if (bool) {
+        allSockets[data.username].emit('joined group', { groupname: data.groupname });
+      }
+    });
+  });
+
+  // Group > GroupChatList
+  socket.on('leave group chat', (data) => {
+    console.log(`leave group ${data.username} left ${data.groupname}`);
+    deletes.removeGroupMember(data.groupname, data.username, (bool) => {
+      if (bool) {
+        console.log('removeGroupMember: ', bool);
+        allSockets[data.username].emit('closed group chat', data.groupname);
+      }
+    });
+  });
+
+  // ChatBox > ChatBox
+  socket.on('submit message', (message) => {
+    console.log(`submit message ${message.sentBy} to ${message.to}`);
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
+    inserts.saveMessage(message);
+    if (message.type === 'private') {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+      }
+    } else {
+      io.sockets.emit(`submitted message ${message.to}`, message);
+    }
+  });
+
+  // auto > PrivateChat
+  socket.on('disconnect', () => {
+    console.log(socket.username, ' disconnected');
+    allSockets[socket.username].broadcast.emit('signed off', allSockets[socket.username].username);
+    delete allSockets[socket.username];
+  });
+});
+
+/* ----------- Sockets Relateted ------------ */
+
+// called by app.js
+app.get('/identifyUser', (req, res) => {
+  const userid = req.session.passport.user;
+  queries.getUserName(userid, (username) => {
+    res.send({ username });
   });
 });
 
 // called by app.js
-app.get('/identifySocket', (req, res) => {
-  const userid = req.query.id;
-  queries.getUserName(userid, (username) => {
-    res.send(username);
+app.post('/assignUsername', (req, res) => {
+  const { username, id } = req.body;
+  allSockets[id].username = username;
+  allSockets[id].status = null;
+  allSockets[username] = allSockets[id];
+  delete allSockets[id];
+  res.sendStatus(200);
+});
+
+// called by PrivateChats.js
+app.get('/loadPrivateChats', (req, res) => {
+  const { currentUser } = req.query;
+  console.log('loadPrivateChats: ', currentUser);
+  queries.loadPrivateChats(currentUser, (friends) => {
+    res.send(friends);
   });
 });
 
-io.sockets.on('connection', (socket) => {
-  console.log(`socket connected: ${socket.id}`);
-
-  socket.on('away', (data) => {
-    if (data !== undefined) {
-      socket.username = data; // eslint-disable-line
-      activeUserSockets[socket.username] = socket;
-    }
-  socket.status = 'away'; // eslint-disable-line
-    io.sockets.emit('notify away', socket.username, socket.status);
+// called by GroupsList.js
+app.get('/loadGroupChats', (req, res) => {
+  const { currentUser } = req.query;
+  console.log('loadGroupChats: ', currentUser);
+  queries.loadGroupChats(currentUser, (groups) => {
+    res.send(groups);
   });
+});
 
-  // listening to app.js and emitting to Friend.js
-  socket.on('available', () => {
-    socket.status = 'available'; // eslint-disable-line
-    io.sockets.emit('notify available', socket.username, socket.status);
-  });
-
-  socket.on('acknowledged', () => {
-    io.sockets.emit('notify acknowledged', socket.username, socket.status);
-  });
-
-  // listening to ChatBox.js and emitting to Chatbox.js
-  socket.on('send message', (data) => {
-    if (data.to in activeUserSockets) {
-      // const { username, status } = activeUserSockets[data.to];
-      activeUserSockets[data.to].emit('update friends', {
-        username: socket.username,
-        status: 'available',
-      });
-    }
-    const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
-    inserts.saveMessage({
-      to: data.to,
-      sentBy: socket.username,
-      text: data.text,
-      timeStamp: now,
+app.get('/loadChatHistory', (req, res) => {
+  const { sentBy, sentTo, type } = req.query;
+  if (type === 'group') {
+    queries.loadGroupChatHistory(sentTo, (docs) => {
+      res.send(docs);
     });
-    data.timeStamp = now; // eslint-disable-line
-    if (data.to in activeUserSockets) {
-      activeUserSockets[data.to].emit('receive message', data);
-    }
-    activeUserSockets[data.sentBy].emit('receive message', data);
-  });
-
-  socket.on('new friend', (friendName, user) => {
-    const newFriend = {
-      username: friendName,
-      status: 'offline',
-    };
-    if (friendName in activeUserSockets) {
-      newFriend.status = activeUserSockets[friendName].status;
-    }
-    activeUserSockets[user].emit('update friends', newFriend);
-  });
-
-  app.post('/removeFriend', (req, res) => {
-    const { user, friend } = req.body;
-    deletes.removeFriend(user, friend, (response) => {
-      if (response !== false) {
-        activeUserSockets[user].emit('removed friend', response);
-      }
-      res.send(200);
+  } else {
+    queries.loadChatHistory(sentBy, sentTo, (docs) => {
+      res.send(docs);
     });
-  });
-
-  // trigged by closing browser and emtting to Friend.js
-  socket.on('disconnect', () => {
-    io.sockets.emit('notify offline', socket.username, 'offline');
-    delete activeUserSockets[socket.username];
-    console.log(`${socket.username} disconnected!`);
-  });
+  }
 });
 
 /* ----------- Google Cal Routes ------------ */

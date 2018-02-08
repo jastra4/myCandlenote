@@ -1,18 +1,26 @@
 import React from 'react';
-import Group from './Group';
+import GroupConnnected from './Group';
 
 class GroupsList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { groups: ['all-students', 'candlenote', 'random'] };
+    this.state = {};
   }
 
   render() {
     return (
       <div>
         <div className='groupsListHeader'>Group Chats</div>
-        <div>{this.state.groups.map((group, i) => (
-          <Group key={i} group={group} changeChat={this.props.changeChat} className='group'/>
+        <div>{this.props.groupChats.map((group, i) => (
+          <GroupConnnected
+            key={i}
+            self={i}
+            chat={this.props.currentChat}
+            groupChat={group}
+            changeChat={this.props.changeChat}
+            closeChat={this.props.closeGroupChat}
+            className='group'
+          />
         ))}
         </div>
       </div>
