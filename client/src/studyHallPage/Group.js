@@ -1,29 +1,41 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {};
   }
 
   handleClick() {
-    this.props.changeChat(this.props.group);
+    console.log();
+    this.props.changeChat(this.props.groupChat.groupname, 'group');
   }
 
-  removeGroup = () => {
-    console.log('removed group');
+  closeSelf() {
+    this.props.closeChat(this.props.self, this.props.username, this.props.groupChat.groupname);
   }
 
   render() {
     return (
-      <div>
-        <div className='groupName' onClick={this.handleClick.bind(this)}>
-          {this.props.group}
-          <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
-        </div>
+      <div className='group'>
+        <span className='groupName' onClick={this.handleClick.bind(this)}>
+          {this.props.groupChat.groupname}
+        </span>
+        <span onClick={this.closeSelf.bind(this)} className='groupRemove'>x</span>
+        <span className='friendUnreadMessages'>{this.props.groupChat.members.length}</span>
       </div>
     );
   }
 }
 
-export default Group;
+const mapStateToProps = state => (
+  {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  }
+);
+
+const GroupConnected = connect(mapStateToProps)(Group);
+
+export default GroupConnected;
