@@ -624,6 +624,20 @@ app.post('/api/userByUsername', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/userById', (req, res) => {
+  const { userId } = req.body;
+  queries.getCurrentUser(userId)
+    .then((user) => {
+      const { _id: id, username, profileImage } = user;
+      res.send({
+        id,
+        username,
+        profileImage,
+      });
+    })
+    .catch(err => res.status(400).send(err));
+});
+
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {

@@ -49,6 +49,14 @@ const usersReducer = (state = defaultState, action) => {
           friends: action.payload,
         },
       };
+    case 'ADD_FRIEND':
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          friends: [...state.currentUser.friends, action.payload],
+        },
+      };
     default:
       return state;
   }
