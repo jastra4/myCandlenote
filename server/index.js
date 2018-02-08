@@ -346,6 +346,7 @@ app.post('/assignUsername', (req, res) => {
 // called by PrivateChats.js
 app.get('/loadPrivateChats', (req, res) => {
   const { currentUser } = req.query;
+  console.log('loadPrivateChats: ', currentUser);
   queries.loadPrivateChats(currentUser, (friends) => {
     res.send(friends);
   });
@@ -354,6 +355,7 @@ app.get('/loadPrivateChats', (req, res) => {
 // called by GroupsList.js
 app.get('/loadGroupChats', (req, res) => {
   const { currentUser } = req.query;
+  console.log('loadGroupChats: ', currentUser);
   queries.loadGroupChats(currentUser, (groups) => {
     res.send(groups);
   });
@@ -434,7 +436,6 @@ app.post('/api/setCalendarEvents', (req, res) => {
         .then(responses => res.send(responses));
     })
     .catch(err => res.status(400).send(err));
->>>>>>> 275b7dfc04f81d70eb0f3569b0ca6f2105075ca3
 });
 
 /* ----------- API Routes ------------ */

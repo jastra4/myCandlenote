@@ -38,6 +38,7 @@ const loadGroupChatHistory = (groupname, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadPrivateChats = (username, callback) => {
+  console.log('loadPrivateChats: ', username);
   User.findOne({ username }, (err, user) => {
     const { privateChats } = user;
     const testList = [];
@@ -58,6 +59,7 @@ const loadPrivateChats = (username, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadGroupChats = (username, callback) => {
+  console.log('loadGroupChats: ', username);
   User.findOne({ username }, (err, user) => {
     const groupChatList = user.groupChats;
     const testList = [];

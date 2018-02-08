@@ -11,6 +11,8 @@ const userSchema = new mongoose.Schema({
   profileImage: String,
   googleAccessToken: String,
   googleRefreshToken: String,
+  privateChats: [],
+  groupChats: [],
   friends: [{
     friendId: String,
     status: String,
