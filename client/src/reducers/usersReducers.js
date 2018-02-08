@@ -57,6 +57,14 @@ const usersReducer = (state = defaultState, action) => {
           friends: [...state.currentUser.friends, action.payload],
         },
       };
+    case 'REMOVE_FRIEND':
+      return {
+        ...state,
+        currentUser: {
+          ...state.currentUser,
+          friends: state.currentUser.friends.filter(friend => friend.id !== action.payload),
+        },
+      };
     default:
       return state;
   }

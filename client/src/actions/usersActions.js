@@ -40,7 +40,7 @@ export const addFriend = friendId => ({
   payload: friendId,
 });
 
-export const getFreind = friendId => (
+export const getFriend = friendId => (
   dispatch => (
     axios.post('/api/userById', { userId: friendId })
       .then((res) => {

@@ -30,6 +30,7 @@ export default class UserSearchBox extends React.Component {
   }
 
   addFriend(friendId) {
+    this.props.getFriend(friendId);
     axios.post('/api/addFriend', {
       friendId,
       userId: this.props.currentUser.userId,

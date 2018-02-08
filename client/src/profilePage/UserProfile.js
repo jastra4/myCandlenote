@@ -25,7 +25,7 @@ export default class UserProfile extends React.Component {
       day: 'numeric',
     };
 
-    this.removeFriend = this.removeFriend.bind(this);
+    this.handleRemoveFriend = this.handleRemoveFriend.bind(this);
   }
 
   componentDidMount() {
@@ -84,8 +84,9 @@ export default class UserProfile extends React.Component {
     return newUrl;
   }
 
-  removeFriend(friendId) {
+  handleRemoveFriend(friendId) {
     console.log('Removed Friend:', friendId);
+    this.props.removeFriend(friendId);
     axios.post('/api/removeFriend', {
       friendId,
       userId: this.props.id,
@@ -121,9 +122,12 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <div className="friends-list-container">
-              <UserFriendsList friends={this.state.friends} removeFriend={this.removeFriend} />
+              <UserFriendsList
+                friends={this.state.friends}
+                handleRemoveFriend={this.handleRemoveFriend}
+              />
             </div>
-            <UserSearchBox currentUser={this.props.currentUser} />
+            <UserSearchBox currentUser={this.props.currentUser} getFriend={this.props.getFriend} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
