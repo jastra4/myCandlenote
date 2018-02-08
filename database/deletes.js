@@ -18,8 +18,14 @@ const removeFriend = (username, friend, callback) => {
   });
 };
 
+const removeFriendById = (userId, friendId) => User.findOne({ userId })
+  .then((user) => {
+    user.friends.pull({ friendId });
+  });
+
 module.exports = {
   deleteDeck,
   deleteFlashcard,
   removeFriend,
+  removeFriendById,
 };

@@ -607,6 +607,16 @@ app.post('/api/addFriend', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/removeFriend', (req, res) => {
+  const { userId, friendId } = req.body;
+  deletes.removeFriendById(userId, friendId)
+    .then(() => res.sendStatus(301))
+    .catch((err) => {
+      console.log('Error removing friend:', err);
+      res.sendStatus(400);
+    });
+});
+
 app.post('/api/userByUsername', (req, res) => {
   const { username } = req.body;
   queries.getUserByUsername(username)

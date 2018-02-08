@@ -12,7 +12,7 @@ const UserFriendsList = props => (
       {'<list of friends>'}
       <ul>
         {props.friends.map(friend => (
-          <li>{friend.username}</li>
+          <li>{friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.removeFriend(friend.id)}/></li>
         ))}
       </ul>
     </Card.Content>

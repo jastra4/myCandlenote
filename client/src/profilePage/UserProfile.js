@@ -24,6 +24,8 @@ export default class UserProfile extends React.Component {
       month: 'long',
       day: 'numeric',
     };
+
+    this.removeFriend = this.removeFriend.bind(this);
   }
 
   componentDidMount() {
@@ -82,6 +84,14 @@ export default class UserProfile extends React.Component {
     return newUrl;
   }
 
+  removeFriend(friendId) {
+    console.log('Removed Friend:', friendId);
+    axios.post('/api/removeFriend', {
+      friendId,
+      userId: this.props.id,
+    });
+  }
+
   render() {
     return (
       <Grid columns="equal">
@@ -109,7 +119,7 @@ export default class UserProfile extends React.Component {
           </Grid.Column>
           <Grid.Column>
             <div className="friends-list-container">
-              <UserFriendsList friends={this.state.friends} />
+              <UserFriendsList friends={this.state.friends} removeFriend={this.removeFriend} />
             </div>
             <UserSearchBox currentUser={this.props.currentUser} />
           </Grid.Column>
