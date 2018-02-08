@@ -1,0 +1,42 @@
+
+body {
+  background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 0, 0.45), 
+        rgba(0, 0, 0, 0.45)
+      ),
+      /* bottom, image */
+      url(/assets/splash-background.jpeg);
+  background-size: cover;
+
+}
+
+.splash-hook {
+  margin-top: 0.5em !important;
+}
+
+.splash-header {
+  color: white !important;
+  font-family: 'Nanum Pen Script', cursive !important;
+  font-size: 4em !important;
+}
+
+.splash-image {
+  width: 30vw;
+  margin-top: 1.5em;
+}
+
+.splash-google-button {
+  margin-top: 1em;
+  position: relative;
+  width: 15em;
+  height: auto;
+}
+
+.splash-google-button:hover {
+  top: -1px;
+  left: -1px;
+  filter: brightness(0.85);
+  filter: drop-shadow(1px 1px 1px black)
+}
