@@ -1,0 +1,21 @@
+
+body {
+  background:
+      /* top, transparent black, faked with gradient */ 
+      linear-gradient(
+        rgba(0, 0, 0, 0.45), 
+        rgba(0, 0, 0, 0.45)
+      ),
+      /* bottom, image */
+      url(/assets/splash-background.jpeg);
+  background-size: cover;
+
+}
+
+.splash-hook {
+  margin-top: 5em !important;
+}
+
+.splash-header {
+  color: white !important;
+}
