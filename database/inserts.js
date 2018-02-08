@@ -37,17 +37,12 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
 
 const insertNote = noteInfo => new Note(noteInfo).save();
 
-const addFriend = (currentUser, newFriend, callback) => {
-  // add user to friends list (private chat) after searching their name
-  User.findOne({ username: currentUser }, (error, user) => {
-    user.friends.addToSet({ username: newFriend });
-    user.save();
-    callback(newFriend);
 const saveAccessToken = ({ userId, token }) => User.findOne({ _id: userId })
   .then((doc) => {
     doc.set({ googleAccessToken: token });
     return doc.save();
   });
+
 
 const addFriend = (userId, friendId) => User.findOne({ _id: userId })
   .then((user) => {

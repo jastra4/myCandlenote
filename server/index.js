@@ -8,6 +8,7 @@ const dateFormat = require('dateformat');
 const axios = require('axios');
 const Promise = require('promise');
 
+const keys = require('./config/keys');
 const puppeteer = require('puppeteer');
 const passport = require('passport');
 const session = require('express-session');

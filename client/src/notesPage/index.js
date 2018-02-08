@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
+import _ from 'lodash';
 import MainEditor from './mainEditor';
 import NoteTitle from './NoteTitle';
 import FileMenu from './fileMenu';
@@ -72,6 +73,7 @@ class NotePage extends React.Component {
       createdAt: Date.now(),
     });
     this.setState({ clearNote: true });
+    _.defer(this.setState.bind(this), { clearNote: false });
   }
 
   resetClear = () => {
@@ -120,6 +122,8 @@ class NotePage extends React.Component {
                 createNote={ this.props.createNote }
                 clearNote={ this.state.clearNote }
                 resetClear={ this.resetClear }
+                editNote={ this.props.editNote }
+                currentNote={ this.props.currentNote }
               />
               <MainEditor
                 { ...this.props }
@@ -128,6 +132,8 @@ class NotePage extends React.Component {
                 content={ this.state.content }
                 clearNote={ this.state.clearNote }
                 resetClear={ this.resetClear }
+                editNote={ this.props.editNote }
+                currentNote={ this.props.currentNote }
               />
             </div>
           }

@@ -7,10 +7,10 @@ export default class NoteTitle extends React.Component {
     super(props);
     this.state = { value: '' };
 
-    this.handleTitleChange = _.debounce(this.handleTitleChange, 2000);
+    this.handleTitleChange = _.debounce(this.handleTitleChange, 1000);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const value = this.props.title || '';
     this.setState({ value });
   }
@@ -21,19 +21,27 @@ export default class NoteTitle extends React.Component {
       value: '',
       clearNote: true,
     });
-    this.props.resetClear();
     _.defer(this.setState.bind(this), { clearNote: false });
   }
 
   handleInputChange = ({ target: { value } }) => {
     this.setState({ value });
-
-    this.handleTitleChange(value);
+    
+    this.handleTitleChange({
+      noteId: this.props.currentNote,
+      title: value,
+    });
   }
 
-  handleTitleChange = (value) => {
-    this.props.handleTitleChange(value);
+  handleTitleChange = (noteInfo) => { this.props.editNote(noteInfo); }
+  
+  componentWillUnmount() {
+    this.handleTitleChange({
+      noteId: this.props.currentNote,
+      title: this.state.value,
+    });
   }
+
 
   render = () => (
     <div >

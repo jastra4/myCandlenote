@@ -10,8 +10,8 @@ export default class MainEditor extends React.Component {
     this.state = { value: '' };
     console.log('props: ', props);
 
-    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
-    this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 2000);
+    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 1000);
+    this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 1000);
   }
   componentDidMount() {
     this.props.changeBackgroundColor('#1F1F1F');
@@ -25,15 +25,19 @@ export default class MainEditor extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.clearNote) {
       this.setState({
-        value: '', clearNote: true,
+        value: '', 
+        clearNote: true, 
+        packet: '',
       });
-      this.props.resetClear();
       _.defer(this.setState.bind(this), { clearNote: false });
     }
   }
 
   componentWillUnmount() {
-    this.handleTextChange(this.state.packet);
+    this.state.packet && this.handleTextChange({
+      noteId: this.props.currentNote,
+      body: this.state.packet,
+    });
   }
 
   handleEditorChange = (value, d, source, editor) => {
@@ -44,11 +48,13 @@ export default class MainEditor extends React.Component {
     });
     const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
-    // this.props.handleTextChange(packet);
-    this.debouncedHandleTextChange(packet);
+    this.debouncedHandleTextChange({
+      noteId: this.props.currentNote,
+      body: packet,
+    });
   }
 
-  handleTextChange = noteInfo => this.props.handleTextChange(noteInfo);
+  handleTextChange = (noteInfo) => { this.props.editNote(noteInfo); }
 
 
   getContentFromDelta = delta => (
