@@ -103,7 +103,7 @@ const createGroup = (groupname, username, callback) => {
       callback(false);
     }
   });
-}
+};
 
 const saveAccessToken = ({ userId, token }) => User.findOne({ _id: userId })
   .then((doc) => {
@@ -128,4 +128,5 @@ module.exports = {
   openPrivateChat,
   addGroupMember,
   createGroup,
+  addFriend,
 };
