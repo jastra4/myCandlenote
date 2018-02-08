@@ -14,11 +14,11 @@ const staggeredComponents = [
     bordered
     centered
     src="/assets/CandleNote-Main-Logo-Square.png"
-    style={{ width: '20vw', marginTop: '5em' }}
+    className="splash-image"
   />,
-  <Header as="h1" className="splash-header splash-hook">Servicing all your study needs, in one place!</Header>,
+  <Header as="h1" className="splash-header splash-hook">All your study needs, in one place</Header>,
   <div>
-    <Header as="h2" className="splash-header">Login with <a href="/auth/google">Google</a></Header>
+    <Image src="/assets/google-signin-button.png" href="/auth/google" className="splash-google-button" rounded centered></Image>
   </div>,
 ];
 

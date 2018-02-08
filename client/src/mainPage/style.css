@@ -13,9 +13,27 @@ body {
 }
 
 .splash-hook {
-  margin-top: 5em !important;
+  margin-top: 3em !important;
 }
 
 .splash-header {
   color: white !important;
+}
+
+.splash-image {
+  width: 30vw;
+  margin-top: 3em;
+}
+
+.splash-google-button {
+  position: relative;
+  width: 15em;
+  height: auto;
+}
+
+.splash-google-button:hover {
+  top: -2px;
+  left: -2px;
+  filter: brightness(0.85);
+  filter: drop-shadow(2px 2px 1px black)
 }
