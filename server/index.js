@@ -700,10 +700,34 @@ app.post('/api/addFriend', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/removeFriend', (req, res) => {
+  const { userId, friendId } = req.body;
+  deletes.removeFriendById(userId, friendId)
+    .then(results => res.send(results))
+    .catch((err) => {
+      console.log('Error removing friend:', err);
+      res.sendStatus(400);
+    });
+});
+
 app.post('/api/userByUsername', (req, res) => {
   const { username } = req.body;
   queries.getUserByUsername(username)
     .then(user => res.send(user))
+    .catch(err => res.status(400).send(err));
+});
+
+app.post('/api/userById', (req, res) => {
+  const { userId } = req.body;
+  queries.getCurrentUser(userId)
+    .then((user) => {
+      const { _id: id, username, profileImage } = user;
+      res.send({
+        id,
+        username,
+        profileImage,
+      });
+    })
     .catch(err => res.status(400).send(err));
 });
 

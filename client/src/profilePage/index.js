@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import UserProfile from './UserProfile';
-import { removeCurrentUser, setCurrentUser, getFriends } from '../actions/usersActions';
+import { removeCurrentUser, setCurrentUser, getFriends, getFriend, removeFriend } from '../actions/usersActions';
 import { setDecks } from '../actions/decksActions';
 import { setFlashcards } from '../actions/flashcardsActions';
 
@@ -15,6 +15,8 @@ const mapDispatchToProps = dispatch => ({
   setDecks: decks => dispatch(setDecks(decks)),
   setFlashcards: flashcards => dispatch(setFlashcards(flashcards)),
   getFriends: userId => dispatch(getFriends(userId)),
+  getFriend: friendId => dispatch(getFriend(friendId)),
+  removeFriend: friendId => dispatch(removeFriend(friendId)),
 });
 
 export default connect(

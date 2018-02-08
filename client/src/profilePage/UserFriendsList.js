@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Icon } from 'semantic-ui-react';
+import { Card, Icon, Image } from 'semantic-ui-react';
 
 const UserFriendsList = props => (
   <Card raised className="user-friends-container">
@@ -12,7 +12,7 @@ const UserFriendsList = props => (
       {'<list of friends>'}
       <ul>
         {props.friends.map(friend => (
-          <li>{friend.username}</li>
+          <li><Image src={friend.profileImage} size="mini" circular spaced="right" />{friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend.id)}/></li>
         ))}
       </ul>
     </Card.Content>
