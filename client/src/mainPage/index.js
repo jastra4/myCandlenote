@@ -16,7 +16,7 @@ const staggeredComponents = [
     src="/assets/CandleNote-Main-Logo-Square.png"
     className="splash-image"
   />,
-  <Header as="h1" className="splash-header splash-hook">All your study needs, in one place</Header>,
+  <Header as="h1" className="splash-header splash-hook">All your study needs<br></br>in one place</Header>,
   <div>
     <Image src="/assets/google-signin-button.png" href="/auth/google" className="splash-google-button" rounded centered></Image>
   </div>,
