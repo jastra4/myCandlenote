@@ -12,13 +12,18 @@ export default class InvisibleEditor extends React.Component {
 
   componentWillMount() {
     const { location: { pathname } } = this.props;
-    const fileName = pathname.split('/').pop();
-    fileName && axios.post('/api/getEditorPacket', { fileName })
+    const noteToPrint = pathname.split('/').pop();
+    currentNote && axios.post('/api/getEditorPacket', { currentNote })
       .then(({ data: { data: packet } }) => {
         const value = JSON.parse(packet);
         this.setState({ value });
       })
       .catch(e => console.error(e));
+  }
+
+  componentDidMount() {
+    console.log('mounted')
+    setTimeout(window.print, 1000);
   }
 
   render = () => (

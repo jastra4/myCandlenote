@@ -83,7 +83,12 @@ const getFriendsById = (friendIds) => {
 
 const getUserByUsername = username => User.findOne({ username });
 
+const getPacket = _id => Note.find({ _id }).then((res) => {
+  console.log('result from getPacket: ', res);
+})
+
 module.exports = {
+  getPacket,
   getNotes,
   updateNote,
   getUserName,

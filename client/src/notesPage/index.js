@@ -108,6 +108,9 @@ class NotePage extends React.Component {
             createNote={ this.props.createNote }
             handleCreateNewNote={ this.handleCreateNewNote }
             handleDelete={ this.handleDelete }
+            currentNote={ this.props.currentNote }
+            notes={ this.props.notes }
+            title={ this.state.title }
           />
           {
             !this.state.currentNote &&

@@ -126,6 +126,8 @@ app.get('/api/userid', (req, res) => {
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
+
+
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
@@ -535,65 +537,62 @@ app.post('/api/suggestedWiki', (req, res) => {
 });
 
 app.post('/api/tempSavePacket', (req, res) => {
-  const { packet } = req.body;
-  const fileName = uuid();
-  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
+  const { currentNote, title } = req.body;
+  // const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
 
-  writeFile(filePath, packet)
-    .then(() => {
-      console.log('File successfully written');
-      const url = `http://${DOMAIN}/pdf/${fileName}`;
-      const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
+  // writeFile(filePath, packet)
+  // .then(() => {
+  // console.log('File successfully written');
+  const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
 
-      (async () => {
-        function resolveAfter1Seconds() {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve('resolved');
-            }, 1000);
-          });
-        }
+  (async () => {
+    function resolveAfter1Seconds() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('resolved');
+        }, 1000);
+      });
+    }
 
-        function logAfterPDF(pdfLocation, title = 'notes.pdf') {
-          return new Promise((resolve) => {
-            console.log('PDF successfully printed 🖨️  👍');
-            // res.download(pdfLocation, title)
-            res.sendFile(pathToPDF, title, (err) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log('yes!');
-              }
-            });
-            resolve('PDF printed');
-          });
-        }
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2' });
-        await resolveAfter1Seconds();
-        await page.pdf({
-          path: pathToPDF,
-          format: 'Letter',
-          printBackground: true,
-          margin: {
-            top: '10mm',
-            bottom: '10mm',
-            left: '10mm',
-            right: '10mm',
-          },
+    function logAfterPDF(pdfLocation, title = 'notes.pdf') {
+      return new Promise((resolve) => {
+        console.log('PDF successfully printed 🖨️  👍');
+        // res.download(pdfLocation, title)
+        res.sendFile(pathToPDF, title, (err) => {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log('yes!');
+          }
         });
-        await logAfterPDF(`PDFs/${fileName}.pdf`);
-        await browser.close();
-      })();
+        resolve('PDF printed');
+      });
+    }
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await resolveAfter1Seconds();
+    await page.pdf({
+      path: pathToPDF,
+      format: 'Letter',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+        right: '10mm',
+      },
     });
+    await logAfterPDF(`PDFs/${fileName}.pdf`, title);
+    await browser.close();
+  })();
 });
 
 app.post('/api/getEditorPacket', (req, res) => {
-  const { fileName } = req.body;
-  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-  readFile(filePath, 'utf8')
+  const { noteToPrint } = req.body;
+  queries.getPacket(noteToPrint)
     .then((data) => {
       res.json({ data });
     })

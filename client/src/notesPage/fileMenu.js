@@ -8,8 +8,31 @@ export default class FileMenu extends React.Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    const { currentNote, notes, title } = this.props;
+    this.setState({
+      currentNote,
+      notes,
+      title,
+    });
+  }
+
+  componentWillReceiveProps({ currentNote, notes, title }) {
+    this.setState({
+      currentNote,
+      notes,
+      title,
+    });
+  }
+
   renderPDF = () => {
     window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
+    const { currentNote } = this.state;
+    axios.post('/api/tempSavePacket', { currentNote, title })
+    // .then(() => {
+
+    // })
+    .catch((e) => { console.error(e); })
   }
 
   render = () => (
