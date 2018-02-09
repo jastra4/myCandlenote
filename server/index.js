@@ -602,18 +602,17 @@ app.post('/api/tempSavePacket', (req, res) => {
 
 app.post('/api/getEditorPacket', (req, res) => {
   const { noteToPrint } = req.body;
-  console.log('noteToPrint: ', noteToPrint);
   queries.getPacket(noteToPrint)
     .then((result) => {
-      const packet = result[0].body;
-      // res.send(r
-      res.send(packet);
-      // const packet = result[0].body;
-      // console.log('res from getPacket: ', packet);
+      const { body: packet, authorID, title, showDate } = result[0];
+      queries.getUsernameById(authorID)
+        .then(({ username }) => {
+          res.send({ packet, title, username, showDate });
+      });
     })
     .catch((e) => {
       console.error(e);
-      res.sendStatus(500);
+      res.sendStatus(500).end();
     });
 });
 

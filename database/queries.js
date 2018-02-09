@@ -87,7 +87,10 @@ const getUserByUsername = username => User.findOne({ username });
 
 const getPacket = _id => Note.find({ _id });
 
+const getUsernameById = _id => User.findOne({ _id }).select('username');
+
 module.exports = {
+  getUsernameById,
   getPacket,
   getNotes,
   updateNote,
