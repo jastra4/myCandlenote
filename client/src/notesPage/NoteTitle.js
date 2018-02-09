@@ -7,7 +7,7 @@ export default class NoteTitle extends React.Component {
     super(props);
     this.state = { value: '' };
 
-    this.handleTitleChange = _.debounce(this.handleTitleChange, 1000);
+    this.debouncedHandleTitleChange = _.debounce(this.handleTitleChange, 1000);
   }
 
   componentDidMount() {
@@ -26,21 +26,18 @@ export default class NoteTitle extends React.Component {
 
   handleInputChange = ({ target: { value } }) => {
     this.setState({ value });
-    
-    this.handleTitleChange({
+    this.debouncedHandleTitleChange();
+  }
+
+  handleTitleChange = () => { 
+    this.props.editNote({
       noteId: this.props.currentNote,
-      title: value,
+      title: this.state.value,
+      authorID: this.props.authorID,
     });
   }
 
-  handleTitleChange = (noteInfo) => { this.props.editNote(noteInfo); }
-  
-  componentWillUnmount() {
-    this.handleTitleChange({
-      noteId: this.props.currentNote,
-      title: this.state.value,
-    });
-  }
+  componentWillUnmount() { this.handleTitleChange(); }
 
 
   render = () => (

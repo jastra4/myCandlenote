@@ -9,14 +9,22 @@ export default class Notebox extends Component {
   }
 
   componentWillMount() {
+    this.setState({ notes: this.props.notes });
+  }
+
+  componentDidMount() {
     const currentUser = this.props.currentUser.userId;
     this.props.getNotes(currentUser);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ notes: nextProps.notes });
   }
 
   render = () => (
     <div>
       {
-        this.props.notes.map(note =>
+        this.state.notes && this.state.notes.map(note =>
           <NotePreview
             title={ note.title || 'Untitled' }
             key={ note._id }

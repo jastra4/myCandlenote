@@ -30,7 +30,7 @@ const notesReducer = (state = defaultState, action) => {
 
       const currentNote = notesFromDB
         .slice()
-        .sort((a, b) => (a.modifiedAt <= b.modifiedAt ? -1 : 1))[0]._id;
+        .sort((a, b) => (a.modifiedAt >= b.modifiedAt ? -1 : 1))[0]._id;
 
       return {
         ...state,

@@ -31,7 +31,7 @@ export default class NotePreview extends Component {
     this.state = { redirect: false };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({ redirect: false });
   }
 

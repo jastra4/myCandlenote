@@ -25,8 +25,8 @@ export default class MainEditor extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.clearNote) {
       this.setState({
-        value: '', 
-        clearNote: true, 
+        value: '',
+        clearNote: true,
         packet: '',
       });
       _.defer(this.setState.bind(this), { clearNote: false });
@@ -34,10 +34,7 @@ export default class MainEditor extends React.Component {
   }
 
   componentWillUnmount() {
-    this.state.packet && this.handleTextChange({
-      noteId: this.props.currentNote,
-      body: this.state.packet,
-    });
+    this.state.packet && this.handleTextChange();
   }
 
   handleEditorChange = (value, d, source, editor) => {
@@ -48,13 +45,16 @@ export default class MainEditor extends React.Component {
     });
     const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
-    this.debouncedHandleTextChange({
-      noteId: this.props.currentNote,
-      body: packet,
-    });
+    this.debouncedHandleTextChange();
   }
 
-  handleTextChange = (noteInfo) => { this.props.editNote(noteInfo); }
+  handleTextChange = () => { 
+    this.props.editNote({
+      noteId: this.props.currentNote,
+      body: this.state.packet,
+      authorID: this.props.authorID,
+    });
+  };
 
 
   getContentFromDelta = delta => (

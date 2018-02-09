@@ -84,7 +84,7 @@ class NotePage extends React.Component {
     this.props.deleteNote(this.props.currentNote);
     this.setState({
       clearNote: true,
-      currentNote: '',
+      currentNote: -1,
     });
   }
 
@@ -124,6 +124,7 @@ class NotePage extends React.Component {
                 resetClear={ this.resetClear }
                 editNote={ this.props.editNote }
                 currentNote={ this.props.currentNote }
+                authorID={ this.props.currentUser.userId }
               />
               <MainEditor
                 { ...this.props }
@@ -134,6 +135,7 @@ class NotePage extends React.Component {
                 resetClear={ this.resetClear }
                 editNote={ this.props.editNote }
                 currentNote={ this.props.currentNote }
+                authorID={ this.props.currentUser.userId }
               />
             </div>
           }
