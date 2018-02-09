@@ -73,6 +73,12 @@ export default class SideBar extends Component {
                 Schedule
               </Menu.Item>
             </Link>
+            <Link to='/video-conference'>
+              <Menu.Item name='video-conference' onClick={this.handleItemClick}>
+                <Icon name='video camera' />
+                Video Conference
+              </Menu.Item>
+            </Link>
             <Link to='/quizzlet'>
               <Menu.Item name='winner' onClick={ this.handleItemClick }>
                 <Icon name='winner' />

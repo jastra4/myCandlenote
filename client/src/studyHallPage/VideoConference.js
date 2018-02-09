@@ -103,19 +103,22 @@ class VideoConference extends React.Component {
     if (this.state.newCall[0]) {
       this.state.newCall[0].on('stream', (stream) => {
         const video = document.querySelector('.video-call-one');
-        video.src = window.URL.createObjectURL(stream);
+        const source = window.URL.createObjectURL(stream);
+        video.src = source
       });
     }
     if (this.state.newCall[1]) {
       this.state.newCall[1].on('stream', (stream) => {
         const video = document.querySelector('.video-call-two');
-        video.src = window.URL.createObjectURL(stream);
+        const source = window.URL.createObjectURL(stream);
+        video.src = source
       });
     }
     if (this.state.newCall[2]) {
       this.state.newCall[2].on('stream', (stream) => {
         const video = document.querySelector('.video-call-three');
-        video.src = window.URL.createObjectURL(stream);
+        const source = window.URL.createObjectURL(stream);
+        video.src = source
       });
     }
   }
@@ -143,7 +146,6 @@ class VideoConference extends React.Component {
         this.setState({ newCall: this.state.peer.call(this.state.remoteId[2], stream) });
       }
       console.log('calling...');
-      this.state.peer.on('call', this.onReceiveCall);
     }, (err) => { console.log('Error in call: ', err); });
   }
 

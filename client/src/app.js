@@ -17,6 +17,7 @@ import PDF from './notesPage/invisibleEditor';
 import SchedulePage from './schedulePage';
 import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
+import VideoConference from './studyHallPage/VideoConference';
 import activeSocket from './actions/activeSocket';
 
 
@@ -67,6 +68,7 @@ class App extends React.Component {
             <Route path='/quizzlet' render={() => <TopBar ContentPage={NotFoundPage} />} />
             <Route path='/profile' render={() => <TopBar ContentPage={UserProfile} />} />
             <Route path='/schedule' render={() => <TopBar ContentPage={SchedulePage} />} />
+            <Route path='/video-conference' render={() => <TopBar ContentPage={VideoConference} />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
             <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />
