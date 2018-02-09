@@ -104,6 +104,21 @@ app.use('/user', userRoutes);
 //   console.log('authenticated at /user? : ', req.isAuthenticated());
 // });
 
+// This route must come before authentication routes
+// Headless Browser will not be authenticated
+
+app.get('/pdf/:id', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, '/index.html'));
+});
+
+app.get('/api/pdf/:id', (req, res) => {
+  const { id: fileName } = req.params;
+  console.log('fileName: ', fileName);
+  // res.end();
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+});
+
+
 app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, '/index.html'));
 });
@@ -123,13 +138,7 @@ app.get('/api/userid', (req, res) => {
   res.status(200).send({ userid });
 });
 
-app.get('/api/pdf/:id', (req, res) => {
-  const { id: fileName } = req.params;
-  console.log('fileName: ', fileName);
 
-
-  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
-});
 
 app.post('/api/createNote', (req, res) => {
   const { noteInfo } = req.body;
@@ -551,7 +560,7 @@ app.post('/api/tempSavePacket', (req, res) => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve('resolved');
-        }, 1000);
+        }, 3000);
       });
     }
 
@@ -559,13 +568,14 @@ app.post('/api/tempSavePacket', (req, res) => {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
         // res.download(pdfLocation, title)
-        res.sendFile(pdfLocation, `${title}.pdf`, (err) => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.log('yes!');
-          }
-        });
+        res.end()
+        // res.sendFile(pdfLocation, `${title}.pdf`, (err) => {
+        //   if (err) {
+        //     console.error(err);
+        //   } else {
+        //     console.log('yes!');
+        //   }
+        // });
         resolve('PDF printed');
       });
     }

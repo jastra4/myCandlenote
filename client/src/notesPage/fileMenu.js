@@ -30,7 +30,10 @@ export default class FileMenu extends React.Component {
     // window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
     const { currentNote, title } = this.state;
     axios.post('/api/tempSavePacket', { currentNote, title })
-      .then(() => { window.open(`http://localhost:3000/api/pdf/${currentNote}`); })
+      .then(() => { 
+        alert('Finished!')
+        window.open(`http://localhost:3000/api/pdf/${currentNote}`); 
+      })
     // .then(() => {
 
     // })
