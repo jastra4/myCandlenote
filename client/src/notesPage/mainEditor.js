@@ -48,7 +48,7 @@ export default class MainEditor extends React.Component {
     this.debouncedHandleTextChange();
   }
 
-  handleTextChange = () => { 
+  handleTextChange = () => {
     this.props.editNote({
       noteId: this.props.currentNote,
       body: this.state.packet,

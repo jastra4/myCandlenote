@@ -29,7 +29,7 @@ export default class NoteTitle extends React.Component {
     this.debouncedHandleTitleChange();
   }
 
-  handleTitleChange = () => { 
+  handleTitleChange = () => {
     this.props.editNote({
       noteId: this.props.currentNote,
       title: this.state.value,
