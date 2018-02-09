@@ -74,7 +74,7 @@ export default class MainEditor extends React.Component {
 
   handlePrint = () => {
     const { packet } = this.state;
-    axios.post('/api/tempSavePacket', { packet })
+    axios.post('/api/generatePDF', { packet })
       .catch((e) => { console.error(e); });
   }
 

@@ -545,8 +545,8 @@ app.post('/api/suggestedWiki', (req, res) => {
     });
 });
 
-app.post('/api/tempSavePacket', (req, res) => {
-  const { currentNote, title } = req.body;
+app.post('/api/generatePDF', (req, res) => {
+  const { currentNote } = req.body;
   // const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
 
   // writeFile(filePath, packet)
