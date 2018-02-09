@@ -152,6 +152,12 @@ app.get('/userProfile', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
+app.post('/deleteUser', (req, res) => {
+  const { username } = req.body;
+  console.log('deleteUser ', username);
+  deletes.deleteUser(username);
+});
+
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());

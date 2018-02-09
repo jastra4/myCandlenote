@@ -40,6 +40,7 @@ const removeGroupMember = (groupname, username, callback) => {
 };
 
 const deleteUser = (username) => {
+  console.log('deleteUser ', username);
   User.findOne({ username }, (err, docs) => {
     if (err) {
       console.log(err);

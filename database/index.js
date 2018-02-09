@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   googleRefreshToken: String,
   privateChats: [],
   groupChats: [],
+  lastUpdate: Date,
   friends: [{
     friendId: String,
     status: String,
@@ -69,6 +70,7 @@ const Messages = mongoose.model('messages', messagesSchema);
 
 const groupsSchema = mongoose.Schema({
   groupname: String,
+  lastUpdate: Date,
   members: [],
 });
 

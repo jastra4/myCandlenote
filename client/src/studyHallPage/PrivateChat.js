@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import axios from 'axios';
 
 class PrivateChat extends React.Component {
   constructor(props) {
@@ -78,6 +79,14 @@ class PrivateChat extends React.Component {
     this.props.closeChat(this.props.self, this.props.username, this.props.privateChat.username);
   }
 
+  deleteUser() {
+    console.log('deleteUser ', this.props.privateChat.username);
+    axios.post('/deleteUser', { username: this.props.privateChat.username })
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
   render() {
     return (
       <div>
@@ -88,6 +97,7 @@ class PrivateChat extends React.Component {
         </span>
         <span onClick={this.closeSelf.bind(this)} className='friendRemove'>x</span>
         <span className='friendUnreadMessages'>{this.state.unread}</span>
+        <button onClick={this.deleteUser.bind(this)}>delete</button>
       </div>
     );
   }

@@ -11,7 +11,7 @@ class GroupsList extends React.Component {
     return (
       <div>
         <div className='groupsListHeader'>Group Chats</div>
-        <div>{this.props.groupChats.map((group, i) => (
+        <div className="scroll" >{this.props.groupChats.map((group, i) => (
           <GroupConnnected
             key={i}
             self={i}

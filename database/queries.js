@@ -14,22 +14,26 @@ const getUserName = (id, callback) => {
 
 // only difference for groups is that "to" will be a group name
 const loadChatHistory = (sentBy, to, callback) => {
-  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('created').limit(30); // .limit(8);
+  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-created').limit(30); // .limit(8);
+  // const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-lastUpdate').limit(30); // .limit(8);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
     } else {
+      docs.reverse();
       callback(docs);
     }
   });
 };
 
 const loadGroupChatHistory = (groupname, callback) => {
-  const query = db.Messages.find({ to: { $in: [groupname] } }).sort('created').limit(30); // .limit(8);
+  const query = db.Messages.find({ to: { $in: [groupname] } }).sort('-created').limit(30); // .limit(8);
+  // const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-lastUpdate').limit(30); // .limit(8);  
   query.exec((err, docs) => {
     if (err) {
       callback(err);
     } else {
+      docs.reverse();
       callback(docs);
     }
   });
@@ -45,7 +49,8 @@ const loadPrivateChats = (username, callback) => {
     privateChats.forEach((chatWith) => {
       testList.push(chatWith.username);
     });
-    const query = User.find({ username: { $in: testList } }).sort({ username: 'asc' });
+    // const query = User.find({ username: { $in: testList } }).sort({ username: 'asc' });
+    const query = User.find({ username: { $in: testList } }).sort('-lastUpdate');
     query.exec((error, listOfUsersInPrivateChatList) => {
       if (error) {
         callback(err);
@@ -66,7 +71,8 @@ const loadGroupChats = (username, callback) => {
     groupChatList.forEach((group) => {
       testList.push(group.groupname);
     });
-    const query = Groups.find({ groupname: { $in: testList } }).sort({ groupname: 'asc' });
+    // const query = Groups.find({ groupname: { $in: testList } }).sort({ groupname: 'asc' });
+    const query = Groups.find({ groupname: { $in: testList } }).sort('-lastUpdate');
     query.exec((error, groups) => {
       if (error) {
         console.log(error);
