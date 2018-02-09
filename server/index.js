@@ -198,7 +198,12 @@ io.sockets.on('connection', (socket) => {
   socket.on('available', (data) => {
     console.log(`available ${data.username}`);
     allSockets[data.username].status = 'available';
-    allSockets[data.username].broadcast.emit('is available', data.username);
+    // allSockets[data.username].emit('is available', data.username);
+    const callback = () => {
+      allSockets[data.username].emit('is available', data.username);
+    }
+    setTimeout(callback, 2000);
+    console.log('emit is available to for ', data.username);
   });
 
   // ChatBox > PrivateChat
@@ -210,10 +215,16 @@ io.sockets.on('connection', (socket) => {
   });
 
   // ChatBox > PrivateChat
-  socket.on('away', (data) => {
+  socket.on('Bob Pennyworth away', (data) => {
     console.log(`away ${data.username}`);
     allSockets[data.username].status = 'away';
-    allSockets[data.username].broadcast.emit('is away', data.username);
+    //allSockets[data.username].broadcast.emit('is away', data.username);
+    const callback = () => {
+      console.log('emit to: ', allSockets['Joseph Strandmo'].id);
+      allSockets[data.username].broadcast.emit('is away', data.username);
+      allSockets['Joseph Strandmo'].emit('is away Bob Pennyworth');
+    }
+    setTimeout(callback, 2000);
   });
 
   app.post('/openChat', (req, res) => {

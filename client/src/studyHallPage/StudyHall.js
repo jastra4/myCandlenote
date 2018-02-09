@@ -65,6 +65,7 @@ class StudyHall extends React.Component {
   }
 
   changeChat(name, type) {
+    console.log('changeChat: ', name, ' ', type);
     this.setState({
       chat: name,
       type,
@@ -72,21 +73,21 @@ class StudyHall extends React.Component {
   }
 
   closePrivateChat(i, username, otheruser) {
-    const updated = this.state.privateChats;
-    updated.splice(i, 1);
-    this.setState({ privateChats: updated });
+    // const updated = this.state.privateChats;
+    // updated.splice(i, 1);
+    // this.setState({ privateChats: updated });
 
-    if (otheruser === this.state.chat) {
-      this.setState({
-        chat: 'No chat selected',
-        type: 'none',
-      });
-    }
+    // if (otheruser === this.state.chat) {
+    //   this.setState({
+    //     chat: 'No chat selected',
+    //     type: 'none',
+    //   });
+    // }
 
-    this.props.socket.emit('close private chat', {
-      username,
-      otheruser,
-    });
+    // this.props.socket.emit('close private chat', {
+    //   username,
+    //   otheruser,
+    // });
   }
 
   closeGroupChat(i, username, chatname) {
@@ -108,6 +109,7 @@ class StudyHall extends React.Component {
   }
 
   render() {
+    console.log('StudyHall render');
     if (this.props.socket === undefined) {
       return (<div>No socket connection</div>);
     }

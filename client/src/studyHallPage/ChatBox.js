@@ -78,7 +78,7 @@ class ChatBox extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.socket.emit('away', { username: this.props.username });
+    this.props.socket.emit(`${this.props.username} away`, { username: this.props.username });
   }
 
   // deleteUser(e) {
