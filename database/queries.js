@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const { Decks, Flashcards, User, Note } = require('./index');
 const db = require('./index');
 
+const { ObjectId } = mongoose.Types;
+
 const getUserName = (id, callback) => {
   User.findOne({ _id: id }, (err, person) => {
     if (err) {
@@ -83,9 +85,7 @@ const getFriendsById = (friendIds) => {
 
 const getUserByUsername = username => User.findOne({ username });
 
-const getPacket = _id => Note.find({ _id }).then((res) => {
-  console.log('result from getPacket: ', res);
-})
+const getPacket = _id => Note.find({ _id });
 
 module.exports = {
   getPacket,

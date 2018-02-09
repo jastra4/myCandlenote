@@ -544,7 +544,7 @@ app.post('/api/tempSavePacket', (req, res) => {
   // .then(() => {
   // console.log('File successfully written');
   const url = `http://${DOMAIN}/pdf/${currentNote}`;
-  const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
+  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
   (async () => {
     function resolveAfter1Seconds() {
@@ -555,11 +555,11 @@ app.post('/api/tempSavePacket', (req, res) => {
       });
     }
 
-    function logAfterPDF(pdfLocation, title = 'notes.pdf') {
+    function logAfterPDF(pdfLocation) {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
         // res.download(pdfLocation, title)
-        res.sendFile(pathToPDF, title, (err) => {
+        res.sendFile(pdfLocation, `${title}.pdf`, (err) => {
           if (err) {
             console.error(err);
           } else {
@@ -585,16 +585,21 @@ app.post('/api/tempSavePacket', (req, res) => {
         right: '10mm',
       },
     });
-    await logAfterPDF(`PDFs/${fileName}.pdf`, title);
+    await logAfterPDF(`PDFs/${currentNote}.pdf`);
     await browser.close();
   })();
 });
 
 app.post('/api/getEditorPacket', (req, res) => {
   const { noteToPrint } = req.body;
+  console.log('noteToPrint: ', noteToPrint);
   queries.getPacket(noteToPrint)
-    .then((data) => {
-      res.json({ data });
+    .then((result) => {
+      const packet = result[0].body;
+      // res.send(r
+      res.send(packet);
+      // const packet = result[0].body;
+      // console.log('res from getPacket: ', packet);
     })
     .catch((e) => {
       console.error(e);

@@ -14,7 +14,6 @@ export default class MainEditor extends React.Component {
     this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 1000);
   }
   componentDidMount() {
-    window.print();
     this.props.changeBackgroundColor('#1F1F1F');
     const { title, content: value = '' } = this.props;
     this.setState({

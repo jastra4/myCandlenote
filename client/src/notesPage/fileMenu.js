@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import axios from 'axios';
 import EmailModal from './emailModal';
 
 export default class FileMenu extends React.Component {
@@ -26,9 +27,10 @@ export default class FileMenu extends React.Component {
   }
 
   renderPDF = () => {
-    window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
-    const { currentNote } = this.state;
+    // window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
+    const { currentNote, title } = this.state;
     axios.post('/api/tempSavePacket', { currentNote, title })
+      .then(() => { window.open(`http://localhost:3000/api/pdf/${currentNote}`); })
     // .then(() => {
 
     // })
