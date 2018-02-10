@@ -1,4 +1,6 @@
 import React from 'react';
+import EasyDifficulty from './EasyDifficulty';
+import MediumDifficulty from './MediumDifficulty';
 import './style.css';
 
 export default class SimonSays extends React.Component {
@@ -10,7 +12,10 @@ export default class SimonSays extends React.Component {
       greenBlink: '',
       blueBlink: '',
       yellowBlink: '',
+      difficulty: 'easy',
     };
+
+    this.makeTileBlink = this.makeTileBlink.bind(this);
   }
 
   makeTileBlink(tile) {
@@ -27,15 +32,12 @@ export default class SimonSays extends React.Component {
   render() {
     return (
       <div>
-        {console.log('STATE:', this.state)}
-        <div id="red" className={this.state.redBlink} onClick={() => this.makeTileBlink('red')}>
-        </div>
-        <div id="green" className={this.state.greenBlink} onClick={() => this.makeTileBlink('green')}>
-        </div>
-        <div id="blue" className={this.state.blueBlink} onClick={() => this.makeTileBlink('blue')}>
-        </div>
-        <div id="yellow" className={this.state.yellowBlink} onClick={() => this.makeTileBlink('yellow')}>
-        </div>
+        {(() => {
+          if (this.state.difficulty === 'easy') return <EasyDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
+          else if (this.state.difficulty === 'medium') return <MediumDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
+          return <div>No Difficulty Selected</div>;
+        })()
+        }
       </div>
     );
   }
