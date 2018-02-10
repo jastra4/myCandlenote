@@ -17,7 +17,7 @@ export default class SimonSays extends React.Component {
       blueBlink: '',
       yellowBlink: '',
       difficulty: 'easy',
-      turns: [],
+      turns: ['red', 'blue', 'green', 'yellow'],
       choices: ['red', 'green', 'blue', 'yellow'],
       currentMove: 0,
       isPlayersTurn: false,
@@ -82,14 +82,23 @@ export default class SimonSays extends React.Component {
   }
 
   playPrompt() {
+    const rates = {
+      easy: 0.8,
+      medium: 1.4,
+      hard: 2,
+    };
     let counter = 0;
     const limit = this.state.turns.length;
     const stagger = new Stagger({
-      requestsPerSecond: 0.5,
+      requestsPerSecond: rates[this.state.difficulty],
       maxRequests: 100,
     });
     this.state.turns.forEach((turn) => {
       stagger.push(() => {
+        if (this.state.gameStatus !== 'showing prompt') {
+          stagger.stop();
+          return;
+        }
         this.makeTileBlink(turn);
         counter += 1;
         if (counter >= limit) {
@@ -121,6 +130,8 @@ export default class SimonSays extends React.Component {
       difficulty: e.target.value,
       turns: [],
       currentMove: 0,
+      isPlayersTurn: false,
+      gameStatus: 'not started',
     });
   }
 
