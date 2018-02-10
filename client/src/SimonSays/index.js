@@ -17,8 +17,11 @@ export default class SimonSays extends React.Component {
       blueBlink: '',
       yellowBlink: '',
       difficulty: 'easy',
-      turns: ['red', 'green', 'blue', 'yellow'],
+      turns: [],
       choices: ['red', 'green', 'blue', 'yellow'],
+      currentMove: 0,
+      isPlayersTurn: false,
+      gameStatus: 'not started', // 'not started', 'showing prompt', 'player turn', 'game won', 'game lost'
     };
 
     this.makeTileBlink = this.makeTileBlink.bind(this);
@@ -33,6 +36,27 @@ export default class SimonSays extends React.Component {
     };
     console.log('Blinking tile:', tile);
     blinkActions[tile]();
+
+    if (this.state.isPlayersTurn) this.checkIfCorrect(tile);
+  }
+
+  checkIfCorrect(tile) {
+    const { currentMove, turns } = this.state;
+    if (turns[currentMove] === tile && currentMove >= turns.length - 1) {
+      console.log('ALL CORRECT, SETTING NEW TURN');
+      this.setState({ gameStatus: 'game won' });
+      setTimeout(() => this.addNextTurn(), 2000);
+    } else if (turns[currentMove] !== tile) {
+      console.log('HAHA YOU LOSE!');
+      this.setState({
+        turns: [],
+        currentMove: 0,
+        isPlayersTurn: false,
+        gameStatus: 'game lost',
+      });
+    } else {
+      this.setState({ currentMove: currentMove + 1 });
+    }
   }
 
   pickNextColor() {
@@ -42,7 +66,12 @@ export default class SimonSays extends React.Component {
 
   addNextTurn() {
     const nextColor = this.pickNextColor();
-    this.setState({ turns: [...this.state.turns, nextColor] });
+    this.setState({
+      turns: [...this.state.turns, nextColor],
+      currentMove: 0,
+      isPlayersTurn: false,
+      gameStatus: 'showing prompt',
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -64,6 +93,10 @@ export default class SimonSays extends React.Component {
         counter += 1;
         if (counter >= limit) {
           console.log('THATS IT');
+          this.setState({
+            isPlayersTurn: true,
+            gameStatus: 'player turn',
+          });
         }
       });
     });
@@ -71,10 +104,21 @@ export default class SimonSays extends React.Component {
     stagger.start();
   }
 
+  showGameStatus() {
+    const { gameStatus } = this.state;
+    if (gameStatus === 'not started') return <h2>Waiting for the player to start the game</h2>;
+    if (gameStatus === 'showing prompt') return <h2>Please wait till prompt finishes</h2>;
+    if (gameStatus === 'player turn') return <h2>Your turn!</h2>;
+    if (gameStatus === 'game won') return <h2>Congradulations! You won!</h2>;
+    if (gameStatus === 'game lost') return <h2>Congradulations! You lost!</h2>;
+    return <h2>No Status to show</h2>;
+  }
+
   render() {
     return (
       <div>
-        <button type="button" onClick={() => this.addNextTurn()}>Add new turn</button>
+        <button type="button" onClick={() => this.addNextTurn()}>Start Game</button>
+        {this.showGameStatus()}
         {(() => {
           if (this.state.difficulty === 'easy') return <EasyDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
           else if (this.state.difficulty === 'medium') return <MediumDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
