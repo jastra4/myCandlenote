@@ -59,6 +59,7 @@ const messagesSchema = mongoose.Schema({
   to: String,
   sentBy: String,
   text: String,
+  readReciept: Boolean,
   timeStamp: String,
   created: {
     type: Date,

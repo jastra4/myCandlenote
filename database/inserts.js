@@ -17,7 +17,7 @@ const insertDeck = ({ subject, title, userId }) => (
   }).save()
 );
 
-const saveMessage = ({ to, sentBy, text, timeStamp, type }) => {
+const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
   // add user to friends list (private chat) after receiving a message from them
   console.log('*** type: ', type);
   User.findOne({ username: to }, (err, user) => {
@@ -32,6 +32,7 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type }) => {
     to,
     sentBy,
     text,
+    readReciept,
     timeStamp,
   }).save();
   // update groups or user
@@ -49,6 +50,19 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type }) => {
     } else {
       console.log('*** created at: ', doc);
       doc.set({ lastUpdate: new Date() });
+      doc.save();
+    }
+  });
+};
+
+const readReciept = (msg) => {
+  console.log('readReciept: ', msg);
+  Messages.findOne({ _id: msg._id }, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('doc: ', doc);
+      doc.set({ readReciept: true });
       doc.save();
     }
   });
@@ -144,6 +158,7 @@ module.exports = {
   insertFlashcard,
   saveAccessToken,
   saveMessage,
+  readReciept,
   openPrivateChat,
   addGroupMember,
   createGroup,

@@ -190,7 +190,7 @@ io.sockets.on('connection', (socket) => {
   socket.on('acknowledge', (data) => {
     console.log(`acknowledge ${data.to} by ${data.username}`);
     if (data.to in allSockets) {
-      allSockets[data.to].emit('acknowledged', data.username, data.status);
+      allSockets[data.to].emit(`${data.username} acknowledged`, data.status);
     }
   });
 
@@ -198,33 +198,23 @@ io.sockets.on('connection', (socket) => {
   socket.on('available', (data) => {
     console.log(`available ${data.username}`);
     allSockets[data.username].status = 'available';
-    // allSockets[data.username].emit('is available', data.username);
-    const callback = () => {
-      allSockets[data.username].emit('is available', data.username);
-    }
-    setTimeout(callback, 2000);
-    console.log('emit is available to for ', data.username);
+    allSockets[data.username].broadcast.emit(`${data.username} is available`);
   });
 
   // ChatBox > PrivateChat
-  socket.on('friend ping', (data) => {
-    console.log(`ping ${data.username} to ${data.to}`);
-    if (data.to in allSockets) {
-      allSockets[data.username].emit(`sent ping ${data.to}`, allSockets[data.to].status);
+  socket.on('ping222', (data) => {
+    console.log('ping222: ', data.friend);
+    if (data.friend in allSockets) {
+      console.log(data.friend, ' ', allSockets[data.friend].status);
+      allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
     }
   });
 
   // ChatBox > PrivateChat
-  socket.on('Bob Pennyworth away', (data) => {
+  socket.on('away', (data) => {
     console.log(`away ${data.username}`);
     allSockets[data.username].status = 'away';
-    //allSockets[data.username].broadcast.emit('is away', data.username);
-    const callback = () => {
-      console.log('emit to: ', allSockets['Joseph Strandmo'].id);
-      allSockets[data.username].broadcast.emit('is away', data.username);
-      allSockets['Joseph Strandmo'].emit('is away Bob Pennyworth');
-    }
-    setTimeout(callback, 2000);
+    allSockets[data.username].broadcast.emit(`${data.username} is away`);
   });
 
   app.post('/openChat', (req, res) => {
@@ -335,7 +325,7 @@ io.sockets.on('connection', (socket) => {
   // auto > PrivateChat
   socket.on('disconnect', () => {
     console.log(socket.username, ' disconnected');
-    allSockets[socket.username].broadcast.emit('signed off', allSockets[socket.username].username);
+    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
     delete allSockets[socket.username];
   });
 });
@@ -389,6 +379,12 @@ app.get('/loadChatHistory', (req, res) => {
       res.send(docs);
     });
   }
+});
+
+app.post('/readReciept', (req, res) => {
+  console.log('readReciept: ', req.body.msg);
+  inserts.readReciept(req.body.msg);
+  res.send();
 });
 
 /* ----------- Google Cal Routes ------------ */

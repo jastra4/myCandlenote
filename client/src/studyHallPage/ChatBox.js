@@ -71,6 +71,7 @@ class ChatBox extends React.Component {
       to: this.props.chat,
       sentBy: this.props.username,
       type: this.state.type,
+      readReciept: false,
       timeStamp: null,
     };
     this.props.socket.emit('submit message', msg);
@@ -78,7 +79,7 @@ class ChatBox extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.socket.emit(`${this.props.username} away`, { username: this.props.username });
+    this.props.socket.emit('away', { username: this.props.username });
   }
 
   // deleteUser(e) {
