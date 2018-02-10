@@ -1,0 +1,173 @@
+#red {
+  position: absolute;
+  left: 30vw;
+  top: 30vh;
+  background-color: rgb(170, 0, 0);
+  width: 7em;
+  height: 7em;
+
+  /*
+    * CSS Please is your friend for ensuring cross browser syntax
+    */
+  -webkit-animation: orbit1 8s linear infinite; /* Chrome, Safari 5 */
+      -moz-animation: orbit1 8s linear infinite; /* Firefox 5-15 */
+        -o-animation: orbit1 8s linear infinite; /* Opera 12+ */
+          animation: orbit1 8s linear infinite; /* Chrome, Firefox 16+, 
+                                                     IE 10+, Safari 5 */
+}
+
+@-webkit-keyframes orbit1 {
+	from { 	-webkit-transform: rotate(0deg) translateX(150px) rotate(0deg); }
+	to   {  -webkit-transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+
+@-moz-keyframes orbit1 {
+	from { 	-moz-transform: rotate(0deg) translateX(150px) rotate(0deg); }
+	to   {  -moz-transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+
+@-o-keyframes orbit1 {
+	from { 	-o-transform: rotate(0deg) translateX(150px) rotate(0deg); }
+	to   {  -o-transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+
+@keyframes orbit1 {
+	from { 	transform: rotate(0deg) translateX(150px) rotate(0deg); }
+	to   {  transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+}
+
+
+#green {
+  position: absolute;
+  left: 30vw;
+  top: 30vh;
+  background-color: rgb(0, 140, 0);
+  width: 7em;
+  height: 7em;
+
+  /*
+    * CSS Please is your friend for ensuring cross browser syntax
+    */
+  -webkit-animation: orbit2 8s linear infinite; /* Chrome, Safari 5 */
+      -moz-animation: orbit2 8s linear infinite; /* Firefox 5-15 */
+        -o-animation: orbit2 8s linear infinite; /* Opera 12+ */
+          animation: orbit2 8s linear infinite; /* Chrome, Firefox 16+, 
+                                                     IE 10+, Safari 5 */
+}
+
+@-webkit-keyframes orbit2 {
+	from { 	-webkit-transform: rotate(0deg) translateY(150px) rotate(0deg); }
+	to   {  -webkit-transform: rotate(360deg) translateY(150px) rotate(-360deg); }
+}
+
+@-moz-keyframes orbit2 {
+	from { 	-moz-transform: rotate(0deg) translateY(150px) rotate(0deg); }
+	to   {  -moz-transform: rotate(360deg) translateY(150px) rotate(-360deg); }
+}
+
+@-o-keyframes orbit2 {
+	from { 	-o-transform: rotate(0deg) translateY(150px) rotate(0deg); }
+	to   {  -o-transform: rotate(360deg) translateY(150px) rotate(-360deg); }
+}
+
+@keyframes orbit2 {
+	from { 	transform: rotate(0deg) translateY(150px) rotate(0deg); }
+	to   {  transform: rotate(360deg) translateY(150px) rotate(-360deg); }
+}
+
+
+
+#blue {
+  position: absolute;
+  left: 30vw;
+  top: 30vh;
+  background-color: rgb(0, 0, 182);
+  width: 7em;
+  height: 7em;
+
+  /*
+    * CSS Please is your friend for ensuring cross browser syntax
+    */
+  -webkit-animation: orbit3 8s linear infinite; /* Chrome, Safari 5 */
+      -moz-animation: orbit3 8s linear infinite; /* Firefox 5-15 */
+        -o-animation: orbit3 8s linear infinite; /* Opera 12+ */
+          animation: orbit3 8s linear infinite; /* Chrome, Firefox 16+, 
+                                                     IE 10+, Safari 5 */
+}
+
+@-webkit-keyframes orbit3 {
+	from { 	-webkit-transform: rotate(0deg) translateX(-150px) rotate(0deg); }
+	to   {  -webkit-transform: rotate(360deg) translateX(-150px) rotate(-360deg); }
+}
+
+@-moz-keyframes orbit3 {
+	from { 	-moz-transform: rotate(0deg) translateX(-150px) rotate(0deg); }
+	to   {  -moz-transform: rotate(360deg) translateX(-150px) rotate(-360deg); }
+}
+
+@-o-keyframes orbit3 {
+	from { 	-o-transform: rotate(0deg) translateX(-150px) rotate(0deg); }
+	to   {  -o-transform: rotate(360deg) translateX(-150px) rotate(-360deg); }
+}
+
+@keyframes orbit3 {
+	from { 	transform: rotate(0deg) translateX(-150px) rotate(0deg); }
+	to   {  transform: rotate(360deg) translateX(-150px) rotate(-360deg); }
+}
+
+
+
+#yellow {
+  position: absolute;
+  left: 30vw;
+  top: 30vh;
+  background-color: rgb(199, 199, 0);
+  width: 7em;
+  height: 7em;
+
+  /*
+    * CSS Please is your friend for ensuring cross browser syntax
+    */
+  -webkit-animation: orbit4 8s linear infinite; /* Chrome, Safari 5 */
+      -moz-animation: orbit4 8s linear infinite; /* Firefox 5-15 */
+        -o-animation: orbit4 8s linear infinite; /* Opera 12+ */
+          animation: orbit4 8s linear infinite; /* Chrome, Firefox 16+, 
+                                                     IE 10+, Safari 5 */
+}
+
+@-webkit-keyframes orbit4 {
+	from { 	-webkit-transform: rotate(0deg) translateY(-150px) rotate(0deg); }
+	to   {  -webkit-transform: rotate(360deg) translateY(-150px) rotate(-360deg); }
+}
+
+@-moz-keyframes orbit4 {
+	from { 	-moz-transform: rotate(0deg) translateY(-150px) rotate(0deg); }
+	to   {  -moz-transform: rotate(360deg) translateY(-150px) rotate(-360deg); }
+}
+
+@-o-keyframes orbit4 {
+	from { 	-o-transform: rotate(0deg) translateY(-150px) rotate(0deg); }
+	to   {  -o-transform: rotate(360deg) translateY(-150px) rotate(-360deg); }
+}
+
+@keyframes orbit4 {
+	from { 	transform: rotate(0deg) translateY(-150px) rotate(0deg); }
+	to   {  transform: rotate(360deg) translateY(-150px) rotate(-360deg); }
+}
+
+
+.red-blink {
+  background-color: rgb(255, 0, 0) !important;
+}
+
+.blue-blink {
+  background-color: rgb(13, 0, 255) !important;
+}
+
+.green-blink {
+  background-color: rgb(0, 255, 30) !important;
+}
+
+.yellow-blink {
+  background-color: rgb(255, 247, 0) !important;
+}
