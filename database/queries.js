@@ -2,8 +2,6 @@ const mongoose = require('mongoose');
 const { Decks, Flashcards, User, Note } = require('./index');
 const db = require('./index');
 
-const { ObjectId } = mongoose.Types;
-
 const getUserName = (id, callback) => {
   User.findOne({ _id: id }, (err, person) => {
     if (err) {

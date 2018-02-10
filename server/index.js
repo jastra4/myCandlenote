@@ -12,19 +12,12 @@ const keys = require('./config/keys');
 const puppeteer = require('puppeteer');
 const passport = require('passport');
 const session = require('express-session');
-const { promisify } = require('util');
-const fs = require('fs');
-const uuid = require('uuid');
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
-
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
-
 
 // db imports
 const inserts = require('../database/inserts');
@@ -137,7 +130,6 @@ app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
   res.status(200).send({ userid });
 });
-
 
 
 app.post('/api/createNote', (req, res) => {
@@ -564,11 +556,11 @@ app.post('/api/generatePDF', (req, res) => {
       });
     }
 
-    function logAfterPDF(pdfLocation) {
+    function logAfterPDF(/* pdfLocation */) {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
         // res.download(pdfLocation, title)
-        res.end()
+        res.end();
         // res.sendFile(pdfLocation, `${title}.pdf`, (err) => {
         //   if (err) {
         //     console.error(err);
@@ -607,8 +599,10 @@ app.post('/api/getEditorPacket', (req, res) => {
       const { body: packet, authorID, title, showDate } = result[0];
       queries.getUsernameById(authorID)
         .then(({ username }) => {
-          res.send({ packet, title, username, showDate });
-      });
+          res.send({
+            packet, title, username, showDate,
+          });
+        });
     })
     .catch((e) => {
       console.error(e);

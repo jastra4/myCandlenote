@@ -5,9 +5,7 @@ import 'react-quill/dist/quill.core.css';
 import 'react-quill/dist/quill.snow.css';
 import moment from 'moment';
 
-const titleStyle = {
-  textAlign: 'center',
-};
+const titleStyle = { textAlign: 'center' };
 
 const authorStyle = {
   display: 'inline',
@@ -27,19 +25,16 @@ export default class InvisibleEditor extends React.Component {
   }
 
   componentWillMount() {
-    const { 
-      location: { pathname },
-    } = this.props;
+    const { location: { pathname } } = this.props;
     const noteToPrint = pathname.split('/').pop();
     noteToPrint && axios.post('/api/getEditorPacket', { noteToPrint })
       .then(({ data }) => {
         const { packet, title, username: author, showDate } = data;
         const value = JSON.parse(packet);
-        this.setState({ value, title, author, showDate });
+        this.setState({
+          value, title, author, showDate,
+        });
       });
-  }
-
-  componentDidMount() {
   }
 
   render = () => (

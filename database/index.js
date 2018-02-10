@@ -56,7 +56,7 @@ const notesSchema = mongoose.Schema({
   showDate: {
     type: Boolean,
     default: true,
-  }
+  },
 });
 
 const Note = mongoose.model('notes', notesSchema);
