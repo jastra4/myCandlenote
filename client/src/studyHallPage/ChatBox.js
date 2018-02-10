@@ -55,12 +55,11 @@ class ChatBox extends React.Component {
     return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}&&type=${type}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
-        console.log('messages: ', messages);
         this.props.loadMessages(messageInfo);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      // .catch((error) => {
+      //   console.log(error);
+      // });
   }
 
   handleSubmit(e) {
@@ -95,11 +94,12 @@ class ChatBox extends React.Component {
     return (
       <div>
         <div className="chatHeader">
-          <div>{this.props.chat}</div>
+          <div>{this.props.channel}</div>
+          <div>{this.props.members}</div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
-            <Message key={i} message={message}/>
+            <Message key={i} message={message} username={this.props.username}/>
           ))}
         </div>
         <div className="chatInput">

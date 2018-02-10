@@ -166,3 +166,10 @@ body {
 .notSelectedChat{
 
 }
+.newMessage{
+  opacity: 1;
+}
+.noMessages{
+	color: red;
+  opacity: 0;
+}

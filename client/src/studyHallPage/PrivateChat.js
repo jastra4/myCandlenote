@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 
 class PrivateChat extends React.Component {
@@ -11,10 +12,33 @@ class PrivateChat extends React.Component {
     this.startListeners = this.startListeners.bind(this);
   }
 
+  updateUnread(nextProps = this.props.chat) {
+    const friendName = this.props.privateChat.username;
+    if (nextProps.chat === this.props.privateChat.username) {
+      this.setState({ unread: 0 });
+    } else {
+      axios.get(`/loadMyMessages?username=${this.props.username}&&chatName=${friendName}`)
+        .then((messages) => {
+          let count = 0;
+          messages.data.forEach((message) => {
+            if (message.readReciept === false) {
+              count += 1;
+            }
+          });
+          this.setState({ unread: count });
+        })
+        // .catch((error) => {
+        //   console.log(error);
+        // });
+    }
+  }
+
   componentDidMount() {
     const friendName = this.props.privateChat.username;
 
-    this.props.socket.emit('ping222', {
+    this.updateUnread();
+
+    this.props.socket.emit('pingFriend', {
       username: this.props.username,
       friend: friendName,
     });
@@ -39,18 +63,16 @@ class PrivateChat extends React.Component {
       this.setState({ status: 'away' });
     });
 
-    this.props.socket.on(`submitted message ${friendName}`, () => {
-      if (friendName !== this.props.chat) {
-        this.setState({ unread: this.state.unread += 1 });
-      }
-    });
+    // this.props.socket.on(`submitted message ${friendName}`, () => {
+    //   if (friendName !== this.props.chat) {
+    //     // this.setState({ unread: this.state.unread += 1 });
+    //   }
+    // });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.chat === this.props.privateChat.username) {
-      this.setState({ unread: 0 });
-    }
-    window.setTimeout(this.startListeners, 750);
+    this.updateUnread(nextProps);
+    window.setTimeout(this.startListeners, 700);
   }
 
   startListeners() {
@@ -70,7 +92,7 @@ class PrivateChat extends React.Component {
   }
 
   handleClick() {
-    this.props.changeChat(this.props.privateChat.username, 'private');
+    this.props.changeChat(this.props.privateChat.username, 'private', '');
   }
 
   closeSelf() {

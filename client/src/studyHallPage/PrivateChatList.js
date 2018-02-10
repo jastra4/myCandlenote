@@ -15,7 +15,7 @@ class PrivateChatList extends React.Component {
           <PrivateChatConnected
             key={i}
             self={i}
-            chat={this.props.currentChat}
+            chat={this.props.channel}
             privateChat={chat}
             changeChat={this.props.changeChat}
             closeChat={this.props.closePrivateChat}

@@ -15,7 +15,7 @@ class GroupsList extends React.Component {
           <GroupConnnected
             key={i}
             self={i}
-            chat={this.props.currentChat}
+            chat={this.props.channel}
             groupChat={group}
             changeChat={this.props.changeChat}
             closeChat={this.props.closeGroupChat}

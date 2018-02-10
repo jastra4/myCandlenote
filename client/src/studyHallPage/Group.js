@@ -8,8 +8,7 @@ class Group extends React.Component {
   }
 
   handleClick() {
-    console.log('change to group chat: ', this.props.groupChat.groupname);
-    this.props.changeChat(this.props.groupChat.groupname, 'group');
+    this.props.changeChat(this.props.groupChat.groupname, 'group', this.props.groupChat.members.length);
   }
 
   closeSelf() {
@@ -23,7 +22,6 @@ class Group extends React.Component {
           {this.props.groupChat.groupname}
         </span>
         <span onClick={this.closeSelf.bind(this)} className='groupRemove'>x</span>
-        <span className='friendUnreadMessages'>{this.props.groupChat.members.length}</span>
       </div>
     );
   }

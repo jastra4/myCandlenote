@@ -12,13 +12,11 @@ class Message extends React.Component {
   }
 
   update() {
-    console.log('update: ', this.props.message);
-    if (this.props.message.readReciept === false) {
-      console.log('send axios');
-      axios.post('/readReciept', { msg: this.props.message })
-        .then((res) => {
-          console.log(res);
-        });
+    if (this.props.message.readReciept === false && this.props.message.to === this.props.username) {
+      axios.post('/readReciept', { msg: this.props.message });
+        // .then((res) => {
+        //   console.log(res);
+        // });
     }
   }
 

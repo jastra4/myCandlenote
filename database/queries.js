@@ -39,6 +39,19 @@ const loadGroupChatHistory = (groupname, callback) => {
   });
 };
 
+const loadMyMessages = (myName, chatName, callback) => {
+  console.log('chatName: ', chatName);
+  console.log('myName: ', myName);
+  const query = db.Messages.find({ $and: [{ sentBy: { $in: [chatName] } }, { to: { $in: [myName] } }] }).sort('-created').limit(30);
+  query.exec((err, docs) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(docs);
+    }
+  });
+};
+
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadPrivateChats = (username, callback) => {
@@ -120,4 +133,5 @@ module.exports = {
   getGetAccessTokensForUsers,
   getFriendsById,
   getUserByUsername,
+  loadMyMessages,
 };

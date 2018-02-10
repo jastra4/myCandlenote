@@ -31,7 +31,6 @@ class Search extends React.Component {
       type,
     })
       .then((res) => {
-        console.log('data: ', res.data);
         if (res.data.error !== undefined) {
           console.log(res.data.error);
         } else if (res.data.members === undefined) {
