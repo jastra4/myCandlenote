@@ -2,8 +2,6 @@ import React from 'react';
 
 const EasyDifficulty = props => (
   <div>
-    {console.log('EASY DIFFICULTY LOADED')}
-    {console.log('STATE:', props)}
     <div id="red-easy" className={props.redBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('red') : () => { }}>
     </div>
     <div id="green-easy" className={props.greenBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('green') : () => { }}>

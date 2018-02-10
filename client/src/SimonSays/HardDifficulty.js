@@ -3,8 +3,6 @@ import React from 'react';
 const HardDifficulty = (props) => {
   return (
     <div className="box">
-      {console.log('HARD DIFFICULTY LOADED')}
-      {console.log('STATE:', props)}
       <div id="red-hard" className={props.redBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('red') : () => { }}>
       </div>
       <div id="green-hard" className={props.greenBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('green') : () => { }}>

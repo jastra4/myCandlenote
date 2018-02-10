@@ -38,11 +38,11 @@ export default class SimonSays extends React.Component {
     this.animals = ['dog', 'cat', 'cow'];
     this.animalSounds = {
       dog: () => this.setState({ animalSound: '/assets/dog_bark.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 400)),
       cat: () => this.setState({ animalSound: '/assets/cat_meow.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 700)),
       cow: () => this.setState({ animalSound: '/assets/cow_moo.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 900)),
     };
 
     this.makeTileBlink = this.makeTileBlink.bind(this);
@@ -57,6 +57,7 @@ export default class SimonSays extends React.Component {
   }
 
   makeAnimalSound(animal) {
+    console.log('Making animal sound:', animal);
     this.animalSounds[animal]();
 
     if (this.state.isPlayersTurn) this.checkIfCorrect(animal);
@@ -85,8 +86,9 @@ export default class SimonSays extends React.Component {
   pickNextChoice() {
     const choices = [...this.state.choices];
     if (this.state.difficulty === 'extreme') choices.push('dog', 'cat', 'cow');
-    const randomIndex = Math.floor(Math.random() * this.state.choices.length);
-    return this.state.choices[randomIndex];
+    const randomIndex = Math.floor(Math.random() * choices.length);
+    console.log('CHOICES:', choices);
+    return choices[randomIndex];
   }
 
   addNextTurn() {
@@ -110,6 +112,7 @@ export default class SimonSays extends React.Component {
       easy: 0.8,
       medium: 1.4,
       hard: 2,
+      extreme: 1,
     };
     let counter = 0;
     const limit = this.state.turns.length;
@@ -127,7 +130,6 @@ export default class SimonSays extends React.Component {
         else this.makeTileBlink(turn);
         counter += 1;
         if (counter >= limit) {
-          console.log('THATS IT');
           this.setState({
             isPlayersTurn: true,
             gameStatus: 'player turn',
@@ -150,7 +152,6 @@ export default class SimonSays extends React.Component {
   }
 
   handleSelectChange(e) {
-    console.log('Select change:', e.target.value);
     this.setState({
       difficulty: e.target.value,
       turns: [],
@@ -168,7 +169,7 @@ export default class SimonSays extends React.Component {
           url={this.state.animalSound}
           playStatus={this.state.soundStatus}
           volume={50}
-          // playFromPosition={}
+          playFromPosition={this.state.animalSound.includes('cow') ? 200 : 0 }
         />
 
         <select value={this.state.difficulty} onChange={this.handleSelectChange.bind(this)}>
