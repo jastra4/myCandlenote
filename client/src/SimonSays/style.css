@@ -304,3 +304,59 @@
   -o-animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
   animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
 }
+
+/* ----- EXTREME DIFFICULTY ----- */
+
+.box #dog-extreme {
+  display: block;
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  background: url("/assests/dog.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  -webkit-animation: moveX 2.8 linear 0s infinite alternate, moveY 3.9s linear 0s infinite alternate;;
+  -moz-animation: moveX 2.8 linear 0s infinite alternate, moveY 3.9s linear 0s infinite alternate;;
+  -o-animation: moveX 2.8 linear 0s infinite alternate, moveY 3.9s linear 0s infinite alternate;;
+  animation: moveX 2.8 linear 0s infinite alternate, moveY 3.9s linear 0s infinite alternate;;
+}
+
+.box #cat-extreme {
+  display: block;
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  background: url("/assests/cat.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  -webkit-animation: moveX 3.3s linear 0s infinite alternate, moveY 4.1s linear 0s infinite alternate;;
+  -moz-animation: moveX 3.3s linear 0s infinite alternate, moveY 4.1s linear 0s infinite alternate;;
+  -o-animation: moveX 3.3s linear 0s infinite alternate, moveY 4.1s linear 0s infinite alternate;;
+  animation: moveX 3.3s linear 0s infinite alternate, moveY 4.1s linear 0s infinite alternate;;
+}
+
+.box #cow-extreme {
+  display: block;
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  background: url("/assests/cow.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  -webkit-animation: moveX 4.1s linear 0s infinite alternate, moveY 3.7s linear 0s infinite alternate;;
+  -moz-animation: moveX 4.1s linear 0s infinite alternate, moveY 3.7s linear 0s infinite alternate;;
+  -o-animation: moveX 4.1s linear 0s infinite alternate, moveY 3.7s linear 0s infinite alternate;;
+  animation: moveX 4.1s linear 0s infinite alternate, moveY 3.7s linear 0s infinite alternate;;
+}

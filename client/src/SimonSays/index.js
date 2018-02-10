@@ -1,8 +1,10 @@
 import React from 'react';
 import Stagger from 'stagger';
+import Sound from 'react-sound';
 import EasyDifficulty from './EasyDifficulty';
 import MediumDifficulty from './MediumDifficulty';
 import HardDifficulty from './HardDifficulty';
+import ExtremeDifficulty from './ExtremeDifficulty';
 import './style.css';
 
 // const delay = timeSpan => new Promise(resolve => setTimeout(resolve(), timeSpan));
@@ -22,22 +24,42 @@ export default class SimonSays extends React.Component {
       currentMove: 0,
       isPlayersTurn: false,
       gameStatus: 'not started', // 'not started', 'showing prompt', 'player turn', 'game won', 'game lost'
+      animalSound: '',
+      soundStatus: 'STOPPED',
     };
 
-    this.makeTileBlink = this.makeTileBlink.bind(this);
-  }
-
-  makeTileBlink(tile) {
-    const blinkActions = {
+    this.blinkActions = {
       red: () => this.setState({ redBlink: 'red-blink' }, () => setTimeout(() => this.setState({ redBlink: '' }), 200)),
       green: () => this.setState({ greenBlink: 'green-blink' }, () => setTimeout(() => this.setState({ greenBlink: '' }), 200)),
       blue: () => this.setState({ blueBlink: 'blue-blink' }, () => setTimeout(() => this.setState({ blueBlink: '' }), 200)),
       yellow: () => this.setState({ yellowBlink: 'yellow-blink' }, () => setTimeout(() => this.setState({ yellowBlink: '' }), 200)),
     };
+
+    this.animals = ['dog', 'cat', 'cow'];
+    this.animalSounds = {
+      dog: () => this.setState({ animalSound: '/assets/dog_bark.mp3', soundStatus: 'PLAYING' },
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+      cat: () => this.setState({ animalSound: '/assets/cat_meow.mp3', soundStatus: 'PLAYING' },
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+      cow: () => this.setState({ animalSound: '/assets/cow_moo.mp3', soundStatus: 'PLAYING' },
+        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 300)),
+    };
+
+    this.makeTileBlink = this.makeTileBlink.bind(this);
+    this.makeAnimalSound = this.makeAnimalSound.bind(this);
+  }
+
+  makeTileBlink(tile) {
     console.log('Blinking tile:', tile);
-    blinkActions[tile]();
+    this.blinkActions[tile]();
 
     if (this.state.isPlayersTurn) this.checkIfCorrect(tile);
+  }
+
+  makeAnimalSound(animal) {
+    this.animalSounds[animal]();
+
+    if (this.state.isPlayersTurn) this.checkIfCorrect(animal);
   }
 
   checkIfCorrect(tile) {
@@ -60,13 +82,15 @@ export default class SimonSays extends React.Component {
     }
   }
 
-  pickNextColor() {
+  pickNextChoice() {
+    const choices = [...this.state.choices];
+    if (this.state.difficulty === 'extreme') choices.push('dog', 'cat', 'cow');
     const randomIndex = Math.floor(Math.random() * this.state.choices.length);
     return this.state.choices[randomIndex];
   }
 
   addNextTurn() {
-    const nextColor = this.pickNextColor();
+    const nextColor = this.pickNextChoice();
     this.setState({
       turns: [...this.state.turns, nextColor],
       currentMove: 0,
@@ -99,7 +123,8 @@ export default class SimonSays extends React.Component {
           stagger.stop();
           return;
         }
-        this.makeTileBlink(turn);
+        if (this.animals.includes(turn)) this.makeAnimalSound(turn);
+        else this.makeTileBlink(turn);
         counter += 1;
         if (counter >= limit) {
           console.log('THATS IT');
@@ -138,10 +163,19 @@ export default class SimonSays extends React.Component {
   render() {
     return (
       <div>
+
+        <Sound
+          url={this.state.animalSound}
+          playStatus={this.state.soundStatus}
+          volume={50}
+          // playFromPosition={}
+        />
+
         <select value={this.state.difficulty} onChange={this.handleSelectChange.bind(this)}>
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
           <option value="hard">Hard</option>
+          <option value="extreme">Extreme</option>
         </select>
         <button type="button" onClick={() => this.addNextTurn()}>Start Game</button>
         {this.showGameStatus()}
@@ -149,6 +183,13 @@ export default class SimonSays extends React.Component {
           if (this.state.difficulty === 'easy') return <EasyDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
           else if (this.state.difficulty === 'medium') return <MediumDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
           else if (this.state.difficulty === 'hard') return <HardDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
+          else if (this.state.difficulty === 'extreme') {
+            return <ExtremeDifficulty
+              {...this.state}
+              makeTileBlink={this.makeTileBlink}
+              makeAnimalSound={this.makeAnimalSound}
+            />;
+          }
           return <div>No Difficulty Selected</div>;
         })()
         }
