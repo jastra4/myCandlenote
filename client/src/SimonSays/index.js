@@ -54,6 +54,7 @@ export default class SimonSays extends React.Component {
         isPlayersTurn: false,
         gameStatus: 'game lost',
       });
+      setTimeout(() => this.setState({ gameStatus: 'not started' }), 2000);
     } else {
       this.setState({ currentMove: currentMove + 1 });
     }
@@ -109,14 +110,27 @@ export default class SimonSays extends React.Component {
     if (gameStatus === 'not started') return <h2>Waiting for the player to start the game</h2>;
     if (gameStatus === 'showing prompt') return <h2>Please wait till prompt finishes</h2>;
     if (gameStatus === 'player turn') return <h2>Your turn!</h2>;
-    if (gameStatus === 'game won') return <h2>Congradulations! You won!</h2>;
+    if (gameStatus === 'game won') return <h2>Nice, you got through that round!</h2>;
     if (gameStatus === 'game lost') return <h2>Congradulations! You lost!</h2>;
     return <h2>No Status to show</h2>;
+  }
+
+  handleSelectChange(e) {
+    console.log('Select change:', e.target.value);
+    this.setState({
+      difficulty: e.target.value,
+      turns: [],
+      currentMove: 0,
+    });
   }
 
   render() {
     return (
       <div>
+        <select value={this.state.difficulty} onChange={this.handleSelectChange.bind(this)}>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+        </select>
         <button type="button" onClick={() => this.addNextTurn()}>Start Game</button>
         {this.showGameStatus()}
         {(() => {

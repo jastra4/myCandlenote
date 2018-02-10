@@ -5,13 +5,13 @@ const MediumDifficulty = (props) => {
     <div>
       {console.log('MEDIUM DIFFICULTY LOADED')}
       {console.log('STATE:', props)}
-      <div id="red-medium" className={props.redBlink} onClick={() => props.makeTileBlink('red')}>
+      <div id="red-medium" className={props.redBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('red') : () => { }}>
       </div>
-      <div id="green-medium" className={props.greenBlink} onClick={() => props.makeTileBlink('green')}>
+      <div id="green-medium" className={props.greenBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('green') : () => { }}>
       </div>
-      <div id="blue-medium" className={props.blueBlink} onClick={() => props.makeTileBlink('blue')}>
+      <div id="blue-medium" className={props.blueBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('blue') : () => { }}>
       </div>
-      <div id="yellow-medium" className={props.yellowBlink} onClick={() => props.makeTileBlink('yellow')}>
+      <div id="yellow-medium" className={props.yellowBlink} onClick={props.isPlayersTurn ? () => props.makeTileBlink('yellow') : () => { }}>
       </div>
     </div>
   );
