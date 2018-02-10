@@ -103,22 +103,19 @@ class VideoConference extends React.Component {
     if (this.state.newCall[0]) {
       this.state.newCall[0].on('stream', (stream) => {
         const video = document.querySelector('.video-call-one');
-        const source = window.URL.createObjectURL(stream);
-        video.src = source
+        video.src = window.URL.createObjectURL(stream);
       });
     }
     if (this.state.newCall[1]) {
       this.state.newCall[1].on('stream', (stream) => {
         const video = document.querySelector('.video-call-two');
-        const source = window.URL.createObjectURL(stream);
-        video.src = source
+        video.src = window.URL.createObjectURL(stream);
       });
     }
     if (this.state.newCall[2]) {
       this.state.newCall[2].on('stream', (stream) => {
         const video = document.querySelector('.video-call-three');
-        const source = window.URL.createObjectURL(stream);
-        video.src = source
+        video.src = window.URL.createObjectURL(stream);
       });
     }
   }
