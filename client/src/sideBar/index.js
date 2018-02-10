@@ -88,9 +88,9 @@ class SideBar extends Component {
             </Link>
             <Link to='/studyhall'>
               <Menu.Item name='student' onClick={ this.handleItemClick }>
-                <Icon name='student' />
+                <Icon name='student'/>
                 Study Hall
-                <div className={`${this.state.newMessage}`}>!</div>
+                <i className={`comment outline icon ${this.state.newMessage}`} ></i>
               </Menu.Item>
             </Link>
             <Link to='/schedule'>

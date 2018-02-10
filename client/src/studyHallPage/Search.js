@@ -45,7 +45,7 @@ class Search extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input id="search" className="input" placeholder="find a user or group"></input>
+          <input id="search" className="input field" placeholder="find a user or group"></input>
         </form>
       </div>
     );

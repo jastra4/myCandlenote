@@ -20,6 +20,8 @@ class ChatBox extends React.Component {
   }
 
   componentDidMount() {
+    const chatbox = document.getElementById('chatBox');
+    console.log('height: ', chatbox.clientHeight);
     this.props.socket.emit('available', { username: this.props.username });
   }
 
@@ -57,9 +59,9 @@ class ChatBox extends React.Component {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
       })
-      // .catch((error) => {
-      //   console.log(error);
-      // });
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   handleSubmit(e) {
@@ -92,19 +94,22 @@ class ChatBox extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="Chat ui segment">
         <div className="chatHeader">
-          <div>{this.props.channel}</div>
-          <div>{this.props.members}</div>
+          {this.props.chat}
+          <div className={`${this.state.type}Header`}>
+            <i class="groupChatMembers users icon"></i>
+            {this.props.members}
+          </div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
             <Message key={i} message={message} username={this.props.username}/>
           ))}
         </div>
-        <div className="chatInput">
+        <div className="chatInput ui form">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
+            <input id="message" className="input field" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>
