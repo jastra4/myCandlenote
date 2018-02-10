@@ -20,7 +20,7 @@
 #red-easy {
   position: absolute;
   left: 30vw;
-  top: 30vh;
+  top: 35vh;
   background-color: rgb(170, 0, 0);
   width: 7em;
   height: 7em;
@@ -29,7 +29,7 @@
 #green-easy {
   position: absolute;
   left: calc(30vw + 8em);
-  top: 30vh;
+  top: 35vh;
   background-color: rgb(0, 140, 0);
   width: 7em;
   height: 7em;
@@ -38,7 +38,7 @@
 #blue-easy {
   position: absolute;
   left: 30vw;
-  top: calc(30vh + 8em);
+  top: calc(35vh + 8em);
   background-color: rgb(0, 0, 182);
   width: 7em;
   height: 7em;
@@ -47,7 +47,7 @@
 #yellow-easy {
   position: absolute;
   left: calc(30vw + 8em);
-  top: calc(30vh + 8em);;
+  top: calc(35vh + 8em);;
   background-color: rgb(199, 199, 0);
   width: 7em;
   height: 7em;
@@ -57,8 +57,8 @@
 
 #red-medium {
   position: absolute;
-  left: 30vw;
-  top: 30vh;
+  left: 35vw;
+  top: 40vh;
   background-color: rgb(170, 0, 0);
   width: 7em;
   height: 7em;
@@ -96,8 +96,8 @@
 
 #green-medium {
   position: absolute;
-  left: 30vw;
-  top: 30vh;
+  left: 35vw;
+  top: 40vh;
   background-color: rgb(0, 140, 0);
   width: 7em;
   height: 7em;
@@ -136,8 +136,8 @@
 
 #blue-medium {
   position: absolute;
-  left: 30vw;
-  top: 30vh;
+  left: 35vw;
+  top: 40vh;
   background-color: rgb(0, 0, 182);
   width: 7em;
   height: 7em;
@@ -176,8 +176,8 @@
 
 #yellow-medium {
   position: absolute;
-  left: 30vw;
-  top: 30vh;
+  left: 35vw;
+  top: 40vh;
   background-color: rgb(199, 199, 0);
   width: 7em;
   height: 7em;
@@ -210,4 +210,97 @@
 @keyframes orbit4 {
 	from { 	transform: rotate(0deg) translateY(-150px) rotate(0deg); }
 	to   {  transform: rotate(360deg) translateY(-150px) rotate(-360deg); }
+}
+
+/* ----- HARD DIFFICULTY ----- */
+
+.box {
+  background-color: #ffffff;
+  margin: 0 auto;
+  width: 70vw;
+  height: 80vh;
+  position: relative;
+  box-shadow: inset 0 0 3px #000;
+  border-radius: 5px;
+  border: 1px solid #111;
+  overflow: hidden;
+}
+
+@-webkit-keyframes moveX {
+  from { left: 0; } to { left: calc(70vw - 7em); }
+}
+@-moz-keyframes moveX {
+  from { left: 0; } to { left: calc(70vw - 7em); }
+}
+@-o-keyframes moveX {
+  from { left: 0; } to { left: calc(70vw - 7em); }
+}
+@keyframes moveX {
+  from { left: 0; } to { left: calc(70vw - 7em); }
+}
+
+
+@-webkit-keyframes moveY {
+  from { top: 0; } to { top: calc(80vh - 7em); }
+}
+@-moz-keyframes moveY {
+  from { top: 0; } to { top: calc(80vh - 7em); }
+}
+@-o-keyframes moveY {
+  from { top: 0; } to { top: calc(80vh - 7em); }
+}
+@keyframes moveY {
+  from { top: 0; } to { top: calc(80vh - 7em); }
+}
+
+.box #red-hard {
+  display: block;
+  background-color: rgb(170, 0, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 3.5s linear 0s infinite alternate, moveY 3.1s linear 0s infinite alternate;;
+  -moz-animation: moveX 3.5s linear 0s infinite alternate, moveY 3.1s linear 0s infinite alternate;;
+  -o-animation: moveX 3.5s linear 0s infinite alternate, moveY 3.1s linear 0s infinite alternate;;
+  animation: moveX 3.5s linear 0s infinite alternate, moveY 3.1s linear 0s infinite alternate;;
+}
+
+.box #green-hard {
+  display: block;
+  background-color: rgb(0, 140, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 4.5s linear 0s infinite alternate, moveY 3.4s linear 0s infinite alternate;;
+  -moz-animation: moveX 4.5s linear 0s infinite alternate, moveY 3.4s linear 0s infinite alternate;;
+  -o-animation: moveX 4.5s linear 0s infinite alternate, moveY 3.4s linear 0s infinite alternate;;
+  animation: moveX 4.5s linear 0s infinite alternate, moveY 3.4s linear 0s infinite alternate;;
+}
+
+.box #blue-hard {
+  display: block;
+  background-color: rgb(0, 0, 182);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 3s linear 0s infinite alternate, moveY 4.4s linear 0s infinite alternate;;
+  -moz-animation: moveX 3s linear 0s infinite alternate, moveY 4.4s linear 0s infinite alternate;;
+  -o-animation: moveX 3s linear 0s infinite alternate, moveY 4.4s linear 0s infinite alternate;;
+  animation: moveX 3s linear 0s infinite alternate, moveY 4.4s linear 0s infinite alternate;;
+}
+
+.box #yellow-hard {
+  display: block;
+  background-color: rgb(199, 199, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
+  -moz-animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
+  -o-animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
+  animation: moveX 4.3s linear 0s infinite alternate, moveY 4.7s linear 0s infinite alternate;;
 }

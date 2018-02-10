@@ -1,8 +1,8 @@
 import React from 'react';
-import Promise from 'promise';
 import Stagger from 'stagger';
 import EasyDifficulty from './EasyDifficulty';
 import MediumDifficulty from './MediumDifficulty';
+import HardDifficulty from './HardDifficulty';
 import './style.css';
 
 // const delay = timeSpan => new Promise(resolve => setTimeout(resolve(), timeSpan));
@@ -130,12 +130,14 @@ export default class SimonSays extends React.Component {
         <select value={this.state.difficulty} onChange={this.handleSelectChange.bind(this)}>
           <option value="easy">Easy</option>
           <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
         </select>
         <button type="button" onClick={() => this.addNextTurn()}>Start Game</button>
         {this.showGameStatus()}
         {(() => {
           if (this.state.difficulty === 'easy') return <EasyDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
           else if (this.state.difficulty === 'medium') return <MediumDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
+          else if (this.state.difficulty === 'hard') return <HardDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
           return <div>No Difficulty Selected</div>;
         })()
         }
