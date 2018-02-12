@@ -154,8 +154,8 @@ app.get('/userProfile', (req, res) => {
 
 app.post('/deleteUser', (req, res) => {
   const { username } = req.body;
-  console.log('deleteUser ', username);
   deletes.deleteUser(username);
+  res.send(`deleted user: ${username}`);
 });
 
 app.post('/makePDF', (req, res) => {
@@ -239,7 +239,7 @@ io.sockets.on('connection', (socket) => {
   app.post('/openChat', (req, res) => {
     const { username, chatname, type } = req.body;
     if (type === '/c ') {
-      inserts.createGroup(chatname, username, (bool, group) => {
+      inserts.createGroup(chatname, username, (bool) => {
         if (bool) {
           res.send({
             groupname: chatname,
@@ -292,7 +292,7 @@ io.sockets.on('connection', (socket) => {
       allSockets[message.sentBy].emit('submitted message', message);
       if (message.to in allSockets) {
         allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
-        allSockets[message.to].emit(`new message`);
+        allSockets[message.to].emit('new message');
       }
     } else {
       io.sockets.emit(`submitted message ${message.to}`, message);
@@ -364,6 +364,7 @@ app.get('/loadMyMessages', (req, res) => {
 });
 
 app.post('/readReciept', (req, res) => {
+  console.log('readReciept ', req.body.msg);
   inserts.readReciept(req.body.msg);
   res.send();
 });

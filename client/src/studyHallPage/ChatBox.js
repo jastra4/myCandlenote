@@ -20,8 +20,7 @@ class ChatBox extends React.Component {
   }
 
   componentDidMount() {
-    const chatbox = document.getElementById('chatBox');
-    console.log('height: ', chatbox.clientHeight);
+    // const chatbox = document.getElementById('chatBox');
     this.props.socket.emit('available', { username: this.props.username });
   }
 
@@ -30,12 +29,14 @@ class ChatBox extends React.Component {
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
 
     this.props.socket.emit('available', { username: this.props.username });
-    // display mine
+    // display my messages
     this.props.socket.on('submitted message', (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
     });
-    // display others
+    // display others messages
     this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
+      // change message status to read true
+      axios.post('/readReciept', { msg: data });
       this.setState({ messages: this.state.messages.concat([data]) });
     });
   }
@@ -82,15 +83,6 @@ class ChatBox extends React.Component {
   componentWillUnmount() {
     this.props.socket.emit('away', { username: this.props.username });
   }
-
-  // deleteUser(e) {
-  //   e.preventDefault();
-  //   let input = $('#message').val();
-  //   axios.post('/deleteUser', { username: input })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // }
 
   render() {
     return (

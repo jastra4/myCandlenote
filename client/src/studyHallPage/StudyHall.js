@@ -141,6 +141,7 @@ class StudyHall extends React.Component {
             members={this.state.members}
           />
         </div>
+        <VideoConference />
       </div>
     );
   }
@@ -160,5 +161,3 @@ const mapDispatchToProps = dispatch => (
 const StudyHallConnected = connect(mapStateToProps, mapDispatchToProps)(StudyHall);
 
 export default StudyHallConnected;
-
-//   <VideoConference />

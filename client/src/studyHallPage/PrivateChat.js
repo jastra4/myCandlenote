@@ -50,6 +50,37 @@ class PrivateChat extends React.Component {
       friend: friendName,
     });
 
+    this.startListeners();
+
+    // this.props.socket.on(`response ${friendName}`, (status) => {
+    //   this.setState({ status });
+    // });
+
+    // this.props.socket.on(`${friendName} signed on`, () => {
+    //   this.setState({ status: 'away' });
+    // });
+
+    // this.props.socket.on(`${friendName} signed off`, () => {
+    //   this.setState({ status: 'offline' });
+    // });
+
+    // this.props.socket.on(`${friendName} is available`, () => {
+    //   this.setState({ status: 'available' });
+    // });
+
+    // this.props.socket.on(`${friendName} is away`, () => {
+    //   this.setState({ status: 'away' });
+    // });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.updateUnread(nextProps);
+    window.setTimeout(this.startListeners, 700);
+  }
+
+  startListeners() {
+    const friendName = this.props.privateChat.username;
+
     this.props.socket.on(`response ${friendName}`, (status) => {
       this.setState({ status });
     });
@@ -61,29 +92,6 @@ class PrivateChat extends React.Component {
     this.props.socket.on(`${friendName} signed off`, () => {
       this.setState({ status: 'offline' });
     });
-
-    this.props.socket.on(`${friendName} is available`, () => {
-      this.setState({ status: 'available' });
-    });
-
-    this.props.socket.on(`${friendName} is away`, () => {
-      this.setState({ status: 'away' });
-    });
-
-    // this.props.socket.on(`submitted message ${friendName}`, () => {
-    //   if (friendName !== this.props.chat) {
-    //     // this.setState({ unread: this.state.unread += 1 });
-    //   }
-    // });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.updateUnread(nextProps);
-    window.setTimeout(this.startListeners, 700);
-  }
-
-  startListeners() {
-    const friendName = this.props.privateChat.username;
 
     this.props.socket.on(`${friendName} is away`, () => {
       this.setState({ status: 'away' });

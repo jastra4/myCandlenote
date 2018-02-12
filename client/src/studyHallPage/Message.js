@@ -14,9 +14,6 @@ class Message extends React.Component {
   update() {
     if (this.props.message.readReciept === false && this.props.message.to === this.props.username) {
       axios.post('/readReciept', { msg: this.props.message });
-        // .then((res) => {
-        //   console.log(res);
-        // });
     }
   }
 

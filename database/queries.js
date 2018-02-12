@@ -12,10 +12,11 @@ const getUserName = (id, callback) => {
   });
 };
 
-// only difference for groups is that "to" will be a group name
 const loadChatHistory = (sentBy, to, callback) => {
-  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-created').limit(30); // .limit(8);
-  // const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-lastUpdate').limit(30); // .limit(8);
+  const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } },
+    { to: { $in: [to] } }] },
+  { $and: [{ sentBy: { $in: [to] } },
+    { to: { $in: [sentBy] } }] }] }).sort('-created').limit(30);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
@@ -27,8 +28,7 @@ const loadChatHistory = (sentBy, to, callback) => {
 };
 
 const loadGroupChatHistory = (groupname, callback) => {
-  const query = db.Messages.find({ to: { $in: [groupname] } }).sort('-created').limit(30); // .limit(8);
-  // const query = db.Messages.find({ $or: [{ $and: [{ sentBy: { $in: [sentBy] } }, { to: { $in: [to] } }] }, { $and: [{ sentBy: { $in: [to] } }, { to: { $in: [sentBy] } }] }] }).sort('-lastUpdate').limit(30); // .limit(8);  
+  const query = db.Messages.find({ to: { $in: [groupname] } }).sort('-created').limit(30);
   query.exec((err, docs) => {
     if (err) {
       callback(err);
@@ -39,9 +39,8 @@ const loadGroupChatHistory = (groupname, callback) => {
   });
 };
 
+// used to find unread messages later
 const loadMyMessages = (myName, chatName, callback) => {
-  console.log('chatName: ', chatName);
-  console.log('myName: ', myName);
   const query = db.Messages.find({ $and: [{ sentBy: { $in: [chatName] } }, { to: { $in: [myName] } }] }).sort('-created').limit(30);
   query.exec((err, docs) => {
     if (err) {
@@ -55,14 +54,12 @@ const loadMyMessages = (myName, chatName, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadPrivateChats = (username, callback) => {
-  console.log('loadPrivateChats: ', username);
   User.findOne({ username }, (err, user) => {
     const { privateChats } = user;
     const testList = [];
     privateChats.forEach((chatWith) => {
       testList.push(chatWith.username);
     });
-    // const query = User.find({ username: { $in: testList } }).sort({ username: 'asc' });
     const query = User.find({ username: { $in: testList } }).sort('-lastUpdate');
     query.exec((error, listOfUsersInPrivateChatList) => {
       if (error) {
@@ -77,14 +74,12 @@ const loadPrivateChats = (username, callback) => {
 // returns all users where their username is in a list a list of friend names
 // created testList because the $in operator won't work on an array of objects
 const loadGroupChats = (username, callback) => {
-  console.log('loadGroupChats: ', username);
   User.findOne({ username }, (err, user) => {
     const groupChatList = user.groupChats;
     const testList = [];
     groupChatList.forEach((group) => {
       testList.push(group.groupname);
     });
-    // const query = Groups.find({ groupname: { $in: testList } }).sort({ groupname: 'asc' });
     const query = Groups.find({ groupname: { $in: testList } }).sort('-lastUpdate');
     query.exec((error, groups) => {
       if (error) {

@@ -1,4 +1,5 @@
 const { Flashcards, Decks, Messages, User, Groups } = require('./index');
+const db = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
@@ -19,7 +20,6 @@ const insertDeck = ({ subject, title, userId }) => (
 
 const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
   // add user to friends list (private chat) after receiving a message from them
-  console.log('*** type: ', type);
   User.findOne({ username: to }, (err, user) => {
     if (err || user === null) {
       console.log('No users found by that name');
@@ -38,17 +38,14 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
   // update groups or user
   let Chat;
   if (type === 'group') {
-    console.log('*** GROUP MESSAGE');
     Chat = Groups;
   } else {
-    console.log('*** PRIVATE MESSAGE');
     Chat = User;
   }
   Chat.findOne({ username: to }, (err, doc) => {
     if (err || doc === null) {
       console.log('No users found by that name');
     } else {
-      console.log('*** created at: ', doc);
       doc.set({ lastUpdate: new Date() });
       doc.save();
     }
@@ -56,16 +53,28 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
 };
 
 const readReciept = (msg) => {
-  console.log('readReciept: ', msg);
-  Messages.findOne({ _id: msg._id }, (err, doc) => {
+  console.log('insert readReciept ', msg);
+  const { to, sentBy, timeStamp } = msg;
+  // find based on sentTo, sentBy, sentTime, sentText
+  const query = db.Messages.findOne({ $and: [{ to }, { sentBy }, { timeStamp }] });
+  query.exec((err, doc) => {
     if (err || doc === null) {
-      console.log(err);
+      console.log('err: ', err, ' doc ', doc);
     } else {
-      console.log('doc: ', doc);
+      console.log('set readReciept');
       doc.set({ readReciept: true });
       doc.save();
     }
   });
+
+  // Messages.findOne({ _id: msg._id }, (err, doc) => {
+  //   if (err || doc === null) {
+  //     console.log('err: ', err, ' doc ', doc);
+  //   } else {
+  //     doc.set({ readReciept: true });
+  //     doc.save();
+  //   }
+  // });
 };
 
 const openPrivateChat = (username, otheruser, callback) => {
