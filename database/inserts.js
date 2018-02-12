@@ -58,7 +58,7 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
 const readReciept = (msg) => {
   console.log('readReciept: ', msg);
   Messages.findOne({ _id: msg._id }, (err, doc) => {
-    if (err) {
+    if (err || doc === null) {
       console.log(err);
     } else {
       console.log('doc: ', doc);

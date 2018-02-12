@@ -94,7 +94,9 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on(`submitted message ${friendName}`, () => {
-      this.setState({ unread: this.state.unread += 1 });
+      if (this.props.chat !== friendName) {
+        this.setState({ unread: this.state.unread += 1 });
+      }
     });
   }
 
