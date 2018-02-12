@@ -307,6 +307,58 @@
 
 /* ----- EXTREME DIFFICULTY ----- */
 
+.box #red-extreme {
+  display: block;
+  background-color: rgb(170, 0, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 2.1s linear 0s infinite alternate, moveY 2.3s linear 0s infinite alternate;;
+  -moz-animation: moveX 2.1s linear 0s infinite alternate, moveY 2.3s linear 0s infinite alternate;;
+  -o-animation: moveX 2.1s linear 0s infinite alternate, moveY 2.3s linear 0s infinite alternate;;
+  animation: moveX 2.1s linear 0s infinite alternate, moveY 2.3s linear 0s infinite alternate;;
+}
+
+.box #green-extreme {
+  display: block;
+  background-color: rgb(0, 140, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 1.9s linear 0s infinite alternate, moveY 2.1s linear 0s infinite alternate;;
+  -moz-animation: moveX 1.9s linear 0s infinite alternate, moveY 2.1s linear 0s infinite alternate;;
+  -o-animation: moveX 1.9s linear 0s infinite alternate, moveY 2.1s linear 0s infinite alternate;;
+  animation: moveX 1.9s linear 0s infinite alternate, moveY 2.1s linear 0s infinite alternate;;
+}
+
+.box #blue-extreme {
+  display: block;
+  background-color: rgb(0, 0, 182);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 1.7s linear 0s infinite alternate, moveY 2.6s linear 0s infinite alternate;;
+  -moz-animation: moveX 1.7s linear 0s infinite alternate, moveY 2.6s linear 0s infinite alternate;;
+  -o-animation: moveX 1.7s linear 0s infinite alternate, moveY 2.6s linear 0s infinite alternate;;
+  animation: moveX 1.7s linear 0s infinite alternate, moveY 2.6s linear 0s infinite alternate;;
+}
+
+.box #yellow-extreme {
+  display: block;
+  background-color: rgb(199, 199, 0);
+  width: 7em;
+  height: 7em;
+  position: absolute;
+
+  -webkit-animation: moveX 2.3s linear 0s infinite alternate, moveY 1.8s linear 0s infinite alternate;;
+  -moz-animation: moveX 2.3s linear 0s infinite alternate, moveY 1.8s linear 0s infinite alternate;;
+  -o-animation: moveX 2.3s linear 0s infinite alternate, moveY 1.8s linear 0s infinite alternate;;
+  animation: moveX 2.3s linear 0s infinite alternate, moveY 1.8s linear 0s infinite alternate;;
+}
+
 .box #dog-extreme {
   display: block;
   width: 7em;
