@@ -37,12 +37,36 @@ export default class SimonSays extends React.Component {
 
     this.animals = ['dog', 'cat', 'cow'];
     this.animalSounds = {
-      dog: () => this.setState({ animalSound: '/assets/dog_bark.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 400)),
-      cat: () => this.setState({ animalSound: '/assets/cat_meow.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 700)),
-      cow: () => this.setState({ animalSound: '/assets/cow_moo.mp3', soundStatus: 'PLAYING' },
-        () => setTimeout(() => this.setState({ animalSound: '', soundStatus: 'STOPPED' }), 900)),
+      dog: () => this.setState(
+        {
+          animalSound: '/assets/dog_bark.mp3',
+          soundStatus: 'PLAYING',
+        },
+        () => setTimeout(() => this.setState({
+          animalSound: '',
+          soundStatus: 'STOPPED',
+        }), 400),
+      ),
+      cat: () => this.setState(
+        {
+          animalSound: '/assets/cat_meow.mp3',
+          soundStatus: 'PLAYING',
+        },
+        () => setTimeout(() => this.setState({
+          animalSound: '',
+          soundStatus: 'STOPPED',
+        }), 700),
+      ),
+      cow: () => this.setState(
+        {
+          animalSound: '/assets/cow_moo.mp3',
+          soundStatus: 'PLAYING',
+        },
+        () => setTimeout(() => this.setState({
+          animalSound: '',
+          soundStatus: 'STOPPED',
+        }), 800),
+      ),
     };
 
     this.makeTileBlink = this.makeTileBlink.bind(this);
