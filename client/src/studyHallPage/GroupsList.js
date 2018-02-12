@@ -10,7 +10,7 @@ class GroupsList extends React.Component {
   render() {
     return (
       <div>
-        <div className='groupsListHeader ui segment scroll'>Group Chats</div>
+        <div className='chatListHeader ui segment scroll'>Group Chats</div>
         <div>{this.props.groupChats.map((group, i) => (
           <GroupConnnected
             key={i}

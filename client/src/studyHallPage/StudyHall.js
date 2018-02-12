@@ -63,7 +63,6 @@ class StudyHall extends React.Component {
   }
 
   changeChat(name, type, members) {
-    console.log(name, type, members)
     this.setState({
       channel: name,
       type,
@@ -112,8 +111,8 @@ class StudyHall extends React.Component {
       return (<div>No socket connection</div>);
     }
     return (
-      <div className="ui segment studyHallContainer">
-        <div className="groupsList ui segment">
+      <div className="studyHallContainer ui segment">
+        <div className="chatList ui segment">
           <GroupsList
             changeChat={this.changeChat.bind(this)}
             channel={this.state.channel}
@@ -121,7 +120,7 @@ class StudyHall extends React.Component {
             closeGroupChat={this.closeGroupChat.bind(this)}
           />
         </div>
-        <div className="friendsList studyBackground ui segment">
+        <div className="chatList ui segment">
           <PrivateChatList
             changeChat={this.changeChat.bind(this)}
             channel={this.state.channel}
@@ -129,18 +128,19 @@ class StudyHall extends React.Component {
             closePrivateChat={this.closePrivateChat.bind(this)}
           />
         </div>
-        <div className="Search ui form">
+        <div className="searchContainer ui form">
           <SearchConnected
           updatePrivateChats={this.updatePrivateChats.bind(this)}
           updateGroupChats={this.updateGroupChats.bind(this)}
         />
         </div>
+        <div className="chatBoxContainer ui segment">
           <ChatBox
             chat={this.state.channel}
             type={this.state.type}
             members={this.state.members}
           />
-      
+        </div>
       </div>
     );
   }

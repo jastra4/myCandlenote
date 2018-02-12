@@ -10,7 +10,7 @@ class PrivateChatList extends React.Component {
   render() {
     return (
       <div>
-        <div className='friendsListHeader ui segment scroll'>Private Chats</div>
+        <div className='chatListHeader ui segment scroll'>Private Chats</div>
         <div> {this.props.privateChats.map((chat, i) => (
           <PrivateChatConnected
             key={i}

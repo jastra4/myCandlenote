@@ -94,11 +94,11 @@ class ChatBox extends React.Component {
 
   render() {
     return (
-      <div className="Chat ui segment">
+      <div>
         <div className="chatHeader">
           {this.props.chat}
-          <div className={`${this.state.type}Header`}>
-            <i class="groupChatMembers users icon"></i>
+          <div className={`${this.state.type}HeaderType`}>
+            <i className="groupChatMembers users icon"></i>
             {this.props.members}
           </div>
         </div>

@@ -4,7 +4,15 @@ import { connect } from 'react-redux';
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { selected: false };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.chat === this.props.groupChat.groupname) {
+      this.setState({ selected: true });
+    } else {
+      this.setState({ selected: false });
+    }
   }
 
   handleClick() {
@@ -17,11 +25,11 @@ class Group extends React.Component {
 
   render() {
     return (
-      <div className='group'>
-        <span className='groupName' onClick={this.handleClick.bind(this)}>
+      <div className={`chatContainer chatSelected${this.state.selected}`}>
+        <span className='chatName' onClick={this.handleClick.bind(this)}>
           {this.props.groupChat.groupname}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='groupRemove'>x</span>
+        <span onClick={this.closeSelf.bind(this)} className='closeChat'>x</span>
       </div>
     );
   }

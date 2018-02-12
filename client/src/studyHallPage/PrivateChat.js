@@ -8,6 +8,7 @@ class PrivateChat extends React.Component {
     this.state = {
       status: this.props.privateChat.status || 'offline',
       unread: 0,
+      selected: false,
     };
     this.startListeners = this.startListeners.bind(this);
   }
@@ -15,7 +16,10 @@ class PrivateChat extends React.Component {
   updateUnread(nextProps = this.props.chat) {
     const friendName = this.props.privateChat.username;
     if (nextProps.chat === this.props.privateChat.username) {
-      this.setState({ unread: 0 });
+      this.setState({
+        unread: 0,
+        selected: true,
+      });
     } else {
       axios.get(`/loadMyMessages?username=${this.props.username}&&chatName=${friendName}`)
         .then((messages) => {
@@ -25,11 +29,14 @@ class PrivateChat extends React.Component {
               count += 1;
             }
           });
-          this.setState({ unread: count });
+          this.setState({
+            unread: count,
+            selected: false,
+          });
         })
-        // .catch((error) => {
-        //   console.log(error);
-        // });
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
@@ -108,14 +115,15 @@ class PrivateChat extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={`chatContainer chatSelected${this.state.selected}`}>
+        <i className={`${this.state.status} circle icon`}></i>
         <span
-          className={`friendName ${this.state.status} ${this.state.activeChat}`}
-          onClick={this.handleClick.bind(this)}
-          >{this.props.privateChat.username}
+          className='chatName'
+          onClick={this.handleClick.bind(this)}>
+          {this.props.privateChat.username}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='friendRemove'>x</span>
-        <span className='friendUnreadMessages'>{this.state.unread}</span>
+        <span onClick={this.closeSelf.bind(this)} className='closeChat'>X</span>
+        <span className={`numUnread numUnread${this.state.unread}`}>{this.state.unread}</span>
       </div>
     );
   }
