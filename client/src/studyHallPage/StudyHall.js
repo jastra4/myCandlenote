@@ -102,9 +102,9 @@ class StudyHall extends React.Component {
   }
 
   closeGroupChat(i, username, chatname) {
-    const updated = this.state.groupChats;
-    updated.splice(i, 1);
-    this.setState({ groupChats: updated });
+    // const updated = this.state.groupChats;
+    // updated.splice(i, 1);
+    // this.setState({ groupChats: updated });
 
     if (chatname === this.state.channel) {
       this.setState({

@@ -234,7 +234,7 @@ io.sockets.on('connection', (socket) => {
   socket.on('leave group chat', (data) => {
     deletes.removeGroupMember(data.groupname, data.username, (bool) => {
       if (bool) {
-        allSockets[data.username].emit('closed group chat', data.groupname);
+        //allSockets[data.username].emit('closed group chat', data.groupname);
       }
     });
   });
