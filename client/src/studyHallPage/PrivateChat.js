@@ -26,6 +26,7 @@ class PrivateChat extends React.Component {
           let count = 0;
           messages.data.forEach((message) => {
             if (message.readReciept === false) {
+              console.log('message: ', message);
               count += 1;
             }
           });
@@ -41,6 +42,7 @@ class PrivateChat extends React.Component {
   }
 
   componentDidMount() {
+    this.props.socket.removeAllListeners();
     const friendName = this.props.privateChat.username;
 
     this.updateUnread();
@@ -49,39 +51,25 @@ class PrivateChat extends React.Component {
       username: this.props.username,
       friend: friendName,
     });
-
     this.startListeners();
-
-    // this.props.socket.on(`response ${friendName}`, (status) => {
-    //   this.setState({ status });
-    // });
-
-    // this.props.socket.on(`${friendName} signed on`, () => {
-    //   this.setState({ status: 'away' });
-    // });
-
-    // this.props.socket.on(`${friendName} signed off`, () => {
-    //   this.setState({ status: 'offline' });
-    // });
-
-    // this.props.socket.on(`${friendName} is available`, () => {
-    //   this.setState({ status: 'available' });
-    // });
-
-    // this.props.socket.on(`${friendName} is away`, () => {
-    //   this.setState({ status: 'away' });
-    // });
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateUnread(nextProps);
+    this.props.socket.removeAllListeners();
     window.setTimeout(this.startListeners, 700);
   }
 
   startListeners() {
     const friendName = this.props.privateChat.username;
 
+    this.props.socket.emit('pingFriend', {
+      username: this.props.username,
+      friend: friendName,
+    });
+
     this.props.socket.on(`response ${friendName}`, (status) => {
+      console.log(`'resonse' set ${friendName} to ${status}`);
       this.setState({ status });
     });
 
@@ -98,6 +86,7 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on(`${friendName} is available`, () => {
+      console.log(`'is available' set ${friendName} to available`);
       this.setState({ status: 'available' });
     });
 

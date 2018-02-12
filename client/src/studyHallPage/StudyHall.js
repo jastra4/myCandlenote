@@ -19,6 +19,7 @@ class StudyHall extends React.Component {
       members: '', // chatMembers
     };
     this.loadChatLists = this.loadChatLists.bind(this);
+    this.loadPrivateChats = this.loadPrivateChats.bind(this);
   }
 
   componentDidMount() {
@@ -37,6 +38,7 @@ class StudyHall extends React.Component {
   loadPrivateChats() {
     return axios.get(`/loadPrivateChats?currentUser=${this.props.username}`)
       .then((chats) => {
+        console.log('loadPrivateChats: ', chats.data);
         this.setState({ privateChats: chats.data });
       })
       .catch((err) => {
@@ -71,9 +73,10 @@ class StudyHall extends React.Component {
   }
 
   closePrivateChat(i, username, otheruser) {
-    const updated = this.state.privateChats;
-    updated.splice(i, 1);
-    this.setState({ privateChats: updated });
+    // const updated = this.state.privateChats;
+    // updated.splice(i, 1);
+    // console.log('updated users: ', updated);
+    // this.setState({ privateChats: updated });
 
     if (otheruser === this.state.channel) {
       this.setState({
@@ -82,10 +85,20 @@ class StudyHall extends React.Component {
       });
     }
 
-    this.props.socket.emit('close private chat', {
+    axios.post('/closeChat', {
       username,
       otheruser,
+    }).then((res) => {
+      if (res.data) {
+        this.loadPrivateChats();
+      }
     });
+
+    // change this to axios
+    // this.props.socket.emit('close private chat', {
+    //   username,
+    //   otheruser,
+    // });
   }
 
   closeGroupChat(i, username, chatname) {

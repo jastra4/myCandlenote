@@ -193,8 +193,11 @@ io.sockets.on('connection', (socket) => {
 
   // ChatBox > PrivateChat
   socket.on('pingFriend', (data) => {
+    console.log('*** pingFriend *** ', data.friend);
     if (data.friend in allSockets) {
       allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
+    } else {
+      allSockets[data.username].emit(`response ${data.friend}`, 'offline');
     }
   });
 
@@ -364,9 +367,17 @@ app.get('/loadMyMessages', (req, res) => {
 });
 
 app.post('/readReciept', (req, res) => {
-  console.log('readReciept ', req.body.msg);
+  console.log('/readReciept: ', req.body.msg);
   inserts.readReciept(req.body.msg);
   res.send();
+});
+
+app.post('/closeChat', (req, res) => {
+  const { username, otheruser } = req.body;
+  deletes.closePrivateChat(username, otheruser, (bool) => {
+    console.log(`closePrivateChat ${bool}`);
+    res.send(bool);
+  });
 });
 
 /* ----------- Google Cal Routes ------------ */
