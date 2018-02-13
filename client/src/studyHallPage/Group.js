@@ -15,21 +15,22 @@ class Group extends React.Component {
     }
   }
 
-  handleClick() {
-    this.props.changeChat(this.props.groupChat.groupname, 'group', this.props.groupChat.members.length);
+  select() {
+    const { groupname, members } = this.props.groupChat;
+    this.props.selectChat(groupname, 'group', members);
   }
 
-  closeSelf() {
-    this.props.closeChat(this.props.self, this.props.username, this.props.groupChat.groupname);
+  close() {
+    this.props.closeChat(this.props.username, this.props.groupChat.groupname, 'group');
   }
 
   render() {
     return (
       <div className={`chatContainer chatSelected${this.state.selected}`}>
-        <span className='chatName' onClick={this.handleClick.bind(this)}>
+        <span className='chatName' onClick={this.select.bind(this)}>
           {this.props.groupChat.groupname}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='closeChat'>x</span>
+        <span onClick={this.close.bind(this)} className='closeChat'>x</span>
       </div>
     );
   }

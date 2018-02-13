@@ -14,10 +14,9 @@ class GroupsList extends React.Component {
         <div>{this.props.groupChats.map((group, i) => (
           <GroupConnnected
             key={i}
-            self={i}
             chat={this.props.channel}
             groupChat={group}
-            changeChat={this.props.changeChat}
+            selectChat={this.props.selectChat}
             closeChat={this.props.closeGroupChat}
             className='group'
           />

@@ -20,7 +20,6 @@ class ChatBox extends React.Component {
   }
 
   componentDidMount() {
-    // const chatbox = document.getElementById('chatBox');
     this.props.socket.emit('available', { username: this.props.username });
   }
 
@@ -35,7 +34,6 @@ class ChatBox extends React.Component {
     });
     // display others messages
     this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
-      // change message status to read true
       axios.post('/readReciept', { msg: data });
       this.setState({ messages: this.state.messages.concat([data]) });
     });
@@ -59,9 +57,6 @@ class ChatBox extends React.Component {
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -91,7 +86,7 @@ class ChatBox extends React.Component {
           {this.props.chat}
           <div className={`${this.state.type}HeaderType`}>
             <i className="groupChatMembers users icon"></i>
-            {this.props.members}
+            {this.props.members.length}
           </div>
         </div>
         <div className="chatMessages scroll" id="chatBox">

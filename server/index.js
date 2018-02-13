@@ -192,8 +192,13 @@ io.sockets.on('connection', (socket) => {
   });
 
   // ChatBox > PrivateChat
+  socket.on('away', (data) => {
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} is away`);
+  });
+
+  // ChatBox > PrivateChat
   socket.on('pingFriend', (data) => {
-    console.log('*** pingFriend *** ', data.friend);
     if (data.friend in allSockets) {
       allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
     } else {
@@ -201,42 +206,19 @@ io.sockets.on('connection', (socket) => {
     }
   });
 
-  // ChatBox > PrivateChat
-  socket.on('away', (data) => {
-    allSockets[data.username].status = 'away';
-    allSockets[data.username].broadcast.emit(`${data.username} is away`);
-  });
-
-  // PrivateChat > PrivateChatList
-  socket.on('close private chat', (data) => {
-    deletes.closePrivateChat(data.username, data.otheruser, (bool) => {
-      console.log(`closePrivateChat ${bool}`);
-    });
-  });
-
-  // Search > GroupChatList
-  socket.on('create group chat', (data) => {
-    inserts.createGroup(data.groupname, data.username, (bool) => {
-      console.log(`createGroup ${bool}`);
-    });
-  });
-
-  // Search > GroupChatList
-  socket.on('join group chat', (data) => {
-    inserts.addGroupMember(data.groupname, data.username, (bool) => {
-      if (bool) {
-        allSockets[data.username].emit('joined group', { groupname: data.groupname });
+  // ChatBox > ChatBox
+  socket.on('submit message', (message) => {
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
+    inserts.saveMessage(message);
+    if (message.type === 'private') {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        allSockets[message.to].emit('new message');
       }
-    });
-  });
-
-  // Group > GroupChatList
-  socket.on('leave group chat', (data) => {
-    deletes.removeGroupMember(data.groupname, data.username, (bool) => {
-      if (bool) {
-        //allSockets[data.username].emit('closed group chat', data.groupname);
-      }
-    });
+    } else {
+      io.sockets.emit(`submitted message ${message.to}`, message);
+    }
   });
 
   app.post('/openChat', (req, res) => {
@@ -281,26 +263,19 @@ io.sockets.on('connection', (socket) => {
     }
   });
 
-  // Search > GroupChatList
-  // socket.on('delete group chat', (data) => {
-  //   console.log(`delete group ${data.username} deleted ${data.groupname}`);
-  //   allSockets[data.username].emit('deleted group', data.groupname);
-  // });
-
-  // ChatBox > ChatBox
-  socket.on('submit message', (message) => {
-    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
-    inserts.saveMessage(message);
-    if (message.type === 'private') {
-      allSockets[message.sentBy].emit('submitted message', message);
-      if (message.to in allSockets) {
-        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
-        allSockets[message.to].emit('new message');
-      }
-    } else {
-      io.sockets.emit(`submitted message ${message.to}`, message);
-    }
-  });
+app.post('/closeChat', (req, res) => {
+  const { username, chatname, chatType } = req.body;
+  if (chatType === 'private') {
+    deletes.closePrivateChat(username, chatname, (bool) => {
+      console.log(`closePrivateChat ${bool}`);
+      res.send(bool);
+    });
+  } else {
+    deletes.removeGroupMember(username, chatname, (bool) => {
+      console.log(`closeGroupChat ${bool}`);
+    });
+  }
+});
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
@@ -359,25 +334,16 @@ app.get('/loadChatHistory', (req, res) => {
   }
 });
 
-app.get('/loadMyMessages', (req, res) => {
+app.get('/checkMessages', (req, res) => {
   const { username, chatName } = req.query;
   queries.loadMyMessages(username, chatName, (docs) => {
     res.send(docs);
   });
 });
 
-app.post('/readReciept', (req, res) => {
-  console.log('/readReciept: ', req.body.msg);
-  inserts.readReciept(req.body.msg);
+app.post('/setReadReciept', (req, res) => {
+  inserts.setReadReciept(req.body.msg);
   res.send();
-});
-
-app.post('/closeChat', (req, res) => {
-  const { username, otheruser } = req.body;
-  deletes.closePrivateChat(username, otheruser, (bool) => {
-    console.log(`closePrivateChat ${bool}`);
-    res.send(bool);
-  });
 });
 
 /* ----------- Google Cal Routes ------------ */

@@ -15,18 +15,18 @@ class PrivateChat extends React.Component {
 
   updateUnread(nextProps = this.props.chat) {
     const friendName = this.props.privateChat.username;
-    if (nextProps.chat === this.props.privateChat.username) {
+
+    if (nextProps.chat === friendName) {
       this.setState({
         unread: 0,
         selected: true,
       });
     } else {
-      axios.get(`/loadMyMessages?username=${this.props.username}&&chatName=${friendName}`)
+      axios.get(`/checkMessages?username=${this.props.username}&&chatName=${friendName}`)
         .then((messages) => {
           let count = 0;
           messages.data.forEach((message) => {
             if (message.readReciept === false) {
-              console.log('message: ', message);
               count += 1;
             }
           });
@@ -34,29 +34,20 @@ class PrivateChat extends React.Component {
             unread: count,
             selected: false,
           });
-        })
-        .catch((error) => {
-          console.log(error);
         });
     }
   }
 
   componentDidMount() {
     this.props.socket.removeAllListeners();
-    const friendName = this.props.privateChat.username;
-
     this.updateUnread();
-
-    this.props.socket.emit('pingFriend', {
-      username: this.props.username,
-      friend: friendName,
-    });
     this.startListeners();
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateUnread(nextProps);
     this.props.socket.removeAllListeners();
+    // what if server sends data during the 700 wait
     window.setTimeout(this.startListeners, 700);
   }
 
@@ -69,7 +60,6 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on(`response ${friendName}`, (status) => {
-      console.log(`'resonse' set ${friendName} to ${status}`);
       this.setState({ status });
     });
 
@@ -86,7 +76,6 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on(`${friendName} is available`, () => {
-      console.log(`'is available' set ${friendName} to available`);
       this.setState({ status: 'available' });
     });
 
@@ -97,20 +86,14 @@ class PrivateChat extends React.Component {
     });
   }
 
-  handleClick() {
-    this.props.changeChat(this.props.privateChat.username, 'private', '');
+  select() {
+    const { username } = this.props.privateChat;
+    this.props.selectChat(username, 'private', '');
   }
 
-  closeSelf() {
-    this.props.closeChat(this.props.self, this.props.username, this.props.privateChat.username);
+  close() {
+    this.props.closeChat(this.props.username, this.props.privateChat.username, 'private');
   }
-
-  // deleteUser() {
-  //   axios.post('/deleteUser', { username: this.props.privateChat.username })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // }
 
   render() {
     return (
@@ -118,10 +101,10 @@ class PrivateChat extends React.Component {
         <i className={`${this.state.status} circle icon`}></i>
         <span
           className='chatName'
-          onClick={this.handleClick.bind(this)}>
+          onClick={this.select.bind(this)}>
           {this.props.privateChat.username}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='closeChat'>X</span>
+        <span onClick={this.close.bind(this)} className='closeChat'>X</span>
         <span className={`numUnread numUnread${this.state.unread}`}>{this.state.unread}</span>
       </div>
     );

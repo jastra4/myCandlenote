@@ -18,7 +18,7 @@ const closePrivateChat = (username, otheruser, callback) => {
   });
 };
 
-const removeGroupMember = (groupname, username, callback) => {
+const removeGroupMember = (username, groupname, callback) => {
   Groups.findOne({ groupname }, (err, group) => {
     if (err) {
       console.log(err);

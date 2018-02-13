@@ -52,15 +52,13 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
   });
 };
 
-const readReciept = (msg) => {
+const setReadReciept = (msg) => {
   const { to, sentBy, text, timeStamp, created } = msg;
-  console.log('readReciept init: ', msg);
   const query = db.Messages.findOne({ $and: [{ to }, { sentBy }, { text }, { timeStamp }, { created }] });
   query.exec((err, doc) => {
     if (err || doc === null) {
       console.log('err: ', err, ' doc ', doc);
     } else {
-      console.log('readReciept found: ', doc);
       doc.set({ readReciept: true });
       doc.save();
     }
@@ -157,7 +155,7 @@ module.exports = {
   insertFlashcard,
   saveAccessToken,
   saveMessage,
-  readReciept,
+  setReadReciept,
   openPrivateChat,
   addGroupMember,
   createGroup,

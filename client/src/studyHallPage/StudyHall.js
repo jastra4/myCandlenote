@@ -15,11 +15,10 @@ class StudyHall extends React.Component {
       channel: 'No chat selected',
       privateChats: [],
       groupChats: [],
-      type: 'none', // chatType
-      members: '', // chatMembers
+      type: 'none',
+      members: '',
     };
     this.loadChatLists = this.loadChatLists.bind(this);
-    this.loadPrivateChats = this.loadPrivateChats.bind(this);
   }
 
   componentDidMount() {
@@ -38,11 +37,7 @@ class StudyHall extends React.Component {
   loadPrivateChats() {
     return axios.get(`/loadPrivateChats?currentUser=${this.props.username}`)
       .then((chats) => {
-        console.log('loadPrivateChats: ', chats.data);
         this.setState({ privateChats: chats.data });
-      })
-      .catch((err) => {
-        console.log('loadPrivateChats: ', err);
       });
   }
 
@@ -50,21 +45,18 @@ class StudyHall extends React.Component {
     return axios.get(`/loadGroupChats?currentUser=${this.props.username}`)
       .then((groups) => {
         this.setState({ groupChats: groups.data });
-      })
-      .catch((err) => {
-        console.log('loadGroupChats: ', err);
       });
   }
 
-  updatePrivateChats(newChat) {
+  addPrivateChat(newChat) {
     this.setState({ privateChats: this.state.privateChats.concat([newChat]) });
   }
 
-  updateGroupChats(newChat) {
+  addGroupChat(newChat) {
     this.setState({ groupChats: this.state.groupChats.concat([newChat]) });
   }
 
-  changeChat(name, type, members) {
+  selectChat(name, type, members) {
     this.setState({
       channel: name,
       type,
@@ -72,13 +64,8 @@ class StudyHall extends React.Component {
     });
   }
 
-  closePrivateChat(i, username, otheruser) {
-    // const updated = this.state.privateChats;
-    // updated.splice(i, 1);
-    // console.log('updated users: ', updated);
-    // this.setState({ privateChats: updated });
-
-    if (otheruser === this.state.channel) {
+  closeChat(username, chatname, chatType) {
+    if (chatname === this.state.channel) {
       this.setState({
         channel: 'No chat selected',
         type: 'none',
@@ -87,35 +74,12 @@ class StudyHall extends React.Component {
 
     axios.post('/closeChat', {
       username,
-      otheruser,
+      chatname,
+      chatType,
     }).then((res) => {
       if (res.data) {
-        this.loadPrivateChats();
+        this.loadChatLists();
       }
-    });
-
-    // change this to axios
-    // this.props.socket.emit('close private chat', {
-    //   username,
-    //   otheruser,
-    // });
-  }
-
-  closeGroupChat(i, username, chatname) {
-    // const updated = this.state.groupChats;
-    // updated.splice(i, 1);
-    // this.setState({ groupChats: updated });
-
-    if (chatname === this.state.channel) {
-      this.setState({
-        channel: 'No chat selected',
-        type: 'none',
-      });
-    }
-
-    this.props.socket.emit('leave group chat', {
-      username,
-      groupname: chatname,
     });
   }
 
@@ -127,24 +91,24 @@ class StudyHall extends React.Component {
       <div className="studyHallContainer ui segment">
         <div className="chatList ui segment">
           <GroupsList
-            changeChat={this.changeChat.bind(this)}
+            selectChat={this.selectChat.bind(this)}
             channel={this.state.channel}
             groupChats={this.state.groupChats}
-            closeGroupChat={this.closeGroupChat.bind(this)}
+            closeGroupChat={this.closeChat.bind(this)}
           />
         </div>
         <div className="chatList ui segment">
           <PrivateChatList
-            changeChat={this.changeChat.bind(this)}
+            selectChat={this.selectChat.bind(this)}
             channel={this.state.channel}
             privateChats={this.state.privateChats}
-            closePrivateChat={this.closePrivateChat.bind(this)}
+            closePrivateChat={this.closeChat.bind(this)}
           />
         </div>
         <div className="searchContainer ui form">
           <SearchConnected
-          updatePrivateChats={this.updatePrivateChats.bind(this)}
-          updateGroupChats={this.updateGroupChats.bind(this)}
+          addPrivateChat={this.addPrivateChat.bind(this)}
+          addGroupChat={this.addGroupChat.bind(this)}
         />
         </div>
         <div className="chatBoxContainer ui segment">
