@@ -43,7 +43,7 @@ const flashcardsSchema = mongoose.Schema({
 
 const Flashcards = mongoose.model('flashcards', flashcardsSchema);
 
-const Session = mongoose.model('sessions', {});
+const Session = mongoose.model('sessions', { _id: String });
 
 const notesSchema = mongoose.Schema({
   title: String,

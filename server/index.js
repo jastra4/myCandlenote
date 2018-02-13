@@ -129,8 +129,19 @@ app.get('/login', (req, res) => {
 app.get('/api/getUserByCookie/:cookie', (req, res) => {
   const { cookie } = req.params;
   queries.getUserByCookie(cookie)
-  .then((res) => { console.log('res from cookie: ', res) });
-  res.status(200).send({ userid });
+  .then(( result ) => { 
+    // console.log('result: ', result);
+    // console.log('jsonresult: ', JSON.parse(JSON.stringify(result)));
+    const { user } = JSON.parse(JSON.parse(JSON.stringify(result)).session).passport;
+    
+    // console.log('session: ', JSON.parse(JSON.parse(JSON.stringify(result))));
+    // const { user } = session.passport;
+    // console.log('user: ', user);
+    res.end(':)');
+  })
+  .catch((e) => { console.error(e); });
+  
+  // res.status(200).send({ userid });
 });
 
 
