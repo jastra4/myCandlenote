@@ -1,29 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-
-const noteStyle = {
-  position: 'relative',
-  textAlign: 'center',
-  width: '150px',
-  height: '193px',
-  float: 'left',
-  marginLeft: '30px',
-  cursor: 'pointer',
-  maxWidth: '130px',
-  overflow: 'hidden',
-};
-
-const imageStyle = {
-  width: '100%',
-  height: '100%',
-};
-
-const textStyle = {
-  position: 'absolute',
-  top: '-5%',
-  left: '13%',
-};
-
+import moment from 'moment';
 
 export default class NotePreview extends Component {
   constructor(props) {
@@ -33,6 +10,14 @@ export default class NotePreview extends Component {
 
   componentDidMount() {
     this.setState({ redirect: false });
+    const modifiedAt = moment(this.props.modifiedAt);
+    const modifiedDay = modifiedAt.format('MMM Do YYYY');
+    const today = moment().format('MMM Do YYYY');
+    const formattedTime = modifiedDay === today
+      ? modifiedAt.format('MMM Do YYYY').fromNow()
+      :moment(this.props.modifiedAt).format('MMM Do YYYY');
+    
+    this.setState({ formattedTime });
   }
 
   handleNoteChange = () => {
@@ -47,9 +32,9 @@ export default class NotePreview extends Component {
     this.state.redirect
       ? <Redirect to='/notepad' />
       : (
-        <div style={ noteStyle } onClick={ this.handleNoteChange }>
-            <img src='/assets/notepad.png' style={ imageStyle } />
-            <h2 style={ textStyle }>{ this.props.title }</h2>
+        <div class='notePreview' onClick={ this.handleNoteChange }>
+          <div className='notePreviewTitle'>{ this.props.title }</div>
+          <div className='notePreviewDate'>{ this.state.formattedTime }</div>
         </div>
       )
   )

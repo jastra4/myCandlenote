@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Input } from 'semantic-ui-react'
 import NotePreview from './notePreview';
 
 
@@ -15,6 +16,7 @@ export default class Notebox extends Component {
   componentDidMount() {
     const currentUser = this.props.currentUser.userId;
     this.props.getNotes(currentUser);
+    console.log('this.state.notes: ', this.state.notes);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -23,6 +25,8 @@ export default class Notebox extends Component {
 
   render = () => (
     <div>
+
+      <Input action='Search' placeholder='Search...' className='notePreviewSearch'/>
       {
         this.state.notes && this.state.notes.map(note =>
           <NotePreview
@@ -32,13 +36,18 @@ export default class Notebox extends Component {
             setCurrentNote={ this.props.setCurrentNote }
           />)
       }
-      <div id='test1' class='testDiv'>
+      <div class='notePreview'>
         <div className='notePreviewTitle'>On the Origins of War and Peace</div>
         <div className='notePreviewDate'>Opened Feb 12, 2018</div>
       </div>
-      <div id='test2' class='testDiv'>The Art of War</div>
-      <div id='test3' class='testDiv'>On Truth and Falsity</div>
-      
+      <div class='notePreview'>  
+        <div className='notePreviewTitle'>On the Origins of War and Peace</div>
+        <div className='notePreviewDate'>Opened Feb 12, 2018</div>
+      </div>
+      <div class='notePreview'>
+        <div className='notePreviewTitle'>On the Origins of War and Peace</div>
+        <div className='notePreviewDate'>Opened Feb 12, 2018</div>
+      </div>
     </div>
   );
 }
