@@ -5,8 +5,8 @@ import ReactQuill from 'react-quill';
 // import _ from 'lodash';
 
 export default class MainEditor extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { value: '' };
 
     this.handleEditorChange = this.handleEditorChange.bind(this);
@@ -21,8 +21,9 @@ export default class MainEditor extends React.Component {
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('noteContent'));
-    this.setState({ value });
+    // const value = JSON.parse(window.localStorage.getItem('noteInfo'));
+    const { body } = this.props;
+    this.setState({ value: body });
     this.quillEditor.focus();
   }
 
@@ -34,14 +35,8 @@ export default class MainEditor extends React.Component {
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
-    console.log('change')
-    chrome.runtime.sendMessage({ 
-      action: 'updateNote',
-      payload: {
-        title: 'Default Title',
-        body: packet,
-      }
-    });
+
+    this.props.handleEditorChange(packet)
   }
 
 

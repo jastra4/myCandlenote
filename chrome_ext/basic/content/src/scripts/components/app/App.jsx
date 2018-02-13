@@ -28,6 +28,8 @@ class App extends Component {
 
   componentWillMount() {
     document.addEventListener('keydown', this.handleKeyPress)
+    const noteInfo = window.localStorage.getItem('noteInfo');
+    this.setState({ ...noteInfo });
   }
 
   componentWillUnmount() {
@@ -59,13 +61,38 @@ class App extends Component {
     }
   }
 
+  handleInputChange = (e) => {
+    const title = e.target.value;
+    this.setState({ title });
+  }
+
+  updateNoteInfo = () => {
+    const { title, body, authorID } = this.state;
+    const noteInfo = {
+      title,
+      body, 
+      authorID,
+    };
+    window.localStorage.setContent({ noteInfo });
+  }
+
+  handleEditorChange = (packet) => {
+    chrome.runtime.sendMessage({
+      action: 'updateNote',
+      payload: {
+        title: this.state.title || 'Untitled',
+        body: packet,
+        authorID
+      }
+    });
+  }
   
   render(){
     return (
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
-          <Editor />
-          <input className='titleInputCE' placeholder='Untitled'/>
+          <Editor handleEditorChange={ this.handleEditorChange } body={ this.state.body }/>
+          <input onChange={ this.handleInputChange } className='titleInputCE' placeholder='Untitled'/>
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote
