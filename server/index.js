@@ -263,19 +263,19 @@ io.sockets.on('connection', (socket) => {
     }
   });
 
-app.post('/closeChat', (req, res) => {
-  const { username, chatname, chatType } = req.body;
-  if (chatType === 'private') {
-    deletes.closePrivateChat(username, chatname, (bool) => {
-      console.log(`closePrivateChat ${bool}`);
-      res.send(bool);
-    });
-  } else {
-    deletes.removeGroupMember(username, chatname, (bool) => {
-      console.log(`closeGroupChat ${bool}`);
-    });
-  }
-});
+  app.post('/closeChat', (req, res) => {
+    const { username, chatname, chatType } = req.body;
+    if (chatType === 'private') {
+      deletes.closePrivateChat(username, chatname, (bool) => {
+        console.log(`closePrivateChat ${bool}`);
+        res.send(bool);
+      });
+    } else {
+      deletes.removeGroupMember(username, chatname, (bool) => {
+        console.log(`closeGroupChat ${bool}`);
+      });
+    }
+  });
 
   // auto > PrivateChat
   socket.on('disconnect', () => {

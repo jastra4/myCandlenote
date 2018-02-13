@@ -54,7 +54,13 @@ const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
 
 const setReadReciept = (msg) => {
   const { to, sentBy, text, timeStamp, created } = msg;
-  const query = db.Messages.findOne({ $and: [{ to }, { sentBy }, { text }, { timeStamp }, { created }] });
+  const query = db.Messages.findOne({ $and: [
+    { to },
+    { sentBy },
+    { text },
+    { timeStamp },
+    { created },
+  ] });
   query.exec((err, doc) => {
     if (err || doc === null) {
       console.log('err: ', err, ' doc ', doc);
