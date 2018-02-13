@@ -9,23 +9,27 @@
 
 .user-data-container {
   display: inline-block;
+  width: max-content !important;
   margin: 0 !important;
 }
 
 .friends-list-container {
-  margin-top: 5.2em;
+  margin-top: 4.3em;
   display: flex;
   align-items: flex-end;
 }
 
 .user-friends-container {
   display: inline-block;
-  margin: 0 !important;
 }
 
 .user-friend-card-count {
   max-height: 20em;
   overflow: auto;
+}
+
+.user-friend-card-count li:not(:first-child) {
+  margin-top: 5px;
 }
 
 .user-data-fbox {
@@ -44,4 +48,15 @@
 
 .user-search-username {
   font-weight: bold;
+}
+
+.friends-list-container-squished {
+  margin-left: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.friends-list-container-squished .card {
+  margin: 1em 0em !important;
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Image, Segment, Header, Label } from 'semantic-ui-react';
+import MediaQuery from 'react-responsive';
 import axios from 'axios';
 import '../../dist/assets/profilePage.css';
 import UserData from './UserData';
@@ -99,7 +100,7 @@ export default class UserProfile extends React.Component {
     return (
       <Grid columns="equal">
         <Grid.Row>
-          <Grid.Column width={12}>
+          <Grid.Column>
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">
               <Segment>
@@ -119,16 +120,33 @@ export default class UserProfile extends React.Component {
                 </div>
               </Segment>
             </div>
+            <MediaQuery maxWidth={899}>
+              <div className="friends-list-container-squished">
+                <UserFriendsList
+                  friends={this.state.friends}
+                  handleRemoveFriend={this.handleRemoveFriend}
+                />
+                <UserSearchBox
+                  currentUser={this.props.currentUser}
+                  getFriend={this.props.getFriend}
+                />
+              </div>
+            </MediaQuery>
           </Grid.Column>
-          <Grid.Column>
-            <div className="friends-list-container">
-              <UserFriendsList
-                friends={this.state.friends}
-                handleRemoveFriend={this.handleRemoveFriend}
+          <MediaQuery minWidth={900}>
+            <Grid.Column width={4}>
+              <div className="friends-list-container">
+                <UserFriendsList
+                  friends={this.state.friends}
+                  handleRemoveFriend={this.handleRemoveFriend}
+                />
+              </div>
+              <UserSearchBox
+                currentUser={this.props.currentUser}
+                getFriend={this.props.getFriend}
               />
-            </div>
-            <UserSearchBox currentUser={this.props.currentUser} getFriend={this.props.getFriend} />
-          </Grid.Column>
+            </Grid.Column>
+          </MediaQuery>
         </Grid.Row>
         <Grid.Row>
         </Grid.Row>
