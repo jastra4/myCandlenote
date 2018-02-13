@@ -1,4 +1,5 @@
 const { Flashcards, Decks, Messages, User, Groups } = require('./index');
+const db = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
   new Flashcards({
@@ -17,7 +18,7 @@ const insertDeck = ({ subject, title, userId }) => (
   }).save()
 );
 
-const saveMessage = ({ to, sentBy, text, timeStamp }) => {
+const saveMessage = ({ to, sentBy, text, timeStamp, type, readReciept }) => {
   // add user to friends list (private chat) after receiving a message from them
   User.findOne({ username: to }, (err, user) => {
     if (err || user === null) {
@@ -31,8 +32,43 @@ const saveMessage = ({ to, sentBy, text, timeStamp }) => {
     to,
     sentBy,
     text,
+    readReciept,
     timeStamp,
   }).save();
+  // update groups or user
+  let Chat;
+  if (type === 'group') {
+    Chat = Groups;
+  } else {
+    Chat = User;
+  }
+  Chat.findOne({ username: to }, (err, doc) => {
+    if (err || doc === null) {
+      console.log('No users found by that name');
+    } else {
+      doc.set({ lastUpdate: new Date() });
+      doc.save();
+    }
+  });
+};
+
+const setReadReciept = (msg) => {
+  const { to, sentBy, text, timeStamp, created } = msg;
+  const query = db.Messages.findOne({ $and: [
+    { to },
+    { sentBy },
+    { text },
+    { timeStamp },
+    { created },
+  ] });
+  query.exec((err, doc) => {
+    if (err || doc === null) {
+      console.log('err: ', err, ' doc ', doc);
+    } else {
+      doc.set({ readReciept: true });
+      doc.save();
+    }
+  });
 };
 
 const openPrivateChat = (username, otheruser, callback) => {
@@ -125,6 +161,7 @@ module.exports = {
   insertFlashcard,
   saveAccessToken,
   saveMessage,
+  setReadReciept,
   openPrivateChat,
   addGroupMember,
   createGroup,

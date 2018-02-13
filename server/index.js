@@ -152,6 +152,12 @@ app.get('/userProfile', (req, res) => {
 
 /* --------- POST Handlers ----------- */
 
+app.post('/deleteUser', (req, res) => {
+  const { username } = req.body;
+  deletes.deleteUser(username);
+  res.send(`deleted user: ${username}`);
+});
+
 app.post('/makePDF', (req, res) => {
   const url = req.body.tab_url;
   const fileName = JSON.stringify(Date.now());
@@ -175,48 +181,51 @@ io.sockets.on('connection', (socket) => {
 
   // App > PrivateChat
   socket.on('sign on', (data) => {
-    console.log(`sign on ${data.username}`);
     allSockets[data.username].status = 'away';
     allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
   });
 
-  // PrivateChat > PrivateChat
-  socket.on('acknowledge', (data) => {
-    console.log(`acknowledge ${data.to} by ${data.username}`);
-    if (data.to in allSockets) {
-      allSockets[data.to].emit('acknowledged', data.username, data.status);
-    }
-  });
-
   // ChatBox > PrivateChat
   socket.on('available', (data) => {
-    console.log(`available ${data.username}`);
     allSockets[data.username].status = 'available';
-    allSockets[data.username].broadcast.emit('is available', data.username);
-  });
-
-  // ChatBox > PrivateChat
-  socket.on('friend ping', (data) => {
-    console.log(`ping ${data.username} to ${data.to}`);
-    if (data.to in allSockets) {
-      allSockets[data.username].emit(`sent ping ${data.to}`, allSockets[data.to].status);
-    }
+    allSockets[data.username].broadcast.emit(`${data.username} is available`);
   });
 
   // ChatBox > PrivateChat
   socket.on('away', (data) => {
-    console.log(`away ${data.username}`);
     allSockets[data.username].status = 'away';
-    allSockets[data.username].broadcast.emit('is away', data.username);
+    allSockets[data.username].broadcast.emit(`${data.username} is away`);
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('pingFriend', (data) => {
+    if (data.friend in allSockets) {
+      allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
+    } else {
+      allSockets[data.username].emit(`response ${data.friend}`, 'offline');
+    }
+  });
+
+  // ChatBox > ChatBox
+  socket.on('submit message', (message) => {
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
+    inserts.saveMessage(message);
+    if (message.type === 'private') {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        allSockets[message.to].emit('new message');
+      }
+    } else {
+      io.sockets.emit(`submitted message ${message.to}`, message);
+    }
   });
 
   app.post('/openChat', (req, res) => {
     const { username, chatname, type } = req.body;
     if (type === '/c ') {
-      console.log('/openChat create group ', username, ' ', chatname, ' ', type);
-      inserts.createGroup(chatname, username, (bool, group) => {
+      inserts.createGroup(chatname, username, (bool) => {
         if (bool) {
-          console.log('group: ', group);
           res.send({
             groupname: chatname,
             members: [{ username }],
@@ -226,10 +235,8 @@ io.sockets.on('connection', (socket) => {
         }
       });
     } else if (type === '/j ') {
-      console.log('/openChat join group ', username, ' ', chatname, ' ', type);
       inserts.addGroupMember(chatname, username, (bool, group) => {
         if (bool) {
-          console.log('group: ', group);
           res.send({
             groupname: chatname,
             members: group.members,
@@ -239,7 +246,6 @@ io.sockets.on('connection', (socket) => {
         }
       });
     } else {
-      console.log('/openChat private ', username, ' ', chatname, ' ', type);
       inserts.openPrivateChat(username, chatname, (bool) => {
         if (bool) {
           let status = 'offline';
@@ -257,68 +263,24 @@ io.sockets.on('connection', (socket) => {
     }
   });
 
-  // PrivateChat > PrivateChatList
-  socket.on('close private chat', (data) => {
-    console.log(`close private chat ${data.username} with ${data.otheruser}`);
-    deletes.closePrivateChat(data.username, data.otheruser, (bool) => {
-      console.log(`closePrivateChat ${bool}`);
-    });
-  });
-
-  // Search > GroupChatList
-  socket.on('create group chat', (data) => {
-    console.log(`create group ${data.username} created ${data.groupname}`);
-    inserts.createGroup(data.groupname, data.username, (bool) => {
-      console.log(`createGroup ${bool}`);
-    });
-  });
-
-  // Search > GroupChatList
-  // socket.on('delete group chat', (data) => {
-  //   console.log(`delete group ${data.username} deleted ${data.groupname}`);
-  //   allSockets[data.username].emit('deleted group', data.groupname);
-  // });
-
-  // Search > GroupChatList
-  socket.on('join group chat', (data) => {
-    console.log(`join group ${data.groupname} by ${data.username}`);
-    inserts.addGroupMember(data.groupname, data.username, (bool) => {
-      if (bool) {
-        allSockets[data.username].emit('joined group', { groupname: data.groupname });
-      }
-    });
-  });
-
-  // Group > GroupChatList
-  socket.on('leave group chat', (data) => {
-    console.log(`leave group ${data.username} left ${data.groupname}`);
-    deletes.removeGroupMember(data.groupname, data.username, (bool) => {
-      if (bool) {
-        console.log('removeGroupMember: ', bool);
-        allSockets[data.username].emit('closed group chat', data.groupname);
-      }
-    });
-  });
-
-  // ChatBox > ChatBox
-  socket.on('submit message', (message) => {
-    console.log(`submit message ${message.sentBy} to ${message.to}`);
-    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
-    inserts.saveMessage(message);
-    if (message.type === 'private') {
-      allSockets[message.sentBy].emit('submitted message', message);
-      if (message.to in allSockets) {
-        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
-      }
+  app.post('/closeChat', (req, res) => {
+    const { username, chatname, chatType } = req.body;
+    if (chatType === 'private') {
+      deletes.closePrivateChat(username, chatname, (bool) => {
+        console.log(`closePrivateChat ${bool}`);
+        res.send(bool);
+      });
     } else {
-      io.sockets.emit(`submitted message ${message.to}`, message);
+      deletes.removeGroupMember(username, chatname, (bool) => {
+        console.log(`closeGroupChat ${bool}`);
+      });
     }
   });
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
     console.log(socket.username, ' disconnected');
-    allSockets[socket.username].broadcast.emit('signed off', allSockets[socket.username].username);
+    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
     delete allSockets[socket.username];
   });
 });
@@ -346,7 +308,6 @@ app.post('/assignUsername', (req, res) => {
 // called by PrivateChats.js
 app.get('/loadPrivateChats', (req, res) => {
   const { currentUser } = req.query;
-  console.log('loadPrivateChats: ', currentUser);
   queries.loadPrivateChats(currentUser, (friends) => {
     res.send(friends);
   });
@@ -355,7 +316,6 @@ app.get('/loadPrivateChats', (req, res) => {
 // called by GroupsList.js
 app.get('/loadGroupChats', (req, res) => {
   const { currentUser } = req.query;
-  console.log('loadGroupChats: ', currentUser);
   queries.loadGroupChats(currentUser, (groups) => {
     res.send(groups);
   });
@@ -372,6 +332,18 @@ app.get('/loadChatHistory', (req, res) => {
       res.send(docs);
     });
   }
+});
+
+app.get('/checkMessages', (req, res) => {
+  const { username, chatName } = req.query;
+  queries.loadMyMessages(username, chatName, (docs) => {
+    res.send(docs);
+  });
+});
+
+app.post('/setReadReciept', (req, res) => {
+  inserts.setReadReciept(req.body.msg);
+  res.send();
 });
 
 /* ----------- Google Cal Routes ------------ */

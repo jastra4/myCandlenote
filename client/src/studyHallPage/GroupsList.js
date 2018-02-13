@@ -10,14 +10,13 @@ class GroupsList extends React.Component {
   render() {
     return (
       <div>
-        <div className='groupsListHeader'>Group Chats</div>
+        <div className='chatListHeader ui segment scroll'>Group Chats</div>
         <div>{this.props.groupChats.map((group, i) => (
           <GroupConnnected
             key={i}
-            self={i}
-            chat={this.props.currentChat}
+            chat={this.props.channel}
             groupChat={group}
-            changeChat={this.props.changeChat}
+            selectChat={this.props.selectChat}
             closeChat={this.props.closeGroupChat}
             className='group'
           />
