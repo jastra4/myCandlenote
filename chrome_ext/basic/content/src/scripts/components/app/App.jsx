@@ -2,6 +2,18 @@ import React, {Component} from 'react';
 import Editor from '../editor';
 import '../../../styles/styles.css'
 
+const inputStyle = {
+  backgroundColor: 'transparent';
+  border: 'none';
+  fontSize: '25px';
+  fontWeight: '100';
+  width: '500px';
+  height: '30px';
+  paddingNottom: '10px';
+  paddingLeft: '20px';
+  paddingTop: '15px';
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -53,6 +65,7 @@ class App extends Component {
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
           <Editor />
+          <input style={inputStyle} placeholder='Untitled'/>
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote

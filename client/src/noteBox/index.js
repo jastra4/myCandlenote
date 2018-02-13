@@ -58,16 +58,16 @@ export default class Notebox extends Component {
             setCurrentNote={ this.props.setCurrentNote }
           />)
       }
-
-
-      {/* <img
+      {
+        /* <img
         src='./assets/folder.png'
         style='width: 200px'
       />
       <img
         src='./assets/folder.png'
         style='width: 200px'
-      /> */}
+      /> */
+      }
       <div
         style={{
           backgroundImage: './assets/folder.png', 

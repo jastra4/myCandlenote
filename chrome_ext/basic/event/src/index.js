@@ -14,16 +14,18 @@ chrome.cookies.getAll({ name: 'candleNote' }, (res) => {
     })
     .catch((e) => { console.error(e) });
 });
+
 // TODO: Listen to cookie
 chrome.runtime.onMessage.addListener((req) => {
-  console.log('req: ', req)
-  if (currentUser && (req.action === 'updateNote')) {
+  console.log('req: ', req);
+  console.log('authorid: ', authorID);
+  if (authorID && (req.action === 'updateNote')) {
     const noteInfo = {
       authorID,
       body: req.payload.packet,
       title: 'Default Title :)',
     }
-    currentUser && axios.post(`${DOMAIN}/api/editNote`, noteInfo)
+    axios.post(`${DOMAIN}/api/editNote`, noteInfo)
       .then((res) => {
         console.log('res from updateNote: ', res);
       })

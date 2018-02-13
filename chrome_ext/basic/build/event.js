@@ -964,16 +964,18 @@ chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
     console.error(e);
   });
 });
+
 // TODO: Listen to cookie
 chrome.runtime.onMessage.addListener(function (req) {
   console.log('req: ', req);
-  if (currentUser && req.action === 'updateNote') {
+  console.log('authorid: ', authorID);
+  if (authorID && req.action === 'updateNote') {
     var noteInfo = {
       authorID: authorID,
       body: req.payload.packet,
       title: 'Default Title :)'
     };
-    currentUser && _axios2.default.post(DOMAIN + '/api/editNote', noteInfo).then(function (res) {
+    _axios2.default.post(DOMAIN + '/api/editNote', noteInfo).then(function (res) {
       console.log('res from updateNote: ', res);
     }).catch(function (e) {
       console.error(e);
