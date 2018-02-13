@@ -23,5 +23,4 @@ const UserFriendsList = props => (
     </Card.Content>
   </Card>
 );
-
 export default UserFriendsList;

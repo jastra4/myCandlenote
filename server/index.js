@@ -278,8 +278,16 @@ io.sockets.on('connection', (socket) => {
   });
 
   socket.on('invite to video conference', (data) => {
+    console.log('The invite to conference emitter was fired');
     if (data.friendName in allSockets) {
       allSockets[data.friendName].emit('invited to video conference', data.myId, data.username);
+    }
+  });
+
+  socket.on('accept invite to video conference', (data) => {
+    console.log('Accept invite emitter fired');
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('accepted invite to video conference', data.myId, data.username);
     }
   });
 

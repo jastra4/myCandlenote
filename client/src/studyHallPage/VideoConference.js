@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Modal, Button, Icon } from 'semantic-ui-react';
 import Peer from 'peerjs';
 import axios from 'axios';
 import UserFriendsList from '../profilePage/UserFriendsList';
@@ -16,6 +17,8 @@ class VideoConference extends React.Component {
       initialized: false,
       newCall: [],
       friends: this.props.friends,
+      showInvite: false,
+      friendWhoWantsToTalk: {},
     };
     this.handlePeerIdSumbmission = this.handlePeerIdSumbmission.bind(this);
     this.call = this.call.bind(this);
@@ -63,7 +66,22 @@ class VideoConference extends React.Component {
 
     this.props.socket.on('invited to video conference', (myId, username) => {
       console.log('MyId on invited to conference emitter: ', myId);
-      this.handlePeerIdSumbmission(myId);
+      this.setState({
+        showInvite: true,
+        friendWhoWantsToTalk: {
+          myId: myId,
+          username: username,
+        },
+      });
+    });
+
+    this.props.socket.on('accepted invite to video conference', (myId, username) => {
+      console.log('MyId on accepted to conference emitter: ', myId);
+      this.setState({ remoteId: [...this.state.remoteId, myId] }, () => {
+        console.log('My peer id: ', this.state.myId);
+        console.log('Remote Id i received and want to call: ', this.state.remoteId[0]);
+        this.call();
+      });
     });
   }
 
@@ -72,22 +90,30 @@ class VideoConference extends React.Component {
   }
 
 
-  handlePeerIdSumbmission(id) {
-    console.log('remoteId at submission: ', this.state.remoteId);
+  handlePeerIdSumbmission(id, bool) {
+    console.log('new remoteID at submission: ', id);
 
-    const connection = this.state.peer.connect(this.state.remoteId[0]);
+    const connection = this.state.peer.connect(id);
     console.log('New connection object: ', connection);
 
     this.setState({
       conn: connection,
       remoteId: [...this.state.remoteId, id],
+      showInvite: false,
     }, () => {
       this.state.conn.on('open', () => {
         this.setState({ connected: true });
         console.log('Calling from peer id submission');
         this.call();
       });
-      this.state.conn.on('data', this.onReceiveData);
+      console.log('Acepting invite to Video Conference');
+      if (bool) {
+        this.props.socket.emit('accept invite to video conference', {
+          username: this.props.username,
+          friendName: this.state.friendWhoWantsToTalk.username,
+          myId: this.state.myId,
+        });
+      }
     });
 
     console.log('Connection open after send?', connection.open);
@@ -108,28 +134,10 @@ class VideoConference extends React.Component {
       if (this.state.newCall[0]) {
         this.state.newCall[0].answer(stream);
       }
-      if (this.state.newCall[1]) {
-        this.state.newCall[1].answer(stream);
-      }
-      if (this.state.newCall[2]) {
-        this.state.newCall[2].answer(stream);
-      }
     }, (err) => { console.log('Error in on receive call: ', err); });
     if (this.state.newCall[0]) {
       this.state.newCall[0].on('stream', (stream) => {
         const video = document.querySelector('.video-call-one');
-        video.src = window.URL.createObjectURL(stream);
-      });
-    }
-    if (this.state.newCall[1]) {
-      this.state.newCall[1].on('stream', (stream) => {
-        const video = document.querySelector('.video-call-two');
-        video.src = window.URL.createObjectURL(stream);
-      });
-    }
-    if (this.state.newCall[2]) {
-      this.state.newCall[2].on('stream', (stream) => {
-        const video = document.querySelector('.video-call-three');
         video.src = window.URL.createObjectURL(stream);
       });
     }
@@ -166,7 +174,7 @@ class VideoConference extends React.Component {
 
   handleRemoveFriend(friendId) {
     console.log('Removed Friend:', friendId);
-    this.props.removeFriend(friendId);
+    this.props.handleRemoveFriend(friendId);
     axios.post('/api/removeFriend', {
       friendId,
       userId: this.props.id,
@@ -182,13 +190,6 @@ class VideoConference extends React.Component {
         <div className="video-container">
           <video className="video-call-one" autoPlay></video>
           <video className="video-self" autoPlay></video>
-          <div className="share">
-            <a>Share - {this.state.myId}</a>
-          </div>
-          <div>
-            <input type="text" className="peer-id" onChange={this.handlePeerIdChange}></input>
-            <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
-          </div>
         </div>
         <div className="friends-list-container">
           <UserFriendsList
@@ -197,6 +198,29 @@ class VideoConference extends React.Component {
             handleVideoConferenceInviteClick={this.handleVideoConferenceInviteClick}
           />
         </div>
+          <Modal open={this.state.showInvite} >
+            <Modal.Header as="h1">
+              Remove friend from friends list
+            </Modal.Header>
+            <Modal.Content as="p">
+              Are you sure you want to remove
+               {this.state.friendWhoWantsToTalk.username} from your friends list?
+            </Modal.Content>
+            <Modal.Actions>
+              <Button
+                color='red'
+                onClick={() => this.setState({
+                  showInvite: false,
+                  friendWhoWantsToTalk: {},
+                })}
+              >
+                <Icon name='remove' /> No
+              </Button>
+              <Button color='green' onClick={() => this.handlePeerIdSumbmission(this.state.friendWhoWantsToTalk.myId, true)}>
+                <Icon name='checkmark' /> Yes
+              </Button>
+            </Modal.Actions>
+          </Modal>
       </div>
     );
   }

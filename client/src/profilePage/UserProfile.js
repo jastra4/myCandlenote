@@ -119,7 +119,6 @@ export default class UserProfile extends React.Component {
     return (
       <Grid columns="equal">
         <Grid.Row>
-
           <Modal open={this.state.showWarning} >
             <Modal.Header as="h1">
               Remove friend from friends list
@@ -143,7 +142,6 @@ export default class UserProfile extends React.Component {
               </Button>
             </Modal.Actions>
           </Modal>
-
           <Grid.Column>
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">
@@ -177,12 +175,6 @@ export default class UserProfile extends React.Component {
               </div>
             </MediaQuery>
           </Grid.Column>
-          <Grid.Column>
-            <div className="friends-list-container">
-              <UserFriendsList
-                friends={this.state.friends}
-                handleRemoveFriend={this.handleRemoveFriend}
-                handleVideoConferenceInviteClick={this.handleVideoConferenceInviteClick}
           <MediaQuery minWidth={900}>
             <Grid.Column width={4}>
               <div className="friends-list-container">
