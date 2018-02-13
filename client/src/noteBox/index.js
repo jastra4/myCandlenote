@@ -58,18 +58,6 @@ export default class Notebox extends Component {
             setCurrentNote={ this.props.setCurrentNote }
           />)
       }
-      {/* <div class='notePreview'>
-        <div className='notePreviewTitle'>On the Origins of War and Peace</div>
-        <div className='notePreviewDate'>Opened Feb 12, 2018</div>
-      </div>
-      <div class='notePreview'>  
-        <div className='notePreviewTitle'>On the Origins of War and Peace</div>
-        <div className='notePreviewDate'>Opened Feb 12, 2018</div>
-      </div>
-      <div class='notePreview'>
-        <div className='notePreviewTitle'>On the Origins of War and Peace</div>
-        <div className='notePreviewDate'>Opened Feb 12, 2018</div>
-      </div> */}
     </div>
   );
 }
