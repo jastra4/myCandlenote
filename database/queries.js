@@ -61,7 +61,7 @@ const updateNote = (noteInfo) => {
       if (err) {
         console.error(err);
       } else {
-        console.log('note updated!: ', updatedNote);
+        return updatedNote;
       }
     }));
 };
@@ -87,7 +87,10 @@ const getPacket = _id => Note.find({ _id });
 
 const getUsernameById = _id => User.findOne({ _id }).select('username');
 
+const getTitleById = _id => Note.findOne({ _id }).select('title');
+
 module.exports = {
+  getTitleById,
   getUsernameById,
   getPacket,
   getNotes,

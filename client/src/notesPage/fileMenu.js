@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import PdfModal from './pdfModal';
 import EmailModal from './emailModal';
 
-export default class FileMenu extends React.Component {
+class FileMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -41,6 +42,19 @@ export default class FileMenu extends React.Component {
       .catch((e) => { console.error(e); });
   }
 
+
+  handleDownload = () => {
+    const downloadUrl = `/api/downloadPDF/${ this.state.currentNote }`
+    const link = document.createElement('a');
+    link.setAttribute('href', downloadUrl);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // axios.get(`/api/downloadPDF/${this.state.currentNote}`)
+    //   .catch((e) => { console.error(e); });
+  }
+
   render = () => (
     <div>
       <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
@@ -56,7 +70,7 @@ export default class FileMenu extends React.Component {
           <Icon name='share alternate' />
         </Button.Content>
       </Button>
-    <Button animated='fade' onClick={ this.renderPDF }>
+    <Button animated='fade' onClick={ this.handleDownload }>
         <Button.Content hidden>Download</Button.Content>
         <Button.Content visible>
           <Icon name='download' />
@@ -88,3 +102,5 @@ export default class FileMenu extends React.Component {
     </div>
   );
 }
+
+export default withRouter(FileMenu);

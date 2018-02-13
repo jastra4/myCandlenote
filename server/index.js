@@ -538,23 +538,66 @@ app.post('/api/suggestedWiki', (req, res) => {
 });
 
 
-
-
-app.get('/api/generatePDF', (req, res) => {
-  const body = {
-    currentNote: '5a7b64b7a9cf178b8f246b3c',
-    title: 'On War and Peace: Ch 8',
+app.get('/api/downloadPDF/:currentNote', (req, res) => {
+  const { currentNote } = req.params;
+  const noteInfo = {
+    noteId: currentNote,
     showDate: true,
     showTitle: true,
-    showName: false
+    showName: true,
+  };
 
-  }
-  // console.log('req.body: ', req.body);
+  const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
+
+  (async () => {
+    
+    await queries.updateNote(noteInfo);
+    const { title } = await queries.getTitleById(currentNote);
+    
+    
+    function resolveAfter1Seconds() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('resolved');
+        }, 1500);
+      });
+    }
+
+    function logAfterPDF() {
+      return new Promise((resolve) => {
+        res.download(pathToPDF, `${title}.pdf`, (err) => { console.error(err); });
+        resolve();
+      });
+    }
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await resolveAfter1Seconds();
+    await page.pdf({
+      path: pathToPDF,
+      format: 'Letter',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+        right: '10mm',
+      },
+    });
+    await logAfterPDF(`PDFs/${currentNote}.pdf`);
+    await browser.close();
+  })();
+});
+
+app.post('/api/generatePDF', (req, res) => {
   const { currentNote,
     title,
     showDate,
     showName,
-    showTitle } = body;
+    showTitle } = req.body;
+  
   const noteInfo = {
     noteId: currentNote, showDate, showName, showTitle,
   };
@@ -576,7 +619,6 @@ app.get('/api/generatePDF', (req, res) => {
     function logAfterPDF() {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
-        // res.end();
         res.download(pathToPDF, `${documentTitle}.pdf`, (err) => { console.error(err) });
         resolve('PDF printed');
       });
@@ -601,6 +643,7 @@ app.get('/api/generatePDF', (req, res) => {
     await browser.close();
   })();
 });
+
 
 app.post('/api/getEditorPacket', (req, res) => {
   const { noteToPrint } = req.body;
