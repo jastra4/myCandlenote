@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Icon, Image } from 'semantic-ui-react';
+import MediaQuery from 'react-responsive';
 
 const UserFriendsList = props => (
   <Card raised className="user-friends-container">
@@ -9,10 +10,14 @@ const UserFriendsList = props => (
       </Card.Header>
     </Card.Content>
     <Card.Content className="user-friend-card-count">
-      {'<list of friends>'}
       <ul>
         {props.friends.map(friend => (
-          <li><Image src={friend.profileImage} size="mini" circular spaced="right" />{friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend.id)}/></li>
+          <li>
+            <MediaQuery minWidth={1000}>
+              <Image src={friend.profileImage} size="mini" circular spaced="right" />
+            </MediaQuery>
+            {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend)}/>
+          </li>
         ))}
       </ul>
     </Card.Content>
