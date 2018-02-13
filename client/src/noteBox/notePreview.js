@@ -14,8 +14,8 @@ export default class NotePreview extends Component {
     const modifiedDay = modifiedAt.format('MMM Do YYYY');
     const today = moment().format('MMM Do YYYY');
     const formattedTime = modifiedDay === today
-      ? modifiedAt.format('MMM Do YYYY').fromNow()
-      :moment(this.props.modifiedAt).format('MMM Do YYYY');
+      ? modifiedAt.fromNow()
+      : modifiedAt.format('MMM Do YYYY');
     
     this.setState({ formattedTime });
   }
@@ -34,7 +34,7 @@ export default class NotePreview extends Component {
       : (
         <div class='notePreview' onClick={ this.handleNoteChange }>
           <div className='notePreviewTitle'>{ this.props.title }</div>
-          <div className='notePreviewDate'>{ this.state.formattedTime }</div>
+          <div className='notePreviewDate'>Opened { this.state.formattedTime }</div>
         </div>
       )
   )

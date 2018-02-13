@@ -52,11 +52,13 @@
 .notePreviewDate {
   font-weight: normal;
   font-size: 12px;
-  padding: 30px;
+  padding: 20px;
   padding-bottom: 15px;
-  position: absolute;
+  position: relative;
   bottom: 0px;
   text-align: center;
+  margin: 0px auto;
+  position: absolute;
 }
 
 .notePreviewTitle {
