@@ -17,6 +17,7 @@ export default class PDFModalButton extends Component {
 
   handleButtonClick = () => {
     this.props.renderPDF();
+    this.props.handleStage0Click();
   }
 
   render = () => (

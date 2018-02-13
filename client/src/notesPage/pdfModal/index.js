@@ -15,7 +15,7 @@ export default class PdfModal extends Component {
     this.state = {
       disabled: true,
       stage: 0,
-      progress: 30,
+      progress: 20,
       modalOpen: false,
       showDate: true, 
       showName: true, 
@@ -43,8 +43,7 @@ export default class PdfModal extends Component {
     };
 
     this.props.renderPDF(options, () => {
-      // callback();
-      this.setState({ progress: 100 });
+      this.setState({ progress: 100 }).bind(this);
     });
   }
 
@@ -59,10 +58,10 @@ export default class PdfModal extends Component {
     const incrementProgress = () => {
       const { progress } = this.state;
       const distance = 100 - progress;
-      const newProgress = progress + (distance / 2);
+      const newProgress = progress + (distance / 4);
       this.setState({ progress: newProgress });
     };
-    setInterval(incrementProgress, 500);
+    setInterval(incrementProgress, 750);
   }
 
 
@@ -76,6 +75,7 @@ export default class PdfModal extends Component {
 
   handleStage0Click = () => {
     this.setState({ stage: 1 });
+    this.handleIncrementProgress()
   }
 
   handleStage1Click = () => {
@@ -95,8 +95,6 @@ export default class PdfModal extends Component {
     // console.log('this.state[property]: ', this.state[property]);
     // this.setState({ 'showName': !this.state['showName'] });
     this.setState({ [property]: !this.state[property] });
-    // this.setState({ property: !this.state[property] });
-    // console.log('stateafter: ', this.state)
   }
   /* eslint-disable */
   render = () => (
@@ -121,12 +119,10 @@ export default class PdfModal extends Component {
         <Modal.Content image>
           <Modal.Description>
             <div style={{ textAlign: 'center' }}>
-              {/* <p>Options</p> */}
               <Form>
                 <Checkbox 
                   style={ checkboxStyle }
                   toggle
-                  // defaultChecked={true}
                   checked={ this.state.showTitle }
                   label='Show Title'
                   onClick={ this.handleChange }
@@ -135,7 +131,6 @@ export default class PdfModal extends Component {
                 <Checkbox 
                   style={checkboxStyle}
                   toggle
-                  // defaultChecked={true}
                   label='Show Name'
                   checked={ this.state.showName }
                   onClick={ this.handleChange }
@@ -144,7 +139,6 @@ export default class PdfModal extends Component {
                 <Checkbox 
                   style={checkboxStyle}
                   toggle
-                  // defaultChecked={true}
                   label='Show Date'
                   checked={ this.state.showDate }
                   onClick={ this.handleChange }
@@ -175,15 +169,23 @@ export default class PdfModal extends Component {
                 : <div style={{ textAlign: 'center' }}>PDF Successfully Generated!</div>
             }
 
-            <Progress percent={this.state.progress} indicating autoSuccess></Progress>
+            <Progress percent={ this.state.progress } indicating autoSuccess></Progress>
 
             {
               this.state.progress === 100 &&
+              // <Button
+              //   onClick={this.handleStage1Click}
+              //   floated='right'
+              //   positive
+              // >Close</Button>
               <Button
-                onClick={this.handleStage1Click}
+                onClick={ () => { 
+                  this.handleStage1Click();
+                  window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`) 
+                }}
                 floated='right'
                 positive
-              >Close</Button>
+              >Open</Button>
             }
           </Modal.Description>
         </Modal.Content>

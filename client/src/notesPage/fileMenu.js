@@ -27,7 +27,7 @@ export default class FileMenu extends React.Component {
     });
   }
 
-  renderPDF = (options) => {
+  renderPDF = (options, callback) => {
     console.log('options: ', options);
     // window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
     const { currentNote, title } = this.state;
@@ -37,13 +37,9 @@ export default class FileMenu extends React.Component {
       ...options,
     })
       .then(() => {
-        // callback();
-        alert('Finished!');
+        callback();
         window.open(`http://localhost:3000/api/pdf/${currentNote}`);
       })
-    // .then(() => {
-
-    // })
       .catch((e) => { console.error(e); });
   }
 
@@ -76,7 +72,8 @@ export default class FileMenu extends React.Component {
       </Button> */}
       <PdfModal
         icon='file pdf outline'
-        renderPDF={ this.renderPDF }        
+        renderPDF={ this.renderPDF }  
+        currentNote={ this.state.currentNote }      
       />
       {/* <Button animated='fade' onClick={ this.renderPDF } >
         <Button.Content hidden>PDF</Button.Content>
