@@ -31,13 +31,12 @@ class Search extends React.Component {
       type,
     })
       .then((res) => {
-        console.log('data: ', res.data);
         if (res.data.error !== undefined) {
           console.log(res.data.error);
         } else if (res.data.members === undefined) {
-          this.props.updatePrivateChats(res.data);
+          this.props.addPrivateChat(res.data);
         } else {
-          this.props.updateGroupChats(res.data);
+          this.props.addGroupChat(res.data);
         }
       });
   }
@@ -46,7 +45,7 @@ class Search extends React.Component {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input id="search" className="input" placeholder="find a user or group"></input>
+          <input id="search" className="input field" placeholder="find a user or group"></input>
         </form>
       </div>
     );

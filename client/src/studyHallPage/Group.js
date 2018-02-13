@@ -4,26 +4,33 @@ import { connect } from 'react-redux';
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { selected: false };
   }
 
-  handleClick() {
-    console.log();
-    this.props.changeChat(this.props.groupChat.groupname, 'group');
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.chat === this.props.groupChat.groupname) {
+      this.setState({ selected: true });
+    } else {
+      this.setState({ selected: false });
+    }
   }
 
-  closeSelf() {
-    this.props.closeChat(this.props.self, this.props.username, this.props.groupChat.groupname);
+  select() {
+    const { groupname, members } = this.props.groupChat;
+    this.props.selectChat(groupname, 'group', members);
+  }
+
+  close() {
+    this.props.closeChat(this.props.username, this.props.groupChat.groupname, 'group');
   }
 
   render() {
     return (
-      <div className='group'>
-        <span className='groupName' onClick={this.handleClick.bind(this)}>
+      <div className={`chatContainer chatSelected${this.state.selected}`}>
+        <span className='chatName' onClick={this.select.bind(this)}>
           {this.props.groupChat.groupname}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='groupRemove'>x</span>
-        <span className='friendUnreadMessages'>{this.props.groupChat.members.length}</span>
+        <span onClick={this.close.bind(this)} className='closeChat'>x</span>
       </div>
     );
   }
