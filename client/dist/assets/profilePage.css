@@ -28,6 +28,10 @@
   overflow: auto;
 }
 
+.user-friends-content {
+  flex-grow: 0 !important;
+}
+
 .user-friend-card-count li:not(:first-child) {
   margin-top: 5px;
 }
@@ -40,6 +44,10 @@
 .user-search-box {
   padding-top: 10px;
   height: 15em;
+}
+
+.user-search-box .content {
+  flex-grow: 0 !important;
 }
 
 .user-search-image {

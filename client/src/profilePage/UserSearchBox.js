@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Form, Card, Input, Image, Label } from 'semantic-ui-react';
+import { debounce } from 'lodash';
 
 export default class UserSearchBox extends React.Component {
   constructor(props) {
@@ -11,18 +12,29 @@ export default class UserSearchBox extends React.Component {
       isUserFound: false,
       showWarning: false,
     };
+
+    this.findUserByName = debounce(this.findUserByName, 500);
   }
 
   handleInputChange(e) {
     const username = e.target.value;
     this.setState({ username });
 
+    this.findUserByName(username);
+  }
+
+  findUserByName(username) {
     axios.post('/api/userByUsername', { username })
       .then((user) => {
         if (user.data) {
           this.setState({
             foundUser: user.data,
             isUserFound: true,
+          });
+        } else {
+          this.setState({
+            foundUser: {},
+            isUserFound: false,
           });
         }
       })
