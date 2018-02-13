@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import '_' from 'lodash';
 import Editor from '../editor';
 import '../../../styles/styles.css'
 
@@ -24,6 +25,8 @@ class App extends Component {
     };
     this.toggleWindowState = this.toggleWindowState.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleEditorChange = this.handleEditorChange.bind(this);
   }
 
   componentWillMount() {
@@ -61,12 +64,12 @@ class App extends Component {
     }
   }
 
-  handleInputChange = (e) => {
+  handleInputChange (e) {
     const title = e.target.value;
     this.setState({ title });
   }
 
-  updateNoteInfo = () => {
+  updateNoteInfo () {
     const { title, body, authorID } = this.state;
     const noteInfo = {
       title,
@@ -76,15 +79,19 @@ class App extends Component {
     window.localStorage.setContent({ noteInfo });
   }
 
-  handleEditorChange = (packet) => {
+  handleEditorChange (packet) {
+    const noteInfo = {
+      title: this.state.title || 'Untitled',
+      body: packet,
+      authorID
+    }
+    
     chrome.runtime.sendMessage({
       action: 'updateNote',
-      payload: {
-        title: this.state.title || 'Untitled',
-        body: packet,
-        authorID
-      }
+      payload: noteInfo,
     });
+
+    window.localStorage.setContent({ noteInfo });
   }
   
   render(){
