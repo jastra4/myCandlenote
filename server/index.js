@@ -564,7 +564,7 @@ app.post('/api/generatePDF', (req, res) => {
         resolve('PDF printed');
       });
     }
-    await queries.updateNote(noteInfo).then(() => { console.log('lolzzz'); return; })
+    await queries.updateNote(noteInfo);
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle2' });

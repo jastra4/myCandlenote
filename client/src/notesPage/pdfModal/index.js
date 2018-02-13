@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Modal, Input, Icon, Progress, Checkbox, Form } from 'semantic-ui-react';
-import axios from 'axios';
-import PdfModalButton from './PdfModalButton';
+import { Button, Modal, Icon, Progress, Checkbox, Form } from 'semantic-ui-react';
+import PdfModalButton from './pdfModalButton';
 
 const checkboxStyle = {
   textAlign: 'left',
   margin: '10px auto',
   display: 'block',
-}
+};
 
 export default class PdfModal extends Component {
   constructor(props) {
@@ -17,8 +16,8 @@ export default class PdfModal extends Component {
       stage: 0,
       progress: 20,
       modalOpen: false,
-      showDate: true, 
-      showName: true, 
+      showDate: true,
+      showName: true,
       showTitle: true,
     };
     this.progressTimer;
@@ -30,12 +29,14 @@ export default class PdfModal extends Component {
     icon === 'print'
       ? modalHeader = 'Configure your CandleNote'
       : modalHeader = 'Configure your CandleNote PDF';
-    this.setState({ icon, modalHeader });
+    this.setState({
+      icon, modalHeader,
+    });
   }
 
   renderPDF = () => {
     const { showDate, showTitle, showName } = this.state;
-    
+
     const options = {
       showDate,
       showTitle,
@@ -64,18 +65,9 @@ export default class PdfModal extends Component {
     setInterval(incrementProgress, 750);
   }
 
-
-  handleEmailChange = (e) => {
-    const email = e.target.value;
-    this.setState({
-      email,
-      disabled: !isEmail(email),
-    });
-  }
-
   handleStage0Click = () => {
     this.setState({ stage: 1 });
-    this.handleIncrementProgress()
+    this.handleIncrementProgress();
   }
 
   handleStage1Click = () => {
@@ -87,7 +79,7 @@ export default class PdfModal extends Component {
   }
 
   handleChange = (e, data) => {
-    console.log('handlechange!')
+    console.log('handlechange!');
     const property = data['data-name'];
     this.setState({ [property]: !this.state[property] });
   }

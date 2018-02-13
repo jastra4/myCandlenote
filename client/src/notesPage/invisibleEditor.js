@@ -35,7 +35,7 @@ export default class InvisibleEditor extends React.Component {
     noteToPrint && axios.post('/api/getEditorPacket', { noteToPrint })
       .then(({ data }) => {
         console.log('data: ', data);
-        const { packet, title, username: author, showDate, showName, showTitle, } = data;
+        const { packet, title, username: author, showDate, showName, showTitle } = data;
         const value = JSON.parse(packet);
         this.setState({
           value, title, author, showDate, showName, showTitle,

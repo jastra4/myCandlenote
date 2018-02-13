@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import axios from 'axios';
-import EmailModal from './emailModal';
 import PdfModal from './pdfModal';
 
 export default class FileMenu extends React.Component {
@@ -28,7 +27,6 @@ export default class FileMenu extends React.Component {
   }
 
   renderPDF = (options, callback) => {
-    console.log('options: ', options);
     const { currentNote, title } = this.state;
     axios.post('/api/generatePDF', {
       currentNote,
@@ -44,7 +42,7 @@ export default class FileMenu extends React.Component {
 
   render = () => (
     <div>
-      {/* <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
+      <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
         <Button.Content hidden >New</Button.Content>
         <Button.Content visible>
           <Icon name='file' />
@@ -68,13 +66,13 @@ export default class FileMenu extends React.Component {
         <Button.Content visible>
           <Icon name='print'/>
         </Button.Content>
-      </Button> */}
+      </Button>
       <PdfModal
         icon='file pdf outline'
-        renderPDF={ this.renderPDF }  
-        currentNote={ this.state.currentNote }      
+        renderPDF={ this.renderPDF }
+        currentNote={ this.state.currentNote }
       />
-      {/* <Button animated='fade' onClick={ this.renderPDF } >
+      <Button animated='fade' onClick={ this.renderPDF } >
         <Button.Content hidden>PDF</Button.Content>
         <Button.Content visible>
           <Icon name='file pdf outline' />
@@ -85,7 +83,7 @@ export default class FileMenu extends React.Component {
         <Button.Content visible>
           <Icon name='trash' />
         </Button.Content>
-      </Button> */}
+      </Button>
     </div>
   );
 }
