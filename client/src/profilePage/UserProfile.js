@@ -120,7 +120,8 @@ export default class UserProfile extends React.Component {
               Remove friend from friends list
             </Modal.Header>
             <Modal.Content as="p">
-              Are you sure you want to remove {this.state.friendToRemove.username} from your friends list?
+              Are you sure you want to remove
+               {this.state.friendToRemove.username} from your friends list?
             </Modal.Content>
             <Modal.Actions>
               <Button
