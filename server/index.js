@@ -551,11 +551,10 @@ app.get('/api/downloadPDF/:currentNote', (req, res) => {
   const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
   (async () => {
-    
     await queries.updateNote(noteInfo);
     const { title } = await queries.getTitleById(currentNote);
-    
-    
+
+
     function resolveAfter1Seconds() {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -593,16 +592,13 @@ app.get('/api/downloadPDF/:currentNote', (req, res) => {
 
 app.post('/api/generatePDF', (req, res) => {
   const { currentNote,
-    title,
     showDate,
     showName,
     showTitle } = req.body;
-  
+
   const noteInfo = {
     noteId: currentNote, showDate, showName, showTitle,
   };
-
-  const documentTitle = title || 'untitled';
 
   const url = `http://${DOMAIN}/pdf/${currentNote}`;
   const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
@@ -619,7 +615,7 @@ app.post('/api/generatePDF', (req, res) => {
     function logAfterPDF() {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
-        res.end()
+        res.end();
         resolve('PDF printed');
       });
     }

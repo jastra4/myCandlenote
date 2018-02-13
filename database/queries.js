@@ -57,12 +57,8 @@ const updateNote = (noteInfo) => {
 
   return (
 
-    Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err, updatedNote) => {
-      if (err) {
-        console.error(err);
-      } else {
-        return updatedNote;
-      }
+    Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err) => {
+      if (err) { console.error(err); }
     }));
 };
 
