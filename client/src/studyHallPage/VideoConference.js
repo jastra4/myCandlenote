@@ -152,8 +152,6 @@ class VideoConference extends React.Component {
         <nav>Video Chat</nav>
         <div className="video-container">
           <video className="video-call-one" autoPlay></video>
-          <video className="video-call-two" autoPlay></video>
-          <video className="video-call-three" autoPlay></video>
           <video className="video-self" autoPlay></video>
           <div className="share">
             <a>Share - {this.state.myId}</a>
