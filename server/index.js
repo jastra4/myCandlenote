@@ -537,14 +537,30 @@ app.post('/api/suggestedWiki', (req, res) => {
     });
 });
 
-app.post('/api/generatePDF', (req, res) => {
+
+
+
+app.get('/api/generatePDF', (req, res) => {
+  const body = {
+    currentNote: '5a7b64b7a9cf178b8f246b3c',
+    title: 'On War and Peace: Ch 8',
+    showDate: true,
+    showTitle: true,
+    showName: false
+
+  }
+  // console.log('req.body: ', req.body);
   const { currentNote,
+    title,
     showDate,
     showName,
-    showTitle } = req.body;
+    showTitle } = body;
   const noteInfo = {
     noteId: currentNote, showDate, showName, showTitle,
   };
+
+  const documentTitle = title || 'untitled';
+
   const url = `http://${DOMAIN}/pdf/${currentNote}`;
   const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
@@ -557,10 +573,11 @@ app.post('/api/generatePDF', (req, res) => {
       });
     }
 
-    function logAfterPDF(/* pdfLocation */) {
+    function logAfterPDF() {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
-        res.end();
+        // res.end();
+        res.download(pathToPDF, `${documentTitle}.pdf`, (err) => { console.error(err) });
         resolve('PDF printed');
       });
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import PdfModal from './pdfModal';
+import EmailModal from './emailModal';
 
 export default class FileMenu extends React.Component {
   constructor(props) {
@@ -35,7 +36,7 @@ export default class FileMenu extends React.Component {
     })
       .then(() => {
         callback();
-        window.open(`http://localhost:3000/api/pdf/${currentNote}`);
+        // window.open(`http://localhost:3000/api/pdf/${currentNote}`);
       })
       .catch((e) => { console.error(e); });
   }

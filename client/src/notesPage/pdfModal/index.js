@@ -44,7 +44,7 @@ export default class PdfModal extends Component {
     };
 
     this.props.renderPDF(options, () => {
-      this.setState({ progress: 100 }).bind(this);
+      this.setState.call({ progress: 100 });
     });
   }
 
@@ -59,7 +59,7 @@ export default class PdfModal extends Component {
     const incrementProgress = () => {
       const { progress } = this.state;
       const distance = 100 - progress;
-      const newProgress = progress + (distance / 4);
+      const newProgress = progress + (distance / 5);
       this.setState({ progress: newProgress });
     };
     setInterval(incrementProgress, 750);
