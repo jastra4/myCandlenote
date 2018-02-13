@@ -97,25 +97,6 @@ export default class UserSearchBox extends React.Component {
           </div>
         </Card.Content> : ''}
       </Card>
-
-
-      // <Card.Content className="user-friends-content">
-      // <Card.Header as="h4" className="user-friends-header">
-      //   <Icon name="users" /> Friends:
-      // </Card.Header>
-      // </Card.Content>
-      // <Card.Content className="user-friend-card-count">
-      //   <ul>
-      //     {props.friends.map(friend => (
-      //       <li>
-      //         <MediaQuery minWidth={1000}>
-      //           <Image src={friend.profileImage} size="mini" circular spaced="right" />
-      //         </MediaQuery>
-      //         {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend)} />
-      //       </li>
-      //     ))}
-      //   </ul>
-      // </Card.Content>
     );
   }
 }
