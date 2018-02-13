@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Decks, Flashcards, User, Note } = require('./index');
+const { Decks, Flashcards, User, Note, Session } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -85,7 +85,10 @@ const getUsernameById = _id => User.findOne({ _id }).select('username');
 
 const getTitleById = _id => Note.findOne({ _id }).select('title');
 
+const getUserByCookie = cookie => Session.findOne({ _id: cookie }).select('session');
+
 module.exports = {
+  getUserByCookie,
   getTitleById,
   getUsernameById,
   getPacket,

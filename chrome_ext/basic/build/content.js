@@ -24841,6 +24841,14 @@ var MainEditor = function (_React$Component) {
       });
       window.localStorage.setItem('noteContent', packet);
       var content = this.getContentFromDelta(delta);
+      console.log('change');
+      chrome.runtime.sendMessage({
+        action: 'updateNote',
+        payload: {
+          title: 'Default Title',
+          body: packet
+        }
+      });
     }
   }, {
     key: 'getContentFromDelta',
@@ -24851,26 +24859,6 @@ var MainEditor = function (_React$Component) {
     }
   }, {
     key: 'render',
-
-
-    // TODO: Use return value from this function to build IntelliSearch
-    // parseContentMeaning (content) (
-    //   axios.post('api/parseContentMeaning', { content })
-    //     .then(({ data: { meaning } }) => {
-    //       console.log('Per Google, the meaning of your text is: ', meaning);
-    //       this.props.setCurrentMeaning(meaning);
-    //       return meaning;
-    //     })
-    // );
-
-
-    // handlePrint = () => {
-    //   const { packet } = this.state;
-    //   axios.post('/api/tempSavePacket', { packet })
-    //     .catch((e) => { console.error(e); });
-    // }
-
-
     value: function render() {
       var _this2 = this;
 
@@ -24879,7 +24867,6 @@ var MainEditor = function (_React$Component) {
         null,
         _react2.default.createElement(_reactQuill2.default, {
           ref: function ref(quillEditor) {
-            console.log('quillEditor: ', quillEditor);
             _this2.quillEditor = quillEditor;
           },
           className: 'cn-quill',

@@ -34,6 +34,14 @@ export default class MainEditor extends React.Component {
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
+    console.log('change')
+    chrome.runtime.sendMessage({ 
+      action: 'updateNote',
+      payload: {
+        title: 'Default Title',
+        body: packet,
+      }
+    });
   }
 
 
@@ -42,24 +50,6 @@ export default class MainEditor extends React.Component {
       tv.concat(cv.insert.replace ? cv.insert.replace(/↵|\r\n|\r|\n|"|'/g, '') : cv.insert)
     ), '')
   };
-
-  // TODO: Use return value from this function to build IntelliSearch
-  // parseContentMeaning (content) (
-  //   axios.post('api/parseContentMeaning', { content })
-  //     .then(({ data: { meaning } }) => {
-  //       console.log('Per Google, the meaning of your text is: ', meaning);
-  //       this.props.setCurrentMeaning(meaning);
-  //       return meaning;
-  //     })
-  // );
-
-
-  // handlePrint = () => {
-  //   const { packet } = this.state;
-  //   axios.post('/api/tempSavePacket', { packet })
-  //     .catch((e) => { console.error(e); });
-  // }
-
 
   render() {
     return (

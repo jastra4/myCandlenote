@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "RCR",
+  "name": "CandleNote",
   "description": "React, Chrome, and Redux example",
   "version": "0.0.0.1",
   "background": {
@@ -19,5 +19,12 @@
       "css": [],
       "js": ["content.js"]
     }
+  ],
+  "permissions": [
+    "<all_urls>",
+    "contextMenus",
+    "tts",
+    "tabs",
+    "cookies"
   ]
 }

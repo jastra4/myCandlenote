@@ -43,6 +43,8 @@ const flashcardsSchema = mongoose.Schema({
 
 const Flashcards = mongoose.model('flashcards', flashcardsSchema);
 
+const Session = mongoose.model('sessions', {});
+
 const notesSchema = mongoose.Schema({
   title: String,
   body: String,
@@ -98,4 +100,5 @@ module.exports = {
   Note,
   Videos,
   Messages,
+  Session,
 };

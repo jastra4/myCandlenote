@@ -7,11 +7,13 @@ const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
 const Promise = require('promise');
+const mongoose = require('mongoose');
 
 const keys = require('./config/keys');
 const puppeteer = require('puppeteer');
 const passport = require('passport');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
@@ -20,9 +22,12 @@ const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
 
 // db imports
+const { db } = require('../database');
 const inserts = require('../database/inserts');
 const queries = require('../database/queries');
 const deletes = require('../database/deletes');
+
+mongoose.connect(keys.mongodb.dbURI);
 
 const app = express();
 const server = require('http').createServer(app); // socket stuff
@@ -76,16 +81,21 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 24 * 60 * 60 * 1000 },
   name: 'candleNote',
+  store: new MongoStore({ url: keys.mongodb.dbURI }),
+  autoRemove: 'native',
 }));
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
 
 // app.use(cookieSession({
 //   maxAge: 24 * 60 * 60 * 1000,
 //   keys: [keys.session.cookieKey],
 // }));
 
-app.use(passport.initialize());
 
-app.use(passport.session());
 
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
@@ -114,6 +124,13 @@ app.get('/api/pdf/:id', (req, res) => {
 
 app.get('/login', (req, res) => {
   res.sendFile(path.join(DIST_DIR, '/index.html'));
+});
+
+app.get('/api/getUserByCookie/:cookie', (req, res) => {
+  const { cookie } = req.params;
+  queries.getUserByCookie(cookie)
+  .then((res) => { console.log('res from cookie: ', res) });
+  res.status(200).send({ userid });
 });
 
 

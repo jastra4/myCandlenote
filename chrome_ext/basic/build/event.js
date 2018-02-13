@@ -73,6 +73,25 @@
 "use strict";
 
 
+chrome.runtime.onMessage.addListener(function (req) {
+  console.log('req: ', req);
+  if (req.action === 'updateNote') {
+    console.log('req.payload: ', req.payload);
+  }
+});
+
+fetch('http://localhost:3000/api/userid').then(function (res) {
+  console.log('res from fetch: ', res);
+}).catch(function (e) {
+  console.error(e);
+});
+
+chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
+  console.log('cookies: ', res);
+  var cookie = res[0].value.slice(4).split('.')[0];
+  console.log('cookie: ', cookie);
+});
+
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
