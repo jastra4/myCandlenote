@@ -17,6 +17,7 @@
 .fileMenu > button {
   width: 100px;
   border-radius: 0px !important;
+  background-color: silver !important;
 }
 
 .pusher .segment.mainPageArea {
