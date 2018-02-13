@@ -9,13 +9,14 @@
   min-height: 650px !important;
 }
 
-.ql-toolbar.ql-snow {
+.maineditor .ql-toolbar.ql-snow {
   background-color: silver;
   text-align: center;
 }
 
 .fileMenu > button {
   width: 100px;
+  border-radius: 0px !important;
 }
 
 .pusher .segment.mainPageArea {
@@ -26,4 +27,38 @@
   background: #eacda3;  /* fallback for old browsers */
   background: -webkit-linear-gradient(to left, #d6ae7b, #eacda3);  /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(to left, #d6ae7b, #eacda3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.testDiv {
+  background: white;
+  height: 200px;
+  width: 200px;
+  margin: 10px;
+  border: 1px solid black;
+  text-align: center;
+  padding: 50px 10px 25px 10px;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  font-size: 15px;
+  cursor: pointer;
+  border: none;
+  position: relative;
+}
+
+.testDiv:hover {
+  border-top: 3px solid green;
+   box-shadow: 10px 10px 5px grey;
+}
+
+.notePreviewDate {
+  font-weight: normal;
+  font-size: 12px;
+  padding: 30px;
+  padding-bottom: 15px;
+  position: absolute;
+  bottom: 0px;
+  text-align: center;
+}
+
+.notePreviewTitle {
+
 }
