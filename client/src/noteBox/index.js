@@ -24,7 +24,7 @@ export default class Notebox extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       notes: nextProps.notes,
-      filteredNotes: this.props.notes, 
+      filteredNotes: nextProps.notes, 
     });
   }
 
