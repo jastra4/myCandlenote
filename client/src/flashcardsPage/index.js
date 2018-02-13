@@ -1,9 +1,11 @@
 import React from 'react';
 import { Header, Icon, Divider, Grid } from 'semantic-ui-react';
+import MediaQuery from 'react-responsive';
 
 import FlashcardCreator from './FlashcardCreator';
 import FlashcardView from './FlashcardView';
 import DeckListVert from '../decksPage/DeckListVertContainer';
+import './style.css';
 
 const styles = {
   containerDiv: {
@@ -31,8 +33,9 @@ const styles = {
 
 const FlashcardPage = props => (
   <div style={{ marginLeft: '20px' }}>
-    <Grid>
-      <Grid.Column width={13}>
+    <Grid columns="equal">
+      <Grid.Column>
+        <MediaQuery minWidth={900}>
           <div style={styles.headerContainer}>
             <Header as='h2' icon>
               <Icon name='clone' />
@@ -41,6 +44,10 @@ const FlashcardPage = props => (
               </p>
             </Header>
           </div>
+        </MediaQuery>
+        <MediaQuery maxWidth={899}>
+          <Header textAlign="center" as="h4" style={{ marginTop: '2em' }}><Icon name="clone"/> {props.currentDeck.title || 'No Deck Selected'}</Header>
+        </MediaQuery>
           <FlashcardView
             cards={props.cards}
             currentDeck={props.currentDeck}
@@ -55,14 +62,16 @@ const FlashcardPage = props => (
             currentUser={props.currentUser}
           />
       </Grid.Column>
-      <Grid.Column width={3}>
-        <div style={styles.sideBar}>
-          <Header as="h2">
-            Decks
-          </Header>
-          <DeckListVert />
-        </div>
-      </Grid.Column>
+      <MediaQuery minWidth={900}>
+        <Grid.Column width={3}>
+          <div style={styles.sideBar}>
+            <Header as="h2">
+              Decks
+            </Header>
+            <DeckListVert />
+          </div>
+        </Grid.Column>
+      </MediaQuery>
     </Grid>
   </div>
 );
