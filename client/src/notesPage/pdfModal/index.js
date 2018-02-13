@@ -151,20 +151,17 @@ export default class PdfModal extends Component {
         <Modal.Content image>
           <Modal.Description>
             {
-              this.state.progress < 100
-                ? <div style={{ textAlign: 'center' }}>Generating PDF</div>
-                : <div style={{ textAlign: 'center' }}>PDF Successfully Generated!</div>
+              this.state.progress === 100
+              ? <div style={{ textAlign: 'center' }}>PDF Successfully Generated!</div>
+              : this.props.text !== 'Print'
+              ? <div style={{ textAlign: 'center' }}>Generating PDF</div>
+              :  <div style={{ textAlign: 'center' }}>Preparing PDF for Printing</div>
             }
-
+           
             <Progress percent={ this.state.progress } indicating autoSuccess></Progress>
 
             {
               this.state.progress === 100 &&
-              // <Button
-              //   onClick={this.handleStage1Click}
-              //   floated='right'
-              //   positive
-              // >Close</Button>
               <Button
                 onClick={ () => { 
                   this.handleStage1Click();
@@ -174,7 +171,11 @@ export default class PdfModal extends Component {
                 }}
                 floated='right'
                 positive
-              >Open</Button>
+              >{
+                this.props.text === 'Print'
+                ? 'Print'
+                : 'Open'
+              }</Button>
             }
           </Modal.Description>
         </Modal.Content>
