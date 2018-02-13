@@ -90,13 +90,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// app.use(cookieSession({
-//   maxAge: 24 * 60 * 60 * 1000,
-//   keys: [keys.session.cookieKey],
-// }));
-
-
-
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 // app.use('/peerjs', peerServer);
@@ -116,8 +109,6 @@ app.get('/pdf/:id', (req, res) => {
 
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
-  console.log('fileName: ', fileName);
-  // res.end();
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
@@ -129,11 +120,11 @@ app.get('/login', (req, res) => {
 app.get('/api/getUserByCookie/:cookie', (req, res) => {
   const { cookie } = req.params;
   queries.getUserByCookie(cookie)
-  .then(( result ) => { 
-    const { user } = JSON.parse(JSON.parse(JSON.stringify(result)).session).passport;
-    res.send({ user });
-  })
-  .catch((e) => { console.error(e); });
+    .then((result) => {
+      const { user } = JSON.parse(JSON.parse(JSON.stringify(result)).session).passport;
+      res.send({ user });
+    })
+    .catch((e) => { console.error(e); });
 });
 
 
@@ -154,7 +145,6 @@ app.get('/api/userid', (req, res) => {
 
 app.post('/api/createNote', (req, res) => {
   const { noteInfo } = req.body;
-  // console.log('noteID: ', noteInfo.authorID);
   inserts.insertNote(noteInfo)
     .then((response) => {
       console.log('Successfully saved new note to DB');
