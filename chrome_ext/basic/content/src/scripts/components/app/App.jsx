@@ -83,7 +83,6 @@ class App extends Component {
     const noteInfo = {
       title: this.state.title || 'Untitled',
       body: packet,
-      authorID
     }
     
     chrome.runtime.sendMessage({

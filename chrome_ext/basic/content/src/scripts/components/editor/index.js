@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
-import '_' from 'lodash';
 // import axios from 'axios';
 
 // import _ from 'lodash';

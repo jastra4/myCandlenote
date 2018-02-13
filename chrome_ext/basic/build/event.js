@@ -942,6 +942,8 @@ module.exports = function bind(fn, thisArg) {
 "use strict";
 
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _axios = __webpack_require__(9);
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -950,7 +952,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var DOMAIN = 'http://localhost:3000';
 
-var authorID = void 0;
+var authorID = window.localStorage.getItem('authorID');
+var currentNote = void 0;
 
 chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
   var cookie = res[0].value.slice(4).split('.')[0];
@@ -958,8 +961,11 @@ chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
   _axios2.default.get(DOMAIN + '/api/getUserByCookie/' + cookie).then(function (_ref) {
     var user = _ref.data.user;
 
-    authorID = user;
-    console.log('authorID updated to: ', authorID);
+    if (user) {
+      authorID = user;
+      window.localStorage.getItem('authorID');
+      console.log('authorID updated to: ', authorID);
+    }
   }).catch(function (e) {
     console.error(e);
   });
@@ -972,14 +978,22 @@ chrome.runtime.onMessage.addListener(function (req) {
   if (authorID && req.action === 'updateNote') {
     var noteInfo = {
       authorID: authorID,
-      body: req.payload.packet,
-      title: 'Default Title :)'
+      body: req.payload.body,
+      title: req.payload.title
     };
-    _axios2.default.post(DOMAIN + '/api/editNote', noteInfo).then(function (res) {
-      console.log('res from updateNote: ', res);
-    }).catch(function (e) {
-      console.error(e);
-    });
+    if (currentNote) {
+      _axios2.default.post(DOMAIN + '/api/editNote', _extends({}, noteInfo, { currentNote: currentNote })).then(function (res) {
+        console.log('res from updateNote: ', res);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    } else {
+      _axios2.default.post(DOMAIN + '/api/createNote', noteInfo).then(function (res) {
+        console.log('res from createNote: ', res);
+      }).catch(function (e) {
+        console.error(e);
+      });
+    }
   }
 });
 
