@@ -23,7 +23,8 @@ body {
 }
 
 .splash-image {
-  width: 30vw;
+  max-width: 30vw !important;
+  min-width: 20em;
   margin-top: 1.5em;
 }
 
