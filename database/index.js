@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
   friends: [{
     friendId: String,
     status: String,
+    _id: false,
   }],
 });
 

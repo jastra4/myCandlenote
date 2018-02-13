@@ -51,9 +51,16 @@ const deleteUser = (username) => {
   });
 };
 
+const removeFriendById = (userId, friendId) => User.findOne({ _id: userId })
+  .then((user) => {
+    user.friends.pull({ friendId });
+    return user.save();
+  });
+
 module.exports = {
   deleteDeck,
   deleteFlashcard,
+  removeFriendById,
   closePrivateChat,
   removeGroupMember,
   deleteUser,
