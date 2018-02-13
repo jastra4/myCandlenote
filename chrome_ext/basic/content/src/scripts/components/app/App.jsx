@@ -3,15 +3,15 @@ import Editor from '../editor';
 import '../../../styles/styles.css'
 
 const inputStyle = {
-  backgroundColor: 'transparent';
-  border: 'none';
-  fontSize: '25px';
-  fontWeight: '100';
-  width: '500px';
-  height: '30px';
-  paddingNottom: '10px';
-  paddingLeft: '20px';
-  paddingTop: '15px';
+  backgroundColor: 'transparent',
+  border: 'none',
+  fontSize: '25px',
+  fontWeight: '100',
+  width: '500px',
+  height: '30px',
+  paddingNottom: '10px',
+  paddingLeft: '20px',
+  paddingTop: '15px',
 }
 
 class App extends Component {
@@ -65,7 +65,7 @@ class App extends Component {
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
           <Editor />
-          <input style={inputStyle} placeholder='Untitled'/>
+          <input className='titleInputCE' placeholder='Untitled'/>
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote

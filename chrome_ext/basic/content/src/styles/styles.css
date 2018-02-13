@@ -145,3 +145,23 @@ div.cn-dismiss {
     transform: rotate(270deg) translateY(0%);
   }
 }
+
+
+.titleInputCE {
+  background-color: transparent;
+  border: none;
+  font-size: 25px;
+  font-weight: 100;
+  width: 500px;
+  height: 40px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-top: 20px;
+	outline: none;
+
+}
+
+.titleInputCE::placeholder {
+	font-weight: normal;
+	font-style: italic;
+}
