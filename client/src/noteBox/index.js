@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Input } from 'semantic-ui-react'
 import NotePreview from './notePreview';
+import SearchBar from './searchBar';
 
 
 export default class Notebox extends Component {
@@ -10,25 +10,47 @@ export default class Notebox extends Component {
   }
 
   componentWillMount() {
-    this.setState({ notes: this.props.notes });
+    this.setState({ 
+      notes: this.props.notes, 
+      filteredNotes: this.props.notes, 
+    });
   }
 
   componentDidMount() {
     const currentUser = this.props.currentUser.userId;
     this.props.getNotes(currentUser);
-    console.log('this.state.notes: ', this.state.notes);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ notes: nextProps.notes });
+    this.setState({
+      notes: nextProps.notes,
+      filteredNotes: this.props.notes, 
+    });
+  }
+
+  filterNotes = (value) => {
+    if (value) {
+      const filteredNotes = this.state.notes.filter((note) => {
+        if (
+          note.body.toLowerCase().includes(value)
+          || note.title.toLowerCase().includes(value)
+        ) {
+          return note;
+        }
+      });
+      this.setState({ filteredNotes });
+    } else {
+      this.setState({ filteredNotes: this.state.notes });
+    }
   }
 
   render = () => (
     <div>
-
-      <Input action='Search' placeholder='Search...' className='notePreviewSearch'/>
+      <SearchBar 
+        filterNotes={ this.filterNotes }
+      />
       {
-        this.state.notes && this.state.notes.map(note =>
+        this.state.notes && this.state.filteredNotes.map(note =>
           <NotePreview
             title={ note.title || 'Untitled' }
             key={ note._id }
@@ -36,7 +58,7 @@ export default class Notebox extends Component {
             setCurrentNote={ this.props.setCurrentNote }
           />)
       }
-      <div class='notePreview'>
+      {/* <div class='notePreview'>
         <div className='notePreviewTitle'>On the Origins of War and Peace</div>
         <div className='notePreviewDate'>Opened Feb 12, 2018</div>
       </div>
@@ -47,7 +69,7 @@ export default class Notebox extends Component {
       <div class='notePreview'>
         <div className='notePreviewTitle'>On the Origins of War and Peace</div>
         <div className='notePreviewDate'>Opened Feb 12, 2018</div>
-      </div>
+      </div> */}
     </div>
   );
 }
