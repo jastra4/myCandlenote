@@ -538,9 +538,14 @@ app.post('/api/suggestedWiki', (req, res) => {
 });
 
 app.post('/api/generatePDF', (req, res) => {
-  const { currentNote } = req.body;
+  const { currentNote,
+    showDate,
+    showName,
+    showTitle } = req.body;
+  const noteInfo = {
+    noteId: currentNote, showDate, showName, showTitle,
+  };
   // const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-
   // writeFile(filePath, packet)
   // .then(() => {
   // console.log('File successfully written');
@@ -571,7 +576,7 @@ app.post('/api/generatePDF', (req, res) => {
         resolve('PDF printed');
       });
     }
-
+    await queries.updateNote(noteInfo).then(() => { console.log('lolzzz'); return; })
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: 'networkidle2' });
@@ -596,11 +601,11 @@ app.post('/api/getEditorPacket', (req, res) => {
   const { noteToPrint } = req.body;
   queries.getPacket(noteToPrint)
     .then((result) => {
-      const { body: packet, authorID, title, showDate } = result[0];
+      const { body: packet, authorID, title, showDate, showTitle, showName } = result[0];
       queries.getUsernameById(authorID)
         .then(({ username }) => {
           res.send({
-            packet, title, username, showDate,
+            packet, title, username, showDate, showTitle, showName,
           });
         });
     })

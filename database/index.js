@@ -57,6 +57,14 @@ const notesSchema = mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  showTitle: {
+    type: Boolean,
+    default: true,
+  },
+  showName: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const Note = mongoose.model('notes', notesSchema);

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import axios from 'axios';
 import EmailModal from './emailModal';
+import PdfModal from './pdfModal';
 
 export default class FileMenu extends React.Component {
   constructor(props) {
@@ -26,13 +27,17 @@ export default class FileMenu extends React.Component {
     });
   }
 
-  renderPDF = () => {
+  renderPDF = (options) => {
+    console.log('options: ', options);
     // window.open('http://localhost:3000/api/pdf/70f744e6-26c4-4f7d-b0b2-c6aeebf02f0e');
     const { currentNote, title } = this.state;
     axios.post('/api/generatePDF', {
-      currentNote, title,
+      currentNote,
+      title,
+      ...options,
     })
       .then(() => {
+        // callback();
         alert('Finished!');
         window.open(`http://localhost:3000/api/pdf/${currentNote}`);
       })
@@ -44,7 +49,7 @@ export default class FileMenu extends React.Component {
 
   render = () => (
     <div>
-      <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
+      {/* <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
         <Button.Content hidden >New</Button.Content>
         <Button.Content visible>
           <Icon name='file' />
@@ -68,8 +73,12 @@ export default class FileMenu extends React.Component {
         <Button.Content visible>
           <Icon name='print'/>
         </Button.Content>
-      </Button>
-      <Button animated='fade' onClick={ this.renderPDF } >
+      </Button> */}
+      <PdfModal
+        icon='file pdf outline'
+        renderPDF={ this.renderPDF }        
+      />
+      {/* <Button animated='fade' onClick={ this.renderPDF } >
         <Button.Content hidden>PDF</Button.Content>
         <Button.Content visible>
           <Icon name='file pdf outline' />
@@ -80,7 +89,7 @@ export default class FileMenu extends React.Component {
         <Button.Content visible>
           <Icon name='trash' />
         </Button.Content>
-      </Button>
+      </Button> */}
     </div>
   );
 }

@@ -29,30 +29,31 @@ export default class InvisibleEditor extends React.Component {
     const noteToPrint = pathname.split('/').pop();
     noteToPrint && axios.post('/api/getEditorPacket', { noteToPrint })
       .then(({ data }) => {
-        const { packet, title, username: author, showDate } = data;
+        console.log('data: ', data);
+        const { packet, title, username: author, showDate, showName, showTitle, } = data;
         const value = JSON.parse(packet);
         this.setState({
-          value, title, author, showDate,
+          value, title, author, showDate, showName, showTitle,
         });
       });
   }
 
   render = () => (
     <div>
-    { this.state.title &&
-    <div style={ titleStyle }>
-      <h2><strong>{ this.state.title }</strong></h2>
-    </div>
+    { this.state.title && this.state.showTitle &&
+      <div style={ titleStyle }>
+        <h2><strong>{ this.state.title }</strong></h2>
+      </div>
     }
     {
-      this.state.author &&
+      this.state.author && this.state.showName &&
       <div style={ authorStyle }>
        <em>by </em><strong>{ this.state.author }</strong>
       </div>
     }
     {
       this.state.showDate &&
-      <div style={ dateStyle }>{ moment().format('MMMM Do, YYYY') }</div>
+      <div style={ dateStyle }>{ moment().format('MMMM Do , YYYY') }</div>
     }
     {
       (this.state.title || this.state.author || this.state.showDate)
