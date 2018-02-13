@@ -99,13 +99,12 @@ class SideBar extends Component {
                 Schedule
               </Menu.Item>
             </Link>
-            <Link to='/video-conference'>
+            <Link to='/video-conference' peer={this.props.peer}>
               <Menu.Item name='video-conference' onClick={this.handleItemClick}>
                 <Icon name='video camera' />
                 Video Conference
               </Menu.Item>
             </Link>
-            <Link to='/quizzlet'>
             <Link to='/simonSays'>
               <Menu.Item name='winner' onClick={ this.handleItemClick }>
                 <Icon name='winner' />

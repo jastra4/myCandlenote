@@ -43,7 +43,7 @@ class TopBar extends Component {
             Logout
         </Menu.Item>
       </Sidebar>
-      <SideBarConnected { ...this.props }/>
+      <SideBarConnected { ...this.props } {...console.log('Peer passed down: ', this.props.peer)}/>
     </div>
   );
 }

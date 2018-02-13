@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import axios from 'axios';
 import io from 'socket.io-client';
+import Peer from 'peerjs';
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 import TopBar from './topBar';
 import MainPage from './mainPage';
@@ -19,6 +20,7 @@ import store from '../src/store';
 import StudyHallConnected from './studyHallPage/StudyHall';
 import VideoConference from './studyHallPage/VideoConference';
 import activeSocket from './actions/activeSocket';
+import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
 
@@ -26,7 +28,7 @@ const socketUrl = 'http://localhost:3000';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
   }
 
   componentDidMount() {
@@ -34,8 +36,10 @@ class App extends React.Component {
       .then((res) => {
         if (res.data.username !== undefined) {
           this.initSocket(res.data.username);
+          this.props.peer(this.state.peer);
         }
       });
+    console.log('Peer object: ', this.state.peer);
   }
 
   initSocket(username) {
@@ -81,7 +85,10 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { activeSocket: (socket, username) => dispatch(activeSocket(socket, username)) }
+  {
+    activeSocket: (socket, username) => dispatch(activeSocket(socket, username)),
+    peer: peerObject => dispatch(passPeer(peerObject)),
+  }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);

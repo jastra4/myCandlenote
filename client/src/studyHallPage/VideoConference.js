@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Peer from 'peerjs';
 
 class VideoConference extends React.Component {
@@ -7,7 +8,7 @@ class VideoConference extends React.Component {
     const id = parseInt(Math.random() * 1e4, 10).toString(16);
     this.state = {
       hash: id,
-      peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }),
+      peer: this.props.peer,
       remoteId: [],
       myId: '',
       initialized: false,
@@ -19,19 +20,26 @@ class VideoConference extends React.Component {
     this.onReceiveCall = this.onReceiveCall.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    console.log('Peer prop in the state: ', this.props.peer);
+
     navigator.getUserMedia = (
       navigator.getUserMedia || navigator.webkitGetUserMedia ||
       navigator.mozGetUserMedia || navigator.msGetUserMedia
     );
 
-    this.state.peer.on('open', (id) => {
-      console.log('Peer id: ', id);
-      this.setState({
-        myId: id,
-        initialized: true,
-      });
-    }); // eslint-disable-line 
+    // this.props.peer.on('open', (id) => {
+    //   console.log('Peer id: ', id);
+    //   this.setState({
+    //     myId: id,
+    //     initialized: true,
+    //   });
+    // }); // eslint-disable-line
+    console.log('state peer object: ', this.state.peer);
+    this.setState({
+      myId: this.props.peer.id,
+      initialized: true,
+    });
 
     this.state.peer.on('connection', (connection) => {
       console.log('connection to set on state: ', connection);
@@ -166,4 +174,13 @@ class VideoConference extends React.Component {
   }
 }
 
-export default VideoConference;
+const mapStateToProps = (state) => {
+  console.log('state in mapStateToProps: ', state);
+  return (
+    { peer: state.peerID.peer }
+  );
+};
+
+const VideoConferenceConnected = connect(mapStateToProps)(VideoConference);
+
+export default VideoConferenceConnected;

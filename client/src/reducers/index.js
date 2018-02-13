@@ -9,6 +9,7 @@ import videosReducer from './videosReducers';
 import socketReducer from './socketReducers';
 import userIdReducer from './userIdReducers';
 import intelliSearchReducer from './intellisearchReducers';
+import videoConferenceReducer from './videoConferenceReducers';
 
 const reducers = combineReducers({
   decks: decksReducer,
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   activeSocket: socketReducer,
   userId: userIdReducer,
   intelliSearch: intelliSearchReducer,
+  peerID: videoConferenceReducer,
 });
 
 export default reducers;
