@@ -88,12 +88,7 @@ export default class PdfModal extends Component {
 
   handleChange = (e, data) => {
     console.log('handlechange!')
-    // console.log('data: ', data);
     const property = data['data-name'];
-    // console.log('property: ', property);
-    // console.log('statebefore: ', this.state)
-    // console.log('this.state[property]: ', this.state[property]);
-    // this.setState({ 'showName': !this.state['showName'] });
     this.setState({ [property]: !this.state[property] });
   }
   /* eslint-disable */

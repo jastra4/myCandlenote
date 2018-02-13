@@ -545,10 +545,6 @@ app.post('/api/generatePDF', (req, res) => {
   const noteInfo = {
     noteId: currentNote, showDate, showName, showTitle,
   };
-  // const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-  // writeFile(filePath, packet)
-  // .then(() => {
-  // console.log('File successfully written');
   const url = `http://${DOMAIN}/pdf/${currentNote}`;
   const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
@@ -557,22 +553,14 @@ app.post('/api/generatePDF', (req, res) => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve('resolved');
-        }, 2000);
+        }, 1500);
       });
     }
 
     function logAfterPDF(/* pdfLocation */) {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
-        // res.download(pdfLocation, title)
         res.end();
-        // res.sendFile(pdfLocation, `${title}.pdf`, (err) => {
-        //   if (err) {
-        //     console.error(err);
-        //   } else {
-        //     console.log('yes!');
-        //   }
-        // });
         resolve('PDF printed');
       });
     }
