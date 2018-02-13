@@ -14,8 +14,9 @@ export default class SearchBar extends Component {
 
   render = () => (
     <Input
-      action='Search'
-      placeholder='Search...'
+      icon='search'
+      iconPosition='left'
+      placeholder='Search Your Notes...'
       className='notePreviewSearch'
       onChange={ this.handleSearch }
     />
