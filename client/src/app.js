@@ -58,7 +58,6 @@ class App extends React.Component {
       .then((res) => {
         socket.emit('away', res.data);
         this.props.activeSocket(socket, res.data);
-        // console.log(`${res.data} connected!`);
       });
   }
 

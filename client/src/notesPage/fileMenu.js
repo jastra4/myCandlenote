@@ -37,7 +37,6 @@ class FileMenu extends React.Component {
     })
       .then(() => {
         callback();
-        // window.open(`http://localhost:3000/api/pdf/${currentNote}`);
       })
       .catch((e) => { console.error(e); });
   }
@@ -50,9 +49,6 @@ class FileMenu extends React.Component {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-
-    // axios.get(`/api/downloadPDF/${this.state.currentNote}`)
-    //   .catch((e) => { console.error(e); });
   }
 
   render = () => (
@@ -70,29 +66,24 @@ class FileMenu extends React.Component {
           <Icon name='share alternate' />
         </Button.Content>
       </Button>
-    <Button animated='fade' onClick={ this.handleDownload }>
+      <Button animated='fade' onClick={ this.handleDownload }>
         <Button.Content hidden>Download</Button.Content>
         <Button.Content visible>
           <Icon name='download' />
-        </Button.Content>
+      </Button.Content>
       </Button>
-      <Button animated='fade' onClick={ this.renderPDF } >
-        <Button.Content hidden>Print</Button.Content>
-        <Button.Content visible>
-          <Icon name='print'/>
-        </Button.Content>
-      </Button>
+      <PdfModal
+        icon='print'
+        renderPDF={ this.renderPDF }
+        currentNote={ this.state.currentNote }
+        text='Print'
+      />
       <PdfModal
         icon='file pdf outline'
         renderPDF={ this.renderPDF }
         currentNote={ this.state.currentNote }
+        text='PDF'
       />
-      <Button animated='fade' onClick={ this.renderPDF } >
-        <Button.Content hidden>PDF</Button.Content>
-        <Button.Content visible>
-          <Icon name='file pdf outline' />
-        </Button.Content>
-      </Button>
       <Button animated='fade' onClick={ this.props.handleDelete }>
         <Button.Content hidden>Delete</Button.Content>
         <Button.Content visible>

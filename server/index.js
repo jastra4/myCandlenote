@@ -619,7 +619,7 @@ app.post('/api/generatePDF', (req, res) => {
     function logAfterPDF() {
       return new Promise((resolve) => {
         console.log('PDF successfully printed 🖨️  👍');
-        res.download(pathToPDF, `${documentTitle}.pdf`, (err) => { console.error(err) });
+        res.end()
         resolve('PDF printed');
       });
     }

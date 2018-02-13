@@ -44,7 +44,7 @@ export default class PdfModal extends Component {
     };
 
     this.props.renderPDF(options, () => {
-      this.setState.call({ progress: 100 });
+      this.setState.call(this, { progress: 100 });
     });
   }
 
@@ -91,7 +91,7 @@ export default class PdfModal extends Component {
           animated='fade'
           onClick={() => { this.setState({ modalOpen: true }) }}
         >
-          <Button.Content hidden>PDF</Button.Content>
+          <Button.Content hidden>{ this.props.text }</Button.Content>
           <Button.Content visible>
             <Icon name={this.state.icon || 'file pdf outline' } />
           </Button.Content>
@@ -168,7 +168,9 @@ export default class PdfModal extends Component {
               <Button
                 onClick={ () => { 
                   this.handleStage1Click();
-                  window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`) 
+                  this.props.text === 'Print'
+                  ? window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`).print()
+                  : window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`);
                 }}
                 floated='right'
                 positive
