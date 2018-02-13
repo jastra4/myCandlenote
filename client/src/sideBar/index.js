@@ -1,22 +1,47 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 
-export default class SideBar extends Component {
+class SideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       backgroundColor: '',
       activeItem: 'home',
+      newMessage: 'noMessages',
     };
+    this.activeListener = this.activeListener.bind(this);
+    this.resetNewMessage = this.resetNewMessage.bind(this);
   }
 
   handleItemClick = (e, { name }) => {
+    if (name === 'student') {
+      this.resetNewMessage();
+    }
     this.setState({ activeItem: name });
   }
 
   changeBackgroundColor = (backgroundColor) => {
     this.setState({ backgroundColor });
+  }
+
+  componentDidMount() {
+    this.activeListener();
+  }
+
+  activeListener() {
+    if (this.props.socket !== undefined) {
+      this.props.socket.on('new message', () => {
+        this.setState({ newMessage: 'newMessage' });
+      });
+    } else {
+      window.setTimeout(this.activeListener, 500);
+    }
+  }
+
+  resetNewMessage() {
+    this.setState({ newMessage: 'noMessages' });
   }
 
   render() {
@@ -63,8 +88,9 @@ export default class SideBar extends Component {
             </Link>
             <Link to='/studyhall'>
               <Menu.Item name='student' onClick={ this.handleItemClick }>
-                <Icon name='student' />
+                <Icon name='student'/>
                 Study Hall
+                <i className={`comment outline icon ${this.state.newMessage}`} ></i>
               </Menu.Item>
             </Link>
             <Link to='/schedule'>
@@ -103,3 +129,9 @@ export default class SideBar extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({ socket: state.activeSocket.socket });
+
+const SideBarConnected = connect(mapStateToProps, null)(SideBar);
+
+export default SideBarConnected;

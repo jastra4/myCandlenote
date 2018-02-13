@@ -28,12 +28,13 @@ class ChatBox extends React.Component {
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
 
     this.props.socket.emit('available', { username: this.props.username });
-    // display mine
+    // display my messages
     this.props.socket.on('submitted message', (data) => {
       this.setState({ messages: this.state.messages.concat([data]) });
     });
-    // display others
+    // display others messages
     this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
+      axios.post('/readReciept', { msg: data });
       this.setState({ messages: this.state.messages.concat([data]) });
     });
   }
@@ -55,11 +56,7 @@ class ChatBox extends React.Component {
     return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}&&type=${type}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
-        console.log('messages: ', messages);
         this.props.loadMessages(messageInfo);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 
@@ -71,6 +68,7 @@ class ChatBox extends React.Component {
       to: this.props.chat,
       sentBy: this.props.username,
       type: this.state.type,
+      readReciept: false,
       timeStamp: null,
     };
     this.props.socket.emit('submit message', msg);
@@ -81,29 +79,24 @@ class ChatBox extends React.Component {
     this.props.socket.emit('away', { username: this.props.username });
   }
 
-  // deleteUser(e) {
-  //   e.preventDefault();
-  //   let input = $('#message').val();
-  //   axios.post('/deleteUser', { username: input })
-  //     .then((res) => {
-  //       console.log(res);
-  //     });
-  // }
-
   render() {
     return (
       <div>
         <div className="chatHeader">
-          <div>{this.props.chat}</div>
+          {this.props.chat}
+          <div className={`${this.state.type}HeaderType`}>
+            <i className="groupChatMembers users icon"></i>
+            {this.props.members.length}
+          </div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
-            <Message key={i} message={message}/>
+            <Message key={i} message={message} username={this.props.username}/>
           ))}
         </div>
-        <div className="chatInput">
+        <div className="chatInput ui form">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
+            <input id="message" className="input field" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>
