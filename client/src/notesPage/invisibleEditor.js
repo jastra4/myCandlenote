@@ -12,10 +12,15 @@ const authorStyle = {
   left: 0,
 };
 
-const dateStyle = {
+const dateStyle1 = {
   display: 'inline',
   right: 0,
   position: 'absolute',
+};
+
+const dateStyle2 = {
+  display: 'block',
+  textAlign: 'right',
 };
 
 export default class InvisibleEditor extends React.Component {
@@ -52,11 +57,15 @@ export default class InvisibleEditor extends React.Component {
       </div>
     }
     {
-      this.state.showDate &&
-      <div style={ dateStyle }>{ moment().format('MMMM Do , YYYY') }</div>
+      this.state.showDate && !this.state.showName &&
+      <div style={ dateStyle2 }>{ moment().format('MMMM Do , YYYY') }</div>
     }
     {
-      (this.state.title || this.state.author || this.state.showDate)
+      this.state.showDate && this.state.showName &&
+      <div style={ dateStyle1 }>{ moment().format('MMMM Do , YYYY') }</div>
+    }
+    {
+      (this.state.showTitle || this.state.author || this.state.showDate)
       && <hr/>
     }
     <ReactQuill

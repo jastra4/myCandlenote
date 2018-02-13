@@ -82,7 +82,7 @@ export default class PdfModal extends Component {
     this.setState({
       stage: 0,
       modalOpen: false,
-      email: '',
+      progress: 20,
     });
   }
 

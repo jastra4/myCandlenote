@@ -557,7 +557,7 @@ app.post('/api/generatePDF', (req, res) => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve('resolved');
-        }, 3000);
+        }, 2000);
       });
     }
 
