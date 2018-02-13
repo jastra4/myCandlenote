@@ -51,6 +51,7 @@ export default class UserProfile extends React.Component {
         .catch(err => console.log(err));
     } else {
       this.props.getFriends(this.props.currentUser.userId);
+      this.getDecksAndFlashcards(this.props.currentUser.userId);
       const profileImage = this.resizeProfileImage(this.props.currentUser.profileImage);
       this.setState({
         username: this.props.currentUser.username,
