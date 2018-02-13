@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
+import './NoteTitle.css';
 
 export default class MainEditor extends React.Component {
   constructor(props) {
@@ -81,6 +82,7 @@ export default class MainEditor extends React.Component {
   render = () => (
     <div>
       <ReactQuill
+        className='maineditor'
         theme='snow'
         value={ this.state.value }
         onChange={ !this.clearNote && this.handleEditorChange }

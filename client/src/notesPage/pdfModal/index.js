@@ -93,7 +93,7 @@ export default class PdfModal extends Component {
         >
           <Button.Content hidden>{ this.props.text }</Button.Content>
           <Button.Content visible>
-            <Icon name={this.state.icon || 'file pdf outline' } />
+            <Icon name={this.state.icon || 'file pdf outline'} size='big'/>
           </Button.Content>
         </Button>
       }

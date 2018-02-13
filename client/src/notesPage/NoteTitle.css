@@ -2,3 +2,29 @@
   font-size: 50px !important;
   font-weight: bold;
 }
+
+.maineditor .ql-editor {
+  background-color: white;
+  max-height: none !important;
+  min-height: 650px !important;
+}
+
+.ql-toolbar.ql-snow {
+  background-color: silver;
+  text-align: center;
+}
+
+.fileMenu > button {
+  width: 100px;
+}
+
+.pusher .segment.mainPageArea {
+  margin-top: 20px;
+  margin-right: 100px;
+  padding-right: 75px;
+  min-height: 1505px;
+  background: #eacda3;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #d6ae7b, #eacda3);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #d6ae7b, #eacda3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}

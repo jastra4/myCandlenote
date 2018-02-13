@@ -5,6 +5,10 @@ import axios from 'axios';
 import PdfModal from './pdfModal';
 import EmailModal from './emailModal';
 
+const fileMenuStyle = {
+  textAlign: 'center',
+};
+
 class FileMenu extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +47,7 @@ class FileMenu extends React.Component {
 
 
   handleDownload = () => {
-    const downloadUrl = `/api/downloadPDF/${ this.state.currentNote }`
+    const downloadUrl = `/api/downloadPDF/${this.state.currentNote}`;
     const link = document.createElement('a');
     link.setAttribute('href', downloadUrl);
     document.body.appendChild(link);
@@ -52,24 +56,24 @@ class FileMenu extends React.Component {
   }
 
   render = () => (
-    <div>
+    <div style={ fileMenuStyle } className='fileMenu' >
       <Button animated='fade' onClick={ this.props.handleCreateNewNote }>
         <Button.Content hidden >New</Button.Content>
         <Button.Content visible>
-          <Icon name='file' />
+          <Icon name='file' size='big' />
         </Button.Content>
       </Button>
       <EmailModal />
       <Button animated='fade'>
         <Button.Content hidden>Share</Button.Content>
         <Button.Content visible>
-          <Icon name='share alternate' />
+          <Icon name='share alternate' size='big' />
         </Button.Content>
       </Button>
       <Button animated='fade' onClick={ this.handleDownload }>
         <Button.Content hidden>Download</Button.Content>
         <Button.Content visible>
-          <Icon name='download' />
+          <Icon name='download' size='big' />
       </Button.Content>
       </Button>
       <PdfModal
@@ -87,7 +91,7 @@ class FileMenu extends React.Component {
       <Button animated='fade' onClick={ this.props.handleDelete }>
         <Button.Content hidden>Delete</Button.Content>
         <Button.Content visible>
-          <Icon name='trash' />
+          <Icon name='trash' size='big'/>
         </Button.Content>
       </Button>
     </div>
