@@ -10,14 +10,13 @@ class PrivateChatList extends React.Component {
   render() {
     return (
       <div>
-        <div className='friendsListHeader'>Private Chats</div>
+        <div className='chatListHeader ui segment scroll'>Private Chats</div>
         <div> {this.props.privateChats.map((chat, i) => (
           <PrivateChatConnected
             key={i}
-            self={i}
-            chat={this.props.currentChat}
+            chat={this.props.channel}
             privateChat={chat}
-            changeChat={this.props.changeChat}
+            selectChat={this.props.selectChat}
             closeChat={this.props.closePrivateChat}
           />
         ))} </div>

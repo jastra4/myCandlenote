@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { connect } from 'react-redux';
 
 class PrivateChat extends React.Component {
@@ -7,87 +8,104 @@ class PrivateChat extends React.Component {
     this.state = {
       status: this.props.privateChat.status || 'offline',
       unread: 0,
+      selected: false,
     };
+    this.startListeners = this.startListeners.bind(this);
+  }
+
+  updateUnread(nextProps = this.props.chat) {
+    const friendName = this.props.privateChat.username;
+
+    if (nextProps.chat === friendName) {
+      this.setState({
+        unread: 0,
+        selected: true,
+      });
+    } else {
+      axios.get(`/checkMessages?username=${this.props.username}&&chatName=${friendName}`)
+        .then((messages) => {
+          let count = 0;
+          messages.data.forEach((message) => {
+            if (message.readReciept === false) {
+              count += 1;
+            }
+          });
+          this.setState({
+            unread: count,
+            selected: false,
+          });
+        });
+    }
   }
 
   componentDidMount() {
-    this.props.socket.on(`${this.props.privateChat.username} signed on`, (username) => {
-      if (username === this.props.privateChat.username) {
-        this.setState({ status: 'away' });
-      }
-      this.props.socket.emit('acknowledge', {
-        username: this.props.username,
-        to: this.props.privateChat.username,
-      });
-    });
+    this.props.socket.removeAllListeners();
+    this.updateUnread();
+    this.startListeners();
+  }
 
-    this.props.socket.emit('friend ping', {
+  componentWillReceiveProps(nextProps) {
+    this.updateUnread(nextProps);
+    this.props.socket.removeAllListeners();
+    // what if server sends data during the 700 wait
+    window.setTimeout(this.startListeners, 700);
+  }
+
+  startListeners() {
+    const friendName = this.props.privateChat.username;
+
+    this.props.socket.emit('pingFriend', {
       username: this.props.username,
-      to: this.props.privateChat.username,
+      friend: friendName,
     });
 
-    this.props.socket.on(`sent ping ${this.props.privateChat.username}`, (status) => {
+    this.props.socket.on(`response ${friendName}`, (status) => {
       this.setState({ status });
     });
 
-    this.props.socket.on('acknowledged', (username, status) => {
-      if (username === this.props.privateChat.username) {
-        this.setState({ status });
-      }
+    this.props.socket.on(`${friendName} signed on`, () => {
+      this.setState({ status: 'away' });
     });
 
-    this.props.socket.on('is available', (username) => {
-      console.log('is available: ', username, this.props.privateChat.username);
-      if (username === this.props.privateChat.username) {
-        this.setState({ status: 'available' });
-      }
+    this.props.socket.on(`${friendName} signed off`, () => {
+      this.setState({ status: 'offline' });
     });
 
-    this.props.socket.on('is away', (username) => {
-      console.log('is away: ', username, this.props.privateChat.username);
-      if (username === this.props.privateChat.username) {
-        this.setState({ status: 'away' });
-      }
+    this.props.socket.on(`${friendName} is away`, () => {
+      this.setState({ status: 'away' });
     });
 
-    this.props.socket.on('signed off', (username) => {
-      if (username === this.props.privateChat.username) {
-        this.setState({ status: 'offline' });
-      }
+    this.props.socket.on(`${friendName} is available`, () => {
+      this.setState({ status: 'available' });
     });
 
-    this.props.socket.on(`submitted message ${this.props.privateChat.username}`, () => {
-      console.log('message received from: ', this.props.privateChat.username);
-      if (this.props.privateChat.username !== this.props.chat) {
+    this.props.socket.on(`submitted message ${friendName}`, () => {
+      if (this.props.chat !== friendName) {
         this.setState({ unread: this.state.unread += 1 });
       }
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.chat === this.props.privateChat.username) {
-      this.setState({ unread: 0 });
-    }
+  select() {
+    const { username } = this.props.privateChat;
+    this.props.selectChat(username, 'private', '');
   }
 
-  handleClick() {
-    this.props.changeChat(this.props.privateChat.username, 'private');
-  }
-
-  closeSelf() {
-    this.props.closeChat(this.props.self, this.props.username, this.props.privateChat.username);
+  close() {
+    this.props.closeChat(this.props.username, this.props.privateChat.username, 'private');
   }
 
   render() {
     return (
-      <div>
+      <div className={`chatContainer chatSelected${this.state.selected}`}>
+        <i className={`${this.state.status} circle icon`}></i>
         <span
-          className={`friendName ${this.state.status} ${this.state.activeChat}`}
-          onClick={this.handleClick.bind(this)}
-          >{this.props.privateChat.username}
+          className='chatName'
+          onClick={this.select.bind(this)}>
+          {this.props.privateChat.username}
         </span>
-        <span onClick={this.closeSelf.bind(this)} className='friendRemove'>x</span>
-        <span className='friendUnreadMessages'>{this.state.unread}</span>
+        <span onClick={this.close.bind(this)} className='closeChat'>X</span>
+        <span className={`numUnread numUnread${this.state.unread}`}>{this.state.unread}</span>
       </div>
     );
   }

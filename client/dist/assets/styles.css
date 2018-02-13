@@ -8,163 +8,192 @@ body {
 }
 
 /* StudyHall Styles */
-.studyBackground{
-	background: white;
-}
-.studyContainer{
-	height: 44em;
-	border: 1px #d9d9d9 solid;
-	border-style: none solid none none;
+
+.studyHallContainer{
+	padding: 0em !important;
 }
 
-/* Groups Styles */
-.groupsList{
+/* Chat List Styles */
+
+.chatSelectedtrue {
+	background: #B6B6FE;
+}
+
+.chatSelectedfalse {
+  background: #e6e6ff;
+}
+
+.chatContainer:hover {
+  background: #CDCDE2;
+}
+
+.closeChat:hover {
+	opacity: 1;
+}
+
+.closeChat {
+  color: #4d4d4d;
+  float: right;
+  margin-right: 1em;
+  opacity: 0;
+  font-size: 1.25em;
+}
+
+.chatListHeader {
+	color: #2d2d86;
+	background: #d9d9d9 !important;
+}
+
+.chatList {
 	height: 22em;
 	width: 25%;
 	position: relative;
-	top: 0em;
-	right: 0em;
-	background: #e6e6ff;
-	border: 1px #d9d9d9 solid;
-	border-style: none solid none none;
+	margin: 0em !important;
+	padding: 0em !important;
+	background: #e6e6ff !important;
 }
-.groupsListHeader{
-	padding-top: .5em;
-	padding-bottom: .5em;
-	padding-left: 1em;
-	color: #2d2d86;
-	background: #d9d9d9;
-}
-.group{
-	display: block;
-}
-.groupName{
+
+.chatName {
   padding-left: 1em;
   color: #4d4d4d;
 }
-.groupName:hover {
-	font-size: 1.25em;
-}
-.groupRemove{
-  float: right;
-  color: gray;
-  padding-right: 1em;
-}
-.groupRemove:hover {
-  color: red;
-}
 
-/* Friends Styles */
-.friendsList{
-	height: 22em;
-	width: 25%;
-	position: relative;
-	top: 0em;
-	right: 0em;
-	background: #e6e6ff; /* purple */
-	border: 1px #d9d9d9 solid; /* grey */
-	border-style: none solid solid none;
-}
-.friendsListHeader{
-	padding-top: .5em;
-	padding-bottom: .5em;
-	padding-left: 1em;
-	color: #2d2d86; /* purple */
-	background: #d9d9d9; /* grey */
-}
-.friend{
+/* Private Chat List Styles */
 
-}
-.friendName{
-  padding-left: 1em;
-}
-.friendName:hover {
-	font-size: 1.25em;
-}
-.friendRemove{
-  float: right;
-  margin-right: 1em;
-  color: gray;
-}
-.friendUnreadMessages{
+.numUnread {
 	float: right;
-	color: #4d4d4d;
+	color: red;
 	padding-right: 1em;
-}
-.friendRemove:hover {
-  color: red;
-}
-.offline{
-	color: #4d4d4d; /* Red */
-}
-.away{
-	color: #ff9900; /* Red */
-	font-weight: bold;
-}
-.available{
-	color: green; /* Red */
-	font-weight: bold;
+	opacity: 1;
 }
 
-/* Search Styles */
-.Search{
-	width: 75%;
-	position: relative;
-	bottom: 44em;
-	left: 25%;
+.numUnread0 {
+	float: right;
+	color: red;
+	padding-right: 1em;
+	opacity: 0;
 }
 
-/* Chat Styles */
-.Chat{
-	height: 41em;
+.offline {
+	color: #4d4d4d;
+	padding-left: 1em;
+}
+
+.away {
+	color: #ff9900;
+	padding-left: 1em;
+}
+
+.available {
+	color: green;
+	padding-left: 1em;
+}
+
+/* Search Bar Styles */
+
+.searchContainer {
 	width: 75%;
 	position: relative;
-	bottom: 44em;
+	bottom: 46em;
 	left: 25%;
+	margin-top: 2em !important;	
 }
-.input{
-	width:100%;
+
+/* Chat Box Styles */
+
+.chatBoxContainer {
+	height: 38.5em;
+	width: 75%;
+	position: relative;
+	margin-top: 0em !important;
+	bottom: 46em;
+	left: 25%;
+	padding: 0em !important;
 }
-.chatHeader{
+
+.chatHeader {
 	text-align: center;
 	padding-top: .5em;
 	padding-bottom: 0em;
 	padding-left: 1em;
 	color: #2d2d86;
 	border: 1px #d9d9d9 solid;
-	border-style: none solid solid none;
+	border-style: none none solid none;
 }
-.chatMessages{
-	height: 39em;
+
+.HeaderType { /* no chat selected */
+	opacity: 0 !important;
 }
-.chatInput{
+
+.privateHeaderType { /* private chat selected*/
+	opacity: 0 !important;
 }
-.message{
+
+.noneHeaderType { /* after closing current chat */
+  opacity: 0 !important;
+}
+
+.groupChatMembers {
+	display: inline !important;
+	padding-left: .5em !important;
+}
+
+.selectedChat {
+	font-weight: bold;
+	background-color: white;
+}
+
+.scroll {
+	overflow: auto;
+}
+
+/* Messages */
+
+.chatMessages {
+	height: 35em;
+	padding: 0em !important;
+	margin: 0em !important;
+}
+
+.message {
 	border-bottom: 1px #d9d9d9 solid;
 	margin-left: 1em;
 	margin-right: 1em;
 	padding-bottom: .5em;
 }
-.messageUserName{
+
+.messageUserName {
 	font-weight: bold;
 }
-.messageDate{
+
+.messageDate {
 	font-style: italic;
 	font-size: .9em;
 	font-color: gray;
 }
-.messageText{
+
+.messageText {
 	font-size: 1em;
 }
-.scroll{
-	overflow: auto;
-}
-.selectedChat{
-	font-weight: bold;
-	background-color: white;
-}
-.notSelectedChat{
 
+/* Message Input Field */
+
+.input {
+	width:100%;
+	margin-top: 0em !important;
+}
+
+/* Nav Bar */
+
+.newMessage {
+  opacity: 1 !important;
+  display: inline !important;
+  padding-left: .25em !important;
+}
+
+.noMessages {
+  opacity: 0 !important;
+  height: 0em !important;
 }
 
 /*Video Conference Styles*/
