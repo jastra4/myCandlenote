@@ -86,8 +86,7 @@ const getUsernameById = _id => User.findOne({ _id }).select('username');
 const getTitleById = _id => Note.findOne({ _id }).select('title');
 
 const getUserByCookie = cookie => Session.findOne({ _id: cookie }).select('session').catch((e) => { console.error(e) })
-// ptlNsAHCMBjsySif4uefCp0c0bhl4HW9
-// ptlNsAHCMBjsySif4uefCp0c0bhl4HW9
+
 module.exports = {
   getUserByCookie,
   getTitleById,
