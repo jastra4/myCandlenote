@@ -161,13 +161,15 @@ export default class UserProfile extends React.Component {
             </div>
             <MediaQuery maxWidth={899}>
               <div className="friends-list-container-squished">
-                <UserFriendsList
+                {/* <UserFriendsList
                   friends={this.state.friends}
                   handleRemoveFriend={this.handleRemoveFriend}
-                />
+                /> */}
                 <UserSearchBox
                   currentUser={this.props.currentUser}
                   getFriend={this.props.getFriend}
+                  friends={this.state.friends}
+                  handleRemoveFriend={this.handleRemoveFriend}
                 />
               </div>
             </MediaQuery>
@@ -183,6 +185,8 @@ export default class UserProfile extends React.Component {
               <UserSearchBox
                 currentUser={this.props.currentUser}
                 getFriend={this.props.getFriend}
+                friends={this.state.friends}
+                handleRemoveFriend={this.handleRemoveFriend}
               />
             </Grid.Column>
           </MediaQuery>

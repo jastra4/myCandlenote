@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import { Form, Card, Input, Image, Label } from 'semantic-ui-react';
+import { Form, Card, Input, Image, Label, Icon } from 'semantic-ui-react';
 import { debounce } from 'lodash';
+import MediaQuery from 'react-responsive';
 
 export default class UserSearchBox extends React.Component {
   constructor(props) {
@@ -59,20 +60,62 @@ export default class UserSearchBox extends React.Component {
       <Card className="user-search-box">
         <Card.Content>
           {this.state.showWarning ? <Label pointing color='red'>You must be signed in to add a friend</Label> : ''}
+          <MediaQuery maxWidth={899}>
+            <Card.Header as="h4" className="user-friends-header">
+              <Icon name="users" /> Friends:
+            </Card.Header>
+          </MediaQuery>
           <Form>
-            <Form.Field>
-              <label>Search usernames</label>
-              <Input type='text' onChange={this.handleInputChange.bind(this)} value={this.state.username} />
-            </Form.Field>
+            <MediaQuery minWidth={900}>
+              <Form.Field>
+                <label>Search usernames</label>
+                <Input type='text' onChange={this.handleInputChange.bind(this)} value={this.state.username} />
+              </Form.Field>
+            </MediaQuery>
+            <MediaQuery maxWidth={899}>
+              <Form.Field>
+                <Input type='text' onChange={this.handleInputChange.bind(this)} value={this.state.username} placeholder="Search usernames" />
+              </Form.Field>
+            </MediaQuery>
           </Form>
         </Card.Content>
-        {this.state.isUserFound ? <Card.Content>
+        <MediaQuery maxWidth={899}>
+          <Card.Content className="user-friend-card-count">
+            <ul>
+              {this.props.friends.map(friend => (
+                <li>
+                  {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => this.props.handleRemoveFriend(friend)} />
+                </li>
+              ))}
+            </ul>
+          </Card.Content>
+        </MediaQuery>
+        {this.state.isUserFound ? <Card.Content className="user-search-result">
           <div onClick={() => this.addFriend(this.state.foundUser._id)}>
             <Image className="user-search-image" src={this.state.foundUser.profileImage} circular/>
             <span className="user-search-username">{this.state.foundUser.username}</span>
           </div>
         </Card.Content> : ''}
       </Card>
+
+
+      // <Card.Content className="user-friends-content">
+      // <Card.Header as="h4" className="user-friends-header">
+      //   <Icon name="users" /> Friends:
+      // </Card.Header>
+      // </Card.Content>
+      // <Card.Content className="user-friend-card-count">
+      //   <ul>
+      //     {props.friends.map(friend => (
+      //       <li>
+      //         <MediaQuery minWidth={1000}>
+      //           <Image src={friend.profileImage} size="mini" circular spaced="right" />
+      //         </MediaQuery>
+      //         {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend)} />
+      //       </li>
+      //     ))}
+      //   </ul>
+      // </Card.Content>
     );
   }
 }
