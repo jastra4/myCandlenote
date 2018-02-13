@@ -26,6 +26,7 @@ export default class UserProfile extends React.Component {
     };
 
     this.handleRemoveFriend = this.handleRemoveFriend.bind(this);
+    this.handleVideoConferenceInviteClick = this.handleVideoConferenceInviteClick.bind(this);
   }
 
   componentDidMount() {
@@ -95,6 +96,10 @@ export default class UserProfile extends React.Component {
       .catch(err => console.log(err));
   }
 
+  handleVideoConferenceInviteClick() {
+    console.log('On the user profile page!!');
+  }
+
   render() {
     return (
       <Grid columns="equal">
@@ -125,6 +130,7 @@ export default class UserProfile extends React.Component {
               <UserFriendsList
                 friends={this.state.friends}
                 handleRemoveFriend={this.handleRemoveFriend}
+                handleVideoConferenceInviteClick={this.handleVideoConferenceInviteClick}
               />
             </div>
             <UserSearchBox currentUser={this.props.currentUser} getFriend={this.props.getFriend} />

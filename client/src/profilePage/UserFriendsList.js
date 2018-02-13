@@ -12,7 +12,7 @@ const UserFriendsList = props => (
       {'<list of friends>'}
       <ul>
         {props.friends.map(friend => (
-          <li><Image src={friend.profileImage} size="mini" circular spaced="right" />{friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend.id)}/></li>
+          <li onClick={() => props.handleVideoConferenceInviteClick(friend.username)}><Image src={friend.profileImage} size="mini" circular spaced="right" />{friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend.id)}/></li>
         ))}
       </ul>
     </Card.Content>

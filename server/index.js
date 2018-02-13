@@ -277,6 +277,12 @@ io.sockets.on('connection', (socket) => {
     }
   });
 
+  socket.on('invite to video conference', (data) => {
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('invited to video conference', data.myId, data.username);
+    }
+  });
+
   // auto > PrivateChat
   socket.on('disconnect', () => {
     console.log(socket.username, ' disconnected');

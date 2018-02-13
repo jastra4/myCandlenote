@@ -47,7 +47,7 @@ class App extends React.Component {
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
-        id: socket.id,
+        id: socket.id
       })
         .then(() => {
           console.log(`Connected ${username} / ${socket.id}!`);

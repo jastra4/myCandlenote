@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Peer from 'peerjs';
+import axios from 'axios';
+import UserFriendsList from '../profilePage/UserFriendsList';
 
 class VideoConference extends React.Component {
   constructor(props) {
@@ -13,11 +15,12 @@ class VideoConference extends React.Component {
       myId: '',
       initialized: false,
       newCall: [],
+      friends: this.props.friends,
     };
     this.handlePeerIdSumbmission = this.handlePeerIdSumbmission.bind(this);
-    this.handlePeerIdChange = this.handlePeerIdChange.bind(this);
     this.call = this.call.bind(this);
     this.onReceiveCall = this.onReceiveCall.bind(this);
+    this.handleVideoConferenceInviteClick = this.handleVideoConferenceInviteClick.bind(this);
   }
 
   componentDidMount() {
@@ -57,24 +60,28 @@ class VideoConference extends React.Component {
       console.log('call data set to state: ', call);
       this.onReceiveCall(call);
     });
+
+    this.props.socket.on('invited to video conference', (myId, username) => {
+      console.log('MyId on invited to conference emitter: ', myId);
+      this.handlePeerIdSumbmission(myId);
+    });
   }
 
   componentWillUnmount() {
     this.state.peer.disconnect();
   }
 
-  handlePeerIdChange(event) {
-    console.log('remoteId: ', this.state.remoteId);
-    this.setState({ remoteId: [...this.state.remoteId, event.target.value] });
-  }
 
-  handlePeerIdSumbmission() {
+  handlePeerIdSumbmission(id) {
     console.log('remoteId at submission: ', this.state.remoteId);
 
-    const connection = this.state.peer.connect(this.state.remoteId);
+    const connection = this.state.peer.connect(this.state.remoteId[0]);
     console.log('New connection object: ', connection);
 
-    this.setState({ conn: connection }, () => {
+    this.setState({
+      conn: connection,
+      remoteId: [...this.state.remoteId, id],
+    }, () => {
       this.state.conn.on('open', () => {
         this.setState({ connected: true });
         console.log('Calling from peer id submission');
@@ -144,14 +151,28 @@ class VideoConference extends React.Component {
       video: true,
     }, (stream) => {
       this.setState({ newCall: this.state.peer.call(this.state.remoteId[0], stream) });
-      if (this.state.remoteId[1]) {
-        this.setState({ newCall: this.state.peer.call(this.state.remoteId[1], stream) });
-      }
-      if (this.state.remoteId[2]) {
-        this.setState({ newCall: this.state.peer.call(this.state.remoteId[2], stream) });
-      }
       console.log('calling...');
     }, (err) => { console.log('Error in call: ', err); });
+  }
+
+  handleVideoConferenceInviteClick(friendName) {
+    console.log('Does the thing!');
+    this.props.socket.emit('invite to video conference', {
+      username: this.props.username,
+      friendName: friendName,
+      myId: this.state.myId,
+    });
+  }
+
+  handleRemoveFriend(friendId) {
+    console.log('Removed Friend:', friendId);
+    this.props.removeFriend(friendId);
+    axios.post('/api/removeFriend', {
+      friendId,
+      userId: this.props.id,
+    })
+      .then(res => console.log('Removed response:', res))
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -169,6 +190,13 @@ class VideoConference extends React.Component {
             <button onClick={() => { this.handlePeerIdSumbmission(); }}>Connect</button>
           </div>
         </div>
+        <div className="friends-list-container">
+          <UserFriendsList
+            friends={this.state.friends}
+            handleRemoveFriend={this.handleRemoveFriend}
+            handleVideoConferenceInviteClick={this.handleVideoConferenceInviteClick}
+          />
+        </div>
       </div>
     );
   }
@@ -177,7 +205,12 @@ class VideoConference extends React.Component {
 const mapStateToProps = (state) => {
   console.log('state in mapStateToProps: ', state);
   return (
-    { peer: state.peerID.peer }
+    {
+      peer: state.peerID.peer,
+      friends: state.user.currentUser.friends,
+      socket: state.activeSocket.socket,
+      username: state.activeSocket.username,
+    }
   );
 };
 
