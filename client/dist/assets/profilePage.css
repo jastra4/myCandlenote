@@ -28,6 +28,10 @@
   overflow: auto;
 }
 
+.user-friend-card-count .icon:hover {
+  cursor: pointer;
+}
+
 .user-friends-content {
   flex-grow: 0 !important;
 }

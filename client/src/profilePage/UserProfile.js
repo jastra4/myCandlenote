@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Image, Segment, Header, Label } from 'semantic-ui-react';
+import { Grid, Image, Segment, Header, Label, Modal, Button, Icon } from 'semantic-ui-react';
 import MediaQuery from 'react-responsive';
 import axios from 'axios';
 import '../../dist/assets/profilePage.css';
@@ -17,6 +17,8 @@ export default class UserProfile extends React.Component {
       flashcardCount: 0,
       dateJoined: '',
       friends: [],
+      showWarning: false,
+      friendToRemove: {},
     };
 
     this.dateOptions = {
@@ -86,13 +88,24 @@ export default class UserProfile extends React.Component {
     return newUrl;
   }
 
-  handleRemoveFriend(friendId) {
+  handleRemoveFriend(friend) {
+    this.setState({
+      showWarning: true,
+      friendToRemove: friend,
+    });
+  }
+
+
+  removeFriendById(friendId) {
     this.props.removeFriend(friendId);
     axios.post('/api/removeFriend', {
       friendId,
       userId: this.props.id,
     })
-      .then(res => console.log('Removed response:', res))
+      .then(() => this.setState({
+        showWarning: false,
+        friendToRemove: {},
+      }))
       .catch(err => console.log(err));
   }
 
@@ -100,6 +113,30 @@ export default class UserProfile extends React.Component {
     return (
       <Grid columns="equal">
         <Grid.Row>
+
+          <Modal open={this.state.showWarning} >
+            <Modal.Header as="h1">
+              Remove friend from friends list
+            </Modal.Header>
+            <Modal.Content as="p">
+              Are you sure you want to remove {this.state.friendToRemove.username} from your friends list?
+            </Modal.Content>
+            <Modal.Actions>
+              <Button
+                color='red'
+                onClick={() => this.setState({
+                  showWarning: false,
+                  friendToRemove: {},
+                })}
+              >
+                <Icon name='remove' /> No
+              </Button>
+              <Button color='green' onClick={() => this.removeFriendById(this.state.friendToRemove.id)}>
+                <Icon name='checkmark' /> Yes
+              </Button>
+            </Modal.Actions>
+          </Modal>
+
           <Grid.Column>
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">

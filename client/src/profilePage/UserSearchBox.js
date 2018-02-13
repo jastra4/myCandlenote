@@ -66,12 +66,12 @@ export default class UserSearchBox extends React.Component {
             </Form.Field>
           </Form>
         </Card.Content>
-        <Card.Content>
-          {this.state.isUserFound ? <div onClick={() => this.addFriend(this.state.foundUser._id)}>
+        {this.state.isUserFound ? <Card.Content>
+          <div onClick={() => this.addFriend(this.state.foundUser._id)}>
             <Image className="user-search-image" src={this.state.foundUser.profileImage} circular/>
             <span className="user-search-username">{this.state.foundUser.username}</span>
-          </div> : ''}
-        </Card.Content>
+          </div>
+        </Card.Content> : ''}
       </Card>
     );
   }
