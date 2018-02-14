@@ -10,9 +10,9 @@ export default class Notebox extends Component {
   }
 
   componentWillMount() {
-    this.setState({ 
-      notes: this.props.notes, 
-      filteredNotes: this.props.notes, 
+    this.setState({
+      notes: this.props.notes,
+      filteredNotes: this.props.notes,
     });
   }
 
@@ -24,20 +24,16 @@ export default class Notebox extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       notes: nextProps.notes,
-      filteredNotes: nextProps.notes, 
+      filteredNotes: nextProps.notes,
     });
   }
 
   filterNotes = (value) => {
     if (value) {
-      const filteredNotes = this.state.notes.filter((note) => {
-        if (
-          note.body.toLowerCase().includes(value)
-          || note.title.toLowerCase().includes(value)
-        ) {
-          return note;
-        }
-      });
+      const filteredNotes = this.state.notes.filter(note => (
+        note.body.toLowerCase().includes(value) ||
+        note.title.toLowerCase().includes(value)
+      ));
       this.setState({ filteredNotes });
     } else {
       this.setState({ filteredNotes: this.state.notes });
@@ -46,7 +42,7 @@ export default class Notebox extends Component {
 
   render = () => (
     <div>
-      <SearchBar 
+      <SearchBar
         filterNotes={ this.filterNotes }
       />
       {
@@ -70,8 +66,8 @@ export default class Notebox extends Component {
       }
       <div
         style={{
-          backgroundImage: './assets/folder.png', 
-          width: '200px'
+          backgroundImage: './assets/folder.png',
+          width: '200px',
         }}
       >
         English 1302

@@ -134,7 +134,7 @@ const getUsernameById = _id => User.findOne({ _id }).select('username');
 
 const getTitleById = _id => Note.findOne({ _id }).select('title');
 
-const getUserByCookie = cookie => Session.findOne({ _id: cookie }).select('session').catch((e) => { console.error(e) })
+const getUserByCookie = cookie => Session.findOne({ _id: cookie }).select('session').catch((e) => { console.error(e); });
 
 module.exports = {
   getUserByCookie,
