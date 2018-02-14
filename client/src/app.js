@@ -24,7 +24,7 @@ import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
 
-const socketUrl = 'http://localhost:3000';
+const socketUrl = '/';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -47,7 +47,7 @@ class App extends React.Component {
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
-        id: socket.id
+        id: socket.id,
       })
         .then(() => {
           console.log(`Connected ${username} / ${socket.id}!`);

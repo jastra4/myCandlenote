@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Modal, Button, Icon } from 'semantic-ui-react';
-import Peer from 'peerjs';
+import Peer from 'peerjs'; // eslint-disable-line
 import axios from 'axios';
 import UserFriendsList from '../profilePage/UserFriendsList';
 
@@ -69,13 +69,13 @@ class VideoConference extends React.Component {
       this.setState({
         showInvite: true,
         friendWhoWantsToTalk: {
-          myId: myId,
-          username: username,
+          myId: myId, // eslint-disable-line
+          username: username, // eslint-disable-line
         },
       });
     });
 
-    this.props.socket.on('accepted invite to video conference', (myId, username) => {
+    this.props.socket.on('accepted invite to video conference', (myId) => {
       console.log('MyId on accepted to conference emitter: ', myId);
       this.setState({ remoteId: [...this.state.remoteId, myId] }, () => {
         console.log('My peer id: ', this.state.myId);
@@ -87,6 +87,7 @@ class VideoConference extends React.Component {
 
   componentWillUnmount() {
     this.state.peer.disconnect();
+    this.props.socket.removeAllListeners();
   }
 
 
@@ -167,7 +168,7 @@ class VideoConference extends React.Component {
     console.log('Does the thing!');
     this.props.socket.emit('invite to video conference', {
       username: this.props.username,
-      friendName: friendName,
+      friendName: friendName, // eslint-disable-line
       myId: this.state.myId,
     });
   }
@@ -200,10 +201,10 @@ class VideoConference extends React.Component {
         </div>
           <Modal open={this.state.showInvite} >
             <Modal.Header as="h1">
-              Remove friend from friends list
+              Video Conference Invitation
             </Modal.Header>
             <Modal.Content as="p">
-              Are you sure you want to remove
+              Do you want to video chat with
                {this.state.friendWhoWantsToTalk.username} from your friends list?
             </Modal.Content>
             <Modal.Actions>
