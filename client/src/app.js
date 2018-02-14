@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
 import axios from 'axios';
 import io from 'socket.io-client';
+import Peer from 'peerjs';
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 
 // Containers
@@ -21,45 +22,53 @@ import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
 import SchedulePage from './schedulePage';
 import store from '../src/store';
+import StudyHallConnected from './studyHallPage/StudyHall';
+import VideoConference from './studyHallPage/VideoConference';
 import activeSocket from './actions/activeSocket';
+import passPeer from './actions/passPeer';
+import SimonSays from './SimonSays';
 
-const socketUrl = 'http://localhost:3000';
 
+const socketUrl = '/';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
   }
 
   componentDidMount() {
-    this.identifyUser();
-  }
-
-  identifyUser() {
-    axios.get('/api/userid')
+    axios.get('/identifyUser')
       .then((res) => {
-        if (res.data.userid !== undefined) {
-          this.initSocket(res.data.userid);
-        } else {
-          console.log('Not logged in');
+        if (res.data.username !== undefined) {
+          this.initSocket(res.data.username);
+          this.props.peer(this.state.peer);
         }
       });
+    console.log('Peer object: ', this.state.peer);
   }
 
-  initSocket(userid) {
+  initSocket(username) {
     const socket = io(socketUrl);
     socket.on('connect', () => {
-      this.nameSocket(socket, userid);
+      axios.post('/assignUsername', {
+        username,
+        id: socket.id,
+      })
+        .then(() => {
+          console.log(`Connected ${username} / ${socket.id}!`);
+          socket.emit('sign on', { username });
+          this.props.activeSocket(socket, username);
+        });
     });
   }
 
-  nameSocket(socket, userid) {
-    axios.get(`/identifySocket?id=${userid}`)
-      .then((res) => {
-        socket.emit('away', res.data);
-        this.props.activeSocket(socket, res.data);
-      });
-  }
+  // nameSocket(socket, userid) {
+  //   axios.get(`/identifySocket?id=${userid}`)
+  //     .then((res) => {
+  //       socket.emit('away', res.data);
+  //       this.props.activeSocket(socket, res.data);
+  //     });
+  // }
 
   render = () =>
     (
@@ -77,6 +86,8 @@ class App extends React.Component {
             <Route path='/quizzlet' render={() => <TopBar ContentPage={NotFoundPage} />} />
             <Route path='/profile' render={() => <TopBar ContentPage={UserProfile} />} />
             <Route path='/schedule' render={() => <TopBar ContentPage={SchedulePage} />} />
+            <Route path='/video-conference' render={() => <TopBar ContentPage={VideoConference} />} />
+            <Route path='/simonSays' render={() => <TopBar ContentPage={SimonSays} />} />
             <Route path='/PDF' render={props => <PDF {...props} />} />
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
             <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />
@@ -87,7 +98,10 @@ class App extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => (
-  { activeSocket: (socket, username) => dispatch(activeSocket(socket, username)) }
+  {
+    activeSocket: (socket, username) => dispatch(activeSocket(socket, username)),
+    peer: peerObject => dispatch(passPeer(peerObject)),
+  }
 );
 
 const AppConnected = connect(null, mapDispatchToProps)(App);

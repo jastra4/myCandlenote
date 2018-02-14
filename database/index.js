@@ -18,9 +18,13 @@ const userSchema = new mongoose.Schema({
   profileImage: String,
   googleAccessToken: String,
   googleRefreshToken: String,
+  privateChats: [],
+  groupChats: [],
+  lastUpdate: Date,
   friends: [{
     friendId: String,
     status: String,
+    _id: false,
   }],
 });
 
@@ -83,6 +87,7 @@ const messagesSchema = mongoose.Schema({
   to: String,
   sentBy: String,
   text: String,
+  readReciept: Boolean,
   timeStamp: String,
   created: {
     type: Date,
@@ -91,6 +96,14 @@ const messagesSchema = mongoose.Schema({
 });
 
 const Messages = mongoose.model('messages', messagesSchema);
+
+const groupsSchema = mongoose.Schema({
+  groupname: String,
+  lastUpdate: Date,
+  members: [],
+});
+
+const Groups = mongoose.model('groups', groupsSchema);
 
 module.exports = {
   db,
@@ -101,4 +114,5 @@ module.exports = {
   Videos,
   Messages,
   Session,
+  Groups,
 };

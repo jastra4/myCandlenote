@@ -11,22 +11,41 @@ class Search extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    axios.post('/handleFriendRequest', {
-      currentUser: this.props.username,
-      newFriend: $('#search').val(),
+    let input = $('#search').val();
+    if (input.substring(0, 3) === '/c ') {
+      input = input.substring(3, input.length);
+      this.openChat(this.props.username, input, '/c ');
+    } else if (input.substring(0, 3) === '/j ') {
+      input = input.substring(3, input.length);
+      this.openChat(this.props.username, input, '/j ');
+    } else {
+      this.openChat(this.props.username, input);
+    }
+    $('#search').val('');
+  }
+
+  openChat(username, chatname, type) {
+    axios.post('/openChat', {
+      username,
+      chatname,
+      type,
     })
       .then((res) => {
-        this.props.socket.emit('new friend', res.data, this.props.username);
-        console.log('request sent to ', res.data);
+        if (res.data.error !== undefined) {
+          console.log(res.data.error);
+        } else if (res.data.members === undefined) {
+          this.props.addPrivateChat(res.data);
+        } else {
+          this.props.addGroupChat(res.data);
+        }
       });
-    $('#search').val('');
   }
 
   render() {
     return (
       <div>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input id="search" className="input" placeholder="find a user or group"></input>
+          <input id="search" className="input field" placeholder="find a user or group"></input>
         </form>
       </div>
     );

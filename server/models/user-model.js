@@ -4,7 +4,8 @@ const userSchema = new mongoose.Schema({
   username: String,
   googleId: String,
   profileImage: String,
-  friends: [],
+  privateChats: [],
+  groupChats: [],
 });
 
 const User = mongoose.model('user', userSchema);

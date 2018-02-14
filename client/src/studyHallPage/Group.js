@@ -1,29 +1,48 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 class Group extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = { selected: false };
   }
 
-  handleClick() {
-    this.props.changeChat(this.props.group);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.chat === this.props.groupChat.groupname) {
+      this.setState({ selected: true });
+    } else {
+      this.setState({ selected: false });
+    }
   }
 
-  removeGroup = () => {
-    console.log('removed group');
+  select() {
+    const { groupname, members } = this.props.groupChat;
+    this.props.selectChat(groupname, 'group', members);
+  }
+
+  close() {
+    this.props.closeChat(this.props.username, this.props.groupChat.groupname, 'group');
   }
 
   render() {
     return (
-      <div>
-        <div className='groupName' onClick={this.handleClick.bind(this)}>
-          {this.props.group}
-          <div onClick={this.removeGroup.bind(this)} className='groupRemove'>x</div>
-        </div>
+      <div className={`chatContainer chatSelected${this.state.selected}`}>
+        <span className='chatName' onClick={this.select.bind(this)}>
+          {this.props.groupChat.groupname}
+        </span>
+        <span onClick={this.close.bind(this)} className='closeChat'>x</span>
       </div>
     );
   }
 }
 
-export default Group;
+const mapStateToProps = state => (
+  {
+    socket: state.activeSocket.socket,
+    username: state.activeSocket.username,
+  }
+);
+
+const GroupConnected = connect(mapStateToProps)(Group);
+
+export default GroupConnected;

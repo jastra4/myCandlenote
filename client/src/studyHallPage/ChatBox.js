@@ -8,68 +8,95 @@ import { setMessages } from '../actions/messagesActions';
 class ChatBox extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { messages: [] };
+    this.state = {
+      messages: [],
+      chat: '',
+      type: '',
+    };
+  }
+
+  componentWillUpdate() {
+    this.props.socket.removeAllListeners();
   }
 
   componentDidMount() {
-    this.props.socket.on('receive message', (data) => {
-      if (data.sentBy === this.props.chat) {
-        this.setState({ messages: this.state.messages.concat([data]) });
-      }
-    });
+    this.props.socket.emit('available', { username: this.props.username });
   }
 
   componentDidUpdate = () => {
     const chatbox = document.getElementById('chatBox');
     chatbox.scrollTop = chatbox.scrollHeight - chatbox.clientHeight;
+
+    this.props.socket.emit('available', { username: this.props.username });
+    // display my messages
+    this.props.socket.on('submitted message', (data) => {
+      this.setState({ messages: this.state.messages.concat([data]) });
+    });
+    // display others messages
+    this.props.socket.on(`submitted message ${this.state.chat}`, (data) => {
+      axios.post('/readReciept', { msg: data });
+      this.setState({ messages: this.state.messages.concat([data]) });
+    });
   }
 
-  componentWillReceiveProps(newProps) {
-    if (newProps.messages.length !== this.state.messages.length) {
-      this.setState({ messages: newProps.messages });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.messages.length !== this.state.messages.length) {
+      this.setState({ messages: nextProps.messages });
     }
-    if (newProps.chat !== this.props.chat) {
-      this.getMessages(newProps.chat);
+    if (nextProps.chat !== this.props.chat) {
+      this.setState({
+        chat: nextProps.chat,
+        type: nextProps.type,
+      });
+      this.getMessages(nextProps.chat, nextProps.type);
     }
   }
 
-  getMessages(to) {
-    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&to=${to}`) // `/username?id=${this.props.username}`
+  getMessages(sentTo, type) {
+    return axios.get(`/loadChatHistory?sentBy=${this.props.username}&&sentTo=${sentTo}&&type=${type}`) // `/username?id=${this.props.username}`
       .then((messages) => {
         const messageInfo = messages.data;
         this.props.loadMessages(messageInfo);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   }
 
   handleSubmit(e) {
     e.preventDefault();
+    const input = $('#message').val();
     const msg = {
-      text: $('#message').val(),
+      text: input,
       to: this.props.chat,
       sentBy: this.props.username,
+      type: this.state.type,
+      readReciept: false,
+      timeStamp: null,
     };
-    this.props.socket.emit('send message', msg);
-    this.setState({ messages: this.state.messages.concat([msg]) });
+    this.props.socket.emit('submit message', msg);
     $('#message').val('');
+  }
+
+  componentWillUnmount() {
+    this.props.socket.emit('away', { username: this.props.username });
   }
 
   render() {
     return (
       <div>
         <div className="chatHeader">
-          <div>{this.props.chat}</div>
+          {this.props.chat}
+          <div className={`${this.state.type}HeaderType`}>
+            <i className="groupChatMembers users icon"></i>
+            {this.props.members.length}
+          </div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (
-            <Message key={i} message={message}/>
+            <Message key={i} message={message} username={this.props.username}/>
           ))}
         </div>
-        <div className="chatInput">
+        <div className="chatInput ui form">
           <form onSubmit={this.handleSubmit.bind(this)}>
-            <input id="message" className="input" placeholder="type a message" autoComplete="off"></input>
+            <input id="message" className="input field" placeholder="type a message" autoComplete="off"></input>
           </form>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Sidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import OurSideBar from '../sideBar';
+import SideBarConnected from '../sideBar';
 import { removeCurrentUser } from '../actions/usersActions';
 
 class TopBar extends Component {
@@ -43,7 +43,7 @@ class TopBar extends Component {
             Logout
         </Menu.Item>
       </Sidebar>
-      <OurSideBar { ...this.props }/>
+      <SideBarConnected { ...this.props } {...console.log('Peer passed down: ', this.props.peer)}/>
     </div>
   );
 }

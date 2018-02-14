@@ -35,4 +35,24 @@ export const getFriends = userId => (
   )
 );
 
+export const addFriend = friendId => ({
+  type: 'ADD_FRIEND',
+  payload: friendId,
+});
+
+export const getFriend = friendId => (
+  dispatch => (
+    axios.post('/api/userById', { userId: friendId })
+      .then((res) => {
+        console.log('Single Friend:', res.data);
+        dispatch(addFriend(res.data));
+      }, err => console.log(err))
+  )
+);
+
+export const removeFriend = friendId => ({
+  type: 'REMOVE_FRIEND',
+  payload: friendId,
+});
+
 export const removeCurrentUser = () => ({ type: 'REMOVE_CURRENT_USER' });

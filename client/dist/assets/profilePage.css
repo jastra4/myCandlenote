@@ -9,23 +9,35 @@
 
 .user-data-container {
   display: inline-block;
+  width: max-content !important;
   margin: 0 !important;
 }
 
 .friends-list-container {
-  margin-top: 5.2em;
+  margin-top: 4.3em;
   display: flex;
   align-items: flex-end;
 }
 
 .user-friends-container {
   display: inline-block;
-  margin: 0 !important;
 }
 
 .user-friend-card-count {
   max-height: 20em;
   overflow: auto;
+}
+
+.user-friend-card-count .icon:hover {
+  cursor: pointer;
+}
+
+.user-friends-content {
+  flex-grow: 0 !important;
+}
+
+.user-friend-card-count li:not(:first-child) {
+  margin-top: 5px;
 }
 
 .user-data-fbox {
@@ -38,10 +50,77 @@
   height: 15em;
 }
 
+.user-search-box .content {
+  flex-grow: 0 !important;
+}
+
 .user-search-image {
   margin-right: 5px;
 }
 
 .user-search-username {
   font-weight: bold;
+}
+
+.friends-list-container-squished {
+  margin-left: 2em;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  min-height: 10em;
+}
+
+.friends-list-container-squished .card {
+  margin: 1em 0em !important;
+}
+
+.friends-list-container-squished .user-search-box .content:first-child {
+  display: flex;
+  flex-direction: row;
+}
+
+.friends-list-container-squished .header {
+  flex-grow: 1;
+}
+
+.friends-list-container-squished .form {
+  flex-grow: 4;
+}
+
+.friends-list-container-squished .user-search-box {
+  /* flex-grow: 1 !important;
+  flex-wrap: wrap; */
+  width: 100%;
+  height: 100% !important;
+}
+
+.friends-list-container-squished h4 {
+  margin: 10px 0 !important;
+}
+
+.friends-list-container-squished ul {
+  max-height: 8em !important;
+  margin-bottom: 0 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.friends-list-container-squished li {
+  display: flex !important;
+  margin-right: 10px;
+}
+
+.friends-list-container-squished .user-friend-card-count {
+  max-height: 10em !important;
+  overflow: visible;
+}
+
+.friends-list-container-squished .user-friend-card-count li:first-child {
+  margin-top: 5px;
+}
+
+.friends-list-container-squished img {
+  max-width: 25px !important; 
 }

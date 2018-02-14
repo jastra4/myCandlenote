@@ -5,7 +5,7 @@ const SRC_DIR = path.join(__dirname, 'client/src');
 
 module.exports = {
   context: SRC_DIR,
-  entry: './app',
+  entry: ['babel-polyfill', './app'],
   output: {
     path: DIST_DIR,
     filename: 'bundle.js',

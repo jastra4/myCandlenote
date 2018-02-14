@@ -127,7 +127,6 @@ app.get('/api/getUserByCookie/:cookie', (req, res) => {
     .catch((e) => { console.error(e); });
 });
 
-
 app.get('*', (req, res, next) => {
   if (!req.isAuthenticated()) {
     res.redirect('/login');
@@ -136,6 +135,7 @@ app.get('*', (req, res, next) => {
   }
 });
 
+<<<<<<< HEAD
 // // called by app.js
 app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
@@ -183,14 +183,12 @@ app.get('/users', (req, res) => {
 app.post('/friendrequest', (req, res) => {
   console.log('friendrequest: ', req.body.username);
   res.send(201);
-});
-
-// called by FriendsList.js
-app.get('/loadFriendsList', (req, res) => {
-  const { currentUser } = req.query;
-  queries.loadFriendsList(currentUser, (friends) => {
-    res.send(friends);
-  });
+=======
+app.get('/api/pdf/:id', (req, res) => {
+  const { id: fileName } = req.params;
+  console.log('fileName: ', fileName);
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+>>>>>>> e50727edb931f77377e6578150497d2472b4cc7d
 });
 
 app.get('/userProfile', (req, res) => {
@@ -215,12 +213,10 @@ app.get('/userProfile', (req, res) => {
 
 // /* --------- POST Handlers ----------- */
 
-// called by Search.js
-app.post('/handleFriendRequest', (req, res) => {
-  const { newFriend, currentUser } = req.body;
-  inserts.addFriend(currentUser, newFriend, (response) => {
-    res.send(response);
-  });
+app.post('/deleteUser', (req, res) => {
+  const { username } = req.body;
+  deletes.deleteUser(username);
+  res.send(`deleted user: ${username}`);
 });
 
 app.post('/makePDF', (req, res) => {
@@ -237,98 +233,194 @@ app.post('/makePDF', (req, res) => {
 });
 
 /* ----------- Sockets ------------ */
-const activeUserSockets = {};
 
-// called by ChatBox.js
-app.get('/loadChatHistory', (req, res) => {
-  const { sentBy, to } = req.query;
-  queries.loadChatHistory(sentBy, to, (messages) => {
-    res.send(messages);
-  });
-});
-
-// called by app.js
-app.get('/identifySocket', (req, res) => {
-  const userid = req.query.id;
-  queries.getUserName(userid, (username) => {
-    res.send(username);
-  });
-});
+const allSockets = {};
 
 io.sockets.on('error', (e) => { console.error(e); });
 
 io.sockets.on('connection', (socket) => {
   console.log('✅  Successfully connected new Socket: ', socket.id);
+  allSockets[socket.id] = socket;
 
+  // App > PrivateChat
+  socket.on('sign on', (data) => {
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('available', (data) => {
+    allSockets[data.username].status = 'available';
+    allSockets[data.username].broadcast.emit(`${data.username} is available`);
+  });
+
+  // ChatBox > PrivateChat
   socket.on('away', (data) => {
-    if (data !== undefined) {
-      socket.username = data; // eslint-disable-line
-      activeUserSockets[socket.username] = socket;
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} is away`);
+  });
+
+  // ChatBox > PrivateChat
+  socket.on('pingFriend', (data) => {
+    if (data.friend in allSockets) {
+      allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
+    } else {
+      allSockets[data.username].emit(`response ${data.friend}`, 'offline');
     }
-  socket.status = 'away'; // eslint-disable-line
-    io.sockets.emit('notify away', socket.username, socket.status);
   });
 
-  // listening to app.js and emitting to Friend.js
-  socket.on('available', () => {
-    socket.status = 'available'; // eslint-disable-line
-    io.sockets.emit('notify available', socket.username, socket.status);
+  // ChatBox > ChatBox
+  socket.on('submit message', (message) => {
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
+    inserts.saveMessage(message);
+    if (message.type === 'private') {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        allSockets[message.to].emit('new message');
+      }
+    } else {
+      io.sockets.emit(`submitted message ${message.to}`, message);
+    }
   });
 
-  socket.on('acknowledged', () => {
-    io.sockets.emit('notify acknowledged', socket.username, socket.status);
-  });
-
-  // listening to ChatBox.js and emitting to Chatbox.js
-  socket.on('send message', (data) => {
-    if (data.to in activeUserSockets) {
-      // const { username, status } = activeUserSockets[data.to];
-      activeUserSockets[data.to].emit('update friends', {
-        username: socket.username,
-        status: 'available',
+  app.post('/openChat', (req, res) => {
+    const { username, chatname, type } = req.body;
+    if (type === '/c ') {
+      inserts.createGroup(chatname, username, (bool) => {
+        if (bool) {
+          res.send({
+            groupname: chatname,
+            members: [{ username }],
+          });
+        } else {
+          res.send({ error: 'Group already exists' });
+        }
+      });
+    } else if (type === '/j ') {
+      inserts.addGroupMember(chatname, username, (bool, group) => {
+        if (bool) {
+          res.send({
+            groupname: chatname,
+            members: group.members,
+          });
+        } else {
+          res.send({ error: 'Group does not exist' });
+        }
+      });
+    } else {
+      inserts.openPrivateChat(username, chatname, (bool) => {
+        if (bool) {
+          let status = 'offline';
+          if (chatname in allSockets) {
+            status = allSockets[chatname].status; // eslint-disable-line
+          }
+          res.send({
+            username: chatname,
+            status,
+          });
+        } else {
+          res.send({ error: 'User does not exist' });
+        }
       });
     }
-    const now = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT');
-    inserts.saveMessage({
-      to: data.to,
-      sentBy: socket.username,
-      text: data.text,
-      timeStamp: now,
-    });
-    data.timeStamp = now; // eslint-disable-line
-    if (data.to in activeUserSockets) {
-      activeUserSockets[data.to].emit('receive message', data);
+  });
+
+  app.post('/closeChat', (req, res) => {
+    const { username, chatname, chatType } = req.body;
+    if (chatType === 'private') {
+      deletes.closePrivateChat(username, chatname, (bool) => {
+        console.log(`closePrivateChat ${bool}`);
+        res.send(bool);
+      });
+    } else {
+      deletes.removeGroupMember(username, chatname, (bool) => {
+        console.log(`closeGroupChat ${bool}`);
+      });
     }
-    activeUserSockets[data.sentBy].emit('receive message', data);
   });
 
-  socket.on('new friend', (friendName, user) => {
-    const newFriend = {
-      username: friendName,
-      status: 'offline',
-    };
-    if (friendName in activeUserSockets) {
-      newFriend.status = activeUserSockets[friendName].status;
+  socket.on('invite to video conference', (data) => {
+    console.log('The invite to conference emitter was fired');
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('invited to video conference', data.myId, data.username);
     }
-    activeUserSockets[user].emit('update friends', newFriend);
   });
 
-  app.post('/removeFriend', (req, res) => {
-    const { user, friend } = req.body;
-    deletes.removeFriend(user, friend, (response) => {
-      if (response !== false) {
-        activeUserSockets[user].emit('removed friend', response);
-      }
-      res.send(200);
-    });
+  socket.on('accept invite to video conference', (data) => {
+    console.log('Accept invite emitter fired');
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('accepted invite to video conference', data.myId, data.username);
+    }
   });
 
-  // trigged by closing browser and emtting to Friend.js
+  // auto > PrivateChat
   socket.on('disconnect', () => {
-    io.sockets.emit('notify offline', socket.username, 'offline');
-    delete activeUserSockets[socket.username];
-    console.log(`${socket.username} disconnected!`);
+    console.log(socket.username, ' disconnected');
+    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+    delete allSockets[socket.username];
   });
+});
+
+/* ----------- Sockets Relateted ------------ */
+
+// called by app.js
+app.get('/identifyUser', (req, res) => {
+  const userid = req.session.passport.user;
+  queries.getUserName(userid, (username) => {
+    res.send({ username });
+  });
+});
+
+// called by app.js
+app.post('/assignUsername', (req, res) => {
+  const { username, id } = req.body;
+  allSockets[id].username = username;
+  allSockets[id].status = null;
+  allSockets[username] = allSockets[id];
+  delete allSockets[id];
+  res.sendStatus(200);
+});
+
+// called by PrivateChats.js
+app.get('/loadPrivateChats', (req, res) => {
+  const { currentUser } = req.query;
+  queries.loadPrivateChats(currentUser, (friends) => {
+    res.send(friends);
+  });
+});
+
+// called by GroupsList.js
+app.get('/loadGroupChats', (req, res) => {
+  const { currentUser } = req.query;
+  queries.loadGroupChats(currentUser, (groups) => {
+    res.send(groups);
+  });
+});
+
+app.get('/loadChatHistory', (req, res) => {
+  const { sentBy, sentTo, type } = req.query;
+  if (type === 'group') {
+    queries.loadGroupChatHistory(sentTo, (docs) => {
+      res.send(docs);
+    });
+  } else {
+    queries.loadChatHistory(sentBy, sentTo, (docs) => {
+      res.send(docs);
+    });
+  }
+});
+
+app.get('/checkMessages', (req, res) => {
+  const { username, chatName } = req.query;
+  queries.loadMyMessages(username, chatName, (docs) => {
+    res.send(docs);
+  });
+});
+
+app.post('/setReadReciept', (req, res) => {
+  inserts.setReadReciept(req.body.msg);
+  res.send();
 });
 
 /* ----------- Google Cal Routes ------------ */
@@ -735,6 +827,16 @@ app.post('/api/addFriend', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/removeFriend', (req, res) => {
+  const { userId, friendId } = req.body;
+  deletes.removeFriendById(userId, friendId)
+    .then(results => res.send(results))
+    .catch((err) => {
+      console.log('Error removing friend:', err);
+      res.sendStatus(400);
+    });
+});
+
 app.post('/api/userByUsername', (req, res) => {
   const { username } = req.body;
   queries.getUserByUsername(username)
@@ -742,10 +844,23 @@ app.post('/api/userByUsername', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.post('/api/userById', (req, res) => {
+  const { userId } = req.body;
+  queries.getCurrentUser(userId)
+  .then((user) => {
+    const { _id: id, username, profileImage } = user;
+    res.send({
+      id,
+      username,
+      profileImage,
+    });
+  })
+  .catch(err => res.status(400).send(err));
+});
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
-
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
