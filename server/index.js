@@ -22,7 +22,6 @@ const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
 
 // db imports
-const { db } = require('../database');
 const inserts = require('../database/inserts');
 const queries = require('../database/queries');
 const deletes = require('../database/deletes');

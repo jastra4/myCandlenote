@@ -1,8 +1,5 @@
 @import url('./notepad.css');
 
-body {
-}
-
 .section-inner {
   background-color: #EDEAD0;
 }
@@ -169,7 +166,7 @@ body {
 .messageDate {
 	font-style: italic;
 	font-size: .9em;
-	font-color: gray;
+	color: gray;
 }
 
 .messageText {

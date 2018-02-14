@@ -22,7 +22,6 @@ import UserProfile from './profilePage';
 import PDF from './notesPage/invisibleEditor';
 import SchedulePage from './schedulePage';
 import store from '../src/store';
-import StudyHallConnected from './studyHallPage/StudyHall';
 import VideoConference from './studyHallPage/VideoConference';
 import activeSocket from './actions/activeSocket';
 import passPeer from './actions/passPeer';

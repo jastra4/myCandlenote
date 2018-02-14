@@ -16,7 +16,7 @@ export default class NotePreview extends Component {
     const formattedTime = modifiedDay === today
       ? modifiedAt.fromNow()
       : modifiedAt.format('MMM Do YYYY');
-    
+
     this.setState({ formattedTime });
   }
 

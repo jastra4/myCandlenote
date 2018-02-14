@@ -45,7 +45,7 @@
   border: 1px solid #191a1c;
   border-right: none;
   animation: 1.4s slide-in 0s forwards;
-  -webkit-animation: 1.4s slide-in 0s forwards; */
+  -webkit-animation: 1.4s slide-in 0s forwards;
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
   overflow: hidden;
@@ -57,7 +57,7 @@
 }
 
 div.cn-dismiss {
-  -webkit-transform: translateX(100%); */
+  -webkit-transform: translateX(100%);
   animation: 1.4s slide-window-in 0s forwards;
   -webkit-animation: 1.4s slide-window-in 0s forwards;
 } 

@@ -5,9 +5,7 @@ import axios from 'axios';
 import PdfModal from './pdfModal';
 import EmailModal from './emailModal';
 
-const fileMenuStyle = {
-  textAlign: 'center',
-};
+const fileMenuStyle = { textAlign: 'center' };
 
 class FileMenu extends React.Component {
   constructor(props) {
