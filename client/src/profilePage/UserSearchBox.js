@@ -84,7 +84,7 @@ export default class UserSearchBox extends React.Component {
             <ul>
               {this.props.friends.map(friend => (
                 <li>
-                  {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => this.props.handleRemoveFriend(friend)} />
+                  {friend.username} <Icon name="remove" onClick={() => this.props.handleRemoveFriend(friend)} />
                 </li>
               ))}
             </ul>

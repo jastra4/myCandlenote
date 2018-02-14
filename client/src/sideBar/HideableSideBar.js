@@ -11,14 +11,24 @@ class HideableSideBar extends Component {
       activeItem: 'home',
       newMessage: 'noMessages',
     };
+
+    if (props.visible) {
+      props.toggleSideBar();
+    }
+
     this.activeListener = this.activeListener.bind(this);
     this.resetNewMessage = this.resetNewMessage.bind(this);
   }
+
+  // componentWillReceiveProps(newProps) {
+  //   this.setState({ visible: newProps.visible });
+  // }
 
   handleItemClick = (e, { name }) => {
     if (name === 'student') {
       this.resetNewMessage();
     }
+    this.props.toggleSideBar();
     this.setState({ activeItem: name });
   }
 
@@ -27,6 +37,7 @@ class HideableSideBar extends Component {
   }
 
   componentDidMount() {
+    console.log('Component Mounted');
     this.activeListener();
   }
 
@@ -48,8 +59,8 @@ class HideableSideBar extends Component {
     const { ContentPage } = this.props;
     return (
       <div>
-        <Sidebar.Pushable as={Segment}>
-          <Sidebar as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+        <Sidebar.Pushable as={Segment} className="main-pushable-segment">
+          <Sidebar as={Menu} className="main-sidebar-left" animation='overlay' width='thin' visible={this.props.visible} icon='labeled' vertical inverted>
             <Link to='/'>
               <Menu.Item name='home' active={true} onClick={this.handleItemClick}>
                 <Icon name='home' />
@@ -106,14 +117,8 @@ class HideableSideBar extends Component {
               </Menu.Item>
             </Link>
           </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic style={{
-              backgroundColor: '#ffd1a3',
-              marginTop: '20px',
-              marginRight: '100px',
-              paddingRight: '75px',
-              minHeight: '10005px',
-            }}>
+          <Sidebar.Pusher dimmed={this.props.visible}>
+            <Segment basic className="main-body-segment">
               <ContentPage {...this.props} changeBackgroundColor={this.changeBackgroundColor} />
             </Segment>
           </Sidebar.Pusher>

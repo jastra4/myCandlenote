@@ -48,7 +48,7 @@ class SideBar extends Component {
     const { ContentPage } = this.props;
     return (
       <div>
-        <Sidebar.Pushable as={Segment}>
+        <Sidebar.Pushable as={Segment} className="main-pushable-segment">
           <Sidebar as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
             <Link to='/'>
               <Menu.Item name='home' active={true} onClick={ this.handleItemClick }>
@@ -107,13 +107,7 @@ class SideBar extends Component {
             </Link>
           </Sidebar>
           <Sidebar.Pusher>
-            <Segment basic style={{
-                backgroundColor: '#ffd1a3',
-                marginTop: '20px',
-                marginRight: '100px',
-                paddingRight: '75px',
-                minHeight: '10005px',
-              }}>
+            <Segment basic className="main-body-segment">
               <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>

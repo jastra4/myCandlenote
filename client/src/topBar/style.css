@@ -7,10 +7,36 @@
   .topbar-menu-text {
     font-size: 1.5em;
   }
+
+  .main-body-segment {
+    background-color: #ffd1a3 !important;
+    margin-top: 20px !important;
+    padding-right: 75px !important;
+    min-height: 10005px !important;
+    top: 25px;
+  }
+
+  .main-pushable-segment {
+    overflow: hidden;
+  }
 }
 
 @media (min-width: 900px) {
   .main-sidebar-left {
     top: 3.2em !important;
   }
+
+  .main-body-segment {
+    background-color: #ffd1a3 !important;
+    margin-top: 20px !important;
+    margin-right: 100px !important;
+    padding-right: 75px !important;
+    min-height: 10005px !important;
+    top: 25px
+  }
+
+  .main-pushable-segment {
+    overflow: hidden;
+  }
 }
+

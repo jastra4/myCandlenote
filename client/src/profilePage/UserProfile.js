@@ -62,10 +62,20 @@ export default class UserProfile extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      ...this.state,
-      friends: newProps.currentUser.friends,
-    });
+    const { profileImage, username, friends } = newProps.currentUser;
+    if (!this.state.username || !this.state.profileImage) {
+      this.setState({
+        ...this.state,
+        profileImage: this.resizeProfileImage(profileImage),
+        username,
+        friends,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        friends,
+      });
+    }
   }
 
   getDecksAndFlashcards(userId) {

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Sidebar, Menu, Icon, Image, Header } from 'semantic-ui-react';
+import { Sidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import MediaQuery from 'react-responsive';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import SideBarConnected from '../sideBar';
+import HideableSideBar from '../sideBar/HideableSideBar';
 import { removeCurrentUser } from '../actions/usersActions';
 import './style.css';
 
@@ -11,6 +12,8 @@ class TopBar extends Component {
   constructor(props) {
     super(props);
     this.state = { showSideBar: false };
+
+    this.toggleSideBar = this.toggleSideBar.bind(this);
   }
 
   resizeProfileImage(imageUrl) {
@@ -18,6 +21,10 @@ class TopBar extends Component {
     const sizeIndex = imageUrl.indexOf('sz=') + 3;
     const newUrl = `${imageUrl.slice(0, sizeIndex)}20`;
     return newUrl;
+  }
+
+  toggleSideBar() {
+    this.setState({ showSideBar: !this.state.showSideBar });
   }
 
   render = () => (
@@ -28,8 +35,8 @@ class TopBar extends Component {
             <span className="topbar-menu-text">CandleNote</span>
           </Menu.Item>
           <MediaQuery maxWidth={899}>
-            <Menu.Item>
-              <Icon name="sidebar" size="large"/>
+            <Menu.Item onClick={this.toggleSideBar}>
+              <Icon name="sidebar" size="large" />
             </Menu.Item>
           </MediaQuery>
         </Menu.Menu>
@@ -54,7 +61,16 @@ class TopBar extends Component {
           </Menu.Item>
         </Menu.Menu>
       </Sidebar>
-      <SideBarConnected { ...this.props } />
+      <MediaQuery minWidth={900}>
+        <SideBarConnected { ...this.props } />
+      </MediaQuery>
+      <MediaQuery maxWidth={899}>
+        <HideableSideBar
+          { ...this.props }
+          visible={this.state.showSideBar}
+          toggleSideBar={this.toggleSideBar}
+        />
+      </MediaQuery>
     </div>
   );
 }
