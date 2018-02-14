@@ -111,7 +111,7 @@ export default class UserProfile extends React.Component {
       .catch(err => console.log(err));
   }
 
-  handleVideoConferenceInviteClick() {
+  handleVideoConferenceInviteClick() { // eslint-disable-line
     console.log('On the user profile page!!');
   }
 
