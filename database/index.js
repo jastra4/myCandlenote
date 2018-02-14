@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
+const keys = require('../server/config/keys');
 
-const URI = process.env.MONGOLAB_RED_URI || 'mongodb://localhost/candle';
+// const URI = process.env.MONGOLAB_RED_URI || 'mongodb://keys/candle';
+// mongoose.connect(URI);
 
-mongoose.connect(URI);
+mongoose.connect(keys.mongodb.dbURI)
+  .then(() => { console.log('✅  Successfully connected to Mongodb'); })
+  .catch((e) => { console.error('⚠️ Error connected to MongoDB: ', e); });
+
 const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 const userSchema = new mongoose.Schema({
   username: String,
@@ -40,13 +47,33 @@ const flashcardsSchema = mongoose.Schema({
 
 const Flashcards = mongoose.model('flashcards', flashcardsSchema);
 
+const Session = mongoose.model('sessions', { _id: String });
+
 const notesSchema = mongoose.Schema({
-  subject: String,
-  heading: String,
+  title: String,
   body: String,
+  authorID: 'ObjectId',
+  sharedWith: Array,
+  createdAt: Date,
+  modifiedAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  showDate: {
+    type: Boolean,
+    default: true,
+  },
+  showTitle: {
+    type: Boolean,
+    default: true,
+  },
+  showName: {
+    type: Boolean,
+    default: true,
+  },
 });
 
-const Notes = mongoose.model('notes', notesSchema);
+const Note = mongoose.model('notes', notesSchema);
 
 const videosSchema = mongoose.Schema({
   title: String,
@@ -83,8 +110,9 @@ module.exports = {
   User,
   Decks,
   Flashcards,
-  Notes,
+  Note,
   Videos,
   Messages,
+  Session,
   Groups,
 };

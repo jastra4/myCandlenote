@@ -3,22 +3,39 @@ import ReactQuill from 'react-quill';
 import axios from 'axios';
 import 'react-quill/dist/quill.snow.css';
 import _ from 'lodash';
+import './NoteTitle.css';
 
 export default class MainEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
+    console.log('props: ', props);
 
-    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
+    this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 1000);
+    this.debouncedHandleTextChange = _.debounce(this.handleTextChange, 1000);
   }
-
-  componentWillMount() {
-    this.props.changeBackgroundColor('#1F1F1F');
-  }
-
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('noteContent'));
-    this.setState({ value });
+    this.props.changeBackgroundColor('#1F1F1F');
+    const { title, content: value = '' } = this.props;
+    this.setState({
+      title,
+      value,
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.clearNote) {
+      this.setState({
+        value: '',
+        clearNote: true,
+        packet: '',
+      });
+      _.defer(this.setState.bind(this), { clearNote: false });
+    }
+  }
+
+  componentWillUnmount() {
+    this.state.packet && this.handleTextChange();
   }
 
   handleEditorChange = (value, d, source, editor) => {
@@ -27,10 +44,18 @@ export default class MainEditor extends React.Component {
     this.setState({
       value, packet,
     });
-    window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
     this.debouncedParseContentMeaning(content);
+    this.debouncedHandleTextChange();
   }
+
+  handleTextChange = () => {
+    this.props.editNote({
+      noteId: this.props.currentNote,
+      body: this.state.packet,
+      authorID: this.props.authorID,
+    });
+  };
 
 
   getContentFromDelta = delta => (
@@ -39,11 +64,9 @@ export default class MainEditor extends React.Component {
     ), '')
   );
 
-  // TODO: Use return value from this function to build IntelliSearch
   parseContentMeaning = content => (
     axios.post('api/parseContentMeaning', { content })
       .then(({ data: { meaning } }) => {
-        console.log('Per Google, the meaning of your text is: ', meaning);
         this.props.setCurrentMeaning(meaning);
         return meaning;
       })
@@ -52,16 +75,17 @@ export default class MainEditor extends React.Component {
 
   handlePrint = () => {
     const { packet } = this.state;
-    axios.post('/api/tempSavePacket', { packet })
+    axios.post('/api/generatePDF', { packet })
       .catch((e) => { console.error(e); });
   }
 
   render = () => (
     <div>
       <ReactQuill
+        className='maineditor'
         theme='snow'
         value={ this.state.value }
-        onChange={ this.handleEditorChange }
+        onChange={ !this.clearNote && this.handleEditorChange }
         placeholder="Let's take some notes!"
         formats={ MainEditor.formats }
         modules={ MainEditor.modules }
@@ -69,7 +93,6 @@ export default class MainEditor extends React.Component {
     </div>
   );
 }
-
 
 MainEditor.formats = [
   'header', 'font', 'size',

@@ -74,7 +74,7 @@ export default class EmailModal extends Component {
         >
           <Button.Content hidden>Email</Button.Content>
           <Button.Content visible>
-            <Icon name='mail' />
+            <Icon name='mail' size='big'/>
           </Button.Content>
         </Button>
       }

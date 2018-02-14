@@ -1,8 +1,5 @@
 @import url('./notepad.css');
 
-body {
-}
-
 .section-inner {
   background-color: #EDEAD0;
 }
@@ -177,7 +174,7 @@ body {
 .messageDate {
 	font-style: italic;
 	font-size: .9em;
-	font-color: gray;
+	color: gray;
 }
 
 .messageText {
@@ -209,10 +206,27 @@ body {
   background-color: #15252D;
   border-radius: 4px 4px 0 0;
   width: 600px;
+  height: 447px;
   margin: 0 auto;
   position: relative;
 }
 
+
+.titleInput {
+	font-weight: 600;
+	font-size: 25px;
+	background-color: transparent;
+	border: none;
+	width: 600px;
+	margin: 20px 0px;
+	outline: none;
+
+}
+
+.titleInput::placeholder {
+	font-weight: normal;
+	font-style: italic;
+}
 .video-self {
   width: 174px;
   height: 130px;
@@ -221,7 +235,7 @@ body {
   bottom: 0px;
   background-color: #253841;
   z-index: 10px;
-  border-radius: 24px 0 0 0;
+  border-radius: 24px 24px 24px 24px;
 }
 
 .video-call {

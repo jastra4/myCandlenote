@@ -1,4 +1,4 @@
-const { Flashcards, Decks, Messages, User, Groups } = require('./index');
+const { Flashcards, Decks, Messages, User, Note, Groups } = require('./index');
 const db = require('./index');
 
 const insertFlashcard = ({ front, back, deckId, userId }) => (
@@ -141,11 +141,14 @@ const createGroup = (groupname, username, callback) => {
   });
 };
 
+const insertNote = noteInfo => new Note(noteInfo).save();
+
 const saveAccessToken = ({ userId, token }) => User.findOne({ _id: userId })
   .then((doc) => {
     doc.set({ googleAccessToken: token });
     return doc.save();
   });
+
 
 const addFriend = (userId, friendId) => User.findOne({ _id: userId })
   .then((user) => {
@@ -159,6 +162,7 @@ const addFriend = (userId, friendId) => User.findOne({ _id: userId })
 module.exports = {
   insertDeck,
   insertFlashcard,
+  insertNote,
   saveAccessToken,
   saveMessage,
   setReadReciept,

@@ -1,6 +1,5 @@
 // const { ExpressPeerServer } = require('peerjs');
 // const http = require('http');
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
@@ -8,30 +7,26 @@ const morgan = require('morgan');
 const dateFormat = require('dateformat');
 const axios = require('axios');
 const Promise = require('promise');
-
-const puppeteer = require('puppeteer');
-
 const mongoose = require('mongoose');
+
+const keys = require('./config/keys');
+const puppeteer = require('puppeteer');
 const passport = require('passport');
 const session = require('express-session');
-const { promisify } = require('util');
-const fs = require('fs');
-const uuid = require('uuid');
+const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
 
-const keys = require('./config/keys');
+
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
-
-const writeFile = promisify(fs.writeFile);
-const readFile = promisify(fs.readFile);
-
 
 // db imports
 const inserts = require('../database/inserts');
 const queries = require('../database/queries');
 const deletes = require('../database/deletes');
+
+mongoose.connect(keys.mongodb.dbURI);
 
 const app = express();
 const server = require('http').createServer(app); // socket stuff
@@ -48,6 +43,8 @@ const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.PORT || 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+
+console.log('domain: ', DOMAIN);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -70,7 +67,10 @@ const emailNoteOptions = (email, filePath) => ({
 });
 
 app.use(bodyParser.json({ limit: '5mb' }));
-app.use(bodyParser.urlencoded({ limit: '5mb' }));
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '5mb',
+}));
 
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
@@ -82,46 +82,107 @@ app.use(session({
   saveUninitialized: true,
   cookie: { maxAge: 24 * 60 * 60 * 1000 },
   name: 'candleNote',
+  store: new MongoStore({ url: keys.mongodb.dbURI }),
+  autoRemove: 'native',
 }));
-
-// app.use(cookieSession({
-//   maxAge: 24 * 60 * 60 * 1000,
-//   keys: [keys.session.cookieKey],
-// }));
 
 app.use(passport.initialize());
 
 app.use(passport.session());
 
+
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 // app.use('/peerjs', peerServer);
 
-
-// TODO: Investigate
-mongoose.connect(keys.mongodb.dbURI, () => {
-  console.log('connected to mongodb');
-});
-
-
 /* ----------- GET Handlers --------- */
 // app.get('/user', (req, res) => {
 //   console.log('You are logged in this is your user profile: ', req.user);
-//   console.log('authenticated at /user? : ', req.isAuthenticated())
+//   console.log('authenticated at /user? : ', req.isAuthenticated());
 // });
 
+// This route must come before authentication routes
+// Headless Browser will not be authenticated
+
+app.get('/pdf/:id', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, '/index.html'));
+});
+
+app.get('/api/pdf/:id', (req, res) => {
+  const { id: fileName } = req.params;
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+});
+
+
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
+  res.sendFile(path.join(DIST_DIR, '/index.html'));
+});
+
+app.get('/api/getUserByCookie/:cookie', (req, res) => {
+  const { cookie } = req.params;
+  queries.getUserByCookie(cookie)
+    .then((result) => {
+      const { user } = JSON.parse(JSON.parse(JSON.stringify(result)).session).passport;
+      res.send({ user });
+    })
+    .catch((e) => { console.error(e); });
 });
 
 app.get('*', (req, res, next) => {
-  const isAuth = req.isAuthenticated();
-  if (!isAuth) {
+  if (!req.isAuthenticated()) {
     res.redirect('/login');
   } else {
     next();
   }
-  // res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+// // called by app.js
+app.get('/api/userid', (req, res) => {
+  const userid = req.session.passport.user;
+  res.status(200).send({ userid });
+});
+
+
+app.post('/api/createNote', (req, res) => {
+  const { noteInfo } = req.body;
+  console.log('req.body: ', req.body);
+  console.log('noteInfo: ', noteInfo);
+  inserts.insertNote(noteInfo)
+    .then((response) => {
+      console.log('Successfully saved new note to DB');
+      const noteId = response._id;
+      res.send({ noteId });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500).end();
+    });
+});
+
+
+app.post('/api/editNote', (req, res) => {
+  const { noteInfo } = req.body;
+  console.log('updated note: ', noteInfo);
+  queries.updateNote(noteInfo)
+    .then(() => {
+      console.log('Successfully edited note in DB');
+      res.end();
+    })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500).end();
+    });
+});
+
+app.get('/users', (req, res) => {
+  queries.getAllUsers((users) => {
+    res.send(users);
+  });
+});
+
+app.post('/friendrequest', (req, res) => {
+  console.log('friendrequest: ', req.body.username);
+  res.send(201);
 });
 
 app.get('/api/pdf/:id', (req, res) => {
@@ -150,7 +211,7 @@ app.get('/userProfile', (req, res) => {
     });
 });
 
-/* --------- POST Handlers ----------- */
+// /* --------- POST Handlers ----------- */
 
 app.post('/deleteUser', (req, res) => {
   const { username } = req.body;
@@ -175,12 +236,15 @@ app.post('/makePDF', (req, res) => {
 
 const allSockets = {};
 
+io.sockets.on('error', (e) => { console.error(e); });
+
 io.sockets.on('connection', (socket) => {
-  console.log(`socket connected: ${socket.id}`);
+  console.log('✅  Successfully connected new Socket: ', socket.id);
   allSockets[socket.id] = socket;
 
   // App > PrivateChat
   socket.on('sign on', (data) => {
+    console.log('data: ', data);
     allSockets[data.username].status = 'away';
     allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
   });
@@ -193,6 +257,7 @@ io.sockets.on('connection', (socket) => {
 
   // ChatBox > PrivateChat
   socket.on('away', (data) => {
+    console.log('data: ', data);
     allSockets[data.username].status = 'away';
     allSockets[data.username].broadcast.emit(`${data.username} is away`);
   });
@@ -451,7 +516,7 @@ app.post('/api/decks', (req, res) => {
         userId,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/deleteDeck', (req, res) => {
@@ -460,7 +525,7 @@ app.post('/api/deleteDeck', (req, res) => {
       const { _id: id } = req.body;
       res.send(id);
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/flashcards', (req, res) => {
@@ -475,13 +540,30 @@ app.post('/api/flashcards', (req, res) => {
         userId,
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
 });
 
 app.post('/api/deleteCard', (req, res) => {
   deletes.deleteFlashcard(req.body)
     .then(() => res.send('Deleted'))
-    .catch(err => console.log(err));
+    .catch(err => console.error(err));
+});
+
+
+app.get('/api/getNotes/:id', (req, res) => {
+  const { id: userId } = req.params;
+  queries.getNotes(userId)
+    .then((notes) => { res.send(notes); })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500).end();
+    });
+});
+
+app.post('/api/deleteNote/', (req, res) => {
+  const { noteId } = req.body;
+  deletes.deleteNote(noteId);
+  res.end();
 });
 
 app.post('/api/parseContentMeaning', (req, res) => {
@@ -495,9 +577,6 @@ app.post('/api/parseContentMeaning', (req, res) => {
     }));
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
-});
 
 app.post('/api/suggestedResources', (req, res) => {
   axios.get('https://www.googleapis.com/customsearch/v1', { params: {
@@ -505,8 +584,11 @@ app.post('/api/suggestedResources', (req, res) => {
     key: process.env.GOOGLE_SEARCH_API_KEY,
     cx: process.env.GOOGLE_SEARCH_API_ID,
   } })
-    .then(results => res.send(results.data))
-    .catch(err => res.send(err));
+    .then((results) => { res.send(results.data); })
+    .catch((err) => { // eslint-disable-line
+      console.error('⚠️  Error searching Google');
+      res.sendStatus(500).end();
+    });
 });
 
 app.post('/api/suggestedVideos', (req, res) => {
@@ -519,10 +601,11 @@ app.post('/api/suggestedVideos', (req, res) => {
     videoEmbeddable: 'true',
   } })
     .then(result => res.send(result.data))
-    .catch(err => res.send(err));
+    .catch((err) => { // eslint-disable-line
+      console.error('⚠️  Error searching YouTube');
+      res.sendStatus(500).end();
+    });
 });
-
-// https://en.wikipedia.org/w/api.php?action=opensearch&search=api&limit=10&namespace=0&format=jsonfm
 
 app.post('/api/suggestedWiki', (req, res) => {
   const searchTerms = req.body.searchTerms.split(' ').slice(0, 3).join('+');
@@ -546,80 +629,139 @@ app.post('/api/suggestedWiki', (req, res) => {
             data.isFromGoogle = true;
             res.send(data);
           })
-          .catch(err => res.send(err));
+          .catch((err) => { // eslint-disable-line
+            console.error('⚠️  Error searching Google');
+            res.sendStatus(500).end();
+          });
       } else {
         res.send(result.data);
       }
     })
-    .catch(err => res.send(err));
-});
-
-app.post('/api/tempSavePacket', (req, res) => {
-  const { packet } = req.body;
-  const fileName = uuid();
-  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-
-  writeFile(filePath, packet)
-    .then(() => {
-      console.log('File successfully written');
-      const url = `http://${DOMAIN}/pdf/${fileName}`;
-      const pathToPDF = path.join(__dirname, `../PDFs/${fileName}.pdf`);
-
-      (async () => {
-        function resolveAfter1Seconds() {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve('resolved');
-            }, 1000);
-          });
-        }
-
-        function logAfterPDF(pdfLocation, title = 'notes.pdf') {
-          return new Promise((resolve) => {
-            console.log('PDF successfully printed 🖨️  👍');
-            // res.download(pdfLocation, title)
-            res.sendFile(pathToPDF, title, (err) => {
-              if (err) {
-                console.error(err);
-              } else {
-                console.log('yes!');
-              }
-            });
-            resolve('PDF printed');
-          });
-        }
-
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url, { waitUntil: 'networkidle2' });
-        await resolveAfter1Seconds();
-        await page.pdf({
-          path: pathToPDF,
-          format: 'Letter',
-          printBackground: true,
-          margin: {
-            top: '10mm',
-            bottom: '10mm',
-            left: '10mm',
-            right: '10mm',
-          },
-        });
-        await logAfterPDF(`PDFs/${fileName}.pdf`);
-        await browser.close();
-      })();
+    .catch((err) => { // eslint-disable-line
+      console.error('⚠️  Error searching Wikipedia');
+      res.sendStatus(500).end();
     });
 });
 
+
+app.get('/api/downloadPDF/:currentNote', (req, res) => {
+  const { currentNote } = req.params;
+  const noteInfo = {
+    noteId: currentNote,
+    showDate: true,
+    showTitle: true,
+    showName: true,
+  };
+
+  const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
+
+  (async () => {
+    await queries.updateNote(noteInfo);
+    const { title } = await queries.getTitleById(currentNote);
+
+
+    function resolveAfter1Seconds() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('resolved');
+        }, 1500);
+      });
+    }
+
+    function logAfterPDF() {
+      return new Promise((resolve) => {
+        res.download(pathToPDF, `${title}.pdf`, (err) => { console.error(err); });
+        resolve();
+      });
+    }
+
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await resolveAfter1Seconds();
+    await page.pdf({
+      path: pathToPDF,
+      format: 'Letter',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+        right: '10mm',
+      },
+    });
+    await logAfterPDF(`PDFs/${currentNote}.pdf`);
+    await browser.close();
+  })();
+});
+
+app.post('/api/generatePDF', (req, res) => {
+  const { currentNote,
+    showDate,
+    showName,
+    showTitle } = req.body;
+
+  const noteInfo = {
+    noteId: currentNote, showDate, showName, showTitle,
+  };
+
+  const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
+
+  (async () => {
+    function resolveAfter1Seconds() {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve('resolved');
+        }, 1500);
+      });
+    }
+
+    function logAfterPDF() {
+      return new Promise((resolve) => {
+        console.log('PDF successfully printed 🖨️  👍');
+        res.end();
+        resolve('PDF printed');
+      });
+    }
+    await queries.updateNote(noteInfo);
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: 'networkidle2' });
+    await resolveAfter1Seconds();
+    await page.pdf({
+      path: pathToPDF,
+      format: 'Letter',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        bottom: '10mm',
+        left: '10mm',
+        right: '10mm',
+      },
+    });
+    await logAfterPDF(`PDFs/${currentNote}.pdf`);
+    await browser.close();
+  })();
+});
+
+
 app.post('/api/getEditorPacket', (req, res) => {
-  const { fileName } = req.body;
-  const filePath = path.join(__dirname, `/assets/temp/${fileName}.txt`);
-  readFile(filePath, 'utf8')
-    .then((data) => {
-      res.json({ data });
+  const { noteToPrint } = req.body;
+  queries.getPacket(noteToPrint)
+    .then((result) => {
+      const { body: packet, authorID, title, showDate, showTitle, showName } = result[0];
+      queries.getUsernameById(authorID)
+        .then(({ username }) => {
+          res.send({
+            packet, title, username, showDate, showTitle, showName,
+          });
+        });
     })
     .catch((e) => {
       console.error(e);
-      res.sendStatus(500);
+      res.sendStatus(500).end();
     });
 });
 
@@ -659,6 +801,7 @@ app.post('/api/userFlashcards', (req, res) => {
     })
     .catch(err => res.send(err));
 });
+
 
 app.post('/api/userFriends', (req, res) => {
   const { userId } = req.body;
@@ -717,10 +860,13 @@ app.post('/api/userById', (req, res) => {
     .catch(err => res.status(400).send(err));
 });
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
-  console.info(`🌎  Server now running on port ${PORT}.  🌎`);
+  console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
 
 // peerServer.on('connection', (id) => {

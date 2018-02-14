@@ -113,14 +113,7 @@ class SideBar extends Component {
             </Link>
           </Sidebar>
           <Sidebar.Pusher>π
-            <Segment basic style={{
-                backgroundColor: '#ffd1a3',
-                marginTop: '20px',
-                marginRight: '100px',
-                paddingRight: '55px',
-                paddingLeft: '5px',
-                minHeight: '1000px',
-              }}>
+            <Segment basic className='mainPageArea'>
               <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>
