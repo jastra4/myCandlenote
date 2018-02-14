@@ -242,6 +242,7 @@ io.sockets.on('connection', (socket) => {
 
   // App > PrivateChat
   socket.on('sign on', (data) => {
+    console.log('data: ', data);
     allSockets[data.username].status = 'away';
     allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
   });
@@ -254,6 +255,7 @@ io.sockets.on('connection', (socket) => {
 
   // ChatBox > PrivateChat
   socket.on('away', (data) => {
+    console.log('data: ', data);
     allSockets[data.username].status = 'away';
     allSockets[data.username].broadcast.emit(`${data.username} is away`);
   });
@@ -845,15 +847,15 @@ app.post('/api/userByUsername', (req, res) => {
 app.post('/api/userById', (req, res) => {
   const { userId } = req.body;
   queries.getCurrentUser(userId)
-  .then((user) => {
-    const { _id: id, username, profileImage } = user;
-    res.send({
-      id,
-      username,
-      profileImage,
-    });
-  })
-  .catch(err => res.status(400).send(err));
+    .then((user) => {
+      const { _id: id, username, profileImage } = user;
+      res.send({
+        id,
+        username,
+        profileImage,
+      });
+    })
+    .catch(err => res.status(400).send(err));
 });
 
 app.get('*', (req, res) => {

@@ -57,12 +57,14 @@
 }
 
 div.cn-dismiss {
+  transform: translateX(100%);
   -webkit-transform: translateX(100%);
   animation: 1.4s slide-window-in 0s forwards;
   -webkit-animation: 1.4s slide-window-in 0s forwards;
 } 
 
 .cn-open {
+  animation: 1.4s slide-window-out 0s forwards;
   -webkit-animation: 1.4s slide-window-out 0s forwards;
 }
 

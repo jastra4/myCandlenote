@@ -74,7 +74,7 @@ class App extends React.Component {
       <div>
         <BrowserRouter>
           <Switch>
-            <Route path='/' exact={ true } render={() => <TopBar ContentPage={ MainPage }/>} />
+            <Route path='/' exact={true} component={MainPage} />
             <Route path='/notepad' render={() => <TopBar ContentPage={ NotePageConnected }/>} />
             <Route path='/notebox' render={() => <TopBar ContentPage={ NoteboxConnected }/>} />
             <Route path='/flashcards' exact={true} render={() => <TopBar ContentPage={FlashcardPageConnected} />} />
