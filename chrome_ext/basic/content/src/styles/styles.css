@@ -147,7 +147,7 @@ div.cn-dismiss {
 }
 
 
-.titleInputCE {
+.candlenote-window .titleInputCE {
   background-color: transparent;
   border: none;
   font-size: 25px;
@@ -161,7 +161,7 @@ div.cn-dismiss {
 
 }
 
-.titleInputCE::placeholder {
+.candlenote-window .titleInputCE::placeholder {
 	font-weight: normal;
 	font-style: italic;
 }
