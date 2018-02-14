@@ -950,7 +950,10 @@ var _axios2 = _interopRequireDefault(_axios);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var DOMAIN = 'http://localhost:3000';
+// const DOMAIN = process.env.NODE_ENV === 'production' 
+// ? 'http://candlenote.io'                
+// :'http://localhost:3000';
+
 
 var authorID = window.localStorage.getItem('authorID');
 var currentNote = void 0;

@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const DOMAIN = 'http://localhost:3000';
+// const DOMAIN = process.env.NODE_ENV === 'production' 
+// ? 'http://candlenote.io'                
+// :'http://localhost:3000';
+
 
 let authorID = window.localStorage.getItem('authorID');
 let currentNote;
