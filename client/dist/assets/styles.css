@@ -195,3 +195,29 @@ body {
   opacity: 0 !important;
   height: 0em !important;
 }
+
+/*Video Conference Styles*/
+.video-container {
+  background-color: #15252D;
+  border-radius: 4px 4px 0 0;
+  width: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.video-self {
+  width: 174px;
+  height: 130px;
+  position: absolute;
+  right: 0;
+  bottom: 0px;
+  background-color: #253841;
+  z-index: 10px;
+  border-radius: 24px 0 0 0;
+}
+
+.video-call {
+  width: 600px;
+  height: 447px;
+}
+

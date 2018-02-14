@@ -12,7 +12,7 @@ const UserFriendsList = props => (
     <Card.Content className="user-friend-card-count">
       <ul>
         {props.friends.map(friend => (
-          <li>
+          <li onClick={() => props.handleVideoConferenceInviteClick(friend.username)}>
             <MediaQuery minWidth={1000}>
               <Image src={friend.profileImage} size="mini" circular spaced="right" />
             </MediaQuery>
@@ -23,5 +23,4 @@ const UserFriendsList = props => (
     </Card.Content>
   </Card>
 );
-
 export default UserFriendsList;
