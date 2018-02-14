@@ -166,8 +166,8 @@ export default class PdfModal extends Component {
                 onClick={ () => { 
                   this.handleStage1Click();
                   this.props.text === 'Print'
-                  ? window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`).print()
-                  : window.open(`http://localhost:3000/api/pdf/${this.props.currentNote}`);
+                  ? window.open(`/api/pdf/${this.props.currentNote}`).print()
+                  : window.open(`/api/pdf/${this.props.currentNote}`);
                 }}
                 floated='right'
                 positive

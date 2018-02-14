@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const keys = require('../server/config/keys');
 
-// const URI = process.env.MONGOLAB_RED_URI || 'mongodb://localhost/candle';
+// const URI = process.env.MONGOLAB_RED_URI || 'mongodb://keys/candle';
 // mongoose.connect(URI);
 
 mongoose.connect(keys.mongodb.dbURI)
