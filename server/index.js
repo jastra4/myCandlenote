@@ -135,7 +135,6 @@ app.get('*', (req, res, next) => {
   }
 });
 
-<<<<<<< HEAD
 // // called by app.js
 app.get('/api/userid', (req, res) => {
   const userid = req.session.passport.user;
@@ -183,12 +182,12 @@ app.get('/users', (req, res) => {
 app.post('/friendrequest', (req, res) => {
   console.log('friendrequest: ', req.body.username);
   res.send(201);
-=======
+});
+
 app.get('/api/pdf/:id', (req, res) => {
   const { id: fileName } = req.params;
   console.log('fileName: ', fileName);
   res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
->>>>>>> e50727edb931f77377e6578150497d2472b4cc7d
 });
 
 app.get('/userProfile', (req, res) => {
