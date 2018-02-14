@@ -61,6 +61,7 @@ class TopBar extends Component {
           </Menu.Item>
         </Menu.Menu>
       </Sidebar>
+<<<<<<< HEAD
       <MediaQuery minWidth={900}>
         <SideBarConnected { ...this.props } />
       </MediaQuery>
@@ -71,6 +72,9 @@ class TopBar extends Component {
           toggleSideBar={this.toggleSideBar}
         />
       </MediaQuery>
+=======
+      <SideBarConnected { ...this.props } {...console.log('Peer passed down: ', this.props.peer)}/>
+>>>>>>> master
     </div>
   );
 }

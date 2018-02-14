@@ -99,6 +99,12 @@ class SideBar extends Component {
                 Schedule
               </Menu.Item>
             </Link>
+            <Link to='/video-conference' peer={this.props.peer}>
+              <Menu.Item name='video-conference' onClick={this.handleItemClick}>
+                <Icon name='video camera' />
+                Video Conference
+              </Menu.Item>
+            </Link>
             <Link to='/simonSays'>
               <Menu.Item name='winner' onClick={ this.handleItemClick }>
                 <Icon name='winner' />
@@ -107,7 +113,7 @@ class SideBar extends Component {
             </Link>
           </Sidebar>
           <Sidebar.Pusher>
-            <Segment basic className="main-body-segment">
+            <Segment basic className="main-body-segment mainPageArea">
               <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>
           </Sidebar.Pusher>

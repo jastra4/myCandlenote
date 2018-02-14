@@ -29,6 +29,7 @@ export default class UserProfile extends React.Component {
     };
 
     this.handleRemoveFriend = this.handleRemoveFriend.bind(this);
+    this.handleVideoConferenceInviteClick = this.handleVideoConferenceInviteClick.bind(this);
   }
 
   componentDidMount() {
@@ -120,11 +121,14 @@ export default class UserProfile extends React.Component {
       .catch(err => console.log(err));
   }
 
+  handleVideoConferenceInviteClick() { // eslint-disable-line
+    console.log('On the user profile page!!');
+  }
+
   render() {
     return (
       <Grid columns="equal">
         <Grid.Row>
-
           <Modal open={this.state.showWarning} >
             <Modal.Header as="h1">
               Remove friend from friends list
@@ -148,7 +152,6 @@ export default class UserProfile extends React.Component {
               </Button>
             </Modal.Actions>
           </Modal>
-
           <Grid.Column>
             <div style={{ height: '30px' }}></div>
             <div className="user-info-container">

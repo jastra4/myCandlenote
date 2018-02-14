@@ -21,10 +21,12 @@ export default class IntelliSearch extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const searchTerms = newProps.meaning.trim().split(' ').join('+');
-    this.grabGoogleSearch(searchTerms);
-    this.grabYoutubeSearch(searchTerms);
-    this.grabWikiSearch(searchTerms);
+    if (newProps.meaning) {
+      const searchTerms = newProps.meaning.trim().split(' ').join('+');
+      this.grabGoogleSearch(searchTerms);
+      this.grabYoutubeSearch(searchTerms);
+      this.grabWikiSearch(searchTerms);
+    }
   }
 
   grabGoogleSearch(searchTerms) {

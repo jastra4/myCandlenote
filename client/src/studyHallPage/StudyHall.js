@@ -5,7 +5,6 @@ import ChatBox from './ChatBox';
 import PrivateChatList from './PrivateChatList';
 import GroupsList from './GroupsList';
 import SearchConnected from './Search';
-import VideoConference from './VideoConference';
 import activeSocket from '../actions/activeSocket';
 
 class StudyHall extends React.Component {
@@ -118,7 +117,6 @@ class StudyHall extends React.Component {
             members={this.state.members}
           />
         </div>
-        <VideoConference />
       </div>
     );
   }

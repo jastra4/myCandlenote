@@ -5,15 +5,28 @@ export const addNote = noteInfo => ({
   payload: noteInfo,
 });
 
-export const createNote = noteInfo => (
-  dispatch => (
-    axios.post('/api/notes', noteInfo)
-      .then(
-        res => dispatch(addNote(res.data)),
-        err => console.log(err),
-      )
-  )
-);
+export const savedNote = () => ({ type: 'SAVED_NOTE' });
+
+export const savingNote = () => ({ type: 'SAVING_NOTE' });
+
+export const editNote = (noteInfo) => {
+  console.log('update noteInfo for dispatch: ', noteInfo);
+  return (
+    (dispatch) => {
+      dispatch(savingNote());
+      return (
+        axios.post('/api/editNote', { noteInfo })
+          .then(() => {
+            console.log('successfully updated note');
+            dispatch(savedNote());
+          })
+          .catch((err) => {
+            console.error(err);
+          })
+      );
+    }
+  );
+};
 
 export const setNotes = notes => ({
   type: 'SET_NOTES',
@@ -22,22 +35,41 @@ export const setNotes = notes => ({
 
 export const getNotes = userId => (
   dispatch => (
-    axios.get(`/api/notes/${userId}`)
+    axios.get(`/api/getNotes/${userId}`)
       .then((res) => {
         console.log('Getting note:', res.data);
         dispatch(setNotes(res.data));
-      }, err => console.log(err))
+      })
+      .catch((e) => { console.error(e); })
   )
 );
 
 export const setCurrentNote = noteId => ({
-  type: 'SET_CURRENT_NOTES',
+  type: 'SET_CURRENT_NOTE',
   payload: { id: noteId },
 });
 
+export const clearCurrentNote = () => ({ type: 'CLEAR_CURRENT_NOTE' });
+
+
+export const resetClearCurrentNote = () => ({ type: 'RESET_CLEAR_CURRENT_NOTE' });
+
+export const createNote = noteInfo => (
+  dispatch => (
+    axios.post('/api/createNote', { noteInfo })
+      .then(({ data: { noteId, authorID } }) => {
+        console.log('dispatching new note: ', noteId);
+        dispatch(setCurrentNote(noteId));
+        dispatch(clearCurrentNote());
+        dispatch(getNotes(authorID));
+      })
+      .catch((err) => { console.error(err); })
+  )
+);
+
 export const deleteNote = noteId => (
   dispatch => (
-    axios.post('/api/deleteNote/', noteId)
+    axios.post('/api/deleteNote/', { noteId })
       .then((res) => {
         console.log('Delete note res:', res.body);
         dispatch({

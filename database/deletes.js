@@ -1,4 +1,4 @@
-const { Flashcards, Decks, User, Groups } = require('./index');
+const { Flashcards, Decks, Note, User, Groups } = require('./index');
 
 const deleteFlashcard = id => Flashcards.remove({ _id: id });
 
@@ -17,6 +17,12 @@ const closePrivateChat = (username, otheruser, callback) => {
     }
   });
 };
+
+const deleteNote = noteId => (
+  Note.remove({ _id: noteId })
+    .then(() => { console.log('Successfully deleted note: ', noteId); })
+    .catch((e) => { console.error(e); })
+);
 
 const removeGroupMember = (username, groupname, callback) => {
   Groups.findOne({ groupname }, (err, group) => {
@@ -60,6 +66,7 @@ const removeFriendById = (userId, friendId) => User.findOne({ _id: userId })
 module.exports = {
   deleteDeck,
   deleteFlashcard,
+  deleteNote,
   removeFriendById,
   closePrivateChat,
   removeGroupMember,
