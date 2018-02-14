@@ -1,8 +1,5 @@
 @import url('./notepad.css');
 
-body {
-}
-
 .section-inner {
   background-color: #EDEAD0;
 }
@@ -169,7 +166,7 @@ body {
 .messageDate {
 	font-style: italic;
 	font-size: .9em;
-	font-color: gray;
+	color: gray;
 }
 
 .messageText {
@@ -205,6 +202,22 @@ body {
   position: relative;
 }
 
+
+.titleInput {
+	font-weight: 600;
+	font-size: 25px;
+	background-color: transparent;
+	border: none;
+	width: 600px;
+	margin: 20px 0px;
+	outline: none;
+
+}
+
+.titleInput::placeholder {
+	font-weight: normal;
+	font-style: italic;
+}
 .video-self {
   width: 174px;
   height: 130px;

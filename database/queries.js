@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Decks, Flashcards, User, Groups } = require('./index');
+const { Decks, Flashcards, User, Note, Session, Groups } = require('./index');
 const db = require('./index');
 
 const getUserName = (id, callback) => {
@@ -98,6 +98,20 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
+const updateNote = (noteInfo) => {
+  const updatedNoteInfo = {
+    ...noteInfo,
+    modifiedAt: Date.now(),
+  };
+
+  return (
+
+    Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err) => {
+      if (err) { console.error(err); }
+    }));
+};
+
+const getNotes = authorID => Note.find({ authorID }).sort('-modifiedAt');
 const getRefreshToken = userId => User.findOne({ _id: userId });
 
 const getAccessToken = userId => User.findOne({ _id: userId }, 'googleAccessToken');
@@ -114,7 +128,21 @@ const getFriendsById = (friendIds) => {
 
 const getUserByUsername = username => User.findOne({ username });
 
+const getPacket = _id => Note.find({ _id });
+
+const getUsernameById = _id => User.findOne({ _id }).select('username');
+
+const getTitleById = _id => Note.findOne({ _id }).select('title');
+
+const getUserByCookie = cookie => Session.findOne({ _id: cookie }).select('session').catch((e) => { console.error(e); });
+
 module.exports = {
+  getUserByCookie,
+  getTitleById,
+  getUsernameById,
+  getPacket,
+  getNotes,
+  updateNote,
   getUserName,
   loadChatHistory,
   loadPrivateChats,

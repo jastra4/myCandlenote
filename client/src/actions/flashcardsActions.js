@@ -15,7 +15,6 @@ export const createFlashcard = cardInfo => (
   )
 );
 
-
 export const setFlashcards = cards => ({
   type: 'SET_FLASHCARDS',
   payload: cards,

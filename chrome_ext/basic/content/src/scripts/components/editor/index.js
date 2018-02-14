@@ -2,15 +2,16 @@ import React from 'react';
 import ReactQuill from 'react-quill';
 // import axios from 'axios';
 
-// import _ from 'lodash';
+import _ from 'lodash';
 
 export default class MainEditor extends React.Component {
-  constructor() {
-    super();
-    this.state = { value: '' };
+  constructor(props) {
+    super(props);
+    this.state = { delta: '' };
 
     this.handleEditorChange = this.handleEditorChange.bind(this);
     this.getContentFromDelta = this.getContentFromDelta.bind(this);
+    // this.debouncedHandleEditorChange = _.debounce(this.handleEditorChange, 1000);
 
     // this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
     // this.debouncedParseContentMeaning = _.throttle(this.parseContentMeaning, 2000);
@@ -21,8 +22,9 @@ export default class MainEditor extends React.Component {
   }
 
   componentDidMount() {
-    const value = JSON.parse(window.localStorage.getItem('noteContent'));
-    this.setState({ value });
+    // const value = JSON.parse(window.localStorage.getItem('noteInfo'));
+    const { body } = this.props;
+    this.setState({ delta: body });
     this.quillEditor.focus();
   }
 
@@ -30,10 +32,12 @@ export default class MainEditor extends React.Component {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
     this.setState({
-      value, packet,
+      delta, packet,
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
+
+    // this.props.handleEditorChange(packet)
   }
 
 
@@ -43,35 +47,16 @@ export default class MainEditor extends React.Component {
     ), '')
   };
 
-  // TODO: Use return value from this function to build IntelliSearch
-  // parseContentMeaning (content) (
-  //   axios.post('api/parseContentMeaning', { content })
-  //     .then(({ data: { meaning } }) => {
-  //       console.log('Per Google, the meaning of your text is: ', meaning);
-  //       this.props.setCurrentMeaning(meaning);
-  //       return meaning;
-  //     })
-  // );
-
-
-  // handlePrint = () => {
-  //   const { packet } = this.state;
-  //   axios.post('/api/tempSavePacket', { packet })
-  //     .catch((e) => { console.error(e); });
-  // }
-
-
   render() {
     return (
       <div>
         <ReactQuill
           ref={ (quillEditor) => { 
-            console.log('quillEditor: ', quillEditor) 
             this.quillEditor = quillEditor;
           }} 
           className='cn-quill'
           theme='snow'
-          value={this.state.value}
+          // value={this.state.delta}
           onChange={this.handleEditorChange}
           placeholder="Let's take some notes!"
           formats={MainEditor.formats}

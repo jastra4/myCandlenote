@@ -45,7 +45,7 @@
   border: 1px solid #191a1c;
   border-right: none;
   animation: 1.4s slide-in 0s forwards;
-  -webkit-animation: 1.4s slide-in 0s forwards; */
+  -webkit-animation: 1.4s slide-in 0s forwards;
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
   overflow: hidden;
@@ -57,12 +57,14 @@
 }
 
 div.cn-dismiss {
-  -webkit-transform: translateX(100%); */
+  transform: translateX(100%);
+  -webkit-transform: translateX(100%);
   animation: 1.4s slide-window-in 0s forwards;
   -webkit-animation: 1.4s slide-window-in 0s forwards;
 } 
 
 .cn-open {
+  animation: 1.4s slide-window-out 0s forwards;
   -webkit-animation: 1.4s slide-window-out 0s forwards;
 }
 
@@ -144,4 +146,24 @@ div.cn-dismiss {
   to {
     transform: rotate(270deg) translateY(0%);
   }
+}
+
+
+.candlenote-window .titleInputCE {
+  background-color: transparent;
+  border: none;
+  font-size: 25px;
+  font-weight: 100;
+  width: 500px;
+  height: 40px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-top: 20px;
+	outline: none;
+
+}
+
+.candlenote-window .titleInputCE::placeholder {
+	font-weight: normal;
+	font-style: italic;
 }

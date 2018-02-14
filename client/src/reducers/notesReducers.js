@@ -3,7 +3,9 @@ const dotProp = require('dot-prop-immutable');
 const defaultState = {
   byId: {},
   currentNote: -1,
+  currentNoteIsSaved: true,
   allIds: [],
+  clearCurrentNote: false,
 };
 
 const notesReducer = (state = defaultState, action) => {
@@ -17,22 +19,58 @@ const notesReducer = (state = defaultState, action) => {
         },
       };
     case 'SET_NOTES': {
-      const notesById = action.payload.reduce((notes, note) => ({
+      const notesFromDB = action.payload;
+
+      const notesById = notesFromDB.reduce((notes, note) => ({
         ...notes,
-        [note.id]: note,
+        [note._id]: note,
       }), {});
+
+      const allIds = Object.keys(notesById);
+
+      const currentNote = notesFromDB
+        .slice()
+        .sort((a, b) => (a.modifiedAt >= b.modifiedAt ? -1 : 1))[0]._id;
+
       return {
         ...state,
         byId: notesById,
+        currentNote,
+        allIds,
       };
     }
     case 'SET_CURRENT_NOTE':
       return {
         ...state,
-        currentNote: state.byId[action.payload.id],
+        currentNote: action.payload.id,
       };
     case 'DELETE_NOTE':
       return dotProp.delete(state, `byId.${action.payload.id}`);
+
+    case 'SAVING NOTE':
+      return {
+        ...state,
+        currentNoteIsSaved: false,
+      };
+
+    case 'SAVED_NOTE':
+      return {
+        ...state,
+        currentNoteIsSaved: true,
+      };
+    case 'CLEAR_CURRENT_NOTE':
+      return {
+        ...state,
+        clearCurrentNote: true,
+      };
+
+    case 'RESET_CLEAR_CURRENT_NOTE':
+      return {
+        ...state,
+        clearCurrentNote: false,
+      };
+
+
     default:
       return state;
   }
