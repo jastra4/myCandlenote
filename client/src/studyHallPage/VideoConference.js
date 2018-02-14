@@ -204,8 +204,7 @@ class VideoConference extends React.Component {
               Video Conference Invitation
             </Modal.Header>
             <Modal.Content as="p">
-              Do you want to video chat with 
-              {this.state.friendWhoWantsToTalk.username} from your friends list?
+Do you want to video chat with {this.state.friendWhoWantsToTalk.username} from your friends list?
             </Modal.Content>
             <Modal.Actions>
               <Button
