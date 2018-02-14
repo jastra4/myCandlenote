@@ -963,7 +963,7 @@ chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
 
     if (user) {
       authorID = user;
-      window.localStorage.getItem('authorID');
+      window.localStorage.setItem('authorID', authorID);
       console.log('authorID updated to: ', authorID);
     }
   }).catch(function (e) {
@@ -973,6 +973,7 @@ chrome.cookies.getAll({ name: 'candleNote' }, function (res) {
 
 // TODO: Listen to cookie
 chrome.runtime.onMessage.addListener(function (req) {
+  console.log('currentNote: ', currentNote);
   console.log('req: ', req);
   console.log('authorid: ', authorID);
   if (authorID && req.action === 'updateNote') {
@@ -982,14 +983,18 @@ chrome.runtime.onMessage.addListener(function (req) {
       title: req.payload.title
     };
     if (currentNote) {
-      _axios2.default.post(DOMAIN + '/api/editNote', _extends({}, noteInfo, { currentNote: currentNote })).then(function (res) {
+      _axios2.default.post(DOMAIN + '/api/editNote', { noteInfo: _extends({}, noteInfo, { noteId: currentNote }) }).then(function (res) {
         console.log('res from updateNote: ', res);
       }).catch(function (e) {
         console.error(e);
       });
     } else {
-      _axios2.default.post(DOMAIN + '/api/createNote', noteInfo).then(function (res) {
+      console.log('noteInfo: ', noteInfo);
+      _axios2.default.post(DOMAIN + '/api/createNote', { noteInfo: noteInfo }).then(function (res) {
         console.log('res from createNote: ', res);
+        var noteId = res.data.noteId;
+
+        noteId && (currentNote = noteId);
       }).catch(function (e) {
         console.error(e);
       });

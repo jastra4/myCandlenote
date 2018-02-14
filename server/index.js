@@ -145,6 +145,8 @@ app.get('/api/userid', (req, res) => {
 
 app.post('/api/createNote', (req, res) => {
   const { noteInfo } = req.body;
+  console.log('req.body: ', req.body);
+  console.log('noteInfo: ', noteInfo);
   inserts.insertNote(noteInfo)
     .then((response) => {
       console.log('Successfully saved new note to DB');

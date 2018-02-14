@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import '_' from 'lodash';
+// import '_' from 'lodash';
 import Editor from '../editor';
 import '../../../styles/styles.css'
 
@@ -27,6 +27,7 @@ class App extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleEditorChange = this.handleEditorChange.bind(this);
+    // this.debouncedHandleEditorChange = _.debounce(this.handleEditorChange, 1000);
   }
 
   componentWillMount() {
@@ -76,7 +77,7 @@ class App extends Component {
       body, 
       authorID,
     };
-    window.localStorage.setContent({ noteInfo });
+    window.localStorage.setItem({ noteInfo });
   }
 
   handleEditorChange (packet) {
@@ -84,13 +85,13 @@ class App extends Component {
       title: this.state.title || 'Untitled',
       body: packet,
     }
-    
+
     chrome.runtime.sendMessage({
       action: 'updateNote',
       payload: noteInfo,
     });
 
-    window.localStorage.setContent({ noteInfo });
+    window.localStorage.setItem('noteInfo', noteInfo);
   }
   
   render(){
@@ -98,7 +99,7 @@ class App extends Component {
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
           <Editor handleEditorChange={ this.handleEditorChange } body={ this.state.body }/>
-          <input onChange={ this.handleInputChange } className='titleInputCE' placeholder='Untitled'/>
+          {/* <input onChange={ this.handleInputChange } className='titleInputCE' placeholder='Untitled'/> */}
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote

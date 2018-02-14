@@ -2,7 +2,7 @@ import React from 'react';
 import ReactQuill from 'react-quill';
 // import axios from 'axios';
 
-// import _ from 'lodash';
+import _ from 'lodash';
 
 export default class MainEditor extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ export default class MainEditor extends React.Component {
 
     this.handleEditorChange = this.handleEditorChange.bind(this);
     this.getContentFromDelta = this.getContentFromDelta.bind(this);
+    // this.debouncedHandleEditorChange = _.debounce(this.handleEditorChange, 1000);
 
     // this.debouncedParseContentMeaning = _.debounce(this.parseContentMeaning, 2000);
     // this.debouncedParseContentMeaning = _.throttle(this.parseContentMeaning, 2000);
