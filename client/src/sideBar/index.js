@@ -88,7 +88,7 @@ class SideBar extends Component {
             </Link>
             <Link to='/studyhall'>
               <Menu.Item name='student' onClick={ this.handleItemClick }>
-                <Icon name='student'/>
+                <Icon name='student' />
                 Study Hall
                 <i className={`comment outline icon ${this.state.newMessage}`} ></i>
               </Menu.Item>
@@ -117,8 +117,9 @@ class SideBar extends Component {
                 backgroundColor: '#ffd1a3',
                 marginTop: '20px',
                 marginRight: '100px',
-                paddingRight: '75px',
-                minHeight: '10005px',
+                paddingRight: '55px',
+                paddingLeft: '5px',
+                minHeight: '1000px',
               }}>
               <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
             </Segment>

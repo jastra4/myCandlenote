@@ -9,6 +9,14 @@ body {
 
 /* StudyHall Styles */
 
+#studyHall{
+  background: red;
+  margin-top: 0px;
+  margin-right: 0px;
+  padding-right: 0px;
+  height: 1000px;
+}
+
 .studyHallContainer{
 	padding: 0em !important;
 }

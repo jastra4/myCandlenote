@@ -23,8 +23,6 @@ import activeSocket from './actions/activeSocket';
 import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
-
-const socketUrl = '/';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -43,7 +41,7 @@ class App extends React.Component {
   }
 
   initSocket(username) {
-    const socket = io(socketUrl);
+    const socket = io('/');
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
