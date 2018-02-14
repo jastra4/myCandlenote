@@ -21,29 +21,31 @@ class TopBar extends Component {
   render = () => (
     <div>
       <Sidebar as={Menu} animation='push' direction='top' visible={true} inverted>
-        <Menu.Item name='CandleNote' position='right'>
-        </Menu.Item>
-
-        {this.props.currentUser.userId !== '' ?
-          <Menu.Item as={Link} to='/profile' name='user' position='right' onClick={() => { }}>
-            {console.log('USER IN TOPBAR:', this.props.currentUser)}
-            <div style={{ marginRight: '5px' }}>
-              <Image src={this.resizeProfileImage(this.props.currentUser.profileImage)} circular centered spaced="right" />
-            </div>
-            {this.props.currentUser.username}
+        <Menu.Menu position="right">
+          <Menu.Item name='CandleNote'>
           </Menu.Item>
-          :
-          <Menu.Item as={Link} to='/' name='user' position='right' onClick={() => { }}>
-            <Icon name='user' />
-            Login
-          </Menu.Item>}
 
-        <Menu.Item as={Link} to='/home' name='logout' position='right' onClick={ () => { this.props.removeCurrentUser(); } }>
+          {this.props.currentUser.userId !== '' ?
+            <Menu.Item as={Link} to='/profile' name='user' onClick={() => { }}>
+              {console.log('USER IN TOPBAR:', this.props.currentUser)}
+              <div style={{ marginRight: '5px' }}>
+                <Image src={this.resizeProfileImage(this.props.currentUser.profileImage)} circular centered spaced="right" />
+              </div>
+              {this.props.currentUser.username}
+            </Menu.Item>
+            :
+            <Menu.Item as={Link} to='/' name='user' onClick={() => { }}>
+              <Icon name='user' />
+              Login
+            </Menu.Item>}
+
+          <Menu.Item as={Link} to='/home' name='logout' onClick={() => { this.props.removeCurrentUser(); }}>
             <Icon name='log out' />
             Logout
-        </Menu.Item>
+          </Menu.Item>
+        </Menu.Menu>
       </Sidebar>
-      <SideBarConnected { ...this.props }/>
+      <SideBarConnected { ...this.props } />
     </div>
   );
 }
