@@ -147,7 +147,7 @@ div.cn-dismiss {
 }
 
 
-/* .titleInputCE {
+.titleInputCE {
   background-color: transparent;
   border: none;
   font-size: 25px;
@@ -164,4 +164,4 @@ div.cn-dismiss {
 .titleInputCE::placeholder {
 	font-weight: normal;
 	font-style: italic;
-} */
+}

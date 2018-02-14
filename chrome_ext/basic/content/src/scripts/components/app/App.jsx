@@ -98,8 +98,11 @@ class App extends Component {
     return (
       <div className={`candlenote-parent `}>
         <div className={`candlenote-window ${this.state.intermediateAnimation} ${this.state.windowState}` } >
-          <Editor handleEditorChange={ this.handleEditorChange } body={ this.state.body }/>
-          {/* <input onChange={ this.handleInputChange } className='titleInputCE' placeholder='Untitled'/> */}
+          <Editor 
+            // handleEditorChange={ this.handleEditorChange } 
+            // body={ this.state.body }
+          />
+          <input onChange={ this.handleInputChange } className='titleInputCE' placeholder='Untitled'/>
         </div>
         <div className={`candlenote-tab  ${this.state.tabState}`}  onClick={ this.toggleWindowState }>
           CandleNote

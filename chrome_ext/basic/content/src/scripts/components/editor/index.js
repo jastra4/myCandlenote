@@ -7,7 +7,7 @@ import _ from 'lodash';
 export default class MainEditor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { delta: '' };
 
     this.handleEditorChange = this.handleEditorChange.bind(this);
     this.getContentFromDelta = this.getContentFromDelta.bind(this);
@@ -24,7 +24,7 @@ export default class MainEditor extends React.Component {
   componentDidMount() {
     // const value = JSON.parse(window.localStorage.getItem('noteInfo'));
     const { body } = this.props;
-    this.setState({ value: body });
+    this.setState({ delta: body });
     this.quillEditor.focus();
   }
 
@@ -32,12 +32,12 @@ export default class MainEditor extends React.Component {
     const delta = editor.getContents();
     const packet = JSON.stringify(delta);
     this.setState({
-      value, packet,
+      delta, packet,
     });
     window.localStorage.setItem('noteContent', packet);
     const content = this.getContentFromDelta(delta);
 
-    this.props.handleEditorChange(packet)
+    // this.props.handleEditorChange(packet)
   }
 
 
@@ -56,7 +56,7 @@ export default class MainEditor extends React.Component {
           }} 
           className='cn-quill'
           theme='snow'
-          value={this.state.value}
+          // value={this.state.delta}
           onChange={this.handleEditorChange}
           placeholder="Let's take some notes!"
           formats={MainEditor.formats}
