@@ -46,7 +46,8 @@
 
 .chatListHeader {
 	color: #2d2d86;
-	background: #d9d9d9 !important;
+	font-size: 1.2em !important;
+  background: linear-gradient(#d9d9d9, white) !important;
 }
 
 .chatList {
@@ -61,6 +62,10 @@
 .chatName {
   padding-left: 1em;
   color: #4d4d4d;
+}
+
+.chatName:hover {
+  cursor: pointer;
 }
 
 /* Private Chat List Styles */
@@ -97,10 +102,10 @@
 /* Search Bar Styles */
 
 .searchContainer {
-	width: 75%;
+	width: 25%;
 	position: relative;
 	bottom: 46em;
-	left: 25%;
+	left: 75%;
 	margin-top: 2em !important;	
 }
 
@@ -124,6 +129,8 @@
 	color: #2d2d86;
 	border: 1px #d9d9d9 solid;
 	border-style: none none solid none;
+	font-size: 1.2em !important;
+	background: linear-gradient(#d9d9d9, white) !important;
 }
 
 .HeaderType { /* no chat selected */
