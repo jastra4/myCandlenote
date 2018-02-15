@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Sidebar, Segment, Menu, Icon } from 'semantic-ui-react';
 
-class SideBar extends Component {
+class HideableSideBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,14 +11,24 @@ class SideBar extends Component {
       activeItem: 'home',
       newMessage: 'noMessages',
     };
+
+    if (props.visible) {
+      props.toggleSideBar();
+    }
+
     this.activeListener = this.activeListener.bind(this);
     this.resetNewMessage = this.resetNewMessage.bind(this);
   }
+
+  // componentWillReceiveProps(newProps) {
+  //   this.setState({ visible: newProps.visible });
+  // }
 
   handleItemClick = (e, { name }) => {
     if (name === 'student') {
       this.resetNewMessage();
     }
+    this.props.toggleSideBar();
     this.setState({ activeItem: name });
   }
 
@@ -27,6 +37,7 @@ class SideBar extends Component {
   }
 
   componentDidMount() {
+    console.log('Component Mounted');
     this.activeListener();
   }
 
@@ -49,21 +60,21 @@ class SideBar extends Component {
     return (
       <div>
         <Sidebar.Pushable as={Segment} className="main-pushable-segment">
-          <Sidebar as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+          <Sidebar as={Menu} className="main-sidebar-left" animation='overlay' width='thin' visible={this.props.visible} icon='labeled' vertical inverted>
             <Link to='/'>
-              <Menu.Item name='home' active={true} onClick={ this.handleItemClick }>
+              <Menu.Item name='home' active={true} onClick={this.handleItemClick}>
                 <Icon name='home' />
                 Home
               </Menu.Item>
             </Link>
             <Link to='/notepad'>
-              <Menu.Item name='write' onClick={ this.handleItemClick }>
+              <Menu.Item name='write' onClick={this.handleItemClick}>
                 <Icon name='write' />
                 Create
               </Menu.Item>
             </Link>
             <Link to='/notebox'>
-              <Menu.Item name='inbox' onClick={ this.handleItemClick }>
+              <Menu.Item name='inbox' onClick={this.handleItemClick}>
                 <Icon name='inbox' />
                 NoteBox
               </Menu.Item>
@@ -75,19 +86,19 @@ class SideBar extends Component {
               </Menu.Item>
             </Link>
             <Link to='/flashcards'>
-              <Menu.Item name='vcard outline' onClick={ this.handleItemClick }>
+              <Menu.Item name='vcard outline' onClick={this.handleItemClick}>
                 <Icon name='vcard outline' />
                 Flashcards
               </Menu.Item>
             </Link>
             <Link to='/library'>
-              <Menu.Item name='book' onClick={ this.handleItemClick }>
+              <Menu.Item name='book' onClick={this.handleItemClick}>
                 <Icon name='book' />
                 Library
               </Menu.Item>
             </Link>
             <Link to='/studyhall'>
-              <Menu.Item name='student' onClick={ this.handleItemClick }>
+              <Menu.Item name='student' onClick={this.handleItemClick}>
                 <Icon name='student' />
                 Study Hall
                 <i className={`comment outline icon ${this.state.newMessage}`} ></i>
@@ -99,22 +110,16 @@ class SideBar extends Component {
                 Schedule
               </Menu.Item>
             </Link>
-            <Link to='/video-conference' peer={this.props.peer}>
-              <Menu.Item name='video-conference' onClick={this.handleItemClick}>
-                <Icon name='video camera' />
-                Video Conference
-              </Menu.Item>
-            </Link>
             <Link to='/simonSays'>
-              <Menu.Item name='winner' onClick={ this.handleItemClick }>
+              <Menu.Item name='winner' onClick={this.handleItemClick}>
                 <Icon name='winner' />
                 Simon Says
               </Menu.Item>
             </Link>
           </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic className="main-body-segment mainPageArea">
-              <ContentPage {...this.props} changeBackgroundColor={ this.changeBackgroundColor }/>
+          <Sidebar.Pusher dimmed={this.props.visible}>
+            <Segment basic className="main-body-segment">
+              <ContentPage {...this.props} changeBackgroundColor={this.changeBackgroundColor} />
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
@@ -125,6 +130,4 @@ class SideBar extends Component {
 
 const mapStateToProps = state => ({ socket: state.activeSocket.socket });
 
-const SideBarConnected = connect(mapStateToProps, null)(SideBar);
-
-export default SideBarConnected;
+export default connect(mapStateToProps, null)(HideableSideBar);

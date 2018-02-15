@@ -16,7 +16,7 @@ const UserFriendsList = props => (
             <MediaQuery minWidth={1000}>
               <Image src={friend.profileImage} size="mini" circular spaced="right" />
             </MediaQuery>
-            {friend.username} {console.log('Friend:', friend)}<Icon name="remove" onClick={() => props.handleRemoveFriend(friend)}/>
+            {friend.username} <Icon name="remove" onClick={() => props.handleRemoveFriend(friend)}/>
           </li>
         ))}
       </ul>
