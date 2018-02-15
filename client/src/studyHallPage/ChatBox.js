@@ -4,6 +4,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import Message from './Message';
 import { setMessages } from '../actions/messagesActions';
+import SearchConnected from './Search';
 
 class ChatBox extends React.Component {
   constructor(props) {
@@ -83,7 +84,13 @@ class ChatBox extends React.Component {
     return (
       <div>
         <div className="chatHeader">
-          {this.props.chat}
+          <div className="searchContainer ui form">
+            <SearchConnected
+              addPrivateChat={this.props.addPrivateChat}
+              addGroupChat={this.props.addGroupChat}
+            />
+          </div>
+          <div className="chatHeaderTitle">{this.props.chat}</div>
           <div className={`${this.state.type}HeaderType`}>
             <i className="groupChatMembers users icon"></i>
             {this.props.members.length}

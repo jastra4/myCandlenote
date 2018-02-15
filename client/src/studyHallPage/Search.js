@@ -10,6 +10,7 @@ class Search extends React.Component {
   }
 
   handleSubmit(e) {
+    console.log('handleSubmit: ', $('#search').val());
     e.preventDefault();
     let input = $('#search').val();
     if (input.substring(0, 3) === '/c ') {

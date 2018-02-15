@@ -104,17 +104,13 @@ class StudyHall extends React.Component {
             closePrivateChat={this.closeChat.bind(this)}
           />
         </div>
-        <div className="searchContainer ui form">
-          <SearchConnected
-          addPrivateChat={this.addPrivateChat.bind(this)}
-          addGroupChat={this.addGroupChat.bind(this)}
-        />
-        </div>
         <div className="chatBoxContainer ui segment">
           <ChatBox
             chat={this.state.channel}
             type={this.state.type}
             members={this.state.members}
+            addPrivateChat={this.addPrivateChat.bind(this)}
+            addGroupChat={this.addGroupChat.bind(this)}
           />
         </div>
       </div>

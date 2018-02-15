@@ -101,12 +101,12 @@
 
 /* Search Bar Styles */
 
-.searchContainer {
-	width: 25%;
-	position: relative;
-	bottom: 46em;
-	left: 75%;
-	margin-top: 2em !important;	
+.searchContainer { /* -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
+	width: 50%;
+	/* position: relative; */
+	left: 50%;
+	bottom: .2em;
+	/* margin-top: 2em !important; */	
 }
 
 /* Chat Box Styles */
@@ -116,13 +116,14 @@
 	width: 75%;
 	position: relative;
 	margin-top: 0em !important;
-	bottom: 46em;
+	bottom: 44em;
 	left: 25%;
 	padding: 0em !important;
 }
 
 .chatHeader {
-	text-align: center;
+	height: 3em;
+	text-align: left;
 	padding-top: .5em;
 	padding-bottom: 0em;
 	padding-left: 1em;
@@ -131,6 +132,11 @@
 	border-style: none none solid none;
 	font-size: 1.2em !important;
 	background: linear-gradient(#d9d9d9, white) !important;
+}
+
+.chatHeaderTitle{
+	position: relative;
+	bottom: 2em;
 }
 
 .HeaderType { /* no chat selected */
