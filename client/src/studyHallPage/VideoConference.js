@@ -187,7 +187,6 @@ class VideoConference extends React.Component {
   render() {
     return (
       <div className="container">
-        <nav>Video Chat</nav>
         <div className="video-container">
           <video className="video-call-one" height="447" width="600" autoPlay></video>
           <video className="video-self" autoPlay></video>
