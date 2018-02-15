@@ -104,6 +104,7 @@
 .searchContainer { /* -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_*/
 	width: 50%;
 	/* position: relative; */
+	padding-right: 1em;
 	left: 50%;
 	bottom: .2em;
 	/* margin-top: 2em !important; */	
@@ -112,7 +113,7 @@
 /* Chat Box Styles */
 
 .chatBoxContainer {
-	height: 38.5em;
+	height: 41.2em;
 	width: 75%;
 	position: relative;
 	margin-top: 0em !important;
@@ -122,7 +123,7 @@
 }
 
 .chatHeader {
-	height: 3em;
+	height: 3.2em;
 	text-align: left;
 	padding-top: .5em;
 	padding-bottom: 0em;
@@ -168,7 +169,7 @@
 /* Messages */
 
 .chatMessages {
-	height: 35em;
+	height: 37.6em;
 	padding: 0em !important;
 	margin: 0em !important;
 }
