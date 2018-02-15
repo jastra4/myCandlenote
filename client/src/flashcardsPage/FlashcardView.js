@@ -83,7 +83,7 @@ class FlashcardView extends React.Component {
   render() {
     const { cards, index } = this.state;
     return (
-      <div style={styles.mainDiv}>
+      <div style={styles.mainDiv} className="flashcard-view-main">
         <div onClick={() => this.flipCard()} style={styles.flipCard}>
           <ReactCardFlip
             isFlipped={this.state.flipped}
