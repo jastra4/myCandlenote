@@ -16,7 +16,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
-
+const fs = require('fs');
+// const pem = require('./socketSSL/file.pem');
+// const crt = require('./socketSSL/file.crt');
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
@@ -28,11 +30,27 @@ const deletes = require('../database/deletes');
 
 mongoose.connect(keys.mongodb.dbURI);
 
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync(path.join(__dirname, './socketSSL/file.pem'));
+var certificate = fs.readFileSync(path.join(__dirname, './socketSSL/file.crt'));
+
+var credentials = {key: privateKey, cert: certificate};
+
 const app = express();
-const server = require('http').createServer(app); // socket stuff
-const io = require('socket.io').listen(server); // socket stuff
+// const options = {
+//   key: fs.readFileSync(path.join(__dirname, './socketSSL/file.pem')),
+//   cert: fs.readFileSync(path.join(__dirname, './socketSSL/file.crt')),
+// };
+// const server = require('https').createServer(options, app);
+// const server = require('http').createServer(app); // socket stuff
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+const io = require('socket.io').listen(httpsServer); // socket stuff
 
 // const peerServer = ExpressPeerServer(server, { debug: true });
+
+
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
@@ -868,7 +886,7 @@ app.get('*', (req, res) => {
 });
 /* -------- Initialize Server -------- */
 
-server.listen(PORT, () => {
+httpsServer.listen(PORT, () => {
   console.info('Current Domain: ', DOMAIN);
   console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });

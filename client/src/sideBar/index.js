@@ -26,6 +26,10 @@ class SideBar extends Component {
     this.setState({ backgroundColor });
   }
 
+  componentDidMount() {
+    console.log('peer in props of norm sidebar: ', this.props.peer);
+  }
+
   componentDidUpdate() {
     this.activeListener();
   }
@@ -100,7 +104,7 @@ class SideBar extends Component {
                 Schedule
               </Menu.Item>
             </Link>
-            <Link to='/video-conference' peer={this.props.peer}>
+            <Link to='/video-conference' >
               <Menu.Item name='video-conference' active={activeItem === 'video-conference'} onClick={this.handleItemClick}>
                 <Icon name='video camera' />
                 Video Conference
