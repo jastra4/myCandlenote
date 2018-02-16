@@ -27,6 +27,7 @@ class VideoConference extends React.Component {
   }
 
   componentDidMount() {
+    this.state.peer.on('error', (err) => { console.log('error ', err); });
     console.log('Peer prop in the state: ', this.props.peer);
 
     navigator.getUserMedia = (
@@ -65,6 +66,7 @@ class VideoConference extends React.Component {
     });
 
     this.props.socket.on('invited to video conference', (myId, username) => {
+      this.state.peer.on('error', (err) => { console.log('error ', err); });
       console.log('MyId on invited to conference emitter: ', myId);
       this.setState({
         showInvite: true,
@@ -92,8 +94,6 @@ class VideoConference extends React.Component {
 
 
   handlePeerIdSumbmission(id, bool) {
-    this.state.peer.on('error', (err) => { console.log('error ', err); });
-
     console.log('new remoteID at submission: ', id);
     console.log('this.state.peer ', this.state.peer);
     const connection = this.state.peer.connect(id);
@@ -168,11 +168,13 @@ class VideoConference extends React.Component {
 
   handleVideoConferenceInviteClick(friendName) {
     console.log('Does the thing!');
+    this.state.peer.on('error', (err) => { console.log('error test1 ', err); });
     this.props.socket.emit('invite to video conference', {
       username: this.props.username,
       friendName: friendName, // eslint-disable-line
       myId: this.state.myId,
     });
+    this.state.peer.on('error', (err) => { console.log('error test2', err); });
   }
 
   handleRemoveFriend(friendId) {

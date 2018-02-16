@@ -27,6 +27,16 @@ import activeSocket from './actions/activeSocket';
 import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
+// const peerObj = {
+//   host: 'candlenote.io',
+//   port: 8080,
+//   path: '/peer',
+//   debug: 3,
+//   // config: { icerServers: [{ url: 'stun:stun1.l.google.com:19302' }, {
+//   // url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com',
+//   // }] },
+// };
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +49,13 @@ class App extends React.Component {
       .then((res) => {
         if (res.data.username !== undefined) {
           this.initSocket(res.data.username);
-          const myPeer = new Peer({ host: 'https://candlenote.herokuapp.com' });
+          const myPeer = new Peer({
+            key: 'peerjs',
+            host: 'candlenote.herokuapp.com',
+            port: 443,
+            secure: true,
+            //path: '/peer',
+          });
           setTimeout(() => {
             this.setState({ peer: myPeer }, () => {
               console.log('Peer object: ', this.state.peer);
@@ -52,7 +68,7 @@ class App extends React.Component {
   }
 
   initSocket(username) {
-    const socket = io('/');
+    const socket = io('/', {secure: true});
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
