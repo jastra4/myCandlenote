@@ -27,10 +27,23 @@ import activeSocket from './actions/activeSocket';
 import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
+const peerObj = {
+  host: 'candlenote.io',
+  port: 8080,
+  path: '/peer',
+  debug: 3,
+  // config: { icerServers: [{ url: 'stun:stun1.l.google.com:19302' }, {
+  // url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com',
+  // }] },
+};
+// peer = new Peer(peerObj);
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    // this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    this.state = { peer: new Peer(peerObj) };
   }
 
   componentDidMount() {
