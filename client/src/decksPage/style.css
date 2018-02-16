@@ -1,0 +1,29 @@
+@media (min-width: 900px) {
+  .deck-view-container {
+    padding: 5em;
+  }
+
+  .deck-creator-container {
+    padding: 0 3em;
+  }
+}
+
+@media (max-width: 899px) and (min-width: 500px) {
+  .deck-view-container {
+    padding: 5em 3em;
+  }
+
+  .deck-creator-container {
+    padding: 0 1em;
+  }
+}
+
+@media (max-width: 499px) {
+  .deck-view-container {
+    padding: 5em 1em;
+  }
+
+  .deck-creator-container {
+    margin-left: 1em;
+  }
+}

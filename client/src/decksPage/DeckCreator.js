@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Button, Segment, Divider, Grid, Message } from 'semantic-ui-react';
+import MediaQuery from 'react-responsive';
 
 class DeckCreator extends React.Component {
   constructor(props) {
@@ -40,14 +41,11 @@ class DeckCreator extends React.Component {
 
   render() {
     return (
-        <div style={{
-          width: '100%',
-          padding: '0 3em',
-        }}>
+        <div className="deck-creator-container">
           <Segment>
             <Form onSubmit={e => this.onFormSubmit(e)}>
-              <Grid>
-                <Grid.Column width={6}>
+              <Grid columns="equal">
+                <Grid.Column>
                   {this.state.improperSubmit ?
                     <Message negative onDismiss={() => this.setState({ improperSubmit: false })}>
                       <Message.Header>Missing Field(s)</Message.Header>
@@ -56,13 +54,21 @@ class DeckCreator extends React.Component {
                   <Form.Field control={Input} value={this.state.subject} label='Subject' placeholder='Subject' onChange={e => this.onSubjectChange(e)} />
                   <Divider />
                   <Form.Field control={Input} value={this.state.title} label='Title' placeholder='Title' onChange={e => this.onTitleChange(e)} />
+                  <MediaQuery maxWidth={499}>
+                    <Divider />
+                    <Form.Field>
+                      <Form.TextArea placeholder="Description (optional)" rows="2" />
+                    </Form.Field>
+                  </MediaQuery>
                   <Form.Field id='form-button-control-public' control={Button} content='Confirm' label='Create Deck' />
                 </Grid.Column>
-                <Grid.Column width={10}>
-                  <div style={{ paddingTop: '1.65em' }}>
-                    <Form.TextArea placeholder="Description (optional)" rows="10" />
-                  </div>
-                </Grid.Column>
+                <MediaQuery minWidth={500}>
+                  <Grid.Column width={10}>
+                    <div style={{ paddingTop: '1.65em' }}>
+                      <Form.TextArea placeholder="Description (optional)" rows="10" />
+                    </div>
+                  </Grid.Column>
+                </MediaQuery>
               </Grid>
             </Form>
           </Segment>

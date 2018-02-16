@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import DeckCreator from './DeckCreator';
 import DeckView from './DeckView';
+import './style.css';
 
 const Deck = props => (
   <Grid columns={15}>
