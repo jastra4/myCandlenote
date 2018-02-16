@@ -27,12 +27,21 @@ import activeSocket from './actions/activeSocket';
 import passPeer from './actions/passPeer';
 import SimonSays from './SimonSays';
 
+// const peerObj = {
+//   host: 'candlenote.io',
+//   port: 8080,
+//   path: '/peer',
+//   debug: 3,
+//   // config: { icerServers: [{ url: 'stun:stun1.l.google.com:19302' }, {
+//   // url: 'turn:numb.viagenie.ca', credential: 'muazkh', username: 'webrtc@live.com',
+//   // }] },
+// };
 
-const socketUrl = '/';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    // this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    this.state = { peer: '' };
   }
 
   componentDidMount() {
@@ -40,14 +49,32 @@ class App extends React.Component {
       .then((res) => {
         if (res.data.username !== undefined) {
           this.initSocket(res.data.username);
-          this.props.peer(this.state.peer);
+          const myPeer = new Peer({
+            key: 'peerjs',
+            host: 'candlenote.herokuapp.com',
+            port: 443,
+            secure: true,
+            //path: '/peer',
+          });
+          setTimeout(() => {
+            this.setState({ peer: myPeer }, () => {
+              console.log('Peer object: ', this.state.peer);
+              this.props.peer(this.state.peer);
+              setInterval(this.pingHeroku.bind(this), 10000)
+            });
+          }, 3000);
         }
       });
-    console.log('Peer object: ', this.state.peer);
+    // this.state.peer.on('error', (err) => { console.log('error ', err); });
+  }
+
+  pingHeroku() {
+    this.state.peer.socket.send({type: 'ping'})
+    console.log('pinged heroku')
   }
 
   initSocket(username) {
-    const socket = io(socketUrl);
+    const socket = io('/', {secure: true});
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
@@ -60,14 +87,6 @@ class App extends React.Component {
         });
     });
   }
-
-  // nameSocket(socket, userid) {
-  //   axios.get(`/identifySocket?id=${userid}`)
-  //     .then((res) => {
-  //       socket.emit('away', res.data);
-  //       this.props.activeSocket(socket, res.data);
-  //     });
-  // }
 
   render = () =>
     (

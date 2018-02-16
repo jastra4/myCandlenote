@@ -39,19 +39,17 @@ class PrivateChat extends React.Component {
   }
 
   componentDidMount() {
-    this.props.socket.removeAllListeners();
     this.updateUnread();
     this.startListeners();
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateUnread(nextProps);
-    this.props.socket.removeAllListeners();
-    // what if server sends data during the 700 wait
-    window.setTimeout(this.startListeners, 700);
+    window.setTimeout(this.startListeners, 300);
   }
 
   startListeners() {
+    console.log('startListeners ran');
     const friendName = this.props.privateChat.username;
 
     this.props.socket.emit('pingFriend', {
@@ -72,10 +70,12 @@ class PrivateChat extends React.Component {
     });
 
     this.props.socket.on(`${friendName} is away`, () => {
+      console.log(`${friendName} is away`);
       this.setState({ status: 'away' });
     });
 
     this.props.socket.on(`${friendName} is available`, () => {
+      console.log(`${friendName} is available`);
       this.setState({ status: 'available' });
     });
 

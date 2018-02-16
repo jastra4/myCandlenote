@@ -37,7 +37,7 @@ class HideableSideBar extends Component {
   }
 
   componentDidMount() {
-    console.log('Component Mounted');
+    console.log('peer in props of hideable sidebar: ', this.props.peer);
     this.activeListener();
   }
 

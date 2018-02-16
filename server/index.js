@@ -16,7 +16,9 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 // const cookieSession = require('cookie-session');
-
+const fs = require('fs');
+// const pem = require('./socketSSL/file.pem');
+// const crt = require('./socketSSL/file.crt');
 
 const authRoutes = require('./routes/auth-routes.js');
 const userRoutes = require('./routes/user-routes.js');
@@ -28,11 +30,27 @@ const deletes = require('../database/deletes');
 
 mongoose.connect(keys.mongodb.dbURI);
 
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync(path.join(__dirname, './socketSSL/file.pem'));
+var certificate = fs.readFileSync(path.join(__dirname, './socketSSL/file.crt'));
+
+var credentials = {key: privateKey, cert: certificate};
+
 const app = express();
-const server = require('http').createServer(app); // socket stuff
-const io = require('socket.io').listen(server); // socket stuff
+// const options = {
+//   key: fs.readFileSync(path.join(__dirname, './socketSSL/file.pem')),
+//   cert: fs.readFileSync(path.join(__dirname, './socketSSL/file.crt')),
+// };
+// const server = require('https').createServer(options, app);
+// const server = require('http').createServer(app); // socket stuff
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+const io = require('socket.io').listen(httpsServer); // socket stuff
 
 // const peerServer = ExpressPeerServer(server, { debug: true });
+
+
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
@@ -41,8 +59,8 @@ const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
-const PORT = process.env.PORT || 3000;
-const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+const PORT = process.env.USER === 'ubuntu' ? 8080 : 3000;
+const DOMAIN = process.env.USER === 'ubuntu' ? 'candlenote.io' : `localhost:${PORT}`;
 
 console.log('domain: ', DOMAIN);
 
@@ -60,7 +78,7 @@ const emailNoteOptions = (email, filePath) => ({
   subject: 'Fresh CandleNote! ✔',
   html: '<b>Hello world?</b>',
   attachments: [{
-    contentType: 'application/pdf',
+    contentType: 'application/pdf'``,
     path: filePath,
     filename: 'note.pdf',
   }],
@@ -279,6 +297,7 @@ io.sockets.on('connection', (socket) => {
       allSockets[message.sentBy].emit('submitted message', message);
       if (message.to in allSockets) {
         allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        console.log(`new message for ${allSockets[message.to].username}`);
         allSockets[message.to].emit('new message');
       }
     } else {
@@ -358,9 +377,11 @@ io.sockets.on('connection', (socket) => {
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
-    console.log(socket.username, ' disconnected');
-    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
-    delete allSockets[socket.username];
+    if (socket.username !== undefined) {
+      console.log(socket.username, ' disconnected');
+      allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+      delete allSockets[socket.username];
+    }
   });
 });
 
@@ -865,7 +886,8 @@ app.get('*', (req, res) => {
 });
 /* -------- Initialize Server -------- */
 
-server.listen(PORT, () => {
+httpsServer.listen(PORT, () => {
+  console.info('Current Domain: ', DOMAIN);
   console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
 

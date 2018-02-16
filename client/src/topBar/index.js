@@ -29,7 +29,7 @@ class TopBar extends Component {
 
   render = () => (
     <div>
-      <Sidebar as={Menu} animation='push' direction='top' visible={true} inverted>
+      <Sidebar as={Menu} borderless animation='push' direction='top' visible={true} inverted>
         <Menu.Menu position="left">
           <MediaQuery minWidth="900">
             <Menu.Item>

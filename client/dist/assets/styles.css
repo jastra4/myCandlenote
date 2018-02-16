@@ -6,8 +6,11 @@
 
 /* StudyHall Styles */
 
-.studyHallContainer{
-	padding: 0em !important;
+#studyHall{
+  background: red;
+  margin-top: 0px;
+  margin-right: 0px;
+  padding-right: 0px;
 }
 
 /* Chat List Styles */
@@ -24,6 +27,13 @@
   background: #CDCDE2;
 }
 
+.chatContainer{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-height: 1.25em;
+}
+
 .closeChat:hover {
 	opacity: 1;
 }
@@ -38,21 +48,27 @@
 
 .chatListHeader {
 	color: #2d2d86;
-	background: #d9d9d9 !important;
+	font-size: 1.2em !important;
+  background: linear-gradient(#d9d9d9, white) !important;
 }
 
 .chatList {
 	height: 22em;
-	width: 25%;
+	width: 20%;
 	position: relative;
 	margin: 0em !important;
 	padding: 0em !important;
 	background: #e6e6ff !important;
+	overflow: hidden;
 }
 
 .chatName {
-  padding-left: 1em;
+  padding-left: .75em;
   color: #4d4d4d;
+}
+
+.chatName:hover {
+  cursor: pointer;
 }
 
 /* Private Chat List Styles */
@@ -89,33 +105,40 @@
 /* Search Bar Styles */
 
 .searchContainer {
-	width: 75%;
-	position: relative;
-	bottom: 46em;
-	left: 25%;
-	margin-top: 2em !important;	
+	width: 50%;
+	padding-right: 1em;
+	left: 50%;
+	bottom: .2em;
 }
 
 /* Chat Box Styles */
 
 .chatBoxContainer {
-	height: 38.5em;
-	width: 75%;
+	height: 41.3em;
+	width: 80%;
 	position: relative;
 	margin-top: 0em !important;
-	bottom: 46em;
-	left: 25%;
+	bottom: 44em;
+	left: 20%;
 	padding: 0em !important;
 }
 
 .chatHeader {
-	text-align: center;
+	height: 3.2em;
+	text-align: left;
 	padding-top: .5em;
 	padding-bottom: 0em;
 	padding-left: 1em;
 	color: #2d2d86;
 	border: 1px #d9d9d9 solid;
 	border-style: none none solid none;
+	font-size: 1.2em !important;
+	background: linear-gradient(#d9d9d9, white) !important;
+}
+
+.chatHeaderTitle{
+	position: relative;
+	bottom: 1.7em;
 }
 
 .HeaderType { /* no chat selected */
@@ -130,9 +153,14 @@
   opacity: 0 !important;
 }
 
-.groupChatMembers {
+.groupChatIcon {
 	display: inline !important;
 	padding-left: .5em !important;
+	color: #5D5D5F;
+}
+
+.groupChatMembers {
+	color: #5D5D5F;
 }
 
 .selectedChat {
@@ -147,7 +175,7 @@
 /* Messages */
 
 .chatMessages {
-	height: 35em;
+	height: 37.4em;
 	padding: 0em !important;
 	margin: 0em !important;
 }
