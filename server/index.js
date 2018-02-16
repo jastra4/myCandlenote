@@ -56,7 +56,7 @@ const transporter = nodemailer.createTransport({
 
 const emailNoteOptions = (email, filePath) => ({
   from: 'no-reply@theworldsgreatesthue.com',
-  to: email,``
+  to: email,
   subject: 'Fresh CandleNote! ✔',
   html: '<b>Hello world?</b>',
   attachments: [{
