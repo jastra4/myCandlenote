@@ -12,11 +12,11 @@ const UserFriendsList = props => (
     <Card.Content className="user-friend-card-count">
       <ul>
         {props.friends.map(friend => (
-          <li onClick={() => props.handleVideoConferenceInviteClick(friend.username)}>
+          <li>
             <MediaQuery minWidth={1000}>
               <Image src={friend.profileImage} size="mini" circular spaced="right" />
             </MediaQuery>
-            {friend.username} <Icon name="remove" onClick={() => props.handleRemoveFriend(friend)}/>
+            {friend.username} {console.log('Friend:', friend)}<Icon name="send" onClick={() => props.handleVideoConferenceInviteClick(friend.username)}/>
           </li>
         ))}
       </ul>

@@ -198,6 +198,7 @@
   background-color: #15252D;
   border-radius: 4px 4px 0 0;
   width: 600px;
+  height: 447px;
   margin: 0 auto;
   position: relative;
 }
@@ -226,7 +227,7 @@
   bottom: 0px;
   background-color: #253841;
   z-index: 10px;
-  border-radius: 24px 0 0 0;
+  border-radius: 24px 24px 24px 24px;
 }
 
 .video-call {

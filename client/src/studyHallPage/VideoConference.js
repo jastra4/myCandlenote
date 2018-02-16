@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Modal, Button, Icon } from 'semantic-ui-react';
 import Peer from 'peerjs'; // eslint-disable-line
 import axios from 'axios';
-import UserFriendsList from '../profilePage/UserFriendsList';
+import FriendsListConferencePage from './FriendsListConferencePage';
 
 class VideoConference extends React.Component {
   constructor(props) {
@@ -189,11 +189,11 @@ class VideoConference extends React.Component {
       <div className="container">
         <nav>Video Chat</nav>
         <div className="video-container">
-          <video className="video-call-one" autoPlay></video>
+          <video className="video-call-one" height="447" width="600" autoPlay></video>
           <video className="video-self" autoPlay></video>
         </div>
         <div className="friends-list-container">
-          <UserFriendsList
+          <FriendsListConferencePage
             friends={this.state.friends}
             handleRemoveFriend={this.handleRemoveFriend}
             handleVideoConferenceInviteClick={this.handleVideoConferenceInviteClick}
@@ -204,8 +204,7 @@ class VideoConference extends React.Component {
               Video Conference Invitation
             </Modal.Header>
             <Modal.Content as="p">
-              Do you want to video chat with
-               {this.state.friendWhoWantsToTalk.username} from your friends list?
+Do you want to video chat with {this.state.friendWhoWantsToTalk.username} from your friends list?
             </Modal.Content>
             <Modal.Actions>
               <Button

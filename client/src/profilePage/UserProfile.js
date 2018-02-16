@@ -63,10 +63,20 @@ export default class UserProfile extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({
-      ...this.state,
-      friends: newProps.currentUser.friends,
-    });
+    const { profileImage, username, friends } = newProps.currentUser;
+    if (!this.state.username || !this.state.profileImage) {
+      this.setState({
+        ...this.state,
+        profileImage: this.resizeProfileImage(profileImage),
+        username,
+        friends,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        friends,
+      });
+    }
   }
 
   getDecksAndFlashcards(userId) {
@@ -164,10 +174,6 @@ export default class UserProfile extends React.Component {
             </div>
             <MediaQuery maxWidth={899}>
               <div className="friends-list-container-squished">
-                {/* <UserFriendsList
-                  friends={this.state.friends}
-                  handleRemoveFriend={this.handleRemoveFriend}
-                /> */}
                 <UserSearchBox
                   currentUser={this.props.currentUser}
                   getFriend={this.props.getFriend}
