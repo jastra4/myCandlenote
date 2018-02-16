@@ -41,8 +41,8 @@ const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
-const PORT = process.env.ENV === 'production' ? 8080 : 3000;
-const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
+const PORT = process.env.USER === 'ubuntu' ? 8080 : 3000;
+const DOMAIN = process.env.USER === 'ubuntu' ? 'candlenote.io' : `localhost:${PORT}`;
 
 console.log('domain: ', DOMAIN);
 
