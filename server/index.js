@@ -279,6 +279,7 @@ io.sockets.on('connection', (socket) => {
       allSockets[message.sentBy].emit('submitted message', message);
       if (message.to in allSockets) {
         allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        console.log(`new message for ${allSockets[message.to].username}`);
         allSockets[message.to].emit('new message');
       }
     } else {
@@ -358,9 +359,11 @@ io.sockets.on('connection', (socket) => {
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
-    console.log(socket.username, ' disconnected');
-    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
-    delete allSockets[socket.username];
+    if (socket.username !== undefined) {
+      console.log(socket.username, ' disconnected');
+      allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+      delete allSockets[socket.username];
+    }
   });
 });
 
