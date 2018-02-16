@@ -279,6 +279,7 @@ io.sockets.on('connection', (socket) => {
       allSockets[message.sentBy].emit('submitted message', message);
       if (message.to in allSockets) {
         allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        console.log(`new message for ${allSockets[message.to].username}`);
         allSockets[message.to].emit('new message');
       }
     } else {

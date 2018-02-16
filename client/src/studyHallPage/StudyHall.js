@@ -4,7 +4,6 @@ import axios from 'axios';
 import ChatBox from './ChatBox';
 import PrivateChatList from './PrivateChatList';
 import GroupsList from './GroupsList';
-import SearchConnected from './Search';
 import activeSocket from '../actions/activeSocket';
 
 class StudyHall extends React.Component {
@@ -87,7 +86,7 @@ class StudyHall extends React.Component {
       return (<div>No socket connection</div>);
     }
     return (
-      <div className="studyHallContainer ui segment">
+      <div className="studyHallContainer">
         <div className="chatList ui segment">
           <GroupsList
             selectChat={this.selectChat.bind(this)}

@@ -41,6 +41,9 @@ class ChatBox extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.chat === 'No chat selected') {
+      this.setState({ messages: [] });
+    }
     if (nextProps.messages.length !== this.state.messages.length) {
       this.setState({ messages: nextProps.messages });
     }
@@ -91,10 +94,6 @@ class ChatBox extends React.Component {
             />
           </div>
           <div className="chatHeaderTitle">{this.props.chat}</div>
-          <div className={`${this.state.type}HeaderType`}>
-            <i className="groupChatMembers users icon"></i>
-            {this.props.members.length}
-          </div>
         </div>
         <div className="chatMessages scroll" id="chatBox">
           {this.state.messages.map((message, i) => (

@@ -26,7 +26,7 @@ class SideBar extends Component {
     this.setState({ backgroundColor });
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.activeListener();
   }
 
@@ -49,7 +49,7 @@ class SideBar extends Component {
     return (
       <div>
         <Sidebar.Pushable as={Segment} className="main-pushable-segment">
-          <Sidebar as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+          <Sidebar id="test" as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
             <Link to='/'>
               <Menu.Item name='home' active={true} onClick={ this.handleItemClick }>
                 <Icon name='home' />
