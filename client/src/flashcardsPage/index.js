@@ -53,6 +53,12 @@ const FlashcardPage = props => (
             currentDeck={props.currentDeck}
           />
           <Divider />
+          <MediaQuery maxWidth={899}>
+            <Header as="h2">
+              Decks
+            </Header>
+            <DeckListVert />
+          </MediaQuery>
           <Header as="h2">Create New Flashcards</Header>
           <FlashcardCreator
             currentDeck={props.currentDeck}
