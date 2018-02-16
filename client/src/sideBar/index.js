@@ -85,12 +85,12 @@ class SideBar extends Component {
                 Flashcards
               </Menu.Item>
             </Link>
-            <Link to='/library'>
-              <Menu.Item name='book' active={activeItem === 'book'} onClick={ this.handleItemClick }>
+            {/* <Link to='/library'>
+    <Menu.Item name='book' active={activeItem === 'book'} onClick={ this.handleItemClick }>
                 <Icon name='book' />
                 Library
               </Menu.Item>
-            </Link>
+            </Link> */}
             <Link to='/studyhall'>
               <Menu.Item name='student' active={activeItem === 'student'} onClick={ this.handleItemClick }>
                 <Icon name='student'/>

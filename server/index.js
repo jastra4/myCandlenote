@@ -30,12 +30,16 @@ const deletes = require('../database/deletes');
 
 mongoose.connect(keys.mongodb.dbURI);
 
-var http = require('http');
-var https = require('https');
-var privateKey  = fs.readFileSync(path.join(__dirname, './socketSSL/file.pem'));
-var certificate = fs.readFileSync(path.join(__dirname, './socketSSL/file.crt'));
+// const http = require('http');
+const https = require('https');
 
-var credentials = {key: privateKey, cert: certificate};
+const privateKey = fs.readFileSync(path.join(__dirname, './socketSSL/file.pem'));
+const certificate = fs.readFileSync(path.join(__dirname, './socketSSL/file.crt'));
+
+const credentials = {
+  key: privateKey,
+  cert: certificate,
+};
 
 const app = express();
 // const options = {
@@ -44,14 +48,11 @@ const app = express();
 // };
 // const server = require('https').createServer(options, app);
 // const server = require('http').createServer(app); // socket stuff
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+// const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 const io = require('socket.io').listen(httpsServer); // socket stuff
 
 // const peerServer = ExpressPeerServer(server, { debug: true });
-
-
-
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
   setCalendarEventPerUser, refreshMultipleTokens,

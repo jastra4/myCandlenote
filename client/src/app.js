@@ -54,13 +54,13 @@ class App extends React.Component {
             host: 'candlenote.herokuapp.com',
             port: 443,
             secure: true,
-            //path: '/peer',
+            // path: '/peer',
           });
           setTimeout(() => {
             this.setState({ peer: myPeer }, () => {
               console.log('Peer object: ', this.state.peer);
               this.props.peer(this.state.peer);
-              setInterval(this.pingHeroku.bind(this), 10000)
+              setInterval(this.pingHeroku.bind(this), 10000);
             });
           }, 3000);
         }
@@ -69,12 +69,12 @@ class App extends React.Component {
   }
 
   pingHeroku() {
-    this.state.peer.socket.send({type: 'ping'})
-    console.log('pinged heroku')
+    this.state.peer.socket.send({ type: 'ping' });
+    console.log('pinged heroku');
   }
 
   initSocket(username) {
-    const socket = io('/', {secure: true});
+    const socket = io('/', { secure: true });
     socket.on('connect', () => {
       axios.post('/assignUsername', {
         username,
