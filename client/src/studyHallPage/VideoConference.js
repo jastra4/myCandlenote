@@ -27,7 +27,7 @@ class VideoConference extends React.Component {
   }
 
   componentDidMount() {
-    this.state.peer.on('error', (err) => { console.log('error ', err); });
+    this.state.peer.on('error', (err) => { console.log('error test0', err); });
     console.log('Peer prop in the state: ', this.props.peer);
 
     navigator.getUserMedia = (
@@ -66,7 +66,7 @@ class VideoConference extends React.Component {
     });
 
     this.props.socket.on('invited to video conference', (myId, username) => {
-      this.state.peer.on('error', (err) => { console.log('error ', err); });
+      this.state.peer.on('error', (err) => { console.log('error test3', err); });
       console.log('MyId on invited to conference emitter: ', myId);
       this.setState({
         showInvite: true,

@@ -60,11 +60,17 @@ class App extends React.Component {
             this.setState({ peer: myPeer }, () => {
               console.log('Peer object: ', this.state.peer);
               this.props.peer(this.state.peer);
+              setInterval(this.pingHeroku.bind(this), 10000)
             });
           }, 3000);
         }
       });
     // this.state.peer.on('error', (err) => { console.log('error ', err); });
+  }
+
+  pingHeroku() {
+    this.state.peer.socket.send({type: 'ping'})
+    console.log('pinged heroku')
   }
 
   initSocket(username) {
