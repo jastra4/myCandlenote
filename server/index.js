@@ -32,19 +32,28 @@ const app = express();
 const server = require('http').createServer(app); // socket stuff
 const io = require('socket.io').listen(server); // socket stuff
 
+const ExpressPeerServer = require('peer').ExpressPeerServer;
+var path = require('path')
+var http = require('http');
+// var https = require('https');
+// var fs = require('fs');
+
+
 // const peerServer = ExpressPeerServer(server, { debug: true });
 
 // Helpers
 const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
   setCalendarEventPerUser, refreshMultipleTokens,
   getCalendarList, reduceFreeBusyToTimeSpans, buildGoogleCalEvent } = require('./helpers');
-
+  
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
 const PORT = process.env.USER === 'ubuntu' ? 8080 : 3000;
 const DOMAIN = process.env.USER === 'ubuntu' ? 'candlenote.io' : `localhost:${PORT}`;
-
 console.log('domain: ', DOMAIN);
+
+// var server = http.createServer(app).listen(PORT);
+
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -75,6 +84,16 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.use('/peer', ExpressPeerServer(server, { debug: true }));
+
 
 app.use(session({
   secret: 'shakeweight',
