@@ -27,7 +27,11 @@ class Group extends React.Component {
   render() {
     return (
       <div className={`chatContainer chatSelected${this.state.selected}`}>
-        <span className='chatName' onClick={this.select.bind(this)}>
+        <i className="groupChatIcon users icon"></i>
+        <span className="groupChatMembers">{this.props.groupChat.members.length}</span>
+        <span
+          className='chatName'
+          onClick={this.select.bind(this)}>
           {this.props.groupChat.groupname}
         </span>
         <span onClick={this.close.bind(this)} className='closeChat'>x</span>

@@ -26,7 +26,7 @@ class SideBar extends Component {
     this.setState({ backgroundColor });
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     this.activeListener();
   }
 
