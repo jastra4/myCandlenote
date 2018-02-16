@@ -31,9 +31,11 @@ class TopBar extends Component {
     <div>
       <Sidebar as={Menu} borderless animation='push' direction='top' visible={true} inverted>
         <Menu.Menu position="left">
-          <Menu.Item>
-            <span className="topbar-menu-text">CandleNote</span>
-          </Menu.Item>
+          <MediaQuery minWidth="900">
+            <Menu.Item>
+              <span className="topbar-menu-text">CandleNote</span>
+            </Menu.Item>
+          </MediaQuery>
           <MediaQuery maxWidth={899}>
             <Menu.Item onClick={this.toggleSideBar}>
               <Icon name="sidebar" size="large" />

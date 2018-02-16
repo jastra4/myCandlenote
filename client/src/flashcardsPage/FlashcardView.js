@@ -93,12 +93,22 @@ class FlashcardView extends React.Component {
             <Segment key="front">
               {cards[index % cards.length].front.slice(0, 11) === 'data:image/' ?
                 <img src={cards[index % cards.length].front} /> :
-                <p style={styles.cardText}>{cards[index % cards.length].front}</p>}
+                <p
+                  style={styles.cardText}
+                  className={cards[index % cards.length].front.length <= 72 ? 'some-words' : 'many-words'}
+                >
+                  {cards[index % cards.length].front}
+                </p>}
             </Segment>
             <Segment key="back">
               {cards[index % cards.length].back.slice(0, 11) === 'data:image/' ?
                 <img src={cards[index % cards.length].back} /> :
-                <p style={styles.cardText}>{cards[index % cards.length].back}</p>}
+                <p
+                  style={styles.cardText}
+                  className={cards[index % cards.length].back.length <= 72 ? 'some-words' : 'many-words'}
+                >
+                  {cards[index % cards.length].back}
+                </p>}
             </Segment>
           </ReactCardFlip>
         </div>

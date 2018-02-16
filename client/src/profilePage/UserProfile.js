@@ -40,6 +40,7 @@ export default class UserProfile extends React.Component {
           this.props.getFriends(userId);
           const profileImage = this.resizeProfileImage(res.data.profileImage);
           const dateJoined = new Date(res.data.dateJoined).toLocaleDateString('en-US', this.dateOptions);
+          sessionStorage.setItem('dateJoined', dateJoined);
           this.setState({
             username,
             profileImage,
@@ -54,10 +55,11 @@ export default class UserProfile extends React.Component {
       this.props.getFriends(this.props.currentUser.userId);
       this.getDecksAndFlashcards(this.props.currentUser.userId);
       const profileImage = this.resizeProfileImage(this.props.currentUser.profileImage);
+      const dateJoined = sessionStorage.getItem('dateJoined');
       this.setState({
         username: this.props.currentUser.username,
         profileImage,
-        dateJoined: this.props.id,
+        dateJoined,
       });
     }
   }

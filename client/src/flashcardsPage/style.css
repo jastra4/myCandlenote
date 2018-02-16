@@ -2,4 +2,72 @@
   .flashcard-view-main {
     width: 100% !important;
   }
+
+  .flashcard-deck-list {
+    flex-direction: row;
+  }
+
+  .flashcard-deck-list .card {
+    padding: 10px !important;
+    width: max-content !important;
+    max-width: 15em !important;
+  }
+
+  .deck-list-card-title {
+    font-size: 2em !important;
+  }
+
+  .deck-list-meta {
+    font-size: 1.2em !important;
+  }
+
+  .react-card-front p, .react-card-back p {
+    height: 6em !important;
+  }
+
+  .react-card-front .some-words, .react-card-back .some-words {
+    font-size: 3.5em !important;
+  }
+
+  .react-card-front .many-words, .react-card-back .many-words {
+    font-size: 2.5em !important;
+  }
+
+  .react-card-front, .react-card-front p {
+    max-height: 350px !important;
+  }
+
+  .react-card-back, .react-card-back p {
+    max-height: 350px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  .deck-list-container {
+    padding-top: 1em;
+    padding-bottom: 15px;
+    width: 25em;
+  }
+
+  .deck-list-card-content {
+    padding-top: 10px;
+    padding-left: 8px;
+    width: 10em;
+    height: 5em;
+    font-size: 15px;
+  }
+
+  .deck-list-meta {
+    font-size: 1em;
+    color: gray;
+    margin-bottom: 5px;
+    margin-left: 5px;
+  }
+
+  .deck-list-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: black;
+    overflow-wrap: break-word;
+  }
 }
