@@ -359,8 +359,10 @@ io.sockets.on('connection', (socket) => {
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
-    console.log(socket.username, ' disconnected');
-    allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+    if (socket.username !== undefined) {
+      console.log(socket.username, ' disconnected');
+      allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+    }
     delete allSockets[socket.username];
   });
 });
