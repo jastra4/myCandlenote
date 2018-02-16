@@ -1,13 +1,32 @@
 import React from 'react';
 import Stagger from 'stagger';
 import Sound from 'react-sound';
+import { Dropdown, Button } from 'semantic-ui-react';
 import EasyDifficulty from './EasyDifficulty';
 import MediumDifficulty from './MediumDifficulty';
 import HardDifficulty from './HardDifficulty';
 import ExtremeDifficulty from './ExtremeDifficulty';
 import './style.css';
 
-// const delay = timeSpan => new Promise(resolve => setTimeout(resolve(), timeSpan));
+
+const difficultyOption = [
+  {
+    text: 'easy',
+    value: 'easy',
+  },
+  {
+    text: 'medium',
+    value: 'medium',
+  },
+  {
+    text: 'hard',
+    value: 'hard',
+  },
+  {
+    text: 'extreme',
+    value: 'extreme',
+  },
+];
 
 export default class SimonSays extends React.Component {
   constructor(props) {
@@ -18,7 +37,7 @@ export default class SimonSays extends React.Component {
       greenBlink: '',
       blueBlink: '',
       yellowBlink: '',
-      difficulty: 'easy',
+      difficulty: sessionStorage.getItem('difficulty') || 'easy',
       turns: ['red', 'blue', 'green', 'yellow'],
       choices: ['red', 'green', 'blue', 'yellow'],
       currentMove: 0,
@@ -175,9 +194,11 @@ export default class SimonSays extends React.Component {
     return <h2>No Status to show</h2>;
   }
 
-  handleSelectChange(e) {
+  handleSelectChange(e, data) {
+    console.log('Diff data:', data);
+    sessionStorage.setItem('difficulty', data.value);
     this.setState({
-      difficulty: e.target.value,
+      difficulty: data.value,
       turns: [],
       currentMove: 0,
       isPlayersTurn: false,
@@ -196,13 +217,16 @@ export default class SimonSays extends React.Component {
           playFromPosition={this.state.animalSound.includes('cow') ? 200 : 0 }
         />
 
-        <select value={this.state.difficulty} onChange={this.handleSelectChange.bind(this)}>
-          <option value="easy">Easy</option>
-          <option value="medium">Medium</option>
-          <option value="hard">Hard</option>
-          <option value="extreme">Extreme</option>
-        </select>
-        <button type="button" onClick={() => this.addNextTurn()}>Start Game</button>
+        <Dropdown
+          selection
+          placeholder="Select Difficulty"
+          options={difficultyOption}
+          onChange={this.handleSelectChange.bind(this)}
+          className="simon-says-button"
+        />
+
+        <Button type="button" onClick={() => this.addNextTurn()}>Start Game</Button>
+
         {this.showGameStatus()}
         {(() => {
           if (this.state.difficulty === 'easy') return <EasyDifficulty {...this.state} makeTileBlink={this.makeTileBlink} />;
