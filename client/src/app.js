@@ -30,7 +30,8 @@ import SimonSays from './SimonSays';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    // this.state = { peer: new Peer({ key: 'o8jk92ig9tdwjyvi' }) };
+    this.state = { peer: '' };
   }
 
   componentDidMount() {
@@ -38,11 +39,16 @@ class App extends React.Component {
       .then((res) => {
         if (res.data.username !== undefined) {
           this.initSocket(res.data.username);
-          this.props.peer(this.state.peer);
+          const myPeer = new Peer({ host: 'https://candlenote.herokuapp.com' });
+          setTimeout(() => {
+            this.setState({ peer: myPeer }, () => {
+              console.log('Peer object: ', this.state.peer);
+              this.props.peer(this.state.peer);
+            });
+          }, 3000);
         }
       });
-    this.state.peer.on('error', (err) => { console.log('error ', err); });
-    console.log('Peer object: ', this.state.peer);
+    // this.state.peer.on('error', (err) => { console.log('error ', err); });
   }
 
   initSocket(username) {
