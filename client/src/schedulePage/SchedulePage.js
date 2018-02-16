@@ -4,7 +4,7 @@ import moment from 'moment';
 import momentTz from 'moment-timezone';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Segment } from 'semantic-ui-react';
+import { Segment, Modal, Button } from 'semantic-ui-react';
 import ScheduleGroupMaker from './ScheduleGroupMaker';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
@@ -62,7 +62,7 @@ export default class SchedulePage extends React.Component {
     } else if (!this.state.title) {
       this.setState({
         showWarning: true,
-        warningMessage: 'Please sign in to use the calendar.',
+        warningMessage: 'Please enter a title for this event.',
       });
     } else {
       const slot = {
@@ -78,8 +78,6 @@ export default class SchedulePage extends React.Component {
       this.setState({
         newEvent: slot,
         events: newEvents,
-        title: '',
-        description: '',
       });
       axios.post('/api/setCalendarEvents', {
         newEvent: slot,
@@ -130,15 +128,18 @@ export default class SchedulePage extends React.Component {
       holder.concat(this.state.events[userId]), []);
     return (
       <div className="calendar-container">
-        {/* <Modal closeOnDimmerClick={true}
-        closeOnDocumentClick={true} size='small' open={this.state.showWarning}>
+        <Modal closeOnDimmerClick={true}
+          closeOnDimmerClick size='tiny' open={this.state.showWarning}>
           <Modal.Content>
             <p>{this.state.warningMessage}</p>
+            <Button type="button" onClick={() => this.setState({ showWarning: false })}>
+              OK
+            </Button>
           </Modal.Content>
-        </Modal> */}
+        </Modal>
         <Segment>
           <input type="text" placeholder="Event title" value={this.state.title} onChange={this.handleTitleChange.bind(this)} />
-          <input type="text" placeholder="Event description" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
+          <input type="text" placeholder="Description (optional)" value={this.state.description} onChange={this.handleDescriptionChange.bind(this)}/>
           <BigCalendar
             selectable
             events={allEvents}
