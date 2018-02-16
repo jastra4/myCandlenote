@@ -41,7 +41,7 @@ const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.ENV === 'production' ? 8080 : 3000;
 const DOMAIN = process.env.ENV === 'production' ? 'candlenote.io' : `localhost:${PORT}`;
 
 console.log('domain: ', DOMAIN);
@@ -867,6 +867,7 @@ app.get('*', (req, res) => {
 /* -------- Initialize Server -------- */
 
 server.listen(PORT, () => {
+  console.info('Current Domain: ', DOMAIN);
   console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
 

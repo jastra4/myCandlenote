@@ -46,67 +46,68 @@ class SideBar extends Component {
 
   render() {
     const { ContentPage } = this.props;
+    const { activeItem } = this.state;
     return (
       <div>
-        <Sidebar.Pushable as={Segment} className="main-pushable-segment">
-          <Sidebar id="test" as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
-            <Link to='/'>
-              <Menu.Item name='home' active={true} onClick={ this.handleItemClick }>
+        <Sidebar.Pushable as={Segment} borderless className="main-pushable-segment" overflow="scroll">
+          <Sidebar as={Menu} className="main-sidebar-left" animation='push' width='thin' visible={true} icon='labeled' vertical inverted>
+            <Link to='/profile'>
+              <Menu.Item name='home' active={activeItem === 'home'}onClick={ this.handleItemClick }>
                 <Icon name='home' />
                 Home
               </Menu.Item>
             </Link>
             <Link to='/notepad'>
-              <Menu.Item name='write' onClick={ this.handleItemClick }>
+              <Menu.Item name='write' active={activeItem === 'write'} onClick={ this.handleItemClick }>
                 <Icon name='write' />
                 Create
               </Menu.Item>
             </Link>
             <Link to='/notebox'>
-              <Menu.Item name='inbox' onClick={ this.handleItemClick }>
+              <Menu.Item name='inbox' active={activeItem === 'inbox'} onClick={ this.handleItemClick }>
                 <Icon name='inbox' />
                 NoteBox
               </Menu.Item>
             </Link>
             <Link to='/decks'>
-              <Menu.Item name='clone' onClick={this.handleItemClick}>
+              <Menu.Item name='clone' active={activeItem === 'clone'} onClick={this.handleItemClick}>
                 <Icon name='clone' />
                 Decks
               </Menu.Item>
             </Link>
             <Link to='/flashcards'>
-              <Menu.Item name='vcard outline' onClick={ this.handleItemClick }>
+              <Menu.Item name='vcard outline' active={activeItem === 'vcard outline'} onClick={ this.handleItemClick }>
                 <Icon name='vcard outline' />
                 Flashcards
               </Menu.Item>
             </Link>
             <Link to='/library'>
-              <Menu.Item name='book' onClick={ this.handleItemClick }>
+              <Menu.Item name='book' active={activeItem === 'book'} onClick={ this.handleItemClick }>
                 <Icon name='book' />
                 Library
               </Menu.Item>
             </Link>
             <Link to='/studyhall'>
-              <Menu.Item name='student' onClick={ this.handleItemClick }>
-                <Icon name='student' />
+              <Menu.Item name='student' active={activeItem === 'student'} onClick={ this.handleItemClick }>
+                <Icon name='student'/>
                 Study Hall
                 <i className={`comment outline icon ${this.state.newMessage}`} ></i>
               </Menu.Item>
             </Link>
             <Link to='/schedule'>
-              <Menu.Item name='calendar' onClick={this.handleItemClick}>
+              <Menu.Item name='calendar' active={activeItem === 'calendar'} onClick={this.handleItemClick}>
                 <Icon name='calendar' />
                 Schedule
               </Menu.Item>
             </Link>
             <Link to='/video-conference' peer={this.props.peer}>
-              <Menu.Item name='video-conference' onClick={this.handleItemClick}>
+              <Menu.Item name='video-conference' active={activeItem === 'video-conference'} onClick={this.handleItemClick}>
                 <Icon name='video camera' />
                 Video Conference
               </Menu.Item>
             </Link>
             <Link to='/simonSays'>
-              <Menu.Item name='winner' onClick={ this.handleItemClick }>
+              <Menu.Item name='winner' active={activeItem === 'winner'} onClick={ this.handleItemClick }>
                 <Icon name='winner' />
                 Simon Says
               </Menu.Item>

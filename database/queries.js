@@ -98,18 +98,18 @@ const getDecksForUser = userId => Decks.find({ userId });
 
 const getFlashcardsForUser = userId => Flashcards.find({ userId });
 
-const updateNote = (noteInfo) => {
-  const updatedNoteInfo = {
-    ...noteInfo,
-    modifiedAt: Date.now(),
-  };
+// const updateNote = (noteInfo) => {
+//   const updatedNoteInfo = {
+//     ...noteInfo,
+//     modifiedAt: Date.now(),
+//   };
 
-  return (
+//   return (
 
-    Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err) => {
-      if (err) { console.error(err); }
-    }));
-};
+//     Note.update({ _id: noteInfo.noteId }, { $set: updatedNoteInfo }, (err) => {
+//       if (err) { console.error(err); }
+//     }));
+// };
 
 const getNotes = authorID => Note.find({ authorID }).sort('-modifiedAt');
 const getRefreshToken = userId => User.findOne({ _id: userId });
@@ -142,7 +142,7 @@ module.exports = {
   getUsernameById,
   getPacket,
   getNotes,
-  updateNote,
+  // updateNote,
   getUserName,
   loadChatHistory,
   loadPrivateChats,
