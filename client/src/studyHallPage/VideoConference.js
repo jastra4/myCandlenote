@@ -92,7 +92,7 @@ class VideoConference extends React.Component {
 
 
   handlePeerIdSumbmission(id, bool) {
-    this.state.peer.on('error', function(err) { console.log('error ', err) });
+    this.state.peer.on('error', (err) => { console.log('error ', err); });
 
     console.log('new remoteID at submission: ', id);
     console.log('this.state.peer ', this.state.peer);

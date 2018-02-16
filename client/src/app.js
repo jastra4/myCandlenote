@@ -41,7 +41,7 @@ class App extends React.Component {
           this.props.peer(this.state.peer);
         }
       });
-    this.state.peer.on('error', function(err) { console.log('error ', err) });
+    this.state.peer.on('error', (err) => { console.log('error ', err); });
     console.log('Peer object: ', this.state.peer);
   }
 
