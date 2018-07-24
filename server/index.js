@@ -91,15 +91,15 @@ const transporter = nodemailer.createTransport({
 });
 
 const emailNoteOptions = (email, filePath) => ({
-  // from: 'no-reply@theworldsgreatesthue.com',
-  // to: email,
-  // subject: 'Fresh CandleNote! ✔',
-  // html: '<b>Hello world?</b>',
-  // attachments: [{
-  //   contentType: 'application/pdf'``,
-  //   path: filePath,
-  //   filename: 'note.pdf',
-  // }],
+  from: 'no-reply@theworldsgreatesthue.com',
+  to: email,
+  subject: 'Fresh CandleNote! ✔',
+  html: '<b>Hello world?</b>',
+  attachments: [{
+    contentType: 'application/pdf'``,
+    path: filePath,
+    filename: 'note.pdf',
+  }],
 });
 
 app.use(bodyParser.json({ limit: '5mb' }));
@@ -142,12 +142,12 @@ app.use('/user', userRoutes);
 // Headless Browser will not be authenticated
 
 app.get('/pdf/:id', (req, res) => {
-  // res.sendFile(path.join(DIST_DIR, '/index.html'));
+  res.sendFile(path.join(DIST_DIR, '/index.html'));
 });
 
 app.get('/api/pdf/:id', (req, res) => {
-  // const { id: fileName } = req.params;
-  // res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+  const { id: fileName } = req.params;
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
 
@@ -181,227 +181,227 @@ app.get('/api/userid', (req, res) => {
 
 
 app.post('/api/createNote', (req, res) => {
-  // const { noteInfo } = req.body;
-  // console.log('req.body: ', req.body);
-  // console.log('noteInfo: ', noteInfo);
-  // inserts.insertNote(noteInfo)
-  //   .then((response) => {
-  //     console.log('Successfully saved new note to DB');
-  //     const noteId = response._id;
-  //     res.send({ noteId });
-  //   })
-  //   .catch((e) => {
-  //     console.error(e);
-  //     res.sendStatus(500).end();
-  //   });
+  const { noteInfo } = req.body;
+  console.log('req.body: ', req.body);
+  console.log('noteInfo: ', noteInfo);
+  inserts.insertNote(noteInfo)
+    .then((response) => {
+      console.log('Successfully saved new note to DB');
+      const noteId = response._id;
+      res.send({ noteId });
+    })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500).end();
+    });
 });
 
 
 app.post('/api/editNote', (req, res) => {
-  // const { noteInfo } = req.body;
-  // console.log('updated note: ', noteInfo);
-  // queries.updateNote(noteInfo)
-  //   .then(() => {
-  //     console.log('Successfully edited note in DB');
-  //     res.end();
-  //   })
-  //   .catch((e) => {
-  //     console.error(e);
-  //     res.sendStatus(500).end();
-  //   });
+  const { noteInfo } = req.body;
+  console.log('updated note: ', noteInfo);
+  queries.updateNote(noteInfo)
+    .then(() => {
+      console.log('Successfully edited note in DB');
+      res.end();
+    })
+    .catch((e) => {
+      console.error(e);
+      res.sendStatus(500).end();
+    });
 });
 
 app.get('/users', (req, res) => {
-  // queries.getAllUsers((users) => {
-  //   res.send(users);
-  // });
+  queries.getAllUsers((users) => {
+    res.send(users);
+  });
 });
 
 app.post('/friendrequest', (req, res) => {
-  // console.log('friendrequest: ', req.body.username);
-  // res.send(201);
+  console.log('friendrequest: ', req.body.username);
+  res.send(201);
 });
 
 app.get('/api/pdf/:id', (req, res) => {
-  // const { id: fileName } = req.params;
-  // console.log('fileName: ', fileName);
-  // res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
+  const { id: fileName } = req.params;
+  console.log('fileName: ', fileName);
+  res.sendFile(path.join(__dirname, `../PDFs/${fileName}.pdf`));
 });
 
 app.get('/userProfile', (req, res) => {
-  // queries.getCurrentUser(req.user)
-  //   .then((response) => {
-  //     const { _id: userId, username, googleId, profileImage, friends } = response;
-  //     const dateJoined = response._id.getTimestamp();
-  //     res.send({
-  //       userId,
-  //       username,
-  //       googleId,
-  //       profileImage,
-  //       dateJoined,
-  //       friends,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     res.write(err);
-  //     res.sendStatus(400);
-  //   });
+  queries.getCurrentUser(req.user)
+    .then((response) => {
+      const { _id: userId, username, googleId, profileImage, friends } = response;
+      const dateJoined = response._id.getTimestamp();
+      res.send({
+        userId,
+        username,
+        googleId,
+        profileImage,
+        dateJoined,
+        friends,
+      });
+    })
+    .catch((err) => {
+      res.write(err);
+      res.sendStatus(400);
+    });
 });
 
 // /* --------- POST Handlers ----------- */
 
 app.post('/deleteUser', (req, res) => {
-  // const { username } = req.body;
-  // deletes.deleteUser(username);
-  // res.send(`deleted user: ${username}`);
+  const { username } = req.body;
+  deletes.deleteUser(username);
+  res.send(`deleted user: ${username}`);
 });
 
 app.post('/makePDF', (req, res) => {
-  // const url = req.body.tab_url;
-  // const fileName = JSON.stringify(Date.now());
+  const url = req.body.tab_url;
+  const fileName = JSON.stringify(Date.now());
 
-  // makePDF(url, fileName, (err) => {
-  //   if (err) {
-  //     res.sendStatus(500);
-  //   } else {
-  //     res.sendStatus(200);
-  //   }
-  // });
+  makePDF(url, fileName, (err) => {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 });
 
 /* ----------- Sockets ------------ */
 
 const allSockets = {};
 
-// io.sockets.on('error', (e) => { console.error(e); });
+io.sockets.on('error', (e) => { console.error(e); });
 
-// io.sockets.on('connection', (socket) => {
-//   console.log('✅  Successfully connected new Socket: ', socket.id);
-//   allSockets[socket.id] = socket;
+io.sockets.on('connection', (socket) => {
+  console.log('✅  Successfully connected new Socket: ', socket.id);
+  allSockets[socket.id] = socket;
 
   // App > PrivateChat
   socket.on('sign on', (data) => {
-    // console.log('data: ', data);
-    // allSockets[data.username].status = 'away';
-    // allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
+    console.log('data: ', data);
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} signed on`, data.username);
   });
 
   // ChatBox > PrivateChat
   socket.on('available', (data) => {
-    // allSockets[data.username].status = 'available';
-    // allSockets[data.username].broadcast.emit(`${data.username} is available`);
+    allSockets[data.username].status = 'available';
+    allSockets[data.username].broadcast.emit(`${data.username} is available`);
   });
 
   // ChatBox > PrivateChat
   socket.on('away', (data) => {
-    // console.log('data: ', data);
-    // allSockets[data.username].status = 'away';
-    // allSockets[data.username].broadcast.emit(`${data.username} is away`);
+    console.log('data: ', data);
+    allSockets[data.username].status = 'away';
+    allSockets[data.username].broadcast.emit(`${data.username} is away`);
   });
 
   // ChatBox > PrivateChat
   socket.on('pingFriend', (data) => {
-    // if (data.friend in allSockets) {
-    //   allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
-    // } else {
-    //   allSockets[data.username].emit(`response ${data.friend}`, 'offline');
-    // }
+    if (data.friend in allSockets) {
+      allSockets[data.username].emit(`response ${data.friend}`, allSockets[data.friend].status);
+    } else {
+      allSockets[data.username].emit(`response ${data.friend}`, 'offline');
+    }
   });
 
   // ChatBox > ChatBox
   socket.on('submit message', (message) => {
-    // message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
-    // inserts.saveMessage(message);
-    // if (message.type === 'private') {
-    //   allSockets[message.sentBy].emit('submitted message', message);
-    //   if (message.to in allSockets) {
-    //     allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
-    //     console.log(`new message for ${allSockets[message.to].username}`);
-    //     allSockets[message.to].emit('new message');
-    //   }
-    // } else {
-    //   io.sockets.emit(`submitted message ${message.to}`, message);
-    // }
+    message.timeStamp = dateFormat(new Date(), 'dddd, mmm dS, h:MM TT'); // eslint-disable-line
+    inserts.saveMessage(message);
+    if (message.type === 'private') {
+      allSockets[message.sentBy].emit('submitted message', message);
+      if (message.to in allSockets) {
+        allSockets[message.to].emit(`submitted message ${message.sentBy}`, message);
+        console.log(`new message for ${allSockets[message.to].username}`);
+        allSockets[message.to].emit('new message');
+      }
+    } else {
+      io.sockets.emit(`submitted message ${message.to}`, message);
+    }
   });
 
   app.post('/openChat', (req, res) => {
-    // const { username, chatname, type } = req.body;
-    // if (type === '/c ') {
-    //   inserts.createGroup(chatname, username, (bool) => {
-    //     if (bool) {
-    //       res.send({
-    //         groupname: chatname,
-    //         members: [{ username }],
-    //       });
-    //     } else {
-    //       res.send({ error: 'Group already exists' });
-    //     }
-    //   });
-    // } else if (type === '/j ') {
-    //   inserts.addGroupMember(chatname, username, (bool, group) => {
-    //     if (bool) {
-    //       res.send({
-    //         groupname: chatname,
-    //         members: group.members,
-    //       });
-    //     } else {
-    //       res.send({ error: 'Group does not exist' });
-    //     }
-    //   });
-    // } else {
-    //   inserts.openPrivateChat(username, chatname, (bool) => {
-    //     if (bool) {
-    //       let status = 'offline';
-    //       if (chatname in allSockets) {
-    //         status = allSockets[chatname].status; // eslint-disable-line
-    //       }
-    //       res.send({
-    //         username: chatname,
-    //         status,
-    //       });
-    //     } else {
-    //       res.send({ error: 'User does not exist' });
-    //     }
-    //   });
-    // }
-  // });
+    const { username, chatname, type } = req.body;
+    if (type === '/c ') {
+      inserts.createGroup(chatname, username, (bool) => {
+        if (bool) {
+          res.send({
+            groupname: chatname,
+            members: [{ username }],
+          });
+        } else {
+          res.send({ error: 'Group already exists' });
+        }
+      });
+    } else if (type === '/j ') {
+      inserts.addGroupMember(chatname, username, (bool, group) => {
+        if (bool) {
+          res.send({
+            groupname: chatname,
+            members: group.members,
+          });
+        } else {
+          res.send({ error: 'Group does not exist' });
+        }
+      });
+    } else {
+      inserts.openPrivateChat(username, chatname, (bool) => {
+        if (bool) {
+          let status = 'offline';
+          if (chatname in allSockets) {
+            status = allSockets[chatname].status; // eslint-disable-line
+          }
+          res.send({
+            username: chatname,
+            status,
+          });
+        } else {
+          res.send({ error: 'User does not exist' });
+        }
+      });
+    }
+  });
 
   app.post('/closeChat', (req, res) => {
-    // const { username, chatname, chatType } = req.body;
-    // if (chatType === 'private') {
-    //   deletes.closePrivateChat(username, chatname, (bool) => {
-    //     console.log(`closePrivateChat ${bool}`);
-    //     res.send(bool);
-    //   });
-    // } else {
-    //   deletes.removeGroupMember(username, chatname, (bool) => {
-    //     console.log(`closeGroupChat ${bool}`);
-    //   });
-    // }
+    const { username, chatname, chatType } = req.body;
+    if (chatType === 'private') {
+      deletes.closePrivateChat(username, chatname, (bool) => {
+        console.log(`closePrivateChat ${bool}`);
+        res.send(bool);
+      });
+    } else {
+      deletes.removeGroupMember(username, chatname, (bool) => {
+        console.log(`closeGroupChat ${bool}`);
+      });
+    }
   });
 
   socket.on('invite to video conference', (data) => {
-    // console.log('The invite to conference emitter was fired');
-    // if (data.friendName in allSockets) {
-    //   allSockets[data.friendName].emit('invited to video conference', data.myId, data.username);
-    // }
+    console.log('The invite to conference emitter was fired');
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('invited to video conference', data.myId, data.username);
+    }
   });
 
   socket.on('accept invite to video conference', (data) => {
-    // console.log('Accept invite emitter fired');
-    // if (data.friendName in allSockets) {
-    //   allSockets[data.friendName].emit('accepted invite to video conference', data.myId, data.username);
-    // }
+    console.log('Accept invite emitter fired');
+    if (data.friendName in allSockets) {
+      allSockets[data.friendName].emit('accepted invite to video conference', data.myId, data.username);
+    }
   });
 
   // auto > PrivateChat
   socket.on('disconnect', () => {
-  //   if (socket.username !== undefined) {
-  //     console.log(socket.username, ' disconnected');
-  //     allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
-  //     delete allSockets[socket.username];
-  //   }
-  // });
+    if (socket.username !== undefined) {
+      console.log(socket.username, ' disconnected');
+      allSockets[socket.username].broadcast.emit(`${socket.username} signed off`);
+      delete allSockets[socket.username];
+    }
+  });
 });
 
 /* ----------- Sockets Relateted ------------ */
