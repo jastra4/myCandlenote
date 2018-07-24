@@ -1,31 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+// import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider, connect } from 'react-redux';
-import axios from 'axios';
-import io from 'socket.io-client';
-import Peer from 'peerjs';
+// import axios from 'axios';
+// import io from 'socket.io-client';
+// import Peer from 'peerjs';
 // import { PersistGate } from 'redux-persist/lib/integration/react';
 
 // Containers
-import NotePageConnected from './notesPage/notesContainer'; // eslint-disable-line 
-import DeckPageConnected from './decksPage/DeckContainer';
-import FlashcardPageConnected from './flashcardsPage/FlashcardContainer';
-import StudyHallConnected from './studyHallPage/StudyHall';
-import NoteboxConnected from './noteBox/noteBoxContainer';
+// import NotePageConnected from './notesPage/notesContainer'; // eslint-disable-line 
+// import DeckPageConnected from './decksPage/DeckContainer';
+// import FlashcardPageConnected from './flashcardsPage/FlashcardContainer';
+// import StudyHallConnected from './studyHallPage/StudyHall';
+// import NoteboxConnected from './noteBox/noteBoxContainer';
 
 // Components
-import TopBar from './topBar';
-import MainPage from './mainPage';
-import NotFoundPage from './notFoundPage';
-import UserProfile from './profilePage';
-import PDF from './notesPage/invisibleEditor';
-import SchedulePage from './schedulePage';
+// import TopBar from './topBar';
+// import MainPage from './mainPage';
+// import NotFoundPage from './notFoundPage';
+// import UserProfile from './profilePage';
+// import PDF from './notesPage/invisibleEditor';
+// import SchedulePage from './schedulePage';
 import store from '../src/store';
-import VideoConference from './studyHallPage/VideoConference';
-import activeSocket from './actions/activeSocket';
-import passPeer from './actions/passPeer';
-import SimonSays from './SimonSays';
+// import VideoConference from './studyHallPage/VideoConference';
+// import activeSocket from './actions/activeSocket';
+// import passPeer from './actions/passPeer';
+// import SimonSays from './SimonSays';
 
 // const peerObj = {
 //   host: 'candlenote.io',
@@ -44,57 +44,58 @@ class App extends React.Component {
     this.state = { peer: '' };
   }
 
-  componentDidMount() {
-    // axios.get('/identifyUser')
-    //   .then((res) => {
-    //     if (res.data.username !== undefined) {
-    //       this.initSocket(res.data.username);
-    //       // const myPeer = new Peer({ key: 'lwjd5qra8257b9' });
-    //       // const myPeer = new Peer({ key: 'o8jk92ig9tdwjyvi' });
-    //       const myPeer = new Peer({
-    //         key: 'peerjs',
-    //         host: 'test1-07192018.herokuapp.com',
-    //         port: 443,
-    //         secure: true,
-    //         debug: 3,
-    //         //path: '/peer',
-    //       });
-    //       setTimeout(() => {
-    //         this.setState({ peer: myPeer }, () => {
-    //           console.log('myPeer objectt: ', this.state.peer);
-    //           this.props.peer(this.state.peer);
-    //           setInterval(this.pingHeroku.bind(this), 3000);
-    //         });
-    //       }, 3000);
-    //     }
-    //   });
-    // this.state.peer.on('error', (err) => { console.log('error ', err); });
-  }
+  // componentDidMount() {
+  //   axios.get('/identifyUser')
+  //     .then((res) => {
+  //       if (res.data.username !== undefined) {
+  //         this.initSocket(res.data.username);
+  //         // const myPeer = new Peer({ key: 'lwjd5qra8257b9' });
+  //         // const myPeer = new Peer({ key: 'o8jk92ig9tdwjyvi' });
+  //         const myPeer = new Peer({
+  //           key: 'peerjs',
+  //           host: 'test1-07192018.herokuapp.com',
+  //           port: 443,
+  //           secure: true,
+  //           debug: 3,
+  //           //path: '/peer',
+  //         });
+  //         setTimeout(() => {
+  //           this.setState({ peer: myPeer }, () => {
+  //             console.log('myPeer objectt: ', this.state.peer);
+  //             this.props.peer(this.state.peer);
+  //             setInterval(this.pingHeroku.bind(this), 3000);
+  //           });
+  //         }, 3000);
+  //       }
+  //     });
+  //   this.state.peer.on('error', (err) => { console.log('error ', err); });
+  // }
 
-  pingHeroku() {
-    this.state.peer.socket.send({ type: 'ping' });
-    console.log('pinged heroku');
-  }
+  // pingHeroku() {
+  //   this.state.peer.socket.send({ type: 'ping' });
+  //   console.log('pinged heroku');
+  // }
 
-  initSocket(username) {
-    const socket = io('/', { secure: true });
-    socket.on('connect', () => {
-      axios.post('/assignUsername', {
-        username,
-        id: socket.id,
-      })
-        .then(() => {
-          console.log(`Connected ${username} / ${socket.id}!`);
-          socket.emit('sign on', { username });
-          this.props.activeSocket(socket, username);
-        });
-    });
-  }
+  // initSocket(username) {
+  //   const socket = io('/', { secure: true });
+  //   socket.on('connect', () => {
+  //     axios.post('/assignUsername', {
+  //       username,
+  //       id: socket.id,
+  //     })
+  //       .then(() => {
+  //         console.log(`Connected ${username} / ${socket.id}!`);
+  //         socket.emit('sign on', { username });
+  //         this.props.activeSocket(socket, username);
+  //       });
+  //   });
+  // }
 
   render = () =>
     (
       <div>
-        <BrowserRouter>
+        test
+        {/* <BrowserRouter>
           <Switch>
             <Route path='/' exact={true} component={MainPage} />
             <Route path='/notepad' render={() => <TopBar ContentPage={ NotePageConnected }/>} />
@@ -113,25 +114,31 @@ class App extends React.Component {
             <Route render={() => <TopBar ContentPage={ NotFoundPage }/>}/>
             <Route path='/login' render={() => (<a href="/auth/google">Sign In with Google</a>)} />
           </Switch>
-        </BrowserRouter>
+        </BrowserRouter> */}
       </div>
     );
 }
 
-const mapDispatchToProps = dispatch => (
-  {
-    activeSocket: (socket, username) => dispatch(activeSocket(socket, username)),
-    peer: peerObject => dispatch(passPeer(peerObject)),
-  }
-);
+// const mapDispatchToProps = dispatch => (
+//   {
+//     activeSocket: (socket, username) => dispatch(activeSocket(socket, username)),
+//     peer: peerObject => dispatch(passPeer(peerObject)),
+//   }
+// );
 
-const AppConnected = connect(null, mapDispatchToProps)(App);
+// const AppConnected = connect(null, mapDispatchToProps)(App);
 
-ReactDOM.render(
-  <Provider store={store}>
-    {/* <PersistGate loading={null} persistor={persistor}> */}
-      <AppConnected />
-    {/* </PersistGate> */}
-  </Provider>,
-  document.getElementById('app'),
-);
+// ReactDOM.render(
+//   <Provider store={store}>
+//     {/* <PersistGate loading={null} persistor={persistor}> */}
+//       <AppConnected />
+//     {/* </PersistGate> */}
+//   </Provider>,
+//   document.getElementById('app'),
+// );
+
+ReactDOM.render((
+  <Provider store={store} >
+    <App />
+  </Provider>
+), document.getElementById('app'));
