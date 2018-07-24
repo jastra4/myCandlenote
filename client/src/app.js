@@ -45,29 +45,29 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/identifyUser')
-      .then((res) => {
-        if (res.data.username !== undefined) {
-          this.initSocket(res.data.username);
-          // const myPeer = new Peer({ key: 'lwjd5qra8257b9' });
-          // const myPeer = new Peer({ key: 'o8jk92ig9tdwjyvi' });
-          const myPeer = new Peer({
-            key: 'peerjs',
-            host: 'test1-07192018.herokuapp.com',
-            port: 443,
-            secure: true,
-            debug: 3,
-            //path: '/peer',
-          });
-          setTimeout(() => {
-            this.setState({ peer: myPeer }, () => {
-              console.log('myPeer objectt: ', this.state.peer);
-              this.props.peer(this.state.peer);
-              setInterval(this.pingHeroku.bind(this), 3000);
-            });
-          }, 3000);
-        }
-      });
+    // axios.get('/identifyUser')
+    //   .then((res) => {
+    //     if (res.data.username !== undefined) {
+    //       this.initSocket(res.data.username);
+    //       // const myPeer = new Peer({ key: 'lwjd5qra8257b9' });
+    //       // const myPeer = new Peer({ key: 'o8jk92ig9tdwjyvi' });
+    //       const myPeer = new Peer({
+    //         key: 'peerjs',
+    //         host: 'test1-07192018.herokuapp.com',
+    //         port: 443,
+    //         secure: true,
+    //         debug: 3,
+    //         //path: '/peer',
+    //       });
+    //       setTimeout(() => {
+    //         this.setState({ peer: myPeer }, () => {
+    //           console.log('myPeer objectt: ', this.state.peer);
+    //           this.props.peer(this.state.peer);
+    //           setInterval(this.pingHeroku.bind(this), 3000);
+    //         });
+    //       }, 3000);
+    //     }
+    //   });
     // this.state.peer.on('error', (err) => { console.log('error ', err); });
   }
 
