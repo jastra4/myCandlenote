@@ -10,7 +10,7 @@ const Promise = require('promise');
 const mongoose = require('mongoose');
 
 const keys = require('./config/keys');
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 const passport = require('passport');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -684,105 +684,105 @@ app.post('/api/suggestedWiki', (req, res) => {
 
 
 app.get('/api/downloadPDF/:currentNote', (req, res) => {
-  const { currentNote } = req.params;
-  const noteInfo = {
-    noteId: currentNote,
-    showDate: true,
-    showTitle: true,
-    showName: true,
-  };
+  // const { currentNote } = req.params;
+  // const noteInfo = {
+  //   noteId: currentNote,
+  //   showDate: true,
+  //   showTitle: true,
+  //   showName: true,
+  // };
 
-  const url = `http://${DOMAIN}/pdf/${currentNote}`;
-  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
+  // const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  // const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
-  (async () => {
-    await queries.updateNote(noteInfo);
-    const { title } = await queries.getTitleById(currentNote);
+  // (async () => {
+  //   await queries.updateNote(noteInfo);
+  //   const { title } = await queries.getTitleById(currentNote);
 
 
-    function resolveAfter1Seconds() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('resolved');
-        }, 1500);
-      });
-    }
+  //   function resolveAfter1Seconds() {
+  //     return new Promise((resolve) => {
+  //       setTimeout(() => {
+  //         resolve('resolved');
+  //       }, 1500);
+  //     });
+  //   }
 
-    function logAfterPDF() {
-      return new Promise((resolve) => {
-        res.download(pathToPDF, `${title}.pdf`, (err) => { console.error(err); });
-        resolve();
-      });
-    }
+  //   function logAfterPDF() {
+  //     return new Promise((resolve) => {
+  //       res.download(pathToPDF, `${title}.pdf`, (err) => { console.error(err); });
+  //       resolve();
+  //     });
+  //   }
 
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await resolveAfter1Seconds();
-    await page.pdf({
-      path: pathToPDF,
-      format: 'Letter',
-      printBackground: true,
-      margin: {
-        top: '10mm',
-        bottom: '10mm',
-        left: '10mm',
-        right: '10mm',
-      },
-    });
-    await logAfterPDF(`PDFs/${currentNote}.pdf`);
-    await browser.close();
-  })();
+  //   const browser = await puppeteer.launch();
+  //   const page = await browser.newPage();
+  //   await page.goto(url, { waitUntil: 'networkidle2' });
+  //   await resolveAfter1Seconds();
+  //   await page.pdf({
+  //     path: pathToPDF,
+  //     format: 'Letter',
+  //     printBackground: true,
+  //     margin: {
+  //       top: '10mm',
+  //       bottom: '10mm',
+  //       left: '10mm',
+  //       right: '10mm',
+  //     },
+  //   });
+  //   await logAfterPDF(`PDFs/${currentNote}.pdf`);
+  //   await browser.close();
+  // })();
 });
 
 app.post('/api/generatePDF', (req, res) => {
-  const { currentNote,
-    showDate,
-    showName,
-    showTitle } = req.body;
+  // const { currentNote,
+  //   showDate,
+  //   showName,
+  //   showTitle } = req.body;
 
-  const noteInfo = {
-    noteId: currentNote, showDate, showName, showTitle,
-  };
+  // const noteInfo = {
+  //   noteId: currentNote, showDate, showName, showTitle,
+  // };
 
-  const url = `http://${DOMAIN}/pdf/${currentNote}`;
-  const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
+  // const url = `http://${DOMAIN}/pdf/${currentNote}`;
+  // const pathToPDF = path.join(__dirname, `../PDFs/${currentNote}.pdf`);
 
-  (async () => {
-    function resolveAfter1Seconds() {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve('resolved');
-        }, 1500);
-      });
-    }
+  // (async () => {
+  //   function resolveAfter1Seconds() {
+  //     return new Promise((resolve) => {
+  //       setTimeout(() => {
+  //         resolve('resolved');
+  //       }, 1500);
+  //     });
+  //   }
 
-    function logAfterPDF() {
-      return new Promise((resolve) => {
-        console.log('PDF successfully printed 🖨️  👍');
-        res.end();
-        resolve('PDF printed');
-      });
-    }
-    await queries.updateNote(noteInfo);
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: 'networkidle2' });
-    await resolveAfter1Seconds();
-    await page.pdf({
-      path: pathToPDF,
-      format: 'Letter',
-      printBackground: true,
-      margin: {
-        top: '10mm',
-        bottom: '10mm',
-        left: '10mm',
-        right: '10mm',
-      },
-    });
-    await logAfterPDF(`PDFs/${currentNote}.pdf`);
-    await browser.close();
-  })();
+  //   function logAfterPDF() {
+  //     return new Promise((resolve) => {
+  //       console.log('PDF successfully printed 🖨️  👍');
+  //       res.end();
+  //       resolve('PDF printed');
+  //     });
+  //   }
+  //   await queries.updateNote(noteInfo);
+  //   const browser = await puppeteer.launch();
+  //   const page = await browser.newPage();
+  //   await page.goto(url, { waitUntil: 'networkidle2' });
+  //   await resolveAfter1Seconds();
+  //   await page.pdf({
+  //     path: pathToPDF,
+  //     format: 'Letter',
+  //     printBackground: true,
+  //     margin: {
+  //       top: '10mm',
+  //       bottom: '10mm',
+  //       left: '10mm',
+  //       right: '10mm',
+  //     },
+  //   });
+  //   await logAfterPDF(`PDFs/${currentNote}.pdf`);
+  //   await browser.close();
+  // })();
 });
 
 
