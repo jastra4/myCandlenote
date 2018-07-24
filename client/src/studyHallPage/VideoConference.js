@@ -14,6 +14,7 @@ class VideoConference extends React.Component {
       peer: this.props.peer,
       remoteId: [],
       myId: '',
+      callerId: '',
       initialized: false,
       newCall: [],
       friends: this.props.friends,
@@ -27,8 +28,8 @@ class VideoConference extends React.Component {
   }
 
   componentDidMount() {
-    this.state.peer.on('error', (err) => { console.log('error test0', err); });
-    console.log('Peer prop in the state: ', this.props.peer);
+    this.state.peer.on('error', (err) => { console.log('test for peer details in state', err); });
+    console.log('state peer object: ', this.props.peer);
 
     navigator.getUserMedia = (
       navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -42,7 +43,7 @@ class VideoConference extends React.Component {
     //     initialized: true,
     //   });
     // }); // eslint-disable-line
-    console.log('state peer object: ', this.state.peer);
+
     this.setState({
       myId: this.props.peer.id,
       initialized: true,
@@ -66,7 +67,6 @@ class VideoConference extends React.Component {
     });
 
     this.props.socket.on('invited to video conference', (myId, username) => {
-      this.state.peer.on('error', (err) => { console.log('error test3', err); });
       console.log('MyId on invited to conference emitter: ', myId);
       this.setState({
         showInvite: true,
@@ -78,10 +78,10 @@ class VideoConference extends React.Component {
     });
 
     this.props.socket.on('accepted invite to video conference', (myId) => {
-      console.log('MyId on accepted to conference emitter: ', myId);
+      console.log('CalleeId (Alice) on accepted to conference emitter: ', myId);
       this.setState({ remoteId: [...this.state.remoteId, myId] }, () => {
         console.log('My peer id: ', this.state.myId);
-        console.log('Remote Id i received and want to call: ', this.state.remoteId[0]);
+        console.log('Remote Id I received and want to call: ', this.state.remoteId[0]);
         this.call();
       });
     });
@@ -91,7 +91,6 @@ class VideoConference extends React.Component {
     this.state.peer.disconnect();
     this.props.socket.removeAllListeners();
   }
-
 
   handlePeerIdSumbmission(id, bool) {
     console.log('new remoteID at submission: ', id);
@@ -109,7 +108,7 @@ class VideoConference extends React.Component {
         console.log('Calling from peer id submission');
         this.call();
       });
-      console.log('Acepting invite to Video Conference');
+      console.log('Accepting invite to Video Conference');
       if (bool) {
         this.props.socket.emit('accept invite to video conference', {
           username: this.props.username,
@@ -128,6 +127,7 @@ class VideoConference extends React.Component {
   }
 
   onReceiveCall(call) {
+    console.log('onReceiveCall TRIGGERED: ', call);
     this.setState({ newCall: [...this.state.newCall, call] });
     this.getMedia({
       audio: true,
@@ -141,7 +141,8 @@ class VideoConference extends React.Component {
     if (this.state.newCall[0]) {
       this.state.newCall[0].on('stream', (stream) => {
         const video = document.querySelector('.video-call-one');
-        video.src = window.URL.createObjectURL(stream);
+        // video.src = window.URL.createObjectURL(stream); // depreciated
+        video.srcObject = stream;
       });
     }
   }
@@ -152,7 +153,8 @@ class VideoConference extends React.Component {
       video: true,
     }, (stream) => {
       const video = document.querySelector('.video-self');
-      video.src = window.URL.createObjectURL(stream);
+      // video.src = window.URL.createObjectURL(stream); // depreciated
+      video.srcObject = stream;
     }, (err) => { console.log('Error in prepare self: ', err); });
   }
 
@@ -167,14 +169,13 @@ class VideoConference extends React.Component {
   }
 
   handleVideoConferenceInviteClick(friendName) {
-    console.log('Does the thing!');
-    this.state.peer.on('error', (err) => { console.log('error test1 ', err); });
+    console.log('Sent video conference invite to ', friendName);
+    console.log('Sent myId: ', this.state.myId);
     this.props.socket.emit('invite to video conference', {
       username: this.props.username,
       friendName: friendName, // eslint-disable-line
       myId: this.state.myId,
     });
-    this.state.peer.on('error', (err) => { console.log('error test2', err); });
   }
 
   handleRemoveFriend(friendId) {
@@ -219,7 +220,10 @@ Do you want to video chat with {this.state.friendWhoWantsToTalk.username} from y
               >
                 <Icon name='remove' /> No
               </Button>
-              <Button color='green' onClick={() => this.handlePeerIdSumbmission(this.state.friendWhoWantsToTalk.myId, true)}>
+              <Button color='green' onClick={() => {
+                console.log('this.state.friendWhoWantsToTalk ', this.state.friendWhoWantsToTalk);
+                this.handlePeerIdSumbmission(this.state.friendWhoWantsToTalk.myId, true);
+              }}>
                 <Icon name='checkmark' /> Yes
               </Button>
             </Modal.Actions>

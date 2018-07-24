@@ -49,18 +49,21 @@ class App extends React.Component {
       .then((res) => {
         if (res.data.username !== undefined) {
           this.initSocket(res.data.username);
+          // const myPeer = new Peer({ key: 'lwjd5qra8257b9' });
+          // const myPeer = new Peer({ key: 'o8jk92ig9tdwjyvi' });
           const myPeer = new Peer({
             key: 'peerjs',
-            host: 'candlenote.herokuapp.com',
+            host: 'test1-07192018.herokuapp.com',
             port: 443,
             secure: true,
-            // path: '/peer',
+            debug: 3,
+            //path: '/peer',
           });
           setTimeout(() => {
             this.setState({ peer: myPeer }, () => {
-              console.log('Peer object: ', this.state.peer);
+              console.log('myPeer objectt: ', this.state.peer);
               this.props.peer(this.state.peer);
-              setInterval(this.pingHeroku.bind(this), 10000);
+              setInterval(this.pingHeroku.bind(this), 3000);
             });
           }, 3000);
         }

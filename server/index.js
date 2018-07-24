@@ -30,8 +30,8 @@ const deletes = require('../database/deletes');
 
 mongoose.connect(keys.mongodb.dbURI);
 
-// const http = require('http');
-const https = require('https');
+const http = require('http');
+//const https = require('https');
 
 const privateKey = fs.readFileSync(path.join(__dirname, './socketSSL/file.pem'));
 const certificate = fs.readFileSync(path.join(__dirname, './socketSSL/file.crt'));
@@ -42,15 +42,30 @@ const credentials = {
 };
 
 const app = express();
+const ExpressPeerServer = require('peer').ExpressPeerServer;
 // const options = {
 //   key: fs.readFileSync(path.join(__dirname, './socketSSL/file.pem')),
 //   cert: fs.readFileSync(path.join(__dirname, './socketSSL/file.crt')),
 // };
 // const server = require('https').createServer(options, app);
 // const server = require('http').createServer(app); // socket stuff
-// const httpServer = http.createServer(app);
-const httpsServer = https.createServer(credentials, app);
-const io = require('socket.io').listen(httpsServer); // socket stuff
+const httpServer = http.createServer(app);
+
+var server = app.listen(9000);
+
+var options = {
+  debug: true
+}
+
+var peerserver = ExpressPeerServer(server, options);
+
+app.use('/api', peerserver);
+
+peerserver.on('connection', (id) => { console.log('peerserver connection for ', id); });
+
+// const httpsServer = https.createServer(credentials, app);
+const io = require('socket.io').listen(httpServer); // socket stuff   // *****
+// const io = require('socket.io').listen(httpsServer); // socket stuff
 
 // const peerServer = ExpressPeerServer(server, { debug: true });
 // Helpers
@@ -60,6 +75,7 @@ const { parseMeaningWithGoogleAPI, makePDF, getCalendarFreeBusy,
 
 // const SRC_DIR = path.join(__dirname,  "../client/src/");
 const DIST_DIR = path.join(__dirname, '../client/dist');
+
 const PORT = process.env.USER === 'ubuntu' ? 8080 : 3000;
 const DOMAIN = process.env.USER === 'ubuntu' ? 'candlenote.io' : `localhost:${PORT}`;
 
@@ -91,7 +107,8 @@ app.use(bodyParser.urlencoded({
   limit: '5mb',
 }));
 
-app.use(express.static(DIST_DIR));
+app.use(express.static(__dirname + '/../client/dist'));
+// app.use(express.static(DIST_DIR));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
@@ -887,10 +904,18 @@ app.get('*', (req, res) => {
 });
 /* -------- Initialize Server -------- */
 
-httpsServer.listen(PORT, () => {
+// let port = process.env.PORT || 3000;
+// app.listen(port, () => console.log(`✅  aptAPP listening on port ${port}!`));
+
+httpServer.listen(PORT, () => {
   console.info('Current Domain: ', DOMAIN);
   console.info(`🌎  Server now running on port ${PORT} 🌎`);
 });
+
+// httpsServer.listen(PORT, () => {
+//   console.info('Current Domain: ', DOMAIN);
+//   console.info(`🌎  Server now running on port ${PORT} 🌎`);
+// });
 
 // peerServer.on('connection', (id) => {
 //   console.log(id);
