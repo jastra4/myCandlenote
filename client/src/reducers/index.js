@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-// import decksReducer from './decksReducers';
+import { fakeReducer } from './decksReducers';
 // import flashcardsReducer from './flashcardsReducers';
 // import notesReducer from './notesReducers';
 // import usersReducer from './usersReducers';
@@ -12,7 +12,7 @@ import { combineReducers } from 'redux';
 // import videoConferenceReducer from './videoConferenceReducers';
 
 const reducers = combineReducers({
-  // decks: decksReducer,
+  decks: fakeReducer,
   // flashcards: flashcardsReducer,
   // notes: notesReducer,
   // user: usersReducer,
