@@ -9,7 +9,7 @@ module.exports = {
     path: DIST_DIR,
     filename: 'bundle.js'
   },
-  mode: 'none',
+  //mode: 'none',
   module: {
     rules: [
       {
