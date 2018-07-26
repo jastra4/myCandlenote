@@ -1,39 +1,33 @@
-const path = require('path');
-
-const DIST_DIR = path.join(__dirname, '/client/dist');
-const SRC_DIR = path.join(__dirname, 'client/src');
+var path = require('path');
+var webpack = require('webpack');
+var SRC_DIR = path.join(__dirname, '/client/src');
+var DIST_DIR = path.join(__dirname, '/client/dist');
 
 module.exports = {
-  context: SRC_DIR,
-  entry: ['babel-polyfill', './app'],
+  entry: [`${SRC_DIR}/app.js`],
   output: {
     path: DIST_DIR,
-    filename: 'bundle.js',
+    filename: 'bundle.js'
   },
-  watchOptions: { poll: true },
-  module: { rules: [
-    {
-      loader: 'babel-loader',
-      test: /\.js$/,
-      exclude: /node_modules/,
-    },
-    {
-      loaders: [
-        'style-loader',
-        'css-loader',
-      ],
-      test: /\.css$/,
-    },
-    {
-      test: /\.(eot|svg|ttf|woff|woff2)$/,
-      loader: 'file-loader?name=fonts/[name].[ext]',
-      // exclude: /node_modules/
-    },
-  ] },
-  devtool: 'cheap-module-eval-source-map',
-  devServer: { contentBase: DIST_DIR },
-  node: {
-    fs: 'empty',
-    net: 'empty',
-  },
+  mode: 'none',
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        include: SRC_DIR,
+        loaders: 'babel-loader',
+        options: {
+          presets: ['react']
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'css-loader',
+          'sass-loader'
+        ]
+      }
+    ]
+  }
 };
