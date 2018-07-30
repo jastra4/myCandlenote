@@ -33,9 +33,11 @@ export default class UserProfile extends React.Component {
   }
 
   componentDidMount() {
+    console.log('UserProfile.js mounted')
     if (this.props.currentUser.userId === '') {
       axios.get('/userProfile')
         .then((res) => {
+          console.log('/userProfile res: ', res);
           const { username, friends, userId } = res.data;
           this.props.getFriends(userId);
           const profileImage = this.resizeProfileImage(res.data.profileImage);

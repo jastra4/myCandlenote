@@ -4,7 +4,7 @@ const keys = require('../server/config/keys');
 // const URI = process.env.MONGOLAB_RED_URI || 'mongodb://keys/candle';
 // mongoose.connect(URI);
 
-mongoose.connect(keys.mongodb.dbURI)
+mongoose.connect(keys.mongodb.dbURI, { useNewUrlParser: true })
   .then(() => { console.log('✅  Successfully connected to Mongodb'); })
   .catch((e) => { console.error('⚠️ Error connected to MongoDB: ', e); });
 
